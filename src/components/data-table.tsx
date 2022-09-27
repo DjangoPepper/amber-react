@@ -27,33 +27,33 @@ function useColumns(): any[] {
     const cale = useSelector<RootState, string>(state => state.data.selectedCale);
 
     const columns = [
-        columnHelper.accessor('weight', {
-            header: "Poids",
-            cell: info => info.getValue(),
-            footer: info => info.column.id,
-        }),
-        columnHelper.accessor("position", {
-            // id: 'lastName',
-            cell: info => <i>{info.getValue()}</i>,
-            header: () => "Position",
-            footer: info => info.column.id,
+        columnHelper.accessor('rank', {
+            header: () => <span>Rang</span>,
+            // footer: info => info.column.id,
         }),
         columnHelper.accessor('prepa', {
             header: () => 'Prepa',
             cell: info => info.renderValue(),
             footer: info => info.column.id,
         }),
-        columnHelper.accessor('rank', {
-            header: () => <span>Rang</span>,
-            footer: info => info.column.id,
-        }),
         columnHelper.accessor('reference', {
             header: 'Reference',
-            footer: info => info.column.id,
+            // footer: info => info.column.id,
         }),
+        columnHelper.accessor('weight', {
+            header: "Poids",
+            cell: info => info.getValue(),
+            // footer: info => info.column.id,
+        }),
+        /* columnHelper.accessor("position", {
+            // id: 'lastName',
+            cell: info => <i>{info.getValue()}</i>,
+            header: () => "Position",
+            footer: info => info.column.id,
+        }), */
         columnHelper.accessor('destination', {
             header: 'Destination',
-            footer: info => info.column.id,
+            // footer: info => info.column.id,
         }),
         {
             id: 'select',
