@@ -34,7 +34,7 @@ function useColumns(): any[] {
         columnHelper.accessor('prepa', {
             header: () => 'Prepa',
             cell: info => info.renderValue(),
-            footer: info => info.column.id,
+            // footer: info => info.column.id,
         }),
         columnHelper.accessor('reference', {
             header: 'Reference',

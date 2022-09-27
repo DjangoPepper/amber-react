@@ -8,9 +8,10 @@ export default function Statistics() {
     const statistics = data.reduce<any>((p, row) => {
         if(!p[row.destination]) {
             p[row.destination] = {count: 0, weight: 0};
-
         }
-        p[row.destination] = {count: p[row.destination].count + 1, weight: p[row.destination].weight + row.weight}
+        p[row.destination] = {count: p[row.destination].count + 1, weight: Math.round(p[row.destination].weight) + row.weight}
+        // let num = 5.56789;
+        // let n = num.toFixed(2);
         return p;
     }, {})
     const keys = Object.keys(statistics).sort();
@@ -18,7 +19,7 @@ export default function Statistics() {
         <Table>
             <thead>
                 <th>Cale</th>
-                <th>Nombre</th>
+                <th>Quantité</th>
                 <th>Poids</th>
             </thead>
             <tbody>

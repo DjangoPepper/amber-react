@@ -9,6 +9,13 @@
             "name": "Run npm start",
             "request": "launch",
             "type": "node-terminal"
+        },
+        {
+            "type": "msedge",
+            "request": "launch",
+            "name": "Launch Edge localhost",
+            "url": "http://localhost:3000",
+            "webRoot": "${workspaceFolder}"
         }
     ]
 }
