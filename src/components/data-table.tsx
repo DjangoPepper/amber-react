@@ -28,21 +28,23 @@ function useColumns(): any[] {
 
     const columns = [
         columnHelper.accessor('rank', {
-            header: () => <span>Rang</span>,
+            //header: () => <span>Rang</span>, modif by fred pour faire comme les autres
+            header: () => 'Rang'
             // footer: info => info.column.id,
         }),
         columnHelper.accessor('prepa', {
             header: () => 'Prepa',
-            cell: info => info.renderValue(),
-            // footer: info => info.column.id,
+            cell: info => info.renderValue()
+            //footer: info => info.column.id,
         }),
         columnHelper.accessor('reference', {
             header: 'Reference',
+            cell: ({row}: any) => <Button onClick={() => dispatch(DataAction.moveRow(row.original.reference))}>{row.original.reference}</Button>
             // footer: info => info.column.id,
         }),
         columnHelper.accessor('weight', {
             header: "Poids",
-            cell: info => info.getValue(),
+            cell: info => info.getValue()
             // footer: info => info.column.id,
         }),
         /* columnHelper.accessor("position", {
@@ -52,14 +54,14 @@ function useColumns(): any[] {
             footer: info => info.column.id,
         }), */
         columnHelper.accessor('destination', {
-            header: 'Destination',
+            header: 'Destination'
             // footer: info => info.column.id,
-        }),
-        {
+        })
+        /* {
             id: 'select',
-            header: "->",
+            header: "  ->",
             cell: ({row}: any) => <Button onClick={() => dispatch(DataAction.moveRow(row.original.reference))}>vers {cale}</Button>
-        }
+        } */
     ];
 
     return columns;
