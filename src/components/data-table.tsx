@@ -25,12 +25,12 @@ declare module '@tanstack/react-table' {
 }
 ////////////////////////////////////////////////////////////////////////////
 */
-
+/*
 const Demo = () => {
     const [dirty, toggleDirty] = useToggle(false);
     useBeforeUnload(dirty, 'You have unsaved changes, are you sure?');
 }
-
+ */
 const columnHelper = createColumnHelper<Data>();
 
 interface ColumnsProps {
@@ -176,10 +176,10 @@ const defaultColumn: Partial<ColumnDef<Data>> = {
 */
 
     return <>
-        <div>
+        {/* <div>
             {dirty && <p>Try to reload or close tab</p>}
             <button onClick={() => toggleDirty()}>{dirty ? 'Disable' : 'Enable'}</button>
-        </div>
+        </div> */}
 
         <div className="d-flex">
             <div style={{maxWidth: 200}}>
