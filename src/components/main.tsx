@@ -9,6 +9,20 @@ import DataAction from "../stores/data/DataAction";
 import DataTable from "./data-table";
 import Statistics from "./statistics";
 
+
+/*
+const Demo = () => {
+  const [dirty, toggleDirty] = useToggle(false);
+  useBeforeUnload(dirty, 'You have unsaved changes, are you sure?');
+
+  return (
+    <div>
+      {dirty && <p>Try to reload or close tab</p>}
+      <button onClick={() => toggleDirty()}>{dirty ? 'Disable' : 'Enable'}</button>
+    </div>
+  );
+}; */
+
 function cleanData(values: any): Data {
     return {
         weight: values["Poids"],
@@ -56,8 +70,8 @@ function Main() {
                                     <input {...getInputProps()} />
                                     {
                                         isDragActive ?
-                                            <p>Tu me poses ca ici gamin</p> :
-                                            <p>Balance ton excel ou ton JSON ...</p>
+                                            <p>Poses ca ici</p> :
+                                            <p>Excel ou ton JSON ...</p>
                                     }
                                 </div>
                             </section>
@@ -68,5 +82,6 @@ function Main() {
         </Container>
     );
 }
+
 
 export default Main;

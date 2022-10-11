@@ -14,12 +14,14 @@ export type Data = {
 interface DataState {
     data: Data[];
     selectedCale: string;
+    selectedPrepa: string;
     loaded: boolean;
 }
 
 const initialState: DataState = {
     data: [],
     selectedCale: "Stock",
+    selectedPrepa: "_",
     loaded: false
 };
 
@@ -42,6 +44,12 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
                 return {
                     ...state,
                     data: [...state.data.filter(r => r.reference !== action.payload), {...d, destination: state.selectedCale}]
+                }
+            case DataAction.CHANGE_PREPA:
+                return {
+                    ...state,
+                    selectedPrepa: action.payload
+
                 }
             default:
                 return state;

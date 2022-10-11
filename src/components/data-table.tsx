@@ -11,10 +11,25 @@ import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../stores/rootStore";
 import {Data} from "../stores/data/DataReducer";
 import DebouncedInput from "./debounceInput";
-import {Button, Form, Table} from "react-bootstrap";
+import {Button, Form, Table, Dropdown} from "react-bootstrap";
 import DataAction from "../stores/data/DataAction";
 import {ColumnDef} from "@tanstack/table-core";
-import { useVirtual } from 'react-virtual'
+import { useVirtual } from 'react-virtual';
+import {useBeforeUnload} from 'react-use';
+/*
+////////////////////////////////////////////////////////////////////////////
+declare module '@tanstack/react-table' {
+    interface TableMeta<TData extends RowData> {
+        updateData: (rowIndex: number, columnId: string, value: unknown) => void
+    }
+}
+////////////////////////////////////////////////////////////////////////////
+*/
+
+const Demo = () => {
+    const [dirty, toggleDirty] = useToggle(false);
+    useBeforeUnload(dirty, 'You have unsaved changes, are you sure?');
+}
 
 const columnHelper = createColumnHelper<Data>();
 
@@ -94,6 +109,7 @@ export default function DataTable() {
     const [sorting, setSorting] = React.useState<SortingState>([]);
     const [globalFilter, setGlobalFilter] = React.useState('')
     const cale = useSelector<RootState, string>(state => state.data.selectedCale);
+    const prepa = useSelector<RootState, string>(state => state.data.selectedPrepa);
     const data = useSelector<RootState, Data[]>(state => state.data.data);
 
     const columns = useColumns();
@@ -129,9 +145,44 @@ export default function DataTable() {
             ? totalSize - (virtualRows?.[virtualRows.length - 1]?.end || 0)
             : 0
 
+/*
+////////////////////////////////////////////////////////////////////////////
+const defaultColumn: Partial<ColumnDef<Data>> = {
+    cell: ({ getValue, row: { index }, column: { id }, table }) => {
+    const initialValue = getValue()
+    // We need to keep and update the state of the cell normally
+    const [value, setValue] = React.useState(initialValue)
+    // When the input is blurred, we'll call our table meta's updateData function
+    const onBlur = () => {
+        table.options.meta?.updateData(index, id, value)
+        //table.options.meta?.updateData(prepa)
+    }
+
+    // If the initialValue is changed external, sync it up with our state
+    React.useEffect(() => {
+        setValue(initialValue)
+    }, [initialValue])
+
+    return (
+        <input
+            value={value as string}
+            onChange={e => setValue(e.target.value)}
+            onBlur={onBlur}
+        />
+    )
+    },
+}
+////////////////////////////////////////////////////////////////////////////
+*/
+
     return <>
+        <div>
+            {dirty && <p>Try to reload or close tab</p>}
+            <button onClick={() => toggleDirty()}>{dirty ? 'Disable' : 'Enable'}</button>
+        </div>
+
         <div className="d-flex">
-            <div style={{maxWidth: 300}}>
+            <div style={{maxWidth: 200}}>
                 <DebouncedInput
                     value={globalFilter ?? ''}
                     onChange={value => setGlobalFilter(String(value))}
@@ -139,7 +190,8 @@ export default function DataTable() {
                     placeholder="Filtrer les donnees..."
                 />
             </div>
-            <div style={{maxWidth: 200}}>
+            &nbsp;
+            <div style={{maxWidth: 150}}>
                 <Form.Select placeholder="vers..." value={cale} onChange={(e) => dispatch(DataAction.changeCale(e.target.value))}>
                     <option value="Stock">Stock</option>
                     <option value="Cale1">Cale1</option>
@@ -149,7 +201,31 @@ export default function DataTable() {
                     <option value="Cale5">Cale5</option>
                 </Form.Select>
             </div>
-            <Button onClick={console.log}>Exporter</Button>
+            &nbsp;
+            <Button variant="success" onClick={console.log}>Exporter</Button>
+            &nbsp;
+            <Button variant="danger" onClick={console.log}>Importer</Button>
+            &nbsp;
+            {/* <Dropdown>
+                <Dropdown.Toggle variant="success" id="dropdown-basic">
+                    DdBut
+                </Dropdown.Toggle>
+
+                <Dropdown.Menu>
+                    <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
+                    <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
+                    <Dropdown.Item href="#/action-3">Something else</Dropdown.Item>
+                    <Form.Select placeholder="vers..." value={cale} onChange={(e) => dispatch(DataAction.changeCale(e.target.value))}>
+                    <Dropdown.Item value="Stock">Stock</Dropdown.Item>
+                    <Dropdown.Item value="Cale1">Cale1</Dropdown.Item>
+                    <Dropdown.Item value="Cale2">Cale2</Dropdown.Item>
+                    <Dropdown.Item value="Cale3">Cale3</Dropdown.Item>
+                    <Dropdown.Item value="Cale4">Cale4</Dropdown.Item>
+                    <Dropdown.Item value="Cale5">Cale5</Dropdown.Item>
+                    </Form.Select>
+                </Dropdown.Menu>
+            </Dropdown>
+            */}
         </div>
         <div ref={tableContainerRef} className="overflow-auto" style={{maxHeight: "500px"}}>
             <Table>
