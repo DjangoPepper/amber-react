@@ -15,7 +15,8 @@ import {Button, Form, Table, Dropdown} from "react-bootstrap";
 import DataAction from "../stores/data/DataAction";
 import {ColumnDef} from "@tanstack/table-core";
 import { useVirtual } from 'react-virtual';
-import {useBeforeUnload} from 'react-use';
+import {useBeforeUnload} from "react-use";
+
 /*
 ////////////////////////////////////////////////////////////////////////////
 declare module '@tanstack/react-table' {
@@ -29,8 +30,8 @@ declare module '@tanstack/react-table' {
 const Demo = () => {
     const [dirty, toggleDirty] = useToggle(false);
     useBeforeUnload(dirty, 'You have unsaved changes, are you sure?');
-}
- */
+} */
+
 const columnHelper = createColumnHelper<Data>();
 
 interface ColumnsProps {

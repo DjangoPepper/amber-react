@@ -1,12 +1,13 @@
 {
   "name": "amber-react",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "dependencies": {
     "@reduxjs/toolkit": "1.8.5",
     "@tanstack/match-sorter-utils": "8.1.1",
     "@tanstack/react-table": "8.5.13",
     "@types/react-beforeunload": "^2.1.1",
+    "Router": "^2.1.0",
     "bootstrap": "5.2.1",
     "react": "^18.2.0",
     "react-beforeunload": "^2.5.3",
