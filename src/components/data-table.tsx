@@ -7,15 +7,28 @@ import {
     SortingState,
     useReactTable
 } from "@tanstack/react-table";
+
+import {
+    Column,
+    Table,
+    ColumnDef,
+    getPaginationRowModel,
+    RowData,
+} from '@tanstack/react-table'
+
+import {Button, Form, Table, Dropdown} from "react-bootstrap";
+import {ColumnDef} from "@tanstack/table-core";
+
+
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../stores/rootStore";
 import {Data} from "../stores/data/DataReducer";
 import DebouncedInput from "./debounceInput";
-import {Button, Form, Table, Dropdown} from "react-bootstrap";
+
 import DataAction from "../stores/data/DataAction";
-import {ColumnDef} from "@tanstack/table-core";
+
 import { useVirtual } from 'react-virtual';
-import {useBeforeUnload} from "react-use";
+// import {useBeforeUnload} from "react-use";
 
 /*
 ////////////////////////////////////////////////////////////////////////////
