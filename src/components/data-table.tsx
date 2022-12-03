@@ -28,6 +28,12 @@ import DebouncedInput from "./debounceInput";
 import DataAction from "../stores/data/DataAction";
 
 import { useVirtual } from 'react-virtual';
+
+declare module '@tanstack/react-table' {
+    interface TableMeta<TData extends RowData> {
+        updateData: (rowIndex: number, columnId: string, value: unknown) => void
+    }
+}
 // import {useBeforeUnload} from "react-use";
 
 /*
@@ -51,6 +57,30 @@ interface ColumnsProps {
     columns: ColumnDef<Data>[]
 }
 
+const EditableCell = ({ getValue, row: { index }, column: { id }, table }: any) => {
+    const initialValue = getValue()
+    // We need to keep and update the state of the cell normally
+    const [value, setValue] = React.useState(initialValue)
+
+    // When the input is blurred, we'll call our table meta's updateData function
+    const onBlur = () => {
+        table.options.meta?.updateData(index, id, value)
+    }
+
+    // If the initialValue is changed external, sync it up with our state
+    React.useEffect(() => {
+        setValue(initialValue)
+    }, [initialValue])
+
+    return (
+        <input
+            value={value as string}
+            onChange={e => setValue(e.target.value)}
+            onBlur={onBlur}
+        />
+    )
+};
+
 function useColumns(): any[] {
     const dispatch = useDispatch();
     const cale = useSelector<RootState, string>(state => state.data.selectedCale);
@@ -63,7 +93,7 @@ function useColumns(): any[] {
         }),
         columnHelper.accessor('prepa', {
             header: () => 'Prepa',
-            cell: info => info.renderValue()
+            cell: EditableCell,
             //footer: info => info.column.id,
         }),
         columnHelper.accessor('reference', {
@@ -141,6 +171,16 @@ export default function DataTable() {
         getCoreRowModel: getCoreRowModel(),
         getSortedRowModel: getSortedRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
+        meta: {
+            updateData: (rowIndex, columnId, value) => {
+                // Skip age index reset until after next rerender
+                console.log(rowIndex, columnId, value);
+                if(columnId === "prepa") {
+                    dispatch(DataAction.updateRow(rowIndex, columnId, value));
+                }
+            },
+        },
+        debugTable: true,
     });
 
     const tableContainerRef = React.useRef<HTMLDivElement>(null)

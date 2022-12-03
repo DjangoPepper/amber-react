@@ -45,6 +45,18 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
                     ...state,
                     data: [...state.data.filter(r => r.reference !== action.payload), {...d, destination: state.selectedCale}]
                 }
+            case DataAction.UPDATE_ROW:
+                return {
+                    ...state,
+                    data: Object.assign(
+                        [],
+                        state.data,
+                        {
+                            [action.payload.rowIndex]: {
+                                ...state.data[action.payload.rowIndex],
+                                [action.payload.columnId]: action.payload.value}
+                        })
+                }
             case DataAction.CHANGE_PREPA:
                 return {
                     ...state,

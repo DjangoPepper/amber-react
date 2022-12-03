@@ -5,6 +5,7 @@ export default class DataAction {
     public static CHANGE_CALE = "DataAction.CHANGE_CALE";
     public static CHANGE_PREPA = "DataAction.CHANGE_PREPA";
     public static MOVE_ROW = "DataAction.MOVE_ROW";
+    public static UPDATE_ROW = "DataAction.UPDATE_ROW";
 
     public static importData(data: any[]): AnyAction {
         return { type: DataAction.IMPORT_DATA, payload: data };
@@ -16,6 +17,10 @@ export default class DataAction {
 
     public static changePrepa(prepa: string): AnyAction {
         return { type: DataAction.CHANGE_PREPA, payload: prepa };
+    }
+
+    public static updateRow(rowIndex: number, columnId: string, value: any) {
+        return {type: DataAction.UPDATE_ROW, payload: {rowIndex, columnId, value}};
     }
 
     public static moveRow(reference: string): AnyAction {
