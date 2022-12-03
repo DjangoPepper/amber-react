@@ -16,8 +16,8 @@ import {
     RowData,
 } from '@tanstack/react-table'
 
-import {Button, Form, Table, Dropdown} from "react-bootstrap";
-import {ColumnDef} from "@tanstack/table-core";
+import {Button, Form, Table as TableRS, Dropdown} from "react-bootstrap";
+// import {ColumnDef} from "@tanstack/table-core";
 
 
 import {useDispatch, useSelector} from "react-redux";
@@ -242,7 +242,7 @@ const defaultColumn: Partial<ColumnDef<Data>> = {
             */}
         </div>
         <div ref={tableContainerRef} className="overflow-auto" style={{maxHeight: "500px"}}>
-            <Table>
+            <TableRS>
                 <thead>
                 {table.getHeaderGroups().map(headerGroup => (
                     <tr key={headerGroup.id}>
@@ -310,7 +310,7 @@ const defaultColumn: Partial<ColumnDef<Data>> = {
                     </tr>
                 ))}
                 </tfoot>
-            </Table>
+            </TableRS>
         </div>
     </>
 }
