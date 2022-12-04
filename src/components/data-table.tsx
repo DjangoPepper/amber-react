@@ -16,6 +16,8 @@ import {
     RowData,
 } from '@tanstack/react-table'
 
+import {utils, writeFileXLSX, writeXLSX} from "xlsx";
+
 import {Button, Form, Table as TableRS, Dropdown} from "react-bootstrap";
 // import {ColumnDef} from "@tanstack/table-core";
 
@@ -199,6 +201,13 @@ export default function DataTable() {
             ? totalSize - (virtualRows?.[virtualRows.length - 1]?.end || 0)
             : 0
 
+    const exportData = () => {
+        const sheet = utils.json_to_sheet(data);
+        const wb = utils.book_new();
+        utils.book_append_sheet(wb, sheet);
+        writeFileXLSX(wb, "steppe.xlsx");
+    };
+
 /*
 ////////////////////////////////////////////////////////////////////////////
 const defaultColumn: Partial<ColumnDef<Data>> = {
@@ -256,7 +265,7 @@ const defaultColumn: Partial<ColumnDef<Data>> = {
                 </Form.Select>
             </div>
             &nbsp;
-            <Button variant="success" onClick={console.log}>Exporter</Button>
+            <Button variant="success" onClick={exportData}>Exporter</Button>
             &nbsp;
             <Button variant="danger" onClick={console.log}>Importer</Button>
             &nbsp;
