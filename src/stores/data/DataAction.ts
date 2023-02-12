@@ -19,8 +19,8 @@ export default class DataAction {
         return { type: DataAction.CHANGE_PREPA, payload: prepa };
     }
 
-    public static updateRow(rowIndex: number, columnId: string, value: any) {
-        return {type: DataAction.UPDATE_ROW, payload: {rowIndex, columnId, value}};
+    public static updateRow(reference: number, columnId: string, value: any) {
+        return {type: DataAction.UPDATE_ROW, payload: {reference, columnId, value}};
     }
 
     public static moveRow(reference: string): AnyAction {

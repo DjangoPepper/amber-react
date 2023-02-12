@@ -1,27 +1,22 @@
 import React from "react";
 import {
-    createColumnHelper, FilterFn,
+    ColumnDef,
+    createColumnHelper,
+    FilterFn,
     flexRender,
-    getCoreRowModel, getFilteredRowModel,
-    getSortedRowModel, Row,
+    getCoreRowModel,
+    getFilteredRowModel,
+    getSortedRowModel,
+    Row,
+    RowData,
     SortingState,
     useReactTable
 } from "@tanstack/react-table";
 
-import {
-    Column,
-    Table,
-    ColumnDef,
-    getPaginationRowModel,
-    RowData,
-} from '@tanstack/react-table'
+import {utils, writeFileXLSX} from "xlsx";
 
-import {utils, writeFileXLSX, writeXLSX} from "xlsx";
-
-import {Button, Form, Table as TableRS, Dropdown} from "react-bootstrap";
+import {Button, Form, Table as TableRS} from "react-bootstrap";
 // import {ColumnDef} from "@tanstack/table-core";
-
-
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../stores/rootStore";
 import {Data} from "../stores/data/DataReducer";
@@ -29,11 +24,12 @@ import DebouncedInput from "./debounceInput";
 
 import DataAction from "../stores/data/DataAction";
 
-import { useVirtual } from 'react-virtual';
+import {useVirtual} from 'react-virtual';
+import {colors, destinations} from "../utils/destination";
 
 declare module '@tanstack/react-table' {
     interface TableMeta<TData extends RowData> {
-        updateData: (rowIndex: number, columnId: string, value: unknown) => void
+        updateData: (reference: number, columnId: string, value: unknown) => void
     }
 }
 // import {useBeforeUnload} from "react-use";
@@ -59,14 +55,14 @@ interface ColumnsProps {
     columns: ColumnDef<Data>[]
 }
 
-const EditableCell = ({ getValue, row: { index }, column: { id }, table }: any) => {
+const EditableCell = ({ getValue, row, column, table }: any) => {
     const initialValue = getValue()
     // We need to keep and update the state of the cell normally
     const [value, setValue] = React.useState(initialValue)
 
     // When the input is blurred, we'll call our table meta's updateData function
     const onBlur = () => {
-        table.options.meta?.updateData(index, id, value)
+        table.options.meta?.updateData(row.original.reference, column.id, value);
     }
 
     // If the initialValue is changed external, sync it up with our state
@@ -155,7 +151,7 @@ export default function DataTable() {
     const [sorting, setSorting] = React.useState<SortingState>([]);
     const [globalFilter, setGlobalFilter] = React.useState('')
     const cale = useSelector<RootState, string>(state => state.data.selectedCale);
-    const prepa = useSelector<RootState, string>(state => state.data.selectedPrepa);
+    // const prepa = useSelector<RootState, string>(state => state.data.selectedPrepa);
     const data = useSelector<RootState, Data[]>(state => state.data.data);
 
     const columns = useColumns();
@@ -174,13 +170,15 @@ export default function DataTable() {
         getSortedRowModel: getSortedRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
         meta: {
-            updateData: (rowIndex, columnId, value) => {
+            updateData: (reference, columnId, value) => {
                 // Skip age index reset until after next rerender
-                console.log(rowIndex, columnId, value);
                 if(columnId === "prepa") {
-                    dispatch(DataAction.updateRow(rowIndex, columnId, value));
+                    dispatch(DataAction.updateRow(reference, columnId, value));
                 }
             },
+        },
+        getRowId: (row, relativeIndex) => {
+            return row.reference;
         },
         debugTable: true,
     });
@@ -256,12 +254,7 @@ const defaultColumn: Partial<ColumnDef<Data>> = {
             &nbsp;
             <div style={{maxWidth: 150}}>
                 <Form.Select placeholder="vers..." value={cale} onChange={(e) => dispatch(DataAction.changeCale(e.target.value))}>
-                    <option value="Stock">Stock</option>
-                    <option value="Cale1">Cale1</option>
-                    <option value="Cale2">Cale2</option>
-                    <option value="Cale3">Cale3</option>
-                    <option value="Cale4">Cale4</option>
-                    <option value="Cale5">Cale5</option>
+                    { destinations.map(d => <option key={d.name} value={d.name}>{d.name}</option>) }
                 </Form.Select>
             </div>
             &nbsp;
@@ -329,7 +322,7 @@ const defaultColumn: Partial<ColumnDef<Data>> = {
                     )}
                     {virtualRows.map(virtualRow => {
                         const row = rows[virtualRow.index] as Row<Data>;
-                        return <tr key={row.id}>
+                        return <tr key={row.id} style={{backgroundColor: colors[row.getValue("destination") as string]}}>
                             {row.getVisibleCells().map(cell => (
                                 <td key={cell.id}>
                                     {flexRender(cell.column.columnDef.cell, cell.getContext())}

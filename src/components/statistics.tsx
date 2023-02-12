@@ -2,6 +2,7 @@ import {useSelector} from "react-redux";
 import {RootState} from "../stores/rootStore";
 import {Data} from "../stores/data/DataReducer";
 import {Table} from "react-bootstrap";
+import {colors} from "../utils/destination";
 
 export default function Statistics() {
     const data = useSelector<RootState, Data[]>(state => state.data.data);
@@ -24,9 +25,9 @@ export default function Statistics() {
             </thead>
             <tbody>
             {keys.map(k => <tr key={k}>
-                <td>{k}</td>
+                <td style={{color: colors[k]}}>{k}</td>
                 <td>{statistics[k].count}</td>
-                <td>{statistics[k].weight}</td>
+                <td>{statistics[k].weight.toLocaleString()}</td>
             </tr>)}
             </tbody>
         </Table>

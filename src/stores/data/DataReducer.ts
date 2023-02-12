@@ -46,16 +46,14 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
                     data: [...state.data.filter(r => r.reference !== action.payload), {...d, destination: state.selectedCale}]
                 }
             case DataAction.UPDATE_ROW:
+                const currentRow = state.data.find(r => r.reference === action.payload.reference);
+                if(!currentRow) return state;
                 return {
                     ...state,
-                    data: Object.assign(
-                        [],
-                        state.data,
-                        {
-                            [action.payload.rowIndex]: {
-                                ...state.data[action.payload.rowIndex],
-                                [action.payload.columnId]: action.payload.value}
-                        })
+                    data: [
+                        ...state.data.filter(r => r.reference !== action.payload.reference),
+                        {...currentRow, [action.payload.columnId]: action.payload.value}
+                    ]
                 }
             case DataAction.CHANGE_PREPA:
                 return {
