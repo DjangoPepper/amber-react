@@ -1,6 +1,5 @@
 import React from "react";
 import {
-    ColumnDef,
     createColumnHelper,
     FilterFn,
     flexRender,
@@ -25,7 +24,7 @@ import DebouncedInput from "./debounceInput";
 import DataAction from "../stores/data/DataAction";
 
 import {useVirtual} from 'react-virtual';
-import {colors, destinations} from "../utils/destination";
+import {colors, destinations, HEADER} from "../utils/destination";
 
 declare module '@tanstack/react-table' {
     interface TableMeta<TData extends RowData> {
@@ -50,10 +49,6 @@ const Demo = () => {
 } */
 
 const columnHelper = createColumnHelper<Data>();
-
-interface ColumnsProps {
-    columns: ColumnDef<Data>[]
-}
 
 const EditableCell = ({ getValue, row, column, table }: any) => {
     const initialValue = getValue()
@@ -82,7 +77,7 @@ const EditableCell = ({ getValue, row, column, table }: any) => {
 
 function useColumns(): any[] {
     const dispatch = useDispatch();
-    const cale = useSelector<RootState, string>(state => state.data.selectedCale);
+    // const cale = useSelector<RootState, string>(state => state.data.selectedCale);
 
     const columns = [
         columnHelper.accessor('rank', {
@@ -201,11 +196,17 @@ export default function DataTable() {
             : 0
 
     const exportData = () => {
-        const sheet = utils.json_to_sheet(data);
+        const aoa: any[][] = [HEADER.map(h => h.name)];
+        for (const row of data) {
+            aoa.push(HEADER.map(h => row[h.key as keyof Data]));
+        }
+        const sheet = utils.aoa_to_sheet(aoa)
         const wb = utils.book_new();
         utils.book_append_sheet(wb, sheet);
-        writeFileXLSX(wb, "steppe.xlsx");
+        writeFileXLSX(wb, "stepe.xlsx");
     };
+
+    const clear = () => dispatch(DataAction.clear());
 
 /*
 ////////////////////////////////////////////////////////////////////////////
@@ -261,7 +262,7 @@ const defaultColumn: Partial<ColumnDef<Data>> = {
             &nbsp;
             <Button variant="success" onClick={exportData}>Exporter</Button>
             &nbsp;
-            <Button variant="danger" onClick={console.log}>Importer</Button>
+            <Button variant="danger" onClick={clear}>Importer</Button>
             &nbsp;
             {/* <Dropdown>
                 <Dropdown.Toggle variant="success" id="dropdown-basic">

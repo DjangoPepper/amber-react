@@ -1,5 +1,20 @@
 import React from "react";
 
+interface IHeader {
+    key: string;
+    name: string;
+    default?: string;
+}
+
+export const HEADER: IHeader[] = [
+    {key: "weight", name :"Poids" },
+    {key: "position", name :"Position" },
+    {key: "prepa", name :"Prépa" },
+    {key: "rank", name :"Rang" },
+    {key: "reference", name :"Référence" },
+    {key: "destination", name :"Destination", default: "Stock" },
+]
+
 export const destinations = [
     {name: "Stock", color: "#fff"},
     {name: "Cale1", color: "#79b3f1"},

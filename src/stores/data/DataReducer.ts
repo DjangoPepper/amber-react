@@ -16,13 +16,15 @@ interface DataState {
     selectedCale: string;
     selectedPrepa: string;
     loaded: boolean;
+    saved: boolean;
 }
 
 const initialState: DataState = {
     data: [],
     selectedCale: "Stock",
     selectedPrepa: "_",
-    loaded: false
+    loaded: false,
+    saved: true
 };
 
 export const dataReducer: Reducer<DataState> = (state = initialState, action: AnyAction): DataState => {
@@ -31,19 +33,21 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
                 return {
                     ...state,
                     data: action.payload,
-                    loaded: true
+                    loaded: true,
+                    saved: false,
                 };
             case DataAction.CHANGE_CALE:
                 return {
                     ...state,
-                    selectedCale: action.payload
+                    selectedCale: action.payload,
                 }
             case DataAction.MOVE_ROW:
                 const d = state.data.find(r => r.reference === action.payload);
                 if(!d) return state;
                 return {
                     ...state,
-                    data: [...state.data.filter(r => r.reference !== action.payload), {...d, destination: state.selectedCale}]
+                    data: [...state.data.filter(r => r.reference !== action.payload), {...d, destination: state.selectedCale}],
+                    saved: false,
                 }
             case DataAction.UPDATE_ROW:
                 const currentRow = state.data.find(r => r.reference === action.payload.reference);
@@ -53,13 +57,34 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
                     data: [
                         ...state.data.filter(r => r.reference !== action.payload.reference),
                         {...currentRow, [action.payload.columnId]: action.payload.value}
-                    ]
+                    ],
+                    saved: false,
                 }
             case DataAction.CHANGE_PREPA:
                 return {
                     ...state,
                     selectedPrepa: action.payload
 
+                }
+            case DataAction.SAVE:
+                if(state.saved) return state;
+                console.log("saving...");
+                window.localStorage.setItem("data", JSON.stringify(state.data));
+                return {
+                    ...state,
+                    saved: false
+                }
+            case DataAction.LOAD:
+                return {
+                    ...state,
+                    data: action.payload,
+                    loaded: true,
+                    saved: true,
+                }
+            case DataAction.CLEAR:
+                return {
+                    ...state,
+                    loaded: false,
                 }
             default:
                 return state;

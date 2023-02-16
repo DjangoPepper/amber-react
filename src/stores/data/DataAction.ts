@@ -6,6 +6,9 @@ export default class DataAction {
     public static CHANGE_PREPA = "DataAction.CHANGE_PREPA";
     public static MOVE_ROW = "DataAction.MOVE_ROW";
     public static UPDATE_ROW = "DataAction.UPDATE_ROW";
+    public static SAVE = "DataAction.SAVE";
+    public static LOAD = "DataAction.LOAD";
+    public static CLEAR = "DataAction.CLEAR";
 
     public static importData(data: any[]): AnyAction {
         return { type: DataAction.IMPORT_DATA, payload: data };
@@ -25,5 +28,17 @@ export default class DataAction {
 
     public static moveRow(reference: string): AnyAction {
         return { type: DataAction.MOVE_ROW, payload: reference };
+    }
+
+    public static save(): AnyAction {
+        return { type: DataAction.SAVE };
+    }
+
+    public static load(data: string): AnyAction {
+        return { type: DataAction.LOAD, payload: JSON.parse(data) };
+    }
+
+    public static clear(): AnyAction {
+        return { type: DataAction.CLEAR };
     }
 }
