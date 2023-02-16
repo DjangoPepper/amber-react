@@ -25,6 +25,7 @@ import DataAction from "../stores/data/DataAction";
 
 import {useVirtual} from 'react-virtual';
 import {colors, destinations, HEADER} from "../utils/destination";
+import Filter, {fuzzyFilter} from "./filter";
 
 declare module '@tanstack/react-table' {
     interface TableMeta<TData extends RowData> {
@@ -82,22 +83,26 @@ function useColumns(): any[] {
     const columns = [
         columnHelper.accessor('rank', {
             //header: () => <span>Rang</span>, modif by fred pour faire comme les autres
-            header: () => 'Rang'
+            header: () => 'Rang',
+            filterFn: fuzzyFilter,
             // footer: info => info.column.id,
         }),
         columnHelper.accessor('prepa', {
             header: () => 'Prepa',
             cell: EditableCell,
+            filterFn: fuzzyFilter,
             //footer: info => info.column.id,
         }),
         columnHelper.accessor('reference', {
             header: 'Reference',
-            cell: ({row}: any) => <Button onClick={() => dispatch(DataAction.moveRow(row.original.reference))}>{row.original.reference}</Button>
+            cell: ({row}: any) => <Button onClick={() => dispatch(DataAction.moveRow(row.original.reference))}>{row.original.reference}</Button>,
+            filterFn: fuzzyFilter,
             // footer: info => info.column.id,
         }),
         columnHelper.accessor('weight', {
             header: "Poids",
-            cell: info => info.getValue()
+            cell: info => info.getValue(),
+            filterFn: fuzzyFilter,
             // footer: info => info.column.id,
         }),
         /* columnHelper.accessor("position", {
@@ -107,7 +112,8 @@ function useColumns(): any[] {
             footer: info => info.column.id,
         }), */
         columnHelper.accessor('destination', {
-            header: 'Destination'
+            header: 'Destination',
+            filterFn: fuzzyFilter,
             // footer: info => info.column.id,
         })
         /* {
@@ -310,6 +316,11 @@ const defaultColumn: Partial<ColumnDef<Data>> = {
                                             asc: ' 🔼',
                                             desc: ' 🔽',
                                         }[header.column.getIsSorted() as string] ?? null}
+                                        {header.column.getCanFilter() ? (
+                                            <div>
+                                                <Filter column={header.column} table={table} />
+                                            </div>
+                                        ) : null}
                                     </div>}
                             </th>
                         ))}
