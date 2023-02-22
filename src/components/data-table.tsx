@@ -305,17 +305,20 @@ const defaultColumn: Partial<ColumnDef<Data>> = {
                                             className: header.column.getCanSort()
                                                 ? 'cursor-pointer select-none'
                                                 : '',
-                                            onClick: header.column.getToggleSortingHandler(),
                                         }}
                                     >
-                                        {flexRender(
-                                            header.column.columnDef.header,
-                                            header.getContext()
-                                        )}
-                                        {{
-                                            asc: ' 🔼',
-                                            desc: ' 🔽',
-                                        }[header.column.getIsSorted() as string] ?? null}
+                                        <div {...{
+                                            onClick: header.column.getToggleSortingHandler(),
+                                        }}>
+                                            {flexRender(
+                                                header.column.columnDef.header,
+                                                header.getContext()
+                                            )}
+                                            {{
+                                                asc: ' 🔼',
+                                                desc: ' 🔽',
+                                            }[header.column.getIsSorted() as string] ?? null}
+                                        </div>
                                         {header.column.getCanFilter() ? (
                                             <div>
                                                 <Filter column={header.column} table={table} />

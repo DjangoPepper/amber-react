@@ -21,7 +21,7 @@ export default function Filter({
                     table,
                 }: {
     column: Column<any, unknown>
-    table: Table<any>
+    table: Table<any>,
 }) {
     const firstValue = table
         .getPreFilteredRowModel()
