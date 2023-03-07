@@ -10,7 +10,8 @@ export default function Statistics() {
         if(!p[row.destination]) {
             p[row.destination] = {count: 0, weight: 0};
         }
-        p[row.destination] = {count: p[row.destination].count + 1, weight: Math.round(p[row.destination].weight) + row.weight}
+        // p[row.destination] = {count: p[row.destination].count + 1, weight: Math.round(p[row.destination].weight) + row.weight}
+        p[row.destination] = {count: p[row.destination].count + 1, weight: (p[row.destination].weight + row.weight)}
         // let num = 5.56789;
         // let n = num.toFixed(2);
         return p;
@@ -27,7 +28,8 @@ export default function Statistics() {
             {keys.map(k => <tr key={k}>
                 <td style={{color: colors[k]}}>{k}</td>
                 <td>{statistics[k].count}</td>
-                <td>{statistics[k].weight.toLocaleString()}</td>
+                <td>{statistics[k].weight.toLocaleString('en-US')}</td>
+                {/* toLocaleString('de-DE') */}
             </tr>)}
             </tbody>
         </Table>

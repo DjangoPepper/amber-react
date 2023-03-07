@@ -245,18 +245,13 @@ const defaultColumn: Partial<ColumnDef<Data>> = {
 */
 
     return <>
-        {/* <div>
-            {dirty && <p>Try to reload or close tab</p>}
-            <button onClick={() => toggleDirty()}>{dirty ? 'Disable' : 'Enable'}</button>
-        </div> */}
-
         <div className="d-flex">
-            <div style={{maxWidth: 200}}>
+            <div style={{maxWidth: 160}}>
                 <DebouncedInput
                     value={globalFilter ?? ''}
                     onChange={value => setGlobalFilter(String(value))}
                     className="p-2 font-lg shadow border border-block"
-                    placeholder="Filtrer les donnees..."
+                    placeholder="Filtre"
                 />
             </div>
             &nbsp;
@@ -270,26 +265,6 @@ const defaultColumn: Partial<ColumnDef<Data>> = {
             &nbsp;
             <Button variant="danger" onClick={clear}>Importer</Button>
             &nbsp;
-            {/* <Dropdown>
-                <Dropdown.Toggle variant="success" id="dropdown-basic">
-                    DdBut
-                </Dropdown.Toggle>
-
-                <Dropdown.Menu>
-                    <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
-                    <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
-                    <Dropdown.Item href="#/action-3">Something else</Dropdown.Item>
-                    <Form.Select placeholder="vers..." value={cale} onChange={(e) => dispatch(DataAction.changeCale(e.target.value))}>
-                    <Dropdown.Item value="Stock">Stock</Dropdown.Item>
-                    <Dropdown.Item value="Cale1">Cale1</Dropdown.Item>
-                    <Dropdown.Item value="Cale2">Cale2</Dropdown.Item>
-                    <Dropdown.Item value="Cale3">Cale3</Dropdown.Item>
-                    <Dropdown.Item value="Cale4">Cale4</Dropdown.Item>
-                    <Dropdown.Item value="Cale5">Cale5</Dropdown.Item>
-                    </Form.Select>
-                </Dropdown.Menu>
-            </Dropdown>
-            */}
         </div>
         <div ref={tableContainerRef} className="overflow-auto" style={{maxHeight: "500px"}}>
             <TableRS>
