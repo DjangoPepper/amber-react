@@ -29,7 +29,6 @@ export default function Statistics() {
                 <td style={{color: colors[k]}}>{k}</td>
                 <td>{statistics[k].count}</td>
                 <td>{statistics[k].weight.toLocaleString('en-US')}</td>
-                {/* toLocaleString('de-DE') */}
             </tr>)}
             </tbody>
         </Table>

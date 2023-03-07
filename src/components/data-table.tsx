@@ -257,7 +257,12 @@ const defaultColumn: Partial<ColumnDef<Data>> = {
             &nbsp;
             <div style={{maxWidth: 150}}>
                 <Form.Select placeholder="vers..." value={cale} onChange={(e) => dispatch(DataAction.changeCale(e.target.value))}>
-                    { destinations.map(d => <option key={d.name} value={d.name}>{d.name}</option>) }
+                    { destinations.map(
+                        d => <option key={d.name} value={d.name} style={{backgroundColor:d.color}}
+                        > {d.name}
+                        </option>
+                    )
+                    }
                 </Form.Select>
             </div>
             &nbsp;
