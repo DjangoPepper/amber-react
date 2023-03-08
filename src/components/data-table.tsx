@@ -255,14 +255,9 @@ const defaultColumn: Partial<ColumnDef<Data>> = {
                 />
             </div>
             &nbsp;
-            <div style={{maxWidth: 150}}>
+            <div style={{maxWidth: 150, backgroundColor:"#f85252"}}>
                 <Form.Select placeholder="vers..." value={cale} onChange={(e) => dispatch(DataAction.changeCale(e.target.value))}>
-                    { destinations.map(
-                        d => <option key={d.name} value={d.name} style={{backgroundColor:d.color}}
-                        > {d.name}
-                        </option>
-                    )
-                    }
+                    { destinations.map(d => <option key={d.name} value={d.name} style={{backgroundColor:d.color}}> {d.name} </option>)}
                 </Form.Select>
             </div>
             &nbsp;
@@ -271,9 +266,7 @@ const defaultColumn: Partial<ColumnDef<Data>> = {
             <Button variant="danger" onClick={clear}>Importer</Button>
             &nbsp;
         </div>
-        <div ref={tableContainerRef} className="overflow-auto" style={{maxHeight: "500px"}}>
-            <TableRS>
-                <thead>
+        <thead>
                 {table.getHeaderGroups().map(headerGroup => (
                     <tr key={headerGroup.id}>
                         {headerGroup.headers.map(header => (
@@ -310,12 +303,53 @@ const defaultColumn: Partial<ColumnDef<Data>> = {
                     </tr>
                 ))}
                 </thead>
+        <div ref={tableContainerRef} className="overflow-auto" style={{maxHeight: "500px"}}>
+            <TableRS>
+                {/* <thead>
+                {table.getHeaderGroups().map(headerGroup => (
+                    <tr key={headerGroup.id}>
+                        {headerGroup.headers.map(header => (
+                            <th key={header.id}>
+                                {header.isPlaceholder
+                                    ? null
+                                    : <div
+                                        {...{
+                                            className: header.column.getCanSort()
+                                                ? 'cursor-pointer select-none'
+                                                : '',
+                                        }}
+                                    >
+                                        <div {...{
+                                            onClick: header.column.getToggleSortingHandler(),
+                                        }}>
+                                            {flexRender(
+                                                header.column.columnDef.header,
+                                                header.getContext()
+                                            )}
+                                            {{
+                                                asc: ' 🔼',
+                                                desc: ' 🔽',
+                                            }[header.column.getIsSorted() as string] ?? null}
+                                        </div>
+                                        {header.column.getCanFilter() ? (
+                                            <div>
+                                                <Filter column={header.column} table={table} />
+                                            </div>
+                                        ) : null}
+                                    </div>}
+                            </th>
+                        ))}
+                    </tr>
+                ))}
+                </thead> */}
+
                 <tbody className="overflow-auto" style={{maxHeight: "700px"}}>
                     {paddingTop > 0 && (
                         <tr>
                             <td style={{ height: `${paddingTop}px` }} />
                         </tr>
                     )}
+
                     {virtualRows.map(virtualRow => {
                         const row = rows[virtualRow.index] as Row<Data>;
                         return <tr key={row.id} style={{backgroundColor: colors[row.getValue("destination") as string]}}>
@@ -326,14 +360,17 @@ const defaultColumn: Partial<ColumnDef<Data>> = {
                             ))}
                         </tr>
                     })}
-                    {paddingBottom > 0 && (
+
+ {/*                     {paddingBottom > 0 && (
                         <tr>
                             <td style={{ height: `${paddingBottom}px` }} />
                         </tr>
-                    )}
+                    )} */}
                 </tbody>
+
                 <tfoot>
-                {table.getFooterGroups().map(footerGroup => (
+                {/* quel usage ? */}
+                {/* {table.getFooterGroups().map(footerGroup => (
                     <tr key={footerGroup.id}>
                         {footerGroup.headers.map(header => (
                             <th key={header.id}>
@@ -346,7 +383,7 @@ const defaultColumn: Partial<ColumnDef<Data>> = {
                             </th>
                         ))}
                     </tr>
-                ))}
+                ))} */}
                 </tfoot>
             </TableRS>
         </div>
