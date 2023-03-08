@@ -436,7 +436,6 @@ const defaultColumn: Partial<ColumnDef<Data>> = {
 			>
 				{'>>'}
 			</button>&nbsp;&nbsp;&nbsp;&nbsp;
-			&nbsp;&nbsp;&nbsp;&nbsp;
 			<span className="flex items-center gap-1">
 				{/* <div>Page</div> */}
 				<strong>
@@ -455,9 +454,9 @@ const defaultColumn: Partial<ColumnDef<Data>> = {
 						table.setPageIndex(page)
 					}}
 					className="border p-1 rounded w-16"
-					style={{maxWidth: 64 }}
+					style={{maxWidth: 40 }}
 				/>
-				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			</span>
 			<select
 				value={table.getState().pagination.pageSize}
@@ -467,7 +466,7 @@ const defaultColumn: Partial<ColumnDef<Data>> = {
 			>
 				{[10, 20, 30, 40, 50].map(pageSize => (
 					<option key={pageSize} value={pageSize}>
-						Show {pageSize}
+						{pageSize}
 					</option>
 				))}
 			</select>
