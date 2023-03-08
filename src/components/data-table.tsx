@@ -9,6 +9,8 @@ import {
     Row,
     RowData,
     SortingState,
+	PaginationState,
+	ColumnDef,
     useReactTable
 } from "@tanstack/react-table";
 
@@ -27,27 +29,21 @@ import {useVirtual} from 'react-virtual';
 import {colors, destinations, HEADER} from "../utils/destination";
 import Filter, {fuzzyFilter} from "./filter";
 
+
+
+import { QueryClient, QueryClientProvider, useQuery } from 'react-query'
+import './index-tanstack.css'
+// import { fetchData, Person } from './fetchData'
+
+
+
 declare module '@tanstack/react-table' {
     interface TableMeta<TData extends RowData> {
         updateData: (reference: number, columnId: string, value: unknown) => void
     }
 }
-// import {useBeforeUnload} from "react-use";
 
-/*
-////////////////////////////////////////////////////////////////////////////
-declare module '@tanstack/react-table' {
-    interface TableMeta<TData extends RowData> {
-        updateData: (rowIndex: number, columnId: string, value: unknown) => void
-    }
-}
-////////////////////////////////////////////////////////////////////////////
-*/
-/*
-const Demo = () => {
-    const [dirty, toggleDirty] = useToggle(false);
-    useBeforeUnload(dirty, 'You have unsaved changes, are you sure?');
-} */
+const queryClient = new QueryClient()
 
 const columnHelper = createColumnHelper<Data>();
 
@@ -126,19 +122,6 @@ function useColumns(): any[] {
     return columns;
 }
 
-// const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
-//     // Rank the item
-//     const itemRank = rankItem(row.getValue(columnId), value)
-//
-//     // Store the itemRank info
-//     addMeta({
-//         itemRank,
-//     })
-//
-//     // Return if the item should be filtered in/out
-//     return itemRank.passed
-// }
-
 const globalFilterFn: FilterFn<Data> = (row, columnId, filterValue: string) => {
     const search = filterValue.toLowerCase();
 
@@ -149,6 +132,36 @@ const globalFilterFn: FilterFn<Data> = (row, columnId, filterValue: string) => {
 };
 
 export default function DataTable() {
+
+	const rerender = React.useReducer(() => ({}), {})[1]
+
+	const [{ pageIndex, pageSize }, setPagination] =
+		React.useState<PaginationState>({
+			pageIndex: 0,
+			pageSize: 10,
+		})
+
+	/* const fetchDataOptions = {
+		pageIndex,
+		pageSize,
+	} */
+	/* const dataQuery = useQuery(
+		['data', fetchDataOptions],
+		() => fetchData(fetchDataOptions),
+		{ keepPreviousData: true }
+	) */
+	const defaultData = React.useMemo(() => [], [])
+
+	const pagination = React.useMemo(
+		() => ({
+			pageIndex,
+			pageSize,
+		}),
+		[pageIndex, pageSize]
+	)
+
+
+
     const dispatch = useDispatch();
     const [sorting, setSorting] = React.useState<SortingState>([]);
     const [globalFilter, setGlobalFilter] = React.useState('')
@@ -267,7 +280,7 @@ const defaultColumn: Partial<ColumnDef<Data>> = {
                                 {/* {<div>{d.name} style={{backgroundColor: d.color}}</div>} */}
                                 {/* const row = rows[virtualRow.index] as Row<Data>;
                                     return <tr key={row.id} style={{backgroundColor: colors[row.getValue("destination") as string]}}> */}
-                            style={{backgroundColor:d.color}}
+                            	{/* style={{backgroundColor:d.color}} */}
                         </option>
                     )}
                 </Form.Select>
@@ -399,5 +412,77 @@ const defaultColumn: Partial<ColumnDef<Data>> = {
                 </tfoot>
             </TableRS>
         </div>
+		<div className="h-2" />
+		<div className="flex items-center gap-2">
+			<button
+				className="border rounded p-1"
+				onClick={() => table.setPageIndex(0)}
+				disabled={!table.getCanPreviousPage()}
+			>
+				{'<<'}
+			</button>&nbsp;&nbsp;&nbsp;&nbsp;
+			<button
+				className="border rounded p-1"
+				onClick={() => table.previousPage()}
+				disabled={!table.getCanPreviousPage()}
+			>
+				{'<'}
+			</button>&nbsp;&nbsp;&nbsp;&nbsp;
+			<button
+				className="border rounded p-1"
+				onClick={() => table.nextPage()}
+				disabled={!table.getCanNextPage()}
+			>
+				{'>'}
+			</button>&nbsp;&nbsp;&nbsp;&nbsp;
+			<button
+				className="border rounded p-1"
+				onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+				disabled={!table.getCanNextPage()}
+			>
+				{'>>'}
+			</button>&nbsp;&nbsp;&nbsp;&nbsp;
+			&nbsp;&nbsp;&nbsp;&nbsp;
+			<span className="flex items-center gap-1">
+				{/* <div>Page</div> */}
+				<strong>
+					{table.getState().pagination.pageIndex + 1} of{' '}
+					{table.getPageCount()}
+				</strong>
+			</span>
+			&nbsp;&nbsp;
+			<span className="flex items-center gap-1">
+				| Go to : &nbsp;&nbsp;&nbsp;&nbsp;
+				<input
+					type="number"
+					defaultValue={table.getState().pagination.pageIndex + 1}
+					onChange={e => {
+						const page = e.target.value ? Number(e.target.value) - 1 : 0
+						table.setPageIndex(page)
+					}}
+					className="border p-1 rounded w-16"
+					style={{maxWidth: 64 }}
+				/>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			</span>
+			<select
+				value={table.getState().pagination.pageSize}
+				onChange={e => {
+					table.setPageSize(Number(e.target.value))
+				}}
+			>
+				{[10, 20, 30, 40, 50].map(pageSize => (
+					<option key={pageSize} value={pageSize}>
+						Show {pageSize}
+					</option>
+				))}
+			</select>
+			{/* {dataQuery.isFetching ? 'Loading...' : null} */}
+		</div>
+		{/* <div>{table.getRowModel().rows.length} Lignes</div> */}
+{/* 		<div>to
+			<button onClick={() => rerender()}>Force Rerender</button>
+		</div> */}
+		{/* <pre>{JSON.stringify(pagination, null, 2)}</pre> */}
     </>
 }

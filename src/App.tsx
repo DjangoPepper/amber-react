@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+// import React, {useEffect} from 'react';
 import { Provider } from "react-redux";
 import './styles/App.scss';
 import Header from "./components/header";
