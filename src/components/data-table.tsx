@@ -193,9 +193,11 @@ export default function DataTable() {
         size: rows.length,
         overscan: 10,
     })
+
     const { virtualItems: virtualRows, totalSize } = rowVirtualizer
 
     const paddingTop = virtualRows.length > 0 ? virtualRows?.[0]?.start || 0 : 0
+
     const paddingBottom =
         virtualRows.length > 0
             ? totalSize - (virtualRows?.[virtualRows.length - 1]?.end || 0)
@@ -246,7 +248,7 @@ const defaultColumn: Partial<ColumnDef<Data>> = {
 
     return <>
         <div className="d-flex">
-            <div style={{maxWidth: 160}}>
+            <div style={{maxWidth: 165}}>
                 <DebouncedInput
                     value={globalFilter ?? ''}
                     onChange={value => setGlobalFilter(String(value))}
@@ -255,9 +257,19 @@ const defaultColumn: Partial<ColumnDef<Data>> = {
                 />
             </div>
             &nbsp;
-            <div style={{maxWidth: 150, backgroundColor:"#f85252"}}>
+            <div style={{maxWidth: 150 }}>
                 <Form.Select placeholder="vers..." value={cale} onChange={(e) => dispatch(DataAction.changeCale(e.target.value))}>
-                    { destinations.map(d => <option key={d.name} value={d.name} style={{backgroundColor:d.color}}> {d.name} </option>)}
+                    { destinations.map(
+                        d => <option key={d.name} value={d.name} style={{backgroundColor:d.color}}>
+                            {d.name}
+                                {/* <>{d.name} style={{backgroundColor: d.color}}</> */}
+                                {/* {() => <div>{myScopedVariableReference}</div>} */}
+                                {/* {<div>{d.name} style={{backgroundColor: d.color}}</div>} */}
+                                {/* const row = rows[virtualRow.index] as Row<Data>;
+                                    return <tr key={row.id} style={{backgroundColor: colors[row.getValue("destination") as string]}}> */}
+                            style={{backgroundColor:d.color}}
+                        </option>
+                    )}
                 </Form.Select>
             </div>
             &nbsp;
@@ -302,7 +314,7 @@ const defaultColumn: Partial<ColumnDef<Data>> = {
                         ))}
                     </tr>
                 ))}
-                </thead>
+        </thead>
         <div ref={tableContainerRef} className="overflow-auto" style={{maxHeight: "500px"}}>
             <TableRS>
                 {/* <thead>
@@ -361,11 +373,11 @@ const defaultColumn: Partial<ColumnDef<Data>> = {
                         </tr>
                     })}
 
- {/*                     {paddingBottom > 0 && (
+                    {paddingBottom > 0 && (
                         <tr>
                             <td style={{ height: `${paddingBottom}px` }} />
                         </tr>
-                    )} */}
+                    )}
                 </tbody>
 
                 <tfoot>
