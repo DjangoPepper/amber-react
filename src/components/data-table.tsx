@@ -275,12 +275,6 @@ const defaultColumn: Partial<ColumnDef<Data>> = {
                     { destinations.map(
                         d => <option key={d.name} value={d.name} style={{backgroundColor:d.color}}>
                             {d.name}
-                                {/* <>{d.name} style={{backgroundColor: d.color}}</> */}
-                                {/* {() => <div>{myScopedVariableReference}</div>} */}
-                                {/* {<div>{d.name} style={{backgroundColor: d.color}}</div>} */}
-                                {/* const row = rows[virtualRow.index] as Row<Data>;
-                                    return <tr key={row.id} style={{backgroundColor: colors[row.getValue("destination") as string]}}> */}
-                            	{/* style={{backgroundColor:d.color}} */}
                         </option>
                     )}
                 </Form.Select>
