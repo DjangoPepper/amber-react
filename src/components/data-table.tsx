@@ -9,9 +9,9 @@ import {
     Row,
     RowData,
     SortingState,
-	PaginationState,
-	ColumnDef,
-    useReactTable
+    PaginationState,
+    ColumnDef,
+    useReactTable, getPaginationRowModel
 } from "@tanstack/react-table";
 
 import {utils, writeFileXLSX} from "xlsx";
@@ -150,17 +150,15 @@ export default function DataTable() {
 		() => fetchData(fetchDataOptions),
 		{ keepPreviousData: true }
 	) */
-	const defaultData = React.useMemo(() => [], [])
+	// const defaultData = React.useMemo(() => [], [])
 
-	const pagination = React.useMemo(
-		() => ({
-			pageIndex,
-			pageSize,
-		}),
-		[pageIndex, pageSize]
-	)
-
-
+	// const pagination = React.useMemo(
+	// 	() => ({
+	// 		pageIndex,
+	// 		pageSize,
+	// 	}),
+	// 	[pageIndex, pageSize]
+	// )
 
     const dispatch = useDispatch();
     const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -184,6 +182,7 @@ export default function DataTable() {
         getCoreRowModel: getCoreRowModel(),
         getSortedRowModel: getSortedRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
+        getPaginationRowModel: getPaginationRowModel(),
         meta: {
             updateData: (reference, columnId, value) => {
                 // Skip age index reset until after next rerender
@@ -201,20 +200,20 @@ export default function DataTable() {
     const tableContainerRef = React.useRef<HTMLDivElement>(null)
 
     const { rows } = table.getRowModel()
-    const rowVirtualizer = useVirtual({
-        parentRef: tableContainerRef,
-        size: rows.length,
-        overscan: 10,
-    })
+    // const rowVirtualizer = useVirtual({
+    //     parentRef: tableContainerRef,
+    //     size: rows.length,
+    //     overscan: 10,
+    // })
 
-    const { virtualItems: virtualRows, totalSize } = rowVirtualizer
-
-    const paddingTop = virtualRows.length > 0 ? virtualRows?.[0]?.start || 0 : 0
-
-    const paddingBottom =
-        virtualRows.length > 0
-            ? totalSize - (virtualRows?.[virtualRows.length - 1]?.end || 0)
-            : 0
+    // const { virtualItems: virtualRows, totalSize } = rowVirtualizer
+    //
+    // const paddingTop = virtualRows.length > 0 ? virtualRows?.[0]?.start || 0 : 0
+    //
+    // const paddingBottom =
+    //     virtualRows.length > 0
+    //         ? totalSize - (virtualRows?.[virtualRows.length - 1]?.end || 0)
+    //         : 0
 
     const exportData = () => {
         const aoa: any[][] = [HEADER.map(h => h.name)];
@@ -363,28 +362,44 @@ const defaultColumn: Partial<ColumnDef<Data>> = {
                 </thead> */}
 
                 <tbody className="overflow-auto" style={{maxHeight: "700px"}}>
-                    {paddingTop > 0 && (
-                        <tr>
-                            <td style={{ height: `${paddingTop}px` }} />
-                        </tr>
-                    )}
-
-                    {virtualRows.map(virtualRow => {
-                        const row = rows[virtualRow.index] as Row<Data>;
-                        return <tr key={row.id} style={{backgroundColor: colors[row.getValue("destination") as string]}}>
-                            {row.getVisibleCells().map(cell => (
-                                <td key={cell.id}>
-                                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                                </td>
-                            ))}
-                        </tr>
+                    {table.getRowModel().rows.map(row => {
+                        return (
+                            <tr key={row.id}>
+                                {row.getVisibleCells().map(cell => {
+                                    return (
+                                        <td key={cell.id}>
+                                            {flexRender(
+                                                cell.column.columnDef.cell,
+                                                cell.getContext()
+                                            )}
+                                        </td>
+                                    )
+                                })}
+                            </tr>
+                        )
                     })}
+                    {/*{paddingTop > 0 && (*/}
+                    {/*    <tr>*/}
+                    {/*        <td style={{ height: `${paddingTop}px` }} />*/}
+                    {/*    </tr>*/}
+                    {/*)}*/}
 
-                    {paddingBottom > 0 && (
-                        <tr>
-                            <td style={{ height: `${paddingBottom}px` }} />
-                        </tr>
-                    )}
+                    {/*{virtualRows.map(virtualRow => {*/}
+                    {/*    const row = rows[virtualRow.index] as Row<Data>;*/}
+                    {/*    return <tr key={row.id} style={{backgroundColor: colors[row.getValue("destination") as string]}}>*/}
+                    {/*        {row.getVisibleCells().map(cell => (*/}
+                    {/*            <td key={cell.id}>*/}
+                    {/*                {flexRender(cell.column.columnDef.cell, cell.getContext())}*/}
+                    {/*            </td>*/}
+                    {/*        ))}*/}
+                    {/*    </tr>*/}
+                    {/*})}*/}
+
+                    {/*{paddingBottom > 0 && (*/}
+                    {/*    <tr>*/}
+                    {/*        <td style={{ height: `${paddingBottom}px` }} />*/}
+                    {/*    </tr>*/}
+                    {/*)}*/}
                 </tbody>
 
                 <tfoot>
