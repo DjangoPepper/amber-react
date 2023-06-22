@@ -364,7 +364,7 @@ const defaultColumn: Partial<ColumnDef<Data>> = {
                 <tbody className="overflow-auto" style={{maxHeight: "700px"}}>
                     {table.getRowModel().rows.map(row => {
                         return (
-                            <tr key={row.id}>
+                            <tr key={row.id} style={{backgroundColor: colors[row.getValue("destination") as string]}}>
                                 {row.getVisibleCells().map(cell => {
                                     return (
                                         <td key={cell.id}>

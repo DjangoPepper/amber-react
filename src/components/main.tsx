@@ -30,8 +30,8 @@ function cleanData(values: any): Data {
 		position: values["Position"],
 		prepa: values["Prépa"],
 		rank: values["Rang"],
-		reference: values["Référence"],
-		destination: values["Destination"] || "Stock",
+		reference: values["Référence" || "N° bobine" || "N° PRODUIT"],
+		destination: values["Destination" || "Stock"]
 	}
 }
 
