@@ -262,7 +262,7 @@ const defaultColumn: Partial<ColumnDef<Data>> = {
     const [hold, setHold] = useState('');
     const [selectedColor, setSelectedColor] = useState('');
     // {(e: React.ChangeEvent<HTMLSelectElement>)
-    
+    // const handleHoldChange = () =>  {
     const handleHoldChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         dispatch(DataAction.changeCale(e.target.value))
         // dispatch(DataAction.changeCouleur(e.target.value)) 
@@ -289,9 +289,11 @@ const defaultColumn: Partial<ColumnDef<Data>> = {
             <div style={{maxWidth: 150 }}>
                 <Form.Select placeholder="vers..." value={cale} 
                     // onChange={ (e) => dispatch(DataAction.changeCale(e.target.value))}
-                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) => dispatch(DataAction.changeCale(e.target.value))}
+                    // onChange={(e: React.ChangeEvent<HTMLSelectElement>) => dispatch(DataAction.changeCale(e.target.value))}
                     // onChange={ (e) => handleHoldChange(e.target.value)
-                    // onChange={ (e) => handleHoldChange
+                    // onChange={ () => handleHoldChange}
+                    onChange={(e) => handleHoldChange(e)}
+
                     style={{ backgroundColor: selectedColor }}
                     >
                     { destinations.map(
