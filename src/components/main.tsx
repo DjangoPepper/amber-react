@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect} from 'react'
+import React, {useCallback} from 'react'
 import Dropzone from 'react-dropzone'
 import {Col, Container, Row} from "react-bootstrap";
 import {read, utils} from "xlsx";
@@ -26,16 +26,17 @@ import Statistics from "./statistics";
 
 function cleanData(values: any): Data {
 	return {
-		weight: values["Poids"],
-		position: values["Position"],
-		prepa: values["Prépa"],
-		rank: values["Rang"],
+		weight: values["Poids" || "POIDS"],
+		position: values["Position" || "POSITION"],
+		prepa: values["Prépa" || "PREPA"],
+		rank: values["Rang" || "RANG" || "Num" || "NUM"],
 		reference: values["Référence" || "N° bobine" || "N° PRODUIT"],
-		destination: values["Destination" || "Stock"]
+		destination: values["Destination" || "DESTINATION" || "Stock" ]
 	}
 }
 
 function Main() {
+	const fredcolor="#fdff5b"
 	const dispatch = useDispatch();
 	const loaded = useSelector<RootState, boolean>(state => state.data.loaded);
 	const onDrop = useCallback((acceptedFiles: any) => {

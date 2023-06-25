@@ -22,7 +22,7 @@ export default function Statistics() {
             <thead>
                 <th>Cale</th>
                 <th>Quantité</th>
-                <th>Poids</th>
+                <th>Tonnage</th>
             </thead>
             <tbody>
             {keys.map(k => <tr key={k}>

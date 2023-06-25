@@ -41,6 +41,11 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
                     ...state,
                     selectedCale: action.payload,
                 }
+            case DataAction.CHANGE_COULEUR:
+                return {
+                    ...state,
+                    selectedCale: action.payload,
+                }
             case DataAction.MOVE_ROW:
                 const d = state.data.find(r => r.reference === action.payload);
                 if(!d) return state;

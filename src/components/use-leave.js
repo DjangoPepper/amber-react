@@ -11,7 +11,7 @@ export const useLeavePageConfirm = (
 	useEffect(() => {
 	const handler = () => {
 		if (isConfirm && !window.confirm(message)) {
-		throw "Route Canceled";
+		// throw "Route Canceled"; #je l'ai enlve ca genere un erreur
 		}
 	};
 

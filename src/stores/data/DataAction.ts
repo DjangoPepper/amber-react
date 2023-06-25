@@ -10,6 +10,12 @@ export default class DataAction {
     public static LOAD = "DataAction.LOAD";
     public static CLEAR = "DataAction.CLEAR";
 
+    public static CHANGE_COULEUR = "DataAction.CHANGE_COULEUR";
+
+    public static changeCouleur(cale: any[]): AnyAction {
+        return { type: DataAction.CHANGE_COULEUR, payload: cale };
+    }
+
     public static importData(data: any[]): AnyAction {
         return { type: DataAction.IMPORT_DATA, payload: data };
     }

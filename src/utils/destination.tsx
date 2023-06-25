@@ -1,4 +1,4 @@
-import React from "react";
+// import React from "react";
 
 interface IHeader {
     key: string;
@@ -16,16 +16,17 @@ export const HEADER: IHeader[] = [
 ]
 
 export const destinations = [
-    {name: "Stock", color: "#fff"},
-    {name: "Cale1", color: "#79b3f1"},
-    {name: "Cale2", color: "#f85252"},
-    {name: "Cale3", color: "#ee5bfa"},
-    {name: "Cale4", color: "#aafa4c"},
-    {name: "Cale5", color: "#fa6504"},
+    {name: "Sto", color: "#fff"},
+    {name: "C1", color: "#00c87a"},
+    {name: "C2", color: "#3cbefc"},
+    {name: "C3", color: "#9d64e2"},
+    {name: "C4", color: "#f447d1"},
+    {name: "C5", color: "#fdff5b"},
 ]
 
 
 export const colors = destinations.reduce<{[key: string]: string}>((obj, d) => {
     obj[d.name] = d.color;
+    // obj[fredcolor] = d.color
     return obj;
 }, {})

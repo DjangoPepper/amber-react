@@ -1,4 +1,5 @@
 import React from "react";
+import { useState } from 'react';
 import {
     createColumnHelper,
     FilterFn,
@@ -11,8 +12,8 @@ import {
     SortingState,
     PaginationState,
     ColumnDef,
-    useReactTable, getPaginationRowModel
-} from "@tanstack/react-table";
+    useReactTable, getPaginationRowModel, isRowSelected
+        } from "@tanstack/react-table";
 
 // import {utils, writeFileXLSX} from "xlsx";
 import { utils, writeFile } from "xlsx";
@@ -139,7 +140,7 @@ export default function DataTable() {
 	const [{ pageIndex, pageSize }, setPagination] =
 		React.useState<PaginationState>({
 			pageIndex: 0,
-			pageSize: 10,
+			pageSize: 41,
 		})
 
 	/* const fetchDataOptions = {
@@ -160,7 +161,7 @@ export default function DataTable() {
 	// 	}),
 	// 	[pageIndex, pageSize]
 	// )
-
+    
     const dispatch = useDispatch();
     const [sorting, setSorting] = React.useState<SortingState>([]);
     const [globalFilter, setGlobalFilter] = React.useState('')
@@ -257,10 +258,26 @@ const defaultColumn: Partial<ColumnDef<Data>> = {
 }
 ////////////////////////////////////////////////////////////////////////////
 */
+//  ########################################################################################################################################### 
+    const [hold, setHold] = useState('');
+    const [selectedColor, setSelectedColor] = useState('');
+    // {(e: React.ChangeEvent<HTMLSelectElement>)
+    
+    const handleHoldChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        dispatch(DataAction.changeCale(e.target.value))
+        // dispatch(DataAction.changeCouleur(e.target.value)) 
+        const selectedValue = (e.target.value);
+        const selectedOption = destinations.find((d) => d.name === selectedValue);
 
+        setHold(selectedValue);
+        setSelectedColor(selectedOption ? selectedOption.color : '');
+        
+        }
+//  ########################################################################################################################################### 
     return <>
         <div className="d-flex">
-            <div style={{maxWidth: 165}}>
+            <div style={{maxWidth: 90}}>
+                {/* 11 chiffres */}
                 <DebouncedInput
                     value={globalFilter ?? ''}
                     onChange={value => setGlobalFilter(String(value))}
@@ -270,7 +287,13 @@ const defaultColumn: Partial<ColumnDef<Data>> = {
             </div>
             &nbsp;
             <div style={{maxWidth: 150 }}>
-                <Form.Select placeholder="vers..." value={cale} onChange={(e) => dispatch(DataAction.changeCale(e.target.value))}>
+                <Form.Select placeholder="vers..." value={cale} 
+                    // onChange={ (e) => dispatch(DataAction.changeCale(e.target.value))}
+                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) => dispatch(DataAction.changeCale(e.target.value))}
+                    // onChange={ (e) => handleHoldChange(e.target.value)
+                    // onChange={ (e) => handleHoldChange
+                    style={{ backgroundColor: selectedColor }}
+                    >
                     { destinations.map(
                         d => <option key={d.name} value={d.name} style={{backgroundColor:d.color}}>
                             {d.name}
@@ -479,7 +502,7 @@ const defaultColumn: Partial<ColumnDef<Data>> = {
 					table.setPageSize(Number(e.target.value))
 				}}
 			>
-				{[10, 20, 30, 40, 50].map(pageSize => (
+				{[10,40, 80, 120, 160].map(pageSize => (
 					<option key={pageSize} value={pageSize}>
 						{pageSize}
 					</option>
