@@ -14,7 +14,8 @@ import {
     useReactTable, getPaginationRowModel
 } from "@tanstack/react-table";
 
-import {utils, writeFileXLSX} from "xlsx";
+// import {utils, writeFileXLSX} from "xlsx";
+import { utils, writeFile } from "xlsx";
 
 import {Button, Form, Table as TableRS} from "react-bootstrap";
 // import {ColumnDef} from "@tanstack/table-core";
@@ -25,7 +26,7 @@ import DebouncedInput from "./debounceInput";
 
 import DataAction from "../stores/data/DataAction";
 
-import {useVirtual} from 'react-virtual';
+import {useVirtual} from "react-virtual";
 import {colors, destinations, HEADER} from "../utils/destination";
 import Filter, {fuzzyFilter} from "./filter";
 
@@ -223,9 +224,8 @@ export default function DataTable() {
         const sheet = utils.aoa_to_sheet(aoa)
         const wb = utils.book_new();
         utils.book_append_sheet(wb, sheet);
-        writeFileXLSX(wb, "stepe.xlsx");
+        writeFile(wb, "stepe.xlsx");
     };
-
     const clear = () => dispatch(DataAction.clear());
 
 /*
