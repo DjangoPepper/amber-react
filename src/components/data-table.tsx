@@ -7,19 +7,15 @@ import {
     getCoreRowModel,
     getFilteredRowModel,
     getSortedRowModel,
-    Row,
     RowData,
     SortingState,
     PaginationState,
-    ColumnDef,
-    useReactTable, getPaginationRowModel, isRowSelected
-        } from "@tanstack/react-table";
+    useReactTable,
+    getPaginationRowModel        } from "@tanstack/react-table";
 
-// import {utils, writeFileXLSX} from "xlsx";
 import { utils, writeFile } from "xlsx";
 
 import {Button, Form, Table as TableRS} from "react-bootstrap";
-// import {ColumnDef} from "@tanstack/table-core";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../stores/rootStore";
 import {Data} from "../stores/data/DataReducer";
@@ -27,16 +23,11 @@ import DebouncedInput from "./debounceInput";
 
 import DataAction from "../stores/data/DataAction";
 
-import {useVirtual} from "react-virtual";
 import {colors, destinations, HEADER} from "../utils/destination";
 import Filter, {fuzzyFilter} from "./filter";
 
-
-
-import { QueryClient, QueryClientProvider, useQuery } from 'react-query'
+import { QueryClient } from 'react-query'
 import './index-tanstack.css'
-// import { fetchData, Person } from './fetchData'
-
 
 
 declare module '@tanstack/react-table' {
@@ -45,7 +36,6 @@ declare module '@tanstack/react-table' {
     }
 }
 
-const queryClient = new QueryClient()
 
 const columnHelper = createColumnHelper<Data>();
 
@@ -77,48 +67,45 @@ const EditableCell = ({ getValue, row, column, table }: any) => {
 function useColumns(): any[] {
     const dispatch = useDispatch();
     // const cale = useSelector<RootState, string>(state => state.data.selectedCale);
-
+    
     const columns = [
         columnHelper.accessor('rank', {
             //header: () => <span>Rang</span>, modif by fred pour faire comme les autres
             header: () => 'Rang',
             filterFn: fuzzyFilter,
-            // footer: info => info.column.id,
         }),
         columnHelper.accessor('prepa', {
             header: () => 'Prepa',
             cell: EditableCell,
             filterFn: fuzzyFilter,
-            //footer: info => info.column.id,
         }),
+        // ##############################################################################################################################
         columnHelper.accessor('reference', {
             header: 'Reference',
-            cell: ({row}: any) => <Button onClick={() => dispatch(DataAction.moveRow(row.original.reference))}>{row.original.reference}</Button>,
+            cell: ({row}: any) => 
+
+            <Button onClick={() => {
+                // table.getState().pagination.pageIndex + 0
+                    
+                dispatch(DataAction.moveRow(row.original.reference));
+            }}>
+                {row.original.reference}
+            </Button>,
+            // ##############################################################################################################################
             filterFn: fuzzyFilter,
-            // footer: info => info.column.id,
         }),
+
+        
+        // ##############################################################################################################################
         columnHelper.accessor('weight', {
             header: "Poids",
             cell: info => info.getValue(),
             filterFn: fuzzyFilter,
-            // footer: info => info.column.id,
         }),
-        /* columnHelper.accessor("position", {
-            // id: 'lastName',
-            cell: info => <i>{info.getValue()}</i>,
-            header: () => "Position",
-            footer: info => info.column.id,
-        }), */
         columnHelper.accessor('destination', {
             header: 'Destination',
             filterFn: fuzzyFilter,
-            // footer: info => info.column.id,
         })
-        /* {
-            id: 'select',
-            header: "  ->",
-            cell: ({row}: any) => <Button onClick={() => dispatch(DataAction.moveRow(row.original.reference))}>vers {cale}</Button>
-        } */
     ];
 
     return columns;
@@ -142,31 +129,11 @@ export default function DataTable() {
 			pageIndex: 0,
 			pageSize: 41,
 		})
-
-	/* const fetchDataOptions = {
-		pageIndex,
-		pageSize,
-	} */
-	/* const dataQuery = useQuery(
-		['data', fetchDataOptions],
-		() => fetchData(fetchDataOptions),
-		{ keepPreviousData: true }
-	) */
-	// const defaultData = React.useMemo(() => [], [])
-
-	// const pagination = React.useMemo(
-	// 	() => ({
-	// 		pageIndex,
-	// 		pageSize,
-	// 	}),
-	// 	[pageIndex, pageSize]
-	// )
     
     const dispatch = useDispatch();
     const [sorting, setSorting] = React.useState<SortingState>([]);
     const [globalFilter, setGlobalFilter] = React.useState('')
     const cale = useSelector<RootState, string>(state => state.data.selectedCale);
-    // const prepa = useSelector<RootState, string>(state => state.data.selectedPrepa);
     const data = useSelector<RootState, Data[]>(state => state.data.data);
 
     const columns = useColumns();
@@ -202,20 +169,6 @@ export default function DataTable() {
     const tableContainerRef = React.useRef<HTMLDivElement>(null)
 
     const { rows } = table.getRowModel()
-    // const rowVirtualizer = useVirtual({
-    //     parentRef: tableContainerRef,
-    //     size: rows.length,
-    //     overscan: 10,
-    // })
-
-    // const { virtualItems: virtualRows, totalSize } = rowVirtualizer
-    //
-    // const paddingTop = virtualRows.length > 0 ? virtualRows?.[0]?.start || 0 : 0
-    //
-    // const paddingBottom =
-    //     virtualRows.length > 0
-    //         ? totalSize - (virtualRows?.[virtualRows.length - 1]?.end || 0)
-    //         : 0
 
     const exportData = () => {
         const aoa: any[][] = [HEADER.map(h => h.name)];
@@ -229,50 +182,19 @@ export default function DataTable() {
     };
     const clear = () => dispatch(DataAction.clear());
 
-/*
-////////////////////////////////////////////////////////////////////////////
-const defaultColumn: Partial<ColumnDef<Data>> = {
-    cell: ({ getValue, row: { index }, column: { id }, table }) => {
-    const initialValue = getValue()
-    // We need to keep and update the state of the cell normally
-    const [value, setValue] = React.useState(initialValue)
-    // When the input is blurred, we'll call our table meta's updateData function
-    const onBlur = () => {
-        table.options.meta?.updateData(index, id, value)
-        //table.options.meta?.updateData(prepa)
-    }
-
-    // If the initialValue is changed external, sync it up with our state
-    React.useEffect(() => {
-        setValue(initialValue)
-    }, [initialValue])
-
-    return (
-        <input
-            value={value as string}
-            onChange={e => setValue(e.target.value)}
-            onBlur={onBlur}
-        />
-    )
-    },
-}
-////////////////////////////////////////////////////////////////////////////
-*/
 //  ########################################################################################################################################### 
     const [hold, setHold] = useState('');
     const [selectedColor, setSelectedColor] = useState('');
-    // {(e: React.ChangeEvent<HTMLSelectElement>)
-    // const handleHoldChange = () =>  {
+    // fred
     const handleHoldChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        dispatch(DataAction.changeCale(e.target.value))
-        // dispatch(DataAction.changeCouleur(e.target.value)) 
+        dispatch(DataAction.changeCale(e.target.value)) 
         const selectedValue = (e.target.value);
         const selectedOption = destinations.find((d) => d.name === selectedValue);
 
         setHold(selectedValue);
-        setSelectedColor(selectedOption ? selectedOption.color : '');
-        
-        }
+        setSelectedColor(selectedOption ? selectedOption.color : '');    
+    }
+
 //  ########################################################################################################################################### 
     return <>
         <div className="d-flex">
@@ -288,12 +210,7 @@ const defaultColumn: Partial<ColumnDef<Data>> = {
             &nbsp;
             <div style={{maxWidth: 150 }}>
                 <Form.Select placeholder="vers..." value={cale} 
-                    // onChange={ (e) => dispatch(DataAction.changeCale(e.target.value))}
-                    // onChange={(e: React.ChangeEvent<HTMLSelectElement>) => dispatch(DataAction.changeCale(e.target.value))}
-                    // onChange={ (e) => handleHoldChange(e.target.value)
-                    // onChange={ () => handleHoldChange}
                     onChange={(e) => handleHoldChange(e)}
-
                     style={{ backgroundColor: selectedColor }}
                     >
                     { destinations.map(
@@ -304,9 +221,9 @@ const defaultColumn: Partial<ColumnDef<Data>> = {
                 </Form.Select>
             </div>
             &nbsp;
-            <Button variant="success" onClick={exportData}>Exporter</Button>
+            <Button variant="success" onClick={exportData}>Export</Button>
             &nbsp;
-            <Button variant="danger" onClick={clear}>Importer</Button>
+            <Button variant="danger" onClick={clear}>Import</Button>
             &nbsp;
         </div>
         <thead>
@@ -386,7 +303,7 @@ const defaultColumn: Partial<ColumnDef<Data>> = {
                 ))}
                 </thead> */}
 
-                <tbody className="overflow-auto" style={{maxHeight: "700px"}}>
+                <tbody className="overflow-auto" style={{maxHeight: "100px"}}>
                     {table.getRowModel().rows.map(row => {
                         return (
                             <tr key={row.id} style={{backgroundColor: colors[row.getValue("destination") as string]}}>
@@ -470,9 +387,11 @@ const defaultColumn: Partial<ColumnDef<Data>> = {
 				{'>'}
 			</button>&nbsp;&nbsp;&nbsp;&nbsp;
 			<button
+                // onChange={()=> table.getState().pagination.pageIndex }
 				className="border rounded p-1"
 				onClick={() => table.setPageIndex(table.getPageCount() - 1)}
 				disabled={!table.getCanNextPage()}
+                // table.
 			>
 				{'>>'}
 			</button>&nbsp;&nbsp;&nbsp;&nbsp;
@@ -510,12 +429,11 @@ const defaultColumn: Partial<ColumnDef<Data>> = {
 					</option>
 				))}
 			</select>
-			{/* {dataQuery.isFetching ? 'Loading...' : null} */}
-		</div>
-		{/* <div>{table.getRowModel().rows.length} Lignes</div> */}
-{/* 		<div>to
-			<button onClick={() => rerender()}>Force Rerender</button>
-		</div> */}
-		{/* <pre>{JSON.stringify(pagination, null, 2)}</pre> */}
+			
+		</div>		
     </>
+}
+
+function setPageIndex(pageIndex: any) {
+    throw new Error("Function not implemented.");
 }

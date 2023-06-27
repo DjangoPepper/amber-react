@@ -27,6 +27,5 @@ export const destinations = [
 
 export const colors = destinations.reduce<{[key: string]: string}>((obj, d) => {
     obj[d.name] = d.color;
-    // obj[fredcolor] = d.color
     return obj;
 }, {})
