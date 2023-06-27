@@ -10,22 +10,17 @@ import {
     RowData,
     SortingState,
     useReactTable,
-    getPaginationRowModel        } from "@tanstack/react-table";
+    getPaginationRowModel} from "@tanstack/react-table";
 
 import { utils, writeFile } from "xlsx";
-
 import {Button, Form, Table as TableRS} from "react-bootstrap";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../stores/rootStore";
 import {Data} from "../stores/data/DataReducer";
 import DebouncedInput from "./debounceInput";
-
 import DataAction from "../stores/data/DataAction";
-
 import {colors, destinations, HEADER} from "../utils/destination";
 import Filter, {fuzzyFilter} from "./filter";
-
-import { QueryClient } from 'react-query'
 import './index-tanstack.css'
 
 
@@ -35,9 +30,7 @@ declare module '@tanstack/react-table' {
     }
 }
 
-
 const columnHelper = createColumnHelper<Data>();
-
 const EditableCell = ({ getValue, row, column, table }: any) => {
     const initialValue = getValue()
     // We need to keep and update the state of the cell normally
@@ -62,54 +55,6 @@ const EditableCell = ({ getValue, row, column, table }: any) => {
         />
     )
 };
-
-function useColumns(): any[] {
-    const dispatch = useDispatch();
-    // const cale = useSelector<RootState, string>(state => state.data.selectedCale);
-    
-    const columns = [
-        columnHelper.accessor('rank', {
-            //header: () => <span>Rang</span>, modif by fred pour faire comme les autres
-            header: () => 'Rang',
-            filterFn: fuzzyFilter,
-        }),
-        columnHelper.accessor('prepa', {
-            header: () => 'Prepa',
-            cell: EditableCell,
-            filterFn: fuzzyFilter,
-        }),
-        // ##############################################################################################################################
-        columnHelper.accessor('reference', {
-            header: 'Reference',
-            cell: ({row}: any) => 
-
-            <Button onClick={() => {
-                // table.getState().pagination.pageIndex + 0
-                    
-                dispatch(DataAction.moveRow(row.original.reference));
-            }}>
-                {row.original.reference}
-            </Button>,
-            // ##############################################################################################################################
-            filterFn: fuzzyFilter,
-        }),
-
-        
-        // ##############################################################################################################################
-        columnHelper.accessor('weight', {
-            header: "Poids",
-            cell: info => info.getValue(),
-            filterFn: fuzzyFilter,
-        }),
-        columnHelper.accessor('destination', {
-            header: 'Destination',
-            filterFn: fuzzyFilter,
-        })
-    ];
-
-    return columns;
-}
-
 const globalFilterFn: FilterFn<Data> = (row, columnId, filterValue: string) => {
     const search = filterValue.toLowerCase();
 
@@ -121,22 +66,12 @@ const globalFilterFn: FilterFn<Data> = (row, columnId, filterValue: string) => {
 
 export default function DataTable() {
 
-	const rerender = React.useReducer(() => ({}), {})[1]
-
-	// const [{ pageIndex, pageSize }, setPagination] =
-	// 	React.useState<PaginationState>({
-	// 		pageIndex: 10,
-	// 		pageSize: 41,
-	// 	})
-    
     const dispatch = useDispatch();
     const [sorting, setSorting] = React.useState<SortingState>([]);
     const [globalFilter, setGlobalFilter] = React.useState('')
     const cale = useSelector<RootState, string>(state => state.data.selectedCale);
     const data = useSelector<RootState, Data[]>(state => state.data.data);
-
     const columns = useColumns();
-
     const table = useReactTable({
         data,
         columns,
@@ -159,16 +94,13 @@ export default function DataTable() {
                 }
             },
         },
-        getRowId: (row, relativeIndex) => {
+        getRowId: (row) => {
             return row.reference;
         },
         debugTable: true,
-    });
-
+    }
+    );
     const tableContainerRef = React.useRef<HTMLDivElement>(null)
-
-    const { rows } = table.getRowModel()
-
     const exportData = () => {
         const aoa: any[][] = [HEADER.map(h => h.name)];
         for (const row of data) {
@@ -180,11 +112,10 @@ export default function DataTable() {
         writeFile(wb, "stepe.xlsx");
     };
     const clear = () => dispatch(DataAction.clear());
-
+//  ########################################################################################################################################### 
 //  ########################################################################################################################################### 
     const [hold, setHold] = useState('');
     const [selectedColor, setSelectedColor] = useState('');
-    // fred
     const handleHoldChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         dispatch(DataAction.changeCale(e.target.value)) 
         const selectedValue = (e.target.value);
@@ -194,7 +125,68 @@ export default function DataTable() {
         setSelectedColor(selectedOption ? selectedOption.color : '');    
     }
 
-//  ########################################################################################################################################### 
+    const [Mypageindex, currentindex] = useState('');
+
+    // function setPageIndex(pageIndex: any) {
+    //     table.getState().pagination.pageIndex;
+    //     // throw new Error("Function not implemented.");
+    // }
+    
+    function getcurrentindex(){
+         return table.getState().pagination.pageIndex;
+    }
+
+    // function handlePageIndexChange(e: React.ChangeEvent<HTMLSelectElement>) {
+    //     // setPageIndex(e.target.value);
+    //     setPageIndex(getcurrentindex());
+    // }
+    
+function useColumns(): any[] {
+    const dispatch = useDispatch();
+    // const indexz = getcurrentindex();
+    
+    const columns = [
+        columnHelper.accessor('rank', {
+            header: () => 'Rang',
+            filterFn: fuzzyFilter,
+        }),
+        columnHelper.accessor('prepa', {
+            header: () => 'Prepa',
+            cell: EditableCell,
+            filterFn: fuzzyFilter,
+        }),
+// ##############################################################################################################################
+        columnHelper.accessor('reference', {
+            header: 'Reference',
+            cell: ({row}: any) => 
+
+            <Button onClick={() => {
+                dispatch(DataAction.moveRow(row.original.reference));
+                // console.log(getcurrentindex());
+                // table.setPageIndex(getcurrentindex())};                
+// ##############################################################################################################################
+            }}>
+                {row.original.reference}
+            </Button>,
+
+            filterFn: fuzzyFilter,
+        }),
+
+        
+        columnHelper.accessor('weight', {
+            header: "Poids",
+            cell: info => info.getValue(),
+            filterFn: fuzzyFilter,
+        }),
+        columnHelper.accessor('destination', {
+            header: 'Destination',
+            filterFn: fuzzyFilter,
+        })
+    ];
+
+    return columns;
+}
+
     return <>
         <div className="d-flex">
             <div style={{maxWidth: 90}}>
@@ -430,8 +422,4 @@ export default function DataTable() {
 			
 		</div>		
     </>
-}
-
-function setPageIndex(pageIndex: any) {
-    throw new Error("Function not implemented.");
 }
