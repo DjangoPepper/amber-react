@@ -13,7 +13,7 @@ import {
     getPaginationRowModel,
     PaginationState} from "@tanstack/react-table";
 
-import { utils, writeFile } from "xlsx";
+import {utils, writeFile } from "xlsx";
 import {Button, Form, Table as TableRS} from "react-bootstrap";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../stores/rootStore";
@@ -34,15 +34,11 @@ declare module '@tanstack/react-table' {
 const columnHelper = createColumnHelper<Data>();
 const EditableCell = ({ getValue, row, column, table }: any) => {
     const initialValue = getValue()
-    // We need to keep and update the state of the cell normally
     const [value, setValue] = React.useState(initialValue)
-
-    // When the input is blurred, we'll call our table meta's updateData function
     const onBlur = () => {
         table.options.meta?.updateData(row.original.reference, column.id, value);
     }
 
-    // If the initialValue is changed external, sync it up with our state
     React.useEffect(() => {
         setValue(initialValue)
     }, [initialValue])
@@ -77,7 +73,7 @@ export default function DataTable() {
     const [{ pageIndex, pageSize }, setPagination] =
         React.useState<PaginationState>({
             pageIndex: 0,
-            pageSize: 10,
+            pageSize: 40,
         })
 
     const pagination = React.useMemo(
@@ -94,7 +90,7 @@ export default function DataTable() {
         state: {
             sorting,
             globalFilter,
-            pagination,
+            pagination
         },
         onGlobalFilterChange: setGlobalFilter,
         globalFilterFn,
@@ -102,12 +98,12 @@ export default function DataTable() {
         getCoreRowModel: getCoreRowModel(),
         getSortedRowModel: getSortedRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
-        manualPagination: true,
+        getPaginationRowModel: getPaginationRowModel(),
+           
+        manualPagination: false,
         onPaginationChange: setPagination,
-        // pageCount: dataQuery.data?.pageCount ?? -1,
         meta: {
             updateData: (reference, columnId, value) => {
-                // Skip age index reset until after next rerender
                 if(columnId === "prepa") {
                     dispatch(DataAction.updateRow(reference, columnId, value));
                 }
@@ -144,21 +140,21 @@ export default function DataTable() {
         setSelectedColor(selectedOption ? selectedOption.color : '');    
     }
 
-    // const [Mypageindex, currentindex] = useState('');
+    // // const [Mypageindex, currentindex] = useState('');
 
-    // function setPageIndex(pageIndex: any) {
-    //     table.getState().pagination.pageIndex;
-    //     // throw new Error("Function not implemented.");
-    // }
+    // // function setPageIndex(pageIndex: any) {
+    // //     table.getState().pagination.pageIndex;
+    // //     // throw new Error("Function not implemented.");
+    // // }
     
-    function getcurrentindex(){
-         return table.getState().pagination.pageIndex;
-    }
-
-    // function handlePageIndexChange(e: React.ChangeEvent<HTMLSelectElement>) {
-    //     // setPageIndex(e.target.value);
-    //     setPageIndex(getcurrentindex());
+    // function getcurrentindex(){
+    //      return table.getState().pagination.pageIndex;
     // }
+
+    // // function handlePageIndexChange(e: React.ChangeEvent<HTMLSelectElement>) {
+    // //     // setPageIndex(e.target.value);
+    // //     setPageIndex(getcurrentindex());
+    // // }
     
     function useColumns(): any[] {
         const dispatch = useDispatch();
@@ -432,7 +428,7 @@ export default function DataTable() {
 					table.setPageSize(Number(e.target.value))
 				}}
 			>
-				{[10,40, 80, 120, 160].map(pageSize => (
+				{[40, 80, 120, 160].map(pageSize => (
 					<option key={pageSize} value={pageSize}>
 						{pageSize}
 					</option>
