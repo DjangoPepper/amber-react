@@ -10,7 +10,8 @@ import {
     RowData,
     SortingState,
     useReactTable,
-    getPaginationRowModel} from "@tanstack/react-table";
+    getPaginationRowModel,
+    PaginationState} from "@tanstack/react-table";
 
 import { utils, writeFile } from "xlsx";
 import {Button, Form, Table as TableRS} from "react-bootstrap";
@@ -72,12 +73,28 @@ export default function DataTable() {
     const cale = useSelector<RootState, string>(state => state.data.selectedCale);
     const data = useSelector<RootState, Data[]>(state => state.data.data);
     const columns = useColumns();
+
+    const [{ pageIndex, pageSize }, setPagination] =
+        React.useState<PaginationState>({
+            pageIndex: 0,
+            pageSize: 10,
+        })
+
+    const pagination = React.useMemo(
+        () => ({
+            pageIndex,
+            pageSize,
+        }),
+        [pageIndex, pageSize]
+    )
+
     const table = useReactTable({
         data,
         columns,
         state: {
             sorting,
             globalFilter,
+            pagination,
         },
         onGlobalFilterChange: setGlobalFilter,
         globalFilterFn,
@@ -85,7 +102,9 @@ export default function DataTable() {
         getCoreRowModel: getCoreRowModel(),
         getSortedRowModel: getSortedRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
-        getPaginationRowModel: getPaginationRowModel(),
+        manualPagination: true,
+        onPaginationChange: setPagination,
+        // pageCount: dataQuery.data?.pageCount ?? -1,
         meta: {
             updateData: (reference, columnId, value) => {
                 // Skip age index reset until after next rerender
@@ -125,7 +144,7 @@ export default function DataTable() {
         setSelectedColor(selectedOption ? selectedOption.color : '');    
     }
 
-    const [Mypageindex, currentindex] = useState('');
+    // const [Mypageindex, currentindex] = useState('');
 
     // function setPageIndex(pageIndex: any) {
     //     table.getState().pagination.pageIndex;
@@ -141,51 +160,51 @@ export default function DataTable() {
     //     setPageIndex(getcurrentindex());
     // }
     
-function useColumns(): any[] {
-    const dispatch = useDispatch();
-    // const indexz = getcurrentindex();
-    
-    const columns = [
-        columnHelper.accessor('rank', {
-            header: () => 'Rang',
-            filterFn: fuzzyFilter,
-        }),
-        columnHelper.accessor('prepa', {
-            header: () => 'Prepa',
-            cell: EditableCell,
-            filterFn: fuzzyFilter,
-        }),
-// ##############################################################################################################################
-        columnHelper.accessor('reference', {
-            header: 'Reference',
-            cell: ({row}: any) => 
+    function useColumns(): any[] {
+        const dispatch = useDispatch();
+        // const indexz = getcurrentindex();
 
-            <Button onClick={() => {
-                dispatch(DataAction.moveRow(row.original.reference));
-                // console.log(getcurrentindex());
-                // table.setPageIndex(getcurrentindex())};                
-// ##############################################################################################################################
-            }}>
-                {row.original.reference}
-            </Button>,
+        const columns = [
+            columnHelper.accessor('rank', {
+                header: () => 'Rang',
+                filterFn: fuzzyFilter,
+            }),
+            columnHelper.accessor('prepa', {
+                header: () => 'Prepa',
+                cell: EditableCell,
+                filterFn: fuzzyFilter,
+            }),
+    // ##############################################################################################################################
+            columnHelper.accessor('reference', {
+                header: 'Reference',
+                cell: ({row}: any) =>
 
-            filterFn: fuzzyFilter,
-        }),
+                <Button onClick={() => {
+                    dispatch(DataAction.moveRow(row.original.reference));
+                    // console.log(getcurrentindex());
+                    // table.setPageIndex(getcurrentindex())};
+    // ##############################################################################################################################
+                }}>
+                    {row.original.reference}
+                </Button>,
 
-        
-        columnHelper.accessor('weight', {
-            header: "Poids",
-            cell: info => info.getValue(),
-            filterFn: fuzzyFilter,
-        }),
-        columnHelper.accessor('destination', {
-            header: 'Destination',
-            filterFn: fuzzyFilter,
-        })
-    ];
+                filterFn: fuzzyFilter,
+            }),
 
-    return columns;
-}
+
+            columnHelper.accessor('weight', {
+                header: "Poids",
+                cell: info => info.getValue(),
+                filterFn: fuzzyFilter,
+            }),
+            columnHelper.accessor('destination', {
+                header: 'Destination',
+                filterFn: fuzzyFilter,
+            })
+        ];
+
+        return columns;
+    }
 
     return <>
         <div className="d-flex">
