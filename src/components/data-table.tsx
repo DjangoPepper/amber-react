@@ -9,7 +9,6 @@ import {
     getSortedRowModel,
     RowData,
     SortingState,
-    PaginationState,
     useReactTable,
     getPaginationRowModel        } from "@tanstack/react-table";
 
@@ -124,11 +123,11 @@ export default function DataTable() {
 
 	const rerender = React.useReducer(() => ({}), {})[1]
 
-	const [{ pageIndex, pageSize }, setPagination] =
-		React.useState<PaginationState>({
-			pageIndex: 0,
-			pageSize: 41,
-		})
+	// const [{ pageIndex, pageSize }, setPagination] =
+	// 	React.useState<PaginationState>({
+	// 		pageIndex: 10,
+	// 		pageSize: 41,
+	// 	})
     
     const dispatch = useDispatch();
     const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -387,7 +386,6 @@ export default function DataTable() {
 				{'>'}
 			</button>&nbsp;&nbsp;&nbsp;&nbsp;
 			<button
-                // onChange={()=> table.getState().pagination.pageIndex }
 				className="border rounded p-1"
 				onClick={() => table.setPageIndex(table.getPageCount() - 1)}
 				disabled={!table.getCanNextPage()}
@@ -404,7 +402,7 @@ export default function DataTable() {
 			</span>
 			&nbsp;&nbsp;
 			<span className="flex items-center gap-1">
-				| Go to : &nbsp;&nbsp;&nbsp;&nbsp;
+				| Vers : &nbsp;&nbsp;&nbsp;&nbsp;
 				<input
 					type="number"
 					defaultValue={table.getState().pagination.pageIndex + 1}
