@@ -50,11 +50,8 @@ function definehowmanyspace(originalNumber: string): string {
   return newnumber;
 }
 
-const SpacedString: React.FC<SpacedAtPositionStringProps> = ({
-  numberastext,
-}) => {
-  const HumanspacedText = definehowmanyspace(numberastext);
-  return <div>{HumanspacedText}</div>;
-};
-
+const SpacedString = (_ref:string) => {
+  const HumanspacedText = definehowmanyspace(_ref);
+  return HumanspacedText;
+}
 export default SpacedString;
