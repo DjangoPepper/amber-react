@@ -25,6 +25,12 @@ import Filter, {fuzzyFilter} from "./filter";
 import './index-tanstack.css'
 
 
+//FRED ****************************************************************
+import SpaceatPos from "./SpaceatPos";
+//FRED ****************************************************************
+
+
+
 declare module '@tanstack/react-table' {
     interface TableMeta<TData extends RowData> {
         updateData: (reference: number, columnId: string, value: unknown) => void
@@ -69,13 +75,12 @@ export default function DataTable() {
     const cale = useSelector<RootState, string>(state => state.data.selectedCale);
     const data = useSelector<RootState, Data[]>(state => state.data.data);
     const columns = useColumns();
-
     const [{ pageIndex, pageSize }, setPagination] =
         React.useState<PaginationState>({
             pageIndex: 0,
             pageSize: 40,
-        })
-
+        }
+    )
     const pagination = React.useMemo(
         () => ({
             pageIndex,
@@ -98,10 +103,11 @@ export default function DataTable() {
         getCoreRowModel: getCoreRowModel(),
         getSortedRowModel: getSortedRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
-        getPaginationRowModel: getPaginationRowModel(),
-           
+        
+        getPaginationRowModel: getPaginationRowModel(),   
         manualPagination: false,
         onPaginationChange: setPagination,
+        
         meta: {
             updateData: (reference, columnId, value) => {
                 if(columnId === "prepa") {
@@ -109,6 +115,7 @@ export default function DataTable() {
                 }
             },
         },
+// #####################################################################################################################
         getRowId: (row) => {
             return row.reference;
         },
@@ -126,9 +133,8 @@ export default function DataTable() {
         utils.book_append_sheet(wb, sheet);
         writeFile(wb, "stepe.xlsx");
     };
+
     const clear = () => dispatch(DataAction.clear());
-//  ########################################################################################################################################### 
-//  ########################################################################################################################################### 
     const [hold, setHold] = useState('');
     const [selectedColor, setSelectedColor] = useState('');
     const handleHoldChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -140,25 +146,9 @@ export default function DataTable() {
         setSelectedColor(selectedOption ? selectedOption.color : '');    
     }
 
-    // // const [Mypageindex, currentindex] = useState('');
-
-    // // function setPageIndex(pageIndex: any) {
-    // //     table.getState().pagination.pageIndex;
-    // //     // throw new Error("Function not implemented.");
-    // // }
-    
-    // function getcurrentindex(){
-    //      return table.getState().pagination.pageIndex;
-    // }
-
-    // // function handlePageIndexChange(e: React.ChangeEvent<HTMLSelectElement>) {
-    // //     // setPageIndex(e.target.value);
-    // //     setPageIndex(getcurrentindex());
-    // // }
     
     function useColumns(): any[] {
         const dispatch = useDispatch();
-        // const indexz = getcurrentindex();
 
         const columns = [
             columnHelper.accessor('rank', {
@@ -170,23 +160,18 @@ export default function DataTable() {
                 cell: EditableCell,
                 filterFn: fuzzyFilter,
             }),
-    // ##############################################################################################################################
+// #####################################################################################################################
             columnHelper.accessor('reference', {
                 header: 'Reference',
                 cell: ({row}: any) =>
-
-                <Button onClick={() => {
-                    dispatch(DataAction.moveRow(row.original.reference));
-                    // console.log(getcurrentindex());
-                    // table.setPageIndex(getcurrentindex())};
-    // ##############################################################################################################################
-                }}>
-                    {row.original.reference}
-                </Button>,
-
+                    <Button onClick={() => {
+                        dispatch(DataAction.moveRow(row.original.reference));
+                    }}>
+                        {SpaceatPos(row.original.reference)}
+                    </Button>,
                 filterFn: fuzzyFilter,
             }),
-
+// #####################################################################################################################
 
             columnHelper.accessor('weight', {
                 header: "Poids",
@@ -271,44 +256,6 @@ export default function DataTable() {
         </thead>
         <div ref={tableContainerRef} className="overflow-auto" style={{maxHeight: "500px"}}>
             <TableRS>
-                {/* <thead>
-                {table.getHeaderGroups().map(headerGroup => (
-                    <tr key={headerGroup.id}>
-                        {headerGroup.headers.map(header => (
-                            <th key={header.id}>
-                                {header.isPlaceholder
-                                    ? null
-                                    : <div
-                                        {...{
-                                            className: header.column.getCanSort()
-                                                ? 'cursor-pointer select-none'
-                                                : '',
-                                        }}
-                                    >
-                                        <div {...{
-                                            onClick: header.column.getToggleSortingHandler(),
-                                        }}>
-                                            {flexRender(
-                                                header.column.columnDef.header,
-                                                header.getContext()
-                                            )}
-                                            {{
-                                                asc: ' 🔼',
-                                                desc: ' 🔽',
-                                            }[header.column.getIsSorted() as string] ?? null}
-                                        </div>
-                                        {header.column.getCanFilter() ? (
-                                            <div>
-                                                <Filter column={header.column} table={table} />
-                                            </div>
-                                        ) : null}
-                                    </div>}
-                            </th>
-                        ))}
-                    </tr>
-                ))}
-                </thead> */}
-
                 <tbody className="overflow-auto" style={{maxHeight: "100px"}}>
                     {table.getRowModel().rows.map(row => {
                         return (
@@ -326,46 +273,9 @@ export default function DataTable() {
                             </tr>
                         )
                     })}
-                    {/*{paddingTop > 0 && (*/}
-                    {/*    <tr>*/}
-                    {/*        <td style={{ height: `${paddingTop}px` }} />*/}
-                    {/*    </tr>*/}
-                    {/*)}*/}
-
-                    {/*{virtualRows.map(virtualRow => {*/}
-                    {/*    const row = rows[virtualRow.index] as Row<Data>;*/}
-                    {/*    return <tr key={row.id} style={{backgroundColor: colors[row.getValue("destination") as string]}}>*/}
-                    {/*        {row.getVisibleCells().map(cell => (*/}
-                    {/*            <td key={cell.id}>*/}
-                    {/*                {flexRender(cell.column.columnDef.cell, cell.getContext())}*/}
-                    {/*            </td>*/}
-                    {/*        ))}*/}
-                    {/*    </tr>*/}
-                    {/*})}*/}
-
-                    {/*{paddingBottom > 0 && (*/}
-                    {/*    <tr>*/}
-                    {/*        <td style={{ height: `${paddingBottom}px` }} />*/}
-                    {/*    </tr>*/}
-                    {/*)}*/}
                 </tbody>
 
                 <tfoot>
-                {/* quel usage ? */}
-                {/* {table.getFooterGroups().map(footerGroup => (
-                    <tr key={footerGroup.id}>
-                        {footerGroup.headers.map(header => (
-                            <th key={header.id}>
-                                {header.isPlaceholder
-                                    ? null
-                                    : flexRender(
-                                        header.column.columnDef.footer,
-                                        header.getContext()
-                                    )}
-                            </th>
-                        ))}
-                    </tr>
-                ))} */}
                 </tfoot>
             </TableRS>
         </div>
