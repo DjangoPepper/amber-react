@@ -68,7 +68,7 @@ function definehowmanyspace(originalNumber: string): string {
 
 const SpacedString = (_ref:string) => {
   let newpos:number = trouverPosition1ereLettre(_ref);
-  if (newpos === -2) {                                 // pas de lettre trouvée dans la chaine
+  if (newpos === -1) {                                 // pas de lettre trouvée dans la chaine
     const HumanspacedText = definehowmanyspace(_ref);
     return HumanspacedText;
   }
