@@ -1,10 +1,6 @@
 // import React from "react";
-// import { passiveEventSupported } from "@tanstack/react-table";
 
-// interface SpacedAtPositionStringProps {
-//   numberastext: string;
 
-// }
 
 function trouverPosition1ereLettre(chaine: string): number {
   let result: number = -1;                                    // Initialise le résultat à -1 aucune lettre trouvée
@@ -27,6 +23,17 @@ function insertSpaceAtPosition(numberastext: string, position: number): string {
   }
   return numberastext.slice(0, position) + ' ' + numberastext.slice(position);
 }
+
+function isolelalettre(numberastext: string, position: number): string {
+  if (position < 0 || position > numberastext.length) {
+    throw new Error('Invalid position');
+  }
+  return numberastext.slice(0, position) + ' ' + numberastext.slice(position, position + 1) + ' ' + numberastext.slice(position +1);
+}
+
+// function bobineachaud(numberastext: string, position: number): string {
+//   return
+// }
 
 function definehowmanyspace(originalNumber: string): string {
   let newnumber: string;
@@ -72,11 +79,15 @@ const SpacedString = (_ref:string) => {
     const HumanspacedText = definehowmanyspace(_ref);
     return HumanspacedText;
   }
-  else {                                              // lettre trouvée dans la chaine
-    _ref = insertSpaceAtPosition(_ref, newpos)
-    const HumanspacedText:string = insertSpaceAtPosition(_ref, (newpos+2))
+  // else {                                              // lettre trouvée dans la chaine
+  //   let Humanpre:string = insertSpaceAtPosition(_ref, newpos)
+  //   let HumanspacedText:string = insertSpaceAtPosition(Humanpre, (newpos+2))
+  //   return HumanspacedText;
+  // }
+  else {
+    let HumanspacedText:string = isolelalettre(_ref, newpos);
     return HumanspacedText;
-  } 
+  }
   // const HumanspacedText = definehowmanyspace(_ref);
   // return HumanspacedText;
     
