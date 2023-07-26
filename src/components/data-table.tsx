@@ -167,8 +167,8 @@ export default function DataTable() {
                     <Button onClick={() => {
                         dispatch(DataAction.moveRow(row.original.reference));
                     }}>
-                        {/* {row.original.reference}  */}
-                        {SpaceatPos(row.original.reference)}
+                        {row.original.reference} 
+                        {/* {SpaceatPos(row.original.reference)} */}
                         {/* beuh */}
                     </Button>,
                 filterFn: fuzzyFilter,

@@ -7,11 +7,11 @@ interface IHeader {
 }
 
 export const HEADER: IHeader[] = [
+    {key: "rank", name :"Rang" },
+    {key: "prepa", name :"Prépa" },
+    {key: "reference", name :"Référence" },
     {key: "weight", name :"Poids" },
     {key: "position", name :"Position" },
-    {key: "prepa", name :"Prépa" },
-    {key: "rank", name :"Rang" },
-    {key: "reference", name :"Référence" },
     {key: "destination", name :"Destination", default: "Stock" },
 ]
 
