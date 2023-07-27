@@ -2,10 +2,11 @@
 
 
 
-function trouverPosition1ereLettre(chaine: string): number {
+function trouverPosition1ereLettre(chaine: any): number {
   let result: number = -1;                                    // Initialise le résultat à -1 aucune lettre trouvée
-  const chaineEnMajuscules: string = chaine.toUpperCase();    // transforme la chaine en majuscules
-  
+  // const chaineEnMajuscules: string = chaine.toUpperCase();    // transforme la chaine en majuscules
+  const chaineEnMajuscules: string = chaine.toString().toUpperCase();
+
   for (let i: number = 2; i < (chaineEnMajuscules.length-2); i++) {   //Initialise I, boucle de 2 à longeur chaine
     const code: number = chaineEnMajuscules.charCodeAt(i);        //Transforme le caractere en code
     if (code >= 65 && code <= 90) {                               //Si code represente une lettre majuscule
@@ -13,7 +14,6 @@ function trouverPosition1ereLettre(chaine: string): number {
       break; // Sort de la boucle dès qu'une lettre est trouvée   //break
     }
   }
-
   return result;                                                  // Retourne result
 }
 
@@ -37,7 +37,7 @@ function isolelalettre(numberastext: string, position: number): string {
 
 function definehowmanyspace(originalNumber: string): string {
   let newnumber: string;
-
+ originalNumber = originalNumber.toString(); 
   if (originalNumber.length < 0) {
     throw new Error('Invalid originalNumber');
   }
@@ -51,7 +51,7 @@ function definehowmanyspace(originalNumber: string): string {
     originalNumber = insertSpaceAtPosition(originalNumber, 10);
     newnumber = originalNumber;
   } else if (originalNumber.length === 9) {
-    originalNumber = insertSpaceAtPosition(originalNumber, 3);
+    originalNumber = insertSpaceAtPosition(originalNumber, 4);
     originalNumber = insertSpaceAtPosition(originalNumber, 7);
     newnumber = originalNumber;
   } else if (originalNumber.length === 8) {
@@ -76,18 +76,18 @@ function definehowmanyspace(originalNumber: string): string {
 const SpacedString = (_ref:string) => {
   let newpos:number = trouverPosition1ereLettre(_ref);
   if (newpos === -1) {                                 // pas de lettre trouvée dans la chaine
-    const HumanspacedText = definehowmanyspace(_ref);
+    let HumanspacedText = definehowmanyspace(_ref);
     return HumanspacedText;
   }
-  // else {                                              // lettre trouvée dans la chaine
-  //   let Humanpre:string = insertSpaceAtPosition(_ref, newpos)
-  //   let HumanspacedText:string = insertSpaceAtPosition(Humanpre, (newpos+2))
+  else {                                              // lettre trouvée dans la chaine
+    let Humanpre:string = insertSpaceAtPosition(_ref, newpos)
+    let HumanspacedText:string = insertSpaceAtPosition(Humanpre, (newpos+2))
+    return HumanspacedText;
+  }
+  // else {
+  //   let HumanspacedText:string = isolelalettre(_ref, newpos);
   //   return HumanspacedText;
   // }
-  else {
-    let HumanspacedText:string = isolelalettre(_ref, newpos);
-    return HumanspacedText;
-  }
   // const HumanspacedText = definehowmanyspace(_ref);
   // return HumanspacedText;
     

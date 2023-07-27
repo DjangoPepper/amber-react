@@ -196,8 +196,8 @@ export default function DataTable() {
                     }}
                     
                     >
-                        {row.original.reference} 
-                        {/* {SpaceatPos(row.original.reference)} */}
+                        {/* {row.original.reference}  */}
+                        {SpaceatPos(row.original.reference)}
                     </Button>,
                 filterFn: fuzzyFilter,
 
