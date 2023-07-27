@@ -37,6 +37,7 @@ declare module '@tanstack/react-table' {
     }
 }
 
+
 const columnHelper = createColumnHelper<Data>();
 const EditableCell = ({ getValue, row, column, table }: any) => {
     const initialValue = getValue()
@@ -67,14 +68,18 @@ const globalFilterFn: FilterFn<Data> = (row, columnId, filterValue: string) => {
     return value?.toLowerCase().includes(search);
 };
 
-export default function DataTable() {
+const pagePrev  = -1 ;
 
+export default function DataTable() {
+    
+    
     const dispatch = useDispatch();
     const [sorting, setSorting] = React.useState<SortingState>([]);
     const [globalFilter, setGlobalFilter] = React.useState('')
     const cale = useSelector<RootState, string>(state => state.data.selectedCale);
     const data = useSelector<RootState, Data[]>(state => state.data.data);
     const columns = useColumns();
+    
     const [{ pageIndex, pageSize }, setPagination] =
         React.useState<PaginationState>({
             pageIndex: 0,
@@ -82,14 +87,21 @@ export default function DataTable() {
         }
     )
 
+    
 
+    const fredprevious = React.useMemo(
+        () => ({
+            pagePrev,
+        }),
+        [pagePrev]
+    )
     
     const pagination = React.useMemo(
         () => ({
             pageIndex,
             pageSize,
         }),
-        [pageIndex, pageSize]
+        [pageIndex, pageSize ]
     )
 
     const table = useReactTable({
@@ -125,6 +137,9 @@ export default function DataTable() {
         debugTable: true,
     }
     );
+    
+    // const MyPageIndexValue = table.getState().pagination.pageIndex + 1 ;
+
     const tableContainerRef = React.useRef<HTMLDivElement>(null)
     const exportData = () => {
         const aoa: any[][] = [HEADER.map(h => h.name)];
@@ -149,7 +164,15 @@ export default function DataTable() {
         setSelectedColor(selectedOption ? selectedOption.color : '');    
     }
 
+    function DonneMaPageActuelle(): any { 
+        // const MyPageIndexValue = pageIndex + 1 ;
+        fredprevious.pagePrev = pageIndex;
+    }
+
     function useColumns(): any[] {
+
+        
+
         const dispatch = useDispatch();
 
         const columns = [
@@ -167,11 +190,13 @@ export default function DataTable() {
                 header: 'REF',
                 cell: ({row}: any) =>
                     <Button onClick={() => {
-                        const MyPageIndexValue = table.getState().pagination.pageIndex + 1 ;
+                        DonneMaPageActuelle();
+                        // const MyPageIndexValue = table.getState().pagination.pageIndex + 1 ;
+                        // MyPageIndexValue;
                         dispatch(DataAction.moveRow(row.original.reference));
-                        table.setPageIndex(MyPageIndexValue);
+                        // table.setPageIndex(MyPageIndexValue);
                     }}
-                    // disabled={!table.getCanPreviousPage()}
+                    
                     >
                         {row.original.reference} 
                         {/* {SpaceatPos(row.original.reference)} */}
@@ -297,6 +322,8 @@ export default function DataTable() {
 				{'<<'}
 			</button>&nbsp;&nbsp;&nbsp;&nbsp;
 			
+
+
             <button
 				className="border rounded p-1"
 				onClick={() => table.previousPage()}
@@ -307,13 +334,21 @@ export default function DataTable() {
 			
             <button
 				className="border rounded p-1"
+                onClick = {() => table.setPageIndex(fredprevious.pagePrev)}
+			>
+				{'(o)'}
+			</button>&nbsp;&nbsp;&nbsp;&nbsp;
+
+            <button
+				className="border rounded p-1"
 				onClick={() => table.nextPage()}
 				disabled={!table.getCanNextPage()}
-
 			>
 				{'>'}
 			</button>&nbsp;&nbsp;&nbsp;&nbsp;
-			
+
+
+
             <button
 				className="border rounded p-1"
 				onClick={() => table.setPageIndex(table.getPageCount() - 1)}
@@ -322,6 +357,8 @@ export default function DataTable() {
 			>
 				{'>>'}
 			</button>&nbsp;&nbsp;&nbsp;&nbsp;
+
+
 			<span className="flex items-center gap-1">
 				{/* <div>Page</div> */}
 				<strong>
