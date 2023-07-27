@@ -89,7 +89,7 @@ export default function DataTable() {
 
     
 
-    const fredprevious = React.useMemo(
+    const rappel = React.useMemo(
         () => ({
             pagePrev,
         }),
@@ -138,8 +138,6 @@ export default function DataTable() {
     }
     );
     
-    // const MyPageIndexValue = table.getState().pagination.pageIndex + 1 ;
-
     const tableContainerRef = React.useRef<HTMLDivElement>(null)
     const exportData = () => {
         const aoa: any[][] = [HEADER.map(h => h.name)];
@@ -164,9 +162,11 @@ export default function DataTable() {
         setSelectedColor(selectedOption ? selectedOption.color : '');    
     }
 
-    function DonneMaPageActuelle(): any { 
-        // const MyPageIndexValue = pageIndex + 1 ;
-        fredprevious.pagePrev = pageIndex;
+    function reelPage() { 
+        rappel.pagePrev = pageIndex;
+    }
+    function retournePage() {
+        table.setPageIndex(rappel.pagePrev)
     }
 
     function useColumns(): any[] {
@@ -190,11 +190,9 @@ export default function DataTable() {
                 header: 'REF',
                 cell: ({row}: any) =>
                     <Button onClick={() => {
-                        DonneMaPageActuelle();
-                        // const MyPageIndexValue = table.getState().pagination.pageIndex + 1 ;
-                        // MyPageIndexValue;
-                        dispatch(DataAction.moveRow(row.original.reference));
-                        // table.setPageIndex(MyPageIndexValue);
+                        reelPage(); //je memeorise la page de travail
+                        dispatch(DataAction.moveRow(row.original.reference)); //je change la detination de ref cale1,cale2, etc..
+                        retournePage();//je devrais retourner à la page de travail memorisé mais ca marche po^                    
                     }}
                     
                     >
@@ -334,7 +332,7 @@ export default function DataTable() {
 			
             <button
 				className="border rounded p-1"
-                onClick = {() => table.setPageIndex(fredprevious.pagePrev)}
+                onClick = {() => table.setPageIndex(rappel.pagePrev)}
 			>
 				{'(o)'}
 			</button>&nbsp;&nbsp;&nbsp;&nbsp;
