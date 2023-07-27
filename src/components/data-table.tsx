@@ -151,8 +151,11 @@ export default function DataTable() {
     };
 
     const clear = () => dispatch(DataAction.clear());
+    
     const [hold, setHold] = useState('');
+    
     const [selectedColor, setSelectedColor] = useState('');
+    
     const handleHoldChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         dispatch(DataAction.changeCale(e.target.value)) 
         const selectedValue = (e.target.value);
