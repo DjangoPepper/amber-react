@@ -27,6 +27,47 @@ import './index-tanstack.css'
 
 //FRED ****************************************************************
 import SpaceatPos from "./SpaceatPos";
+import * as fs from 'fs'
+import * as path from 'path'
+
+const monthNames = [
+    'jan', 'fev', 'mar', 'avr', 'mai', 'juin',
+    'juil', 'aou', 'sep', 'oct', 'nov', 'dec'
+  ];
+
+  
+
+function backupCurrentDateTime(): string {
+  const now = new Date();
+  const day = String(now.getDate()).padStart(2, '0');
+  
+  const month = monthNames[now.getMonth()];  
+
+  //const month = String(now.getMonth() + 1).padStart(2, '0');
+  const year = String(now.getFullYear());
+  const hour = String(now.getHours()).padStart(2, '0');
+  const minute = String(now.getMinutes()).padStart(2, '0');
+
+  return `stepe ${month}${day}_${hour}${minute}.xlsx`;
+}
+
+// function saveFileWithCurrentDateTime(content: string): void {
+//   let fileName = `stepe`+`${getCurrentDateTime()}.txt`;
+//   return fileName
+//   const filePath = path.join(__dirname, fileName);
+
+//   fs.writeFile(filePath, content, (err) => {
+//     if (err) {
+//       console.error('Erreur lors de la sauvegarde du fichier :', err);
+//     } else {
+//       console.log('Fichier sauvegardé avec succès :', fileName);
+//     }
+//   });
+// }
+
+// const contentToSave = "Contenu du fichier à sauvegarder...";
+// saveFileWithCurrentDateTime(contentToSave);
+
 //FRED ****************************************************************
 
 
@@ -37,8 +78,8 @@ declare module '@tanstack/react-table' {
     }
 }
 
-
 const columnHelper = createColumnHelper<Data>();
+
 const EditableCell = ({ getValue, row, column, table }: any) => {
     const initialValue = getValue()
     const [value, setValue] = React.useState(initialValue)
@@ -59,6 +100,7 @@ const EditableCell = ({ getValue, row, column, table }: any) => {
         />
     )
 };
+
 const globalFilterFn: FilterFn<Data> = (row, columnId, filterValue: string) => {
     const search = filterValue.toLowerCase();
 
@@ -147,7 +189,9 @@ export default function DataTable() {
         const sheet = utils.aoa_to_sheet(aoa)
         const wb = utils.book_new();
         utils.book_append_sheet(wb, sheet);
-        writeFile(wb, "stepe.xlsx");
+        // writeFile(wb, "stepe.xlsx");
+        // let fileName = saveFileWithCurrentDateTime();
+        writeFile(wb, backupCurrentDateTime())
     };
 
     const clear = () => dispatch(DataAction.clear());
