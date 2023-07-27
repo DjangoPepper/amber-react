@@ -26,12 +26,16 @@ import Statistics from "./statistics";
 
 function cleanData(values: any): Data {
 	return {
-		weight: values["Poids" || "POIDS"],
-		position: values["Position" || "POSITION"],
-		prepa: values["Prépa" || "PREPA"],
-		rank: values["Rang" || "RANG" || "Num" || "NUM"],
-		reference: values["Référence" || "REFERENCE" || "N° PRODUIT"],
-		destination: values["Destination" || "DESTINATION" || "Stock" ]
+		// const sentence = 'The quick brown fox jumps over the lazy dog.';
+		// console.log(sentence.toUpperCase());
+		// Expected output: "THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG."
+		
+		rank: values["Rang" || "RANG" || "rang"],
+		prepa: values["Prépa" || "PREPA" || "prepa"],
+		reference: values["Référence" || "REFERENCE" || "reference" || "REF"],
+		weight: values["Poids" || "POIDS" || "poids"],
+		position: values["Position" || "POSITION" || "position" || "POS"],
+		destination: values["Destination" || "DESTINATION" || "destination" || "DEST" ]
 	}
 }
 
@@ -73,7 +77,7 @@ function Main() {
 									{
 										isDragActive ?
 											<p>Poses ca ici</p> :
-											<p>Excel ou ton JSON ...</p>
+											<p>Excel</p>
 									}
 								</div>
 							</section>

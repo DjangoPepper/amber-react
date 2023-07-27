@@ -81,6 +81,9 @@ export default function DataTable() {
             pageSize: 40,
         }
     )
+
+
+    
     const pagination = React.useMemo(
         () => ({
             pageIndex,
@@ -146,42 +149,45 @@ export default function DataTable() {
         setSelectedColor(selectedOption ? selectedOption.color : '');    
     }
 
-    
     function useColumns(): any[] {
         const dispatch = useDispatch();
 
         const columns = [
             columnHelper.accessor('rank', {
-                header: () => 'Rang',
+                header: () => 'RANG',
                 filterFn: fuzzyFilter,
             }),
             columnHelper.accessor('prepa', {
-                header: () => 'Prepa',
+                header: () => 'PREPA',
                 cell: EditableCell,
                 filterFn: fuzzyFilter,
             }),
 // #####################################################################################################################
             columnHelper.accessor('reference', {
-                header: 'Reference',
+                header: 'REF',
                 cell: ({row}: any) =>
                     <Button onClick={() => {
+                        const MyPageIndexValue = table.getState().pagination.pageIndex + 1 ;
                         dispatch(DataAction.moveRow(row.original.reference));
-                    }}>
+                        table.setPageIndex(MyPageIndexValue);
+                    }}
+                    // disabled={!table.getCanPreviousPage()}
+                    >
                         {row.original.reference} 
                         {/* {SpaceatPos(row.original.reference)} */}
-                        {/* beuh */}
                     </Button>,
                 filterFn: fuzzyFilter,
+
             }),
 // #####################################################################################################################
 
             columnHelper.accessor('weight', {
-                header: "Poids",
+                header: "POIDS",
                 cell: info => info.getValue(),
                 filterFn: fuzzyFilter,
             }),
             columnHelper.accessor('destination', {
-                header: 'Destination',
+                header: 'DEST',
                 filterFn: fuzzyFilter,
             })
         ];
@@ -290,25 +296,29 @@ export default function DataTable() {
 			>
 				{'<<'}
 			</button>&nbsp;&nbsp;&nbsp;&nbsp;
-			<button
+			
+            <button
 				className="border rounded p-1"
 				onClick={() => table.previousPage()}
 				disabled={!table.getCanPreviousPage()}
 			>
 				{'<'}
 			</button>&nbsp;&nbsp;&nbsp;&nbsp;
-			<button
+			
+            <button
 				className="border rounded p-1"
 				onClick={() => table.nextPage()}
 				disabled={!table.getCanNextPage()}
+
 			>
 				{'>'}
 			</button>&nbsp;&nbsp;&nbsp;&nbsp;
-			<button
+			
+            <button
 				className="border rounded p-1"
 				onClick={() => table.setPageIndex(table.getPageCount() - 1)}
 				disabled={!table.getCanNextPage()}
-                // table.
+                // onclick={() => table.index
 			>
 				{'>>'}
 			</button>&nbsp;&nbsp;&nbsp;&nbsp;
