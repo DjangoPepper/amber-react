@@ -48,7 +48,7 @@ function backupCurrentDateTime(): string {
   const hour = String(now.getHours()).padStart(2, '0');
   const minute = String(now.getMinutes()).padStart(2, '0');
 
-  return `stepe ${month}${day}_${hour}${minute}.xlsx`;
+  return `Stepe ${month}${day}_${hour}${minute}.xlsx`;
 }
 
 // function saveFileWithCurrentDateTime(content: string): void {
