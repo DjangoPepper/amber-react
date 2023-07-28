@@ -3,11 +3,11 @@ import DataAction from "./DataAction";
 import {Reducer} from "@reduxjs/toolkit";
 
 export type Data = {
+    rank: number
+    prepa: string
+    reference: string
     weight: number
     position: string
-    prepa: number
-    rank: number
-    reference: string
     destination: string
 }
 

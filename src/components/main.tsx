@@ -24,20 +24,44 @@ import Statistics from "./statistics";
 // 	);
 // };
 
-function cleanData(values: any): Data {
-	return {
-		// const sentence = 'The quick brown fox jumps over the lazy dog.';
-		// console.log(sentence.toUpperCase());
-		// Expected output: "THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG."
+// function cleanData(values: any): Data {
+// 	return {
+// 		// const sentence = 'The quick brown fox jumps over the lazy dog.';
+// 		// console.log(sentence.toUpperCase());
+// 		// Expected output: "THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG."
 		
-		rank: values["Rang" || "RANG" || "rang"],
-		prepa: values["Prépa" || "PREPA" || "prepa"],
-		reference: values["Référence" || "REFERENCE" || "reference" || "REF"],
-		weight: values["Poids" || "POIDS" || "poids"],
-		position: values["Position" || "POSITION" || "position" || "POS"],
-		destination: values["Destination" || "DESTINATION" || "destination" || "DEST" ]
-	}
+// 		rank: values["Rang" || "RANG" || "rang"],
+// 		prepa: values["Prépa" || "PREPA" || "prepa"],
+// 		reference: values["Référence" || "REFERENCE" || "reference" || "REF"],
+// 		weight: values["Poids" || "POIDS" || "poids"],
+// 		position: values["Position" || "POSITION" || "position" || "POS"],
+// 		destination: values["Destination" || "DESTINATION" || "destination" || "DEST" ]
+// 	}
+// }
+
+function cleanData(values: any): Data {
+    const toUpperCaseKeysValues: any = {};
+
+    // Convertir les clés (keys) de "values" en majuscules
+    for (const key in values) {
+		// console.log(key)
+		// console.log(values[key])
+        // if (values.hasOwnProperty(key)) {
+		toUpperCaseKeysValues[key.toUpperCase()] = values[key];
+		// console.log(toUpperCaseKeysValues[key.toUpperCase()])
+        // }
+    }
+
+    return {
+        rank: toUpperCaseKeysValues["NUMERO"] || toUpperCaseKeysValues["RANG"] || toUpperCaseKeysValues["N°"],
+        prepa: toUpperCaseKeysValues["PRÉPA"] || toUpperCaseKeysValues["PREPA"],
+        reference: toUpperCaseKeysValues["RÉFÉRENCE"] || toUpperCaseKeysValues["REFERENCE"] || toUpperCaseKeysValues["REF"] || toUpperCaseKeysValues["COILS"] || toUpperCaseKeysValues["BRAMES"],
+        weight: toUpperCaseKeysValues["POIDS"] || toUpperCaseKeysValues["TONS"],
+        position: toUpperCaseKeysValues["POSITION"] || toUpperCaseKeysValues["POS"] || toUpperCaseKeysValues["ZONE"] || toUpperCaseKeysValues["STOCK"],
+        destination: toUpperCaseKeysValues["DESTINATION"] || toUpperCaseKeysValues["DEST"]
+    };
 }
+
 
 function Main() {
 	const fredcolor="#fdff5b"
