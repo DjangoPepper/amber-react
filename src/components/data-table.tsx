@@ -97,6 +97,7 @@ const EditableCell = ({ getValue, row, column, table }: any) => {
             onChange={e => setValue(e.target.value)}
             onBlur={onBlur}
             style={{width: "50px"}}
+            // prepa insert box
         />
     )
 };
