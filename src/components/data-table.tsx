@@ -114,38 +114,27 @@ const globalFilterFn: FilterFn<Data> = (row, columnId, filterValue: string) => {
 const pagePrev  = -1 ;
 
 export default function DataTable() {
-    
-    
     const dispatch = useDispatch();
     const [sorting, setSorting] = React.useState<SortingState>([]);
     const [globalFilter, setGlobalFilter] = React.useState('')
     const cale = useSelector<RootState, string>(state => state.data.selectedCale);
     const data = useSelector<RootState, Data[]>(state => state.data.data);
     const columns = useColumns();
+    //
+    // const [{ pageIndex, pageSize }, setPagination] =
+    //     React.useState<PaginationState>({
+    //         pageIndex: 0,
+    //         pageSize: 40,
+    //     }
+    // )
     
-    const [{ pageIndex, pageSize }, setPagination] =
-        React.useState<PaginationState>({
-            pageIndex: 0,
-            pageSize: 40,
-        }
-    )
-
-    
-
-    const rappel = React.useMemo(
-        () => ({
-            pagePrev,
-        }),
-        [pagePrev]
-    )
-    
-    const pagination = React.useMemo(
-        () => ({
-            pageIndex,
-            pageSize,
-        }),
-        [pageIndex, pageSize ]
-    )
+    // const pagination = React.useMemo(
+    //     () => ({
+    //         pageIndex,
+    //         pageSize,
+    //     }),
+    //     [pageIndex, pageSize ]
+    // )
 
     const table = useReactTable({
         data,
@@ -153,7 +142,7 @@ export default function DataTable() {
         state: {
             sorting,
             globalFilter,
-            pagination
+            // pagination
         },
         onGlobalFilterChange: setGlobalFilter,
         globalFilterFn,
@@ -161,10 +150,9 @@ export default function DataTable() {
         getCoreRowModel: getCoreRowModel(),
         getSortedRowModel: getSortedRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
-        
         getPaginationRowModel: getPaginationRowModel(),   
-        manualPagination: false,
-        onPaginationChange: setPagination,
+        // manualPagination: false,
+        // onPaginationChange: setPagination,
         
         meta: {
             updateData: (reference, columnId, value) => {
@@ -210,17 +198,7 @@ export default function DataTable() {
         setSelectedColor(selectedOption ? selectedOption.color : '');    
     }
 
-    function reelPage() { 
-        rappel.pagePrev = pageIndex;
-    }
-    function retournePage() {
-        table.setPageIndex(rappel.pagePrev)
-    }
-
     function useColumns(): any[] {
-
-        
-
         const dispatch = useDispatch();
 
         const columns = [
@@ -238,9 +216,9 @@ export default function DataTable() {
                 header: 'REF',
                 cell: ({row}: any) =>
                     <Button onClick={() => {
-                        reelPage(); //je memeorise la page de travail
+                        // reelPage(); //je memeorise la page de travail
                         dispatch(DataAction.moveRow(row.original.reference)); //je change la detination de ref cale1,cale2, etc..
-                        retournePage();//je devrais retourner à la page de travail memorisé mais ca marche po^                    
+                        // retournePage();//je devrais retourner à la page de travail memorisé mais ca marche po^
                     }}
                     
                     >
@@ -297,41 +275,41 @@ export default function DataTable() {
             &nbsp;
         </div>
         <thead>
-                {table.getHeaderGroups().map(headerGroup => (
-                    <tr key={headerGroup.id}>
-                        {headerGroup.headers.map(header => (
-                            <th key={header.id}>
-                                {header.isPlaceholder
-                                    ? null
-                                    : <div
-                                        {...{
-                                            className: header.column.getCanSort()
-                                                ? 'cursor-pointer select-none'
-                                                : '',
-                                        }}
-                                    >
-                                        <div {...{
-                                            onClick: header.column.getToggleSortingHandler(),
-                                        }}>
-                                            {flexRender(
-                                                header.column.columnDef.header,
-                                                header.getContext()
-                                            )}
-                                            {{
-                                                asc: ' 🔼',
-                                                desc: ' 🔽',
-                                            }[header.column.getIsSorted() as string] ?? null}
+            {table.getHeaderGroups().map(headerGroup => (
+                <tr key={headerGroup.id}>
+                    {headerGroup.headers.map(header => (
+                        <th key={header.id}>
+                            {header.isPlaceholder
+                                ? null
+                                : <div
+                                    {...{
+                                        className: header.column.getCanSort()
+                                            ? 'cursor-pointer select-none'
+                                            : '',
+                                    }}
+                                >
+                                    <div {...{
+                                        onClick: header.column.getToggleSortingHandler(),
+                                    }}>
+                                        {flexRender(
+                                            header.column.columnDef.header,
+                                            header.getContext()
+                                        )}
+                                        {{
+                                            asc: ' 🔼',
+                                            desc: ' 🔽',
+                                        }[header.column.getIsSorted() as string] ?? null}
+                                    </div>
+                                    {header.column.getCanFilter() ? (
+                                        <div>
+                                            <Filter column={header.column} table={table} />
                                         </div>
-                                        {header.column.getCanFilter() ? (
-                                            <div>
-                                                <Filter column={header.column} table={table} />
-                                            </div>
-                                        ) : null}
-                                    </div>}
-                            </th>
-                        ))}
-                    </tr>
-                ))}
+                                    ) : null}
+                                </div>}
+                        </th>
+                    ))}
+                </tr>
+            ))}
         </thead>
         <div ref={tableContainerRef} className="overflow-auto" style={{maxHeight: "500px"}}>
             <TableRS>
@@ -377,13 +355,6 @@ export default function DataTable() {
 			>
 				{'<'}
 			</button>&nbsp;&nbsp;&nbsp;&nbsp;
-			
-            <button
-				className="border rounded p-1"
-                onClick = {() => table.setPageIndex(rappel.pagePrev)}
-			>
-				{'(o)'}
-			</button>&nbsp;&nbsp;&nbsp;&nbsp;
 
             <button
 				className="border rounded p-1"
@@ -393,8 +364,6 @@ export default function DataTable() {
 				{'>'}
 			</button>&nbsp;&nbsp;&nbsp;&nbsp;
 
-
-
             <button
 				className="border rounded p-1"
 				onClick={() => table.setPageIndex(table.getPageCount() - 1)}
@@ -403,7 +372,6 @@ export default function DataTable() {
 			>
 				{'>>'}
 			</button>&nbsp;&nbsp;&nbsp;&nbsp;
-
 
 			<span className="flex items-center gap-1">
 				{/* <div>Page</div> */}
