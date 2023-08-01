@@ -113,6 +113,52 @@ const globalFilterFn: FilterFn<Data> = (row, columnId, filterValue: string) => {
 
 const pagePrev  = -1 ;
 
+const useColumns = function useColumns(): any[] {
+    const dispatch = useDispatch();
+
+    const columns = [
+        columnHelper.accessor('rank', {
+            header: () => 'RANG',
+            filterFn: fuzzyFilter,
+        }),
+        columnHelper.accessor('prepa', {
+            header: () => 'PREPA',
+            cell: EditableCell,
+            filterFn: fuzzyFilter,
+        }),
+// #####################################################################################################################
+        columnHelper.accessor('reference', {
+            header: 'REF',
+            cell: ({row}: any) =>
+                <Button onClick={() => {
+                    // reelPage(); //je memeorise la page de travail
+                    dispatch(DataAction.moveRow(row.original.reference)); //je change la detination de ref cale1,cale2, etc..
+                    // retournePage();//je devrais retourner à la page de travail memorisé mais ca marche po^
+                }}
+
+                >
+                    {/* {row.original.reference}  */}
+                    {SpaceatPos(row.original.reference)}
+                </Button>,
+            filterFn: fuzzyFilter,
+
+        }),
+// #####################################################################################################################
+
+        columnHelper.accessor('weight', {
+            header: "POIDS",
+            cell: info => info.getValue(),
+            filterFn: fuzzyFilter,
+        }),
+        columnHelper.accessor('destination', {
+            header: 'DEST',
+            filterFn: fuzzyFilter,
+        })
+    ];
+
+    return columns;
+}
+
 export default function DataTable() {
     const dispatch = useDispatch();
     const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -150,7 +196,8 @@ export default function DataTable() {
         getCoreRowModel: getCoreRowModel(),
         getSortedRowModel: getSortedRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
-        getPaginationRowModel: getPaginationRowModel(),   
+        getPaginationRowModel: getPaginationRowModel(),
+        autoResetPageIndex: false,
         // manualPagination: false,
         // onPaginationChange: setPagination,
         
@@ -196,52 +243,6 @@ export default function DataTable() {
 
         setHold(selectedValue);
         setSelectedColor(selectedOption ? selectedOption.color : '');    
-    }
-
-    function useColumns(): any[] {
-        const dispatch = useDispatch();
-
-        const columns = [
-            columnHelper.accessor('rank', {
-                header: () => 'RANG',
-                filterFn: fuzzyFilter,
-            }),
-            columnHelper.accessor('prepa', {
-                header: () => 'PREPA',
-                cell: EditableCell,
-                filterFn: fuzzyFilter,
-            }),
-// #####################################################################################################################
-            columnHelper.accessor('reference', {
-                header: 'REF',
-                cell: ({row}: any) =>
-                    <Button onClick={() => {
-                        // reelPage(); //je memeorise la page de travail
-                        dispatch(DataAction.moveRow(row.original.reference)); //je change la detination de ref cale1,cale2, etc..
-                        // retournePage();//je devrais retourner à la page de travail memorisé mais ca marche po^
-                    }}
-                    
-                    >
-                        {/* {row.original.reference}  */}
-                        {SpaceatPos(row.original.reference)}
-                    </Button>,
-                filterFn: fuzzyFilter,
-
-            }),
-// #####################################################################################################################
-
-            columnHelper.accessor('weight', {
-                header: "POIDS",
-                cell: info => info.getValue(),
-                filterFn: fuzzyFilter,
-            }),
-            columnHelper.accessor('destination', {
-                header: 'DEST',
-                filterFn: fuzzyFilter,
-            })
-        ];
-
-        return columns;
     }
 
     return <>
