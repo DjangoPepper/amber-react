@@ -11,6 +11,11 @@ export default class DataAction {
     public static CLEAR = "DataAction.CLEAR";
 
     public static CHANGE_COULEUR = "DataAction.CHANGE_COULEUR";
+    public static CHANGE_ORIGINAL_POS = "DataAction.ORIGINAL_POS";
+
+    public static changeOriginalpos(position: string): AnyAction {
+        return { type: DataAction.CHANGE_ORIGINAL_POS, payload: "stack"};
+    }
 
     public static changeCouleur(cale: any[]): AnyAction {
         return { type: DataAction.CHANGE_COULEUR, payload: cale };

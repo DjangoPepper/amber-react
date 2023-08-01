@@ -225,8 +225,6 @@ export default function DataTable() {
         const sheet = utils.aoa_to_sheet(aoa)
         const wb = utils.book_new();
         utils.book_append_sheet(wb, sheet);
-        // writeFile(wb, "stepe.xlsx");
-        // let fileName = saveFileWithCurrentDateTime();
         writeFile(wb, backupCurrentDateTime())
     };
 
