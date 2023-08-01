@@ -11,8 +11,8 @@ export const HEADER: IHeader[] = [
     {key: "prepa", name :"PREPA" },
     {key: "reference", name :"REF" },
     {key: "weight", name :"POIDS" },
-    {key: "position", name :"POS", default: "STO" },
-    {key: "destination", name :"DEST", default: "STOCK" },
+    {key: "position", name :"POS" },
+    {key: "destination", name :"DEST", default: "NE" },
 ]
 
 export const destinations = [
@@ -22,7 +22,7 @@ export const destinations = [
     {name: "C3", color: "#9d64e2"},
     {name: "C4", color: "#f447d1"},
     {name: "C5", color: "#fdff5b"},
-    {name: "", color: "#00ff0000"},
+    // {name: "NE", color: "#00ff0000"},
 ]
 
 

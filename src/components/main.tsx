@@ -8,54 +8,25 @@ import {Data} from "../stores/data/DataReducer";
 import DataAction from "../stores/data/DataAction";
 import DataTable from "./data-table";
 import Statistics from "./statistics";
-// import {useBeforeUnload} from "react-use";
 
-
-
-// const Demo = () => {
-// 	const [dirty, toggleDirty] = useToggle(false);
-// 	useBeforeUnload(dirty, 'You have unsaved changes, are you sure?');
-
-// 	return (
-// 	<div>
-// 		{dirty && <p>Try to reload or close tab</p>}
-// 		<button onClick={() => toggleDirty()}>{dirty ? 'Disable' : 'Enable'}</button>
-// 	</div>
-// 	);
-// };
-
-// function cleanData(values: any): Data {
-// 	return {
-// 		// const sentence = 'The quick brown fox jumps over the lazy dog.';
-// 		// console.log(sentence.toUpperCase());
-// 		// Expected output: "THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG."
-		
-// 		rank: values["Rang" || "RANG" || "rang"],
-// 		prepa: values["Prépa" || "PREPA" || "prepa"],
-// 		reference: values["Référence" || "REFERENCE" || "reference" || "REF"],
-// 		weight: values["Poids" || "POIDS" || "poids"],
-// 		position: values["Position" || "POSITION" || "position" || "POS"],
-// 		destination: values["Destination" || "DESTINATION" || "destination" || "DEST" ]
-// 	}
-// }
+function removeAccents(str: string) {
+    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}
 
 function cleanData(values: any): Data {
     const toUpperCaseKeysValues: any = {};
 
-    // Convertir les clés (keys) de "values" en majuscules
-    for (const key in values) {
-		// console.log(key)
-		// console.log(values[key])
-        // if (values.hasOwnProperty(key)) {
-		toUpperCaseKeysValues[key.toUpperCase()] = values[key];
-		// console.log(toUpperCaseKeysValues[key.toUpperCase()])
-        // }
+	for (const key in values) {
+        const upperCaseKey = key.toUpperCase();
+        const cleanedKey = removeAccents(upperCaseKey);
+        toUpperCaseKeysValues[cleanedKey] = values[key];
     }
+
 
     return {
         rank: toUpperCaseKeysValues["NUMERO"] || toUpperCaseKeysValues["RANG"] || toUpperCaseKeysValues["N°"],
-        prepa: toUpperCaseKeysValues["PRÉPA"] || toUpperCaseKeysValues["PREPA"],
-        reference: toUpperCaseKeysValues["RÉFÉRENCE"] || toUpperCaseKeysValues["REFERENCE"] || toUpperCaseKeysValues["REF"] || toUpperCaseKeysValues["COILS"] || toUpperCaseKeysValues["BRAMES"],
+        prepa: toUpperCaseKeysValues["PREPA"],
+        reference: toUpperCaseKeysValues["REFERENCE"] || toUpperCaseKeysValues["REF"] || toUpperCaseKeysValues["COILS"] || toUpperCaseKeysValues["BRAMES"],
         weight: toUpperCaseKeysValues["POIDS"] || toUpperCaseKeysValues["TONS"],
         position: toUpperCaseKeysValues["POSITION"] || toUpperCaseKeysValues["POS"] || toUpperCaseKeysValues["ZONE"] || toUpperCaseKeysValues["STOCK"],
         destination: toUpperCaseKeysValues["DESTINATION"] || toUpperCaseKeysValues["DEST"]
