@@ -28,7 +28,7 @@ AWS ->  Amazon S3 -> nom Compartiments -> steppe -> Charger
 
 Import -> Excel -> choisir votre fichier
 
-ver 1.0.3 bec;
+ver 1.0.4 bec;
 
 le fichier excel importé doit respecter les contraintes suivantes : 
 

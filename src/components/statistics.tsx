@@ -12,17 +12,15 @@ export default function Statistics() {
         }
         // p[row.destination] = {count: p[row.destination].count + 1, weight: Math.round(p[row.destination].weight) + row.weight}
         p[row.destination] = {count: p[row.destination].count + 1, weight: (p[row.destination].weight + row.weight)}
-        // let num = 5.56789;
-        // let n = num.toFixed(2);
         return p;
     }, {})
     const keys = Object.keys(statistics).sort();
     return (
         <Table>
             <thead>
-                <th>Cale</th>
-                <th>Quantité</th>
-                <th>Tonnage</th>
+                <th>DesT</th>
+                <th>QuanT</th>
+                <th>TonS</th>
             </thead>
             <tbody>
             {keys.map(k => <tr key={k}>
