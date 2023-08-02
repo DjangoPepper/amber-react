@@ -16,7 +16,7 @@ export const HEADER: IHeader[] = [
 ]
 
 export const destinations = [
-    {name: "Sto", color: "#fff"},
+    {name: "STK", color: "#fff"},
     {name: "C1", color: "#00c87a"},
     {name: "C2", color: "#3cbefc"},
     {name: "C3", color: "#9d64e2"},

@@ -14,7 +14,7 @@ export default class DataAction {
     public static CHANGE_ORIGINAL_POS = "DataAction.ORIGINAL_POS";
 
     public static changeOriginalpos(position: string): AnyAction {
-        return { type: DataAction.CHANGE_ORIGINAL_POS, payload: "stack"};
+        return { type: DataAction.CHANGE_ORIGINAL_POS, payload: "STK"};
     }
 
     public static changeCouleur(cale: any[]): AnyAction {

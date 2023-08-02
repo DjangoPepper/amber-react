@@ -29,7 +29,7 @@ function cleanData(values: any): Data {
         reference: toUpperCaseKeysValues["REFERENCE"] || toUpperCaseKeysValues["REF"] || toUpperCaseKeysValues["COILS"] || toUpperCaseKeysValues["BRAMES"],
         weight: toUpperCaseKeysValues["POIDS"] || toUpperCaseKeysValues["TONS"],
         position: toUpperCaseKeysValues["POSITION"] || toUpperCaseKeysValues["POS"] || toUpperCaseKeysValues["ZONE"] || toUpperCaseKeysValues["STOCK"],
-        destination: toUpperCaseKeysValues["DESTINATION"] || toUpperCaseKeysValues["DEST"]
+        destination: toUpperCaseKeysValues["DESTINATION"] || toUpperCaseKeysValues["DEST"] || "STK"
     };
 }
 
@@ -49,7 +49,7 @@ function Main() {
 			const workbook = read(rawData, {type: 'binary'});
 			dispatch(DataAction.importData(utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]).map(cleanData)));
 			// dispatch(DataAction.moveRow(row.original.reference)); //je change la detination de ref cale1,cale2, etc..
-			dispatch(DataAction.changeOriginalpos("stack"));
+			dispatch(DataAction.changeOriginalpos("STK"));
 		};
 		reader.readAsBinaryString(file);
 	}, []);
