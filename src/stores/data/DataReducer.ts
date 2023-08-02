@@ -19,6 +19,13 @@ interface DataState {
     saved: boolean;
 }
 
+interface Statistics {
+    [destination: string]: {
+      count: number;
+      weight: number;
+    };
+  }
+  
 const initialState: DataState = {
     data: [],
     selectedCale: "Stock",
