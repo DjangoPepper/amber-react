@@ -28,14 +28,14 @@ function cleanData(values: any): Data {
         prepa: toUpperCaseKeysValues["PREPA"],
         reference: toUpperCaseKeysValues["REFERENCE"] || toUpperCaseKeysValues["REF"] || toUpperCaseKeysValues["COILS"] || toUpperCaseKeysValues["BRAMES"],
         weight: toUpperCaseKeysValues["POIDS"] || toUpperCaseKeysValues["TONS"],
-        position: toUpperCaseKeysValues["POSITION"] || toUpperCaseKeysValues["POS"] || toUpperCaseKeysValues["ZONE"] || toUpperCaseKeysValues["STOCK"],
+        position: toUpperCaseKeysValues["POSITION"] || toUpperCaseKeysValues["POS"] || toUpperCaseKeysValues["ZONE"],
         destination: toUpperCaseKeysValues["DESTINATION"] || toUpperCaseKeysValues["DEST"] || "STK"
     };
 }
 
 
 function Main() {
-	const fredcolor="#fdff5b"
+	// const fredcolor="#fdff5b"
 	const dispatch = useDispatch();
 	const loaded = useSelector<RootState, boolean>(state => state.data.loaded);
 	const onDrop = useCallback((acceptedFiles: any) => {

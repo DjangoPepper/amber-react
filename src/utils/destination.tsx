@@ -22,7 +22,6 @@ export const destinations = [
     {name: "C3", color: "#9d64e2"},
     {name: "C4", color: "#f447d1"},
     {name: "C5", color: "#fdff5b"},
-    // {name: "NE", color: "#00ff0000"},
 ]
 
 
