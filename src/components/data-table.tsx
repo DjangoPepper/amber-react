@@ -51,27 +51,6 @@ function backupCurrentDateTime(): string {
   return `Stepe ${month}${day}_${hour}${minute}.xlsx`;
 }
 
-// function saveFileWithCurrentDateTime(content: string): void {
-//   let fileName = `stepe`+`${getCurrentDateTime()}.txt`;
-//   return fileName
-//   const filePath = path.join(__dirname, fileName);
-
-//   fs.writeFile(filePath, content, (err) => {
-//     if (err) {
-//       console.error('Erreur lors de la sauvegarde du fichier :', err);
-//     } else {
-//       console.log('Fichier sauvegardé avec succès :', fileName);
-//     }
-//   });
-// }
-
-// const contentToSave = "Contenu du fichier à sauvegarder...";
-// saveFileWithCurrentDateTime(contentToSave);
-
-//FRED ****************************************************************
-
-
-
 declare module '@tanstack/react-table' {
     interface TableMeta<TData extends RowData> {
         updateData: (reference: number, columnId: string, value: unknown) => void
@@ -131,13 +110,10 @@ const useColumns = function useColumns(): any[] {
             header: 'REF',
             cell: ({row}: any) =>
                 <Button onClick={() => {
-                    // reelPage(); //je memeorise la page de travail
                     dispatch(DataAction.moveRow(row.original.reference)); //je change la detination de ref cale1,cale2, etc..
-                    // retournePage();//je devrais retourner à la page de travail memorisé mais ca marche po^
                 }}
 
                 >
-                    {/* {row.original.reference}  */}
                     {SpaceatPos(row.original.reference)}
                 </Button>,
             filterFn: fuzzyFilter,
@@ -400,7 +376,7 @@ export default function DataTable() {
 					table.setPageSize(Number(e.target.value))
 				}}
 			>
-				{[40, 80, 120, 160].map(pageSize => (
+				{[10, 40, 80, 120, 200].map(pageSize => (
 					<option key={pageSize} value={pageSize}>
 						{pageSize}
 					</option>

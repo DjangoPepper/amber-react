@@ -29,7 +29,7 @@ function cleanData(values: any): Data {
         reference: toUpperCaseKeysValues["REFERENCE"] || toUpperCaseKeysValues["REF"] || toUpperCaseKeysValues["COILS"] || toUpperCaseKeysValues["BRAMES"],
         weight: toUpperCaseKeysValues["POIDS"] || toUpperCaseKeysValues["TONS"],
         position: toUpperCaseKeysValues["POSITION"] || toUpperCaseKeysValues["POS"] || toUpperCaseKeysValues["ZONE"],
-        destination: toUpperCaseKeysValues["DESTINATION"] || toUpperCaseKeysValues["DEST"] || "STK"
+        destination: toUpperCaseKeysValues["DESTINATION"] || toUpperCaseKeysValues["DEST"] || "stock"
     };
 }
 
@@ -49,7 +49,7 @@ function Main() {
 			const workbook = read(rawData, {type: 'binary'});
 			dispatch(DataAction.importData(utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]).map(cleanData)));
 			// dispatch(DataAction.moveRow(row.original.reference)); //je change la detination de ref cale1,cale2, etc..
-			dispatch(DataAction.changeOriginalpos("STK"));
+			dispatch(DataAction.changeOriginalpos("stock"));
 		};
 		reader.readAsBinaryString(file);
 	}, []);
@@ -73,8 +73,8 @@ function Main() {
 									<input {...getInputProps()} />
 									{
 										isDragActive ?
-											<p>Poses ca ici</p> :
-											<p>Excel</p>
+											<p>                 </p> :
+											<p>      Excel      </p>
 									}
 								</div>
 							</section>

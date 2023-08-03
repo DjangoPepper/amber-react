@@ -28,7 +28,7 @@ interface Statistics {
   
 const initialState: DataState = {
     data: [],
-    selectedCale: "STK",
+    selectedCale: "stock",
     selectedPrepa: "_",
     loaded: false,
     saved: true
