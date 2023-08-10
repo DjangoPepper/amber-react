@@ -64,7 +64,7 @@ function definehowmanyspace(originalNumber: string): string {
     newnumber = originalNumber;
   } else if (originalNumber.length === 6) {
     originalNumber = insertSpaceAtPosition(originalNumber, 3);
-    originalNumber = insertSpaceAtPosition(originalNumber, 3);
+    // originalNumber = insertSpaceAtPosition(originalNumber, 3);
     newnumber = originalNumber;
   } else {
     newnumber = originalNumber;

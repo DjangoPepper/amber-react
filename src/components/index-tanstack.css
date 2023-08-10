@@ -1,20 +1,26 @@
 html {
   font-family: sans-serif;
   font-size: 14px;
+  /* taille police */
 }
 
 table {
-  border: 1px solid lightgray;
+  border: 4px solid lightgray;
+  /* taille bordure   */
 }
 
 tbody {
-  border-bottom: 1px solid lightgray;
+  border-bottom: 4px solid lightgray;
+  /* taille bordure fin de tableau */
 }
 
 th {
-  border-bottom: 1px solid lightgray;
-  border-right: 1px solid lightgray;
-  padding: 2px 4px;
+  border-bottom: 4px solid lightgray;
+  /* taille bordure haut de tableau */
+  border-right: 4px solid lightgray;
+  /* taille bordure separation header */
+  padding: 2px 4px;  
+  /*hauteur largeur header*/
 }
 
 tfoot {
