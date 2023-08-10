@@ -30,7 +30,7 @@ Import -> Excel -> choisir votre fichier
 ver 1.0.1 lancement beta public
 ver 1.0.2 maj : couleurs, ref espacés, sauvegardes datés, bugs. 
 ver 1.0.3 maj : indexation, importations multi, bugs.
-ver 1.0.4 bec : calculs cumulé, bugs.
+ver 1.0.4 bec : calculs cumulés, bugs.
 ver 1.0.5 gui.
 
 le fichier excel importé doit respecter les contraintes suivantes : 
