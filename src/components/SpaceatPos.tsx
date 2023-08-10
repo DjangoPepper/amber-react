@@ -51,16 +51,16 @@ function definehowmanyspace(originalNumber: string): string {
     originalNumber = insertSpaceAtPosition(originalNumber, 10);
     newnumber = originalNumber;
   } else if (originalNumber.length === 9) {
-    originalNumber = insertSpaceAtPosition(originalNumber, 4);
-    originalNumber = insertSpaceAtPosition(originalNumber, 7);
+    originalNumber = insertSpaceAtPosition(originalNumber, 3);
+    originalNumber = insertSpaceAtPosition(originalNumber, 6);
     newnumber = originalNumber;
   } else if (originalNumber.length === 8) {
-    originalNumber = insertSpaceAtPosition(originalNumber, 4);
+    originalNumber = insertSpaceAtPosition(originalNumber, 3);
     originalNumber = insertSpaceAtPosition(originalNumber, 6);
     newnumber = originalNumber;
   } else if (originalNumber.length === 7) {
     originalNumber = insertSpaceAtPosition(originalNumber, 3);
-    originalNumber = insertSpaceAtPosition(originalNumber, 5);
+    originalNumber = insertSpaceAtPosition(originalNumber, 6);
     newnumber = originalNumber;
   } else if (originalNumber.length === 6) {
     originalNumber = insertSpaceAtPosition(originalNumber, 3);

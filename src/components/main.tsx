@@ -24,11 +24,11 @@ function cleanData(values: any): Data {
 
 
     return {
-        rank: toUpperCaseKeysValues["NUMERO"] || toUpperCaseKeysValues["RANG"] || toUpperCaseKeysValues["N°"],
-        prepa: toUpperCaseKeysValues["PREPA"],
-        reference: toUpperCaseKeysValues["REFERENCE"] || toUpperCaseKeysValues["REF"] || toUpperCaseKeysValues["COILS"] || toUpperCaseKeysValues["BRAMES"],
+        rank: toUpperCaseKeysValues["POS"] || toUpperCaseKeysValues["NUMERO"] || toUpperCaseKeysValues["RANG"] || toUpperCaseKeysValues["N°"],
+        prepa: toUpperCaseKeysValues["ZONE"] || toUpperCaseKeysValues["PREPA"] ,
+        reference: toUpperCaseKeysValues["N° PRODUIT"] ||  toUpperCaseKeysValues["REFERENCE"] || toUpperCaseKeysValues["REF"] || toUpperCaseKeysValues["COILS"] || toUpperCaseKeysValues["BRAMES"],
         weight: toUpperCaseKeysValues["POIDS"] || toUpperCaseKeysValues["TONS"],
-        position: toUpperCaseKeysValues["POSITION"] || toUpperCaseKeysValues["POS"] || toUpperCaseKeysValues["ZONE"],
+        position: toUpperCaseKeysValues["POSITION"],
         destination: toUpperCaseKeysValues["DESTINATION"] || toUpperCaseKeysValues["DEST"] || "stock"
     };
 }
