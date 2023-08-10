@@ -75,8 +75,8 @@ const EditableCell = ({ getValue, row, column, table }: any) => {
             value={value as string}
             onChange={e => setValue(e.target.value)}
             onBlur={onBlur}
-            style={{width: "50px"}}
-            // prepa insert box
+            style={{width: "55px"}}
+            // largeur prepa box
         />
     )
 };
@@ -222,7 +222,7 @@ export default function DataTable() {
     return <>
         <div className="d-flex">
             <div style={{maxWidth: 90}}>
-                {/* 11 chiffres */}
+                {/* 11 chiffres POUR LE CHAMP search de rang*/}
                 <DebouncedInput
                     value={globalFilter ?? ''}
                     onChange={value => setGlobalFilter(String(value))}
@@ -231,7 +231,8 @@ export default function DataTable() {
                 />
             </div>
             &nbsp;
-            <div style={{maxWidth: 150 }}>
+            <div style={{maxWidth: 350 }}>
+                {/* largeur form select stock cale */}
                 <Form.Select placeholder="vers..." value={cale} 
                     onChange={(e) => handleHoldChange(e)}
                     style={{ backgroundColor: selectedColor }}
@@ -286,7 +287,8 @@ export default function DataTable() {
                 </tr>
             ))}
         </thead>
-        <div ref={tableContainerRef} className="overflow-auto" style={{maxHeight: "500px"}}>
+        <div ref={tableContainerRef} className="overflow-auto" style={{maxHeight: "490px"}}>
+            {/* hauteur du tableau data 500 px*/}
             <TableRS>
                 <tbody className="overflow-auto" style={{maxHeight: "100px"}}>
                     {table.getRowModel().rows.map(row => {
