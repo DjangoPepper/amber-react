@@ -8,20 +8,33 @@ import {Data} from "../stores/data/DataReducer";
 import DataAction from "../stores/data/DataAction";
 import DataTable from "./data-table";
 import Statistics from "./statistics";
+import { isNumberObject } from 'util/types';
+
+
+// const deleteRow = (index: number) => {
+//     const updatedData = excelData.filter((_, i) => i !== index);
+//     setExcelData(updatedData);
+//   };
 
 function removeAccents(str: string) {
     return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 }
 
 function cleanData(values: any): Data {
-    const toUpperCaseKeysValues: any = {};
-
+	const toUpperCaseKeysValues: any = {};
 	for (const key in values) {
-        const upperCaseKey = key.toUpperCase();
-        const cleanedKey = removeAccents(upperCaseKey);
-        toUpperCaseKeysValues[cleanedKey] = values[key];
+		if (key.includes('EMPTY')) {
+			console.log("row :  ", values.__rowNum__);
+			// deleteRow(1);
+		} 
+		else 
+		{
+			const upperCaseKey = key.toUpperCase();
+			if (upperCaseKey in values ) {console.log("fred", values,upperCaseKey);}
+			const cleanedKey = removeAccents(upperCaseKey);
+			toUpperCaseKeysValues[cleanedKey] = values[key];
+		}
     }
-
 
     return {
         rank: toUpperCaseKeysValues["POS"] || toUpperCaseKeysValues["NUMERO"] || toUpperCaseKeysValues["RANG"] || toUpperCaseKeysValues["N°"],

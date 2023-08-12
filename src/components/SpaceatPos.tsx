@@ -1,21 +1,26 @@
-// import React from "react";
-
-
-
+//
 function trouverPosition1ereLettre(chaine: any): number {
-  let result: number = -1;                                    // Initialise le résultat à -1 aucune lettre trouvée
-  // const chaineEnMajuscules: string = chaine.toUpperCase();    // transforme la chaine en majuscules
-  const chaineEnMajuscules: string = chaine.toString().toUpperCase();
+  let result: number = -1;
 
-  for (let i: number = 2; i < (chaineEnMajuscules.length-2); i++) {   //Initialise I, boucle de 2 à longeur chaine
-    const code: number = chaineEnMajuscules.charCodeAt(i);        //Transforme le caractere en code
-    if (code >= 65 && code <= 90) {                               //Si code represente une lettre majuscule
-      result = i;                                                 //Récupère la position de la lettre trouvée   
-      break; // Sort de la boucle dès qu'une lettre est trouvée   //break
+  let chaineEnMajuscules: string = "3r0r";  // Valeur par défaut en cas d'erreur
+
+  try {
+    chaineEnMajuscules = chaine.toString().toUpperCase() ||'' ;
+  } catch (error) {
+    console.error("Une erreur s'est produite lors de la conversion en majuscules :", error);
+  }
+
+  for (let i: number = 2; i < (chaineEnMajuscules.length - 2); i++) {
+    const code: number = chaineEnMajuscules.charCodeAt(i);
+    if (code >= 65 && code <= 90) {
+      result = i;
+      break;
     }
   }
-  return result;                                                  // Retourne result
+
+  return result;
 }
+
 
 function insertSpaceAtPosition(numberastext: string, position: number): string {
   if (position < 0 || position > numberastext.length) {
