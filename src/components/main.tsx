@@ -8,7 +8,6 @@ import {Data} from "../stores/data/DataReducer";
 import DataAction from "../stores/data/DataAction";
 import DataTable from "./data-table";
 import Statistics from "./statistics";
-import { isNumberObject } from 'util/types';
 
 
 // const deleteRow = (index: number) => {
@@ -24,7 +23,7 @@ function cleanData(values: any): Data {
 	const toUpperCaseKeysValues: any = {};
 	for (const key in values) {
 		if (key.includes('EMPTY')) {
-			console.log("row :  ", values.__rowNum__);
+			console.log("EMPTY VALUES @ row :  ", values.__rowNum__);
 			// deleteRow(1);
 		} 
 		else 

@@ -15,8 +15,8 @@
             "webRoot": "${workspaceFolder}"
         },
         {
-            "command": "npm start",
-            "name": "Run npm start",
+            "command": "yarn start",
+            "name": "Run yarn start cmd",
             "request": "launch",
             "type": "node-terminal"
         },
