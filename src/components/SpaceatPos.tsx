@@ -44,38 +44,47 @@ function isolelalettre(numberastext: string, position: number): string {
 
 function definehowmanyspace(originalNumber: string): string {
 	let newnumber: string;
- originalNumber = originalNumber.toString().toUpperCase() ||''; 
-	if (originalNumber.length < 0) {
-		throw new Error('Invalid originalNumber');
+	// if (chaine !== undefined && chaine !== null) {
+	// originalNumber = originalNumber.toString().toUpperCase() ||''; 
+	if ( originalNumber !== undefined && originalNumber !== null ){
+		console.log('not defined originalNumber ')	
+		originalNumber = originalNumber.toString().toUpperCase() || ''; 
 	}
-	if (originalNumber.length > 10) {
-		originalNumber = insertSpaceAtPosition(originalNumber, 4);
-		originalNumber = insertSpaceAtPosition(originalNumber, 8);
-		newnumber = originalNumber;
-} else if (originalNumber.length === 10) {
-		originalNumber = insertSpaceAtPosition(originalNumber, 4);
-		originalNumber = insertSpaceAtPosition(originalNumber, 7);
-		originalNumber = insertSpaceAtPosition(originalNumber, 10);
-		newnumber = originalNumber;
-	} else if (originalNumber.length === 9) {
-		originalNumber = insertSpaceAtPosition(originalNumber, 3);
-		originalNumber = insertSpaceAtPosition(originalNumber, 6);
-		newnumber = originalNumber;
-	} else if (originalNumber.length === 8) {
-		originalNumber = insertSpaceAtPosition(originalNumber, 3);
-		originalNumber = insertSpaceAtPosition(originalNumber, 6);
-		newnumber = originalNumber;
-	} else if (originalNumber.length === 7) {
-		originalNumber = insertSpaceAtPosition(originalNumber, 3);
-		originalNumber = insertSpaceAtPosition(originalNumber, 6);
-		newnumber = originalNumber;
-	} else if (originalNumber.length === 6) {
-		originalNumber = insertSpaceAtPosition(originalNumber, 3);
-		// originalNumber = insertSpaceAtPosition(originalNumber, 3);
-		newnumber = originalNumber;
-	} else {
-		newnumber = originalNumber;
+	else {
+		originalNumber = "0";
 	}
+	// originalNumber = originalNumber.toString().toUpperCase() ||''; 
+		if (originalNumber.length < 0) {
+			throw new Error('Invalid originalNumber');
+		}
+		if (originalNumber.length > 10) {
+			originalNumber = insertSpaceAtPosition(originalNumber, 4);
+			originalNumber = insertSpaceAtPosition(originalNumber, 8);
+			newnumber = originalNumber;
+		} else if (originalNumber.length === 10) {
+			originalNumber = insertSpaceAtPosition(originalNumber, 4);
+			originalNumber = insertSpaceAtPosition(originalNumber, 7);
+			originalNumber = insertSpaceAtPosition(originalNumber, 10);
+			newnumber = originalNumber;
+		} else if (originalNumber.length === 9) {
+			originalNumber = insertSpaceAtPosition(originalNumber, 3);
+			originalNumber = insertSpaceAtPosition(originalNumber, 6);
+			newnumber = originalNumber;
+		} else if (originalNumber.length === 8) {
+			originalNumber = insertSpaceAtPosition(originalNumber, 3);
+			originalNumber = insertSpaceAtPosition(originalNumber, 6);
+			newnumber = originalNumber;
+		} else if (originalNumber.length === 7) {
+			originalNumber = insertSpaceAtPosition(originalNumber, 3);
+			originalNumber = insertSpaceAtPosition(originalNumber, 6);
+			newnumber = originalNumber;
+		} else if (originalNumber.length === 6) {
+			originalNumber = insertSpaceAtPosition(originalNumber, 3);
+			// originalNumber = insertSpaceAtPosition(originalNumber, 3);
+			newnumber = originalNumber;
+		} else {
+			newnumber = originalNumber;
+		}
 
 	return newnumber;
 }
