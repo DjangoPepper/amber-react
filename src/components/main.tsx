@@ -9,12 +9,6 @@ import DataAction from "../stores/data/DataAction";
 import DataTable from "./data-table";
 import Statistics from "./statistics";
 
-
-// const deleteRow = (index: number) => {
-//     const updatedData = excelData.filter((_, i) => i !== index);
-//     setExcelData(updatedData);
-//   };
-
 function removeAccents(str: string) {
     return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 }
@@ -40,14 +34,11 @@ function cleanData(values: any): Data {
 
 
 function Main() {
-	// const fredcolor="#fdff5b"
 	const dispatch = useDispatch();
 	const loaded = useSelector<RootState, boolean>(state => state.data.loaded);
 	const onDrop = useCallback((acceptedFiles: any) => {
-		// Do something with the files
 		const file = acceptedFiles[0];
 		const reader = new FileReader();
-		// const name = file.name;
 		reader.onload = function (evt) {
 			const rawData = evt.target?.result;
 			if(!rawData) return;
