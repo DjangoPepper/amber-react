@@ -22,17 +22,10 @@ function removeAccents(str: string) {
 function cleanData(values: any): Data {
 	const toUpperCaseKeysValues: any = {};
 	for (const key in values) {
-		if (key.includes('EMPTY')) {
-			console.log("EMPTY VALUES @ row :  ", values.__rowNum__);
-			// deleteRow(1);
-		} 
-		else 
-		{
-			const upperCaseKey = key.toUpperCase();
-			if (upperCaseKey in values ) {console.log("fred", values,upperCaseKey);}
-			const cleanedKey = removeAccents(upperCaseKey);
-			toUpperCaseKeysValues[cleanedKey] = values[key];
-		}
+		const upperCaseKey = key.toUpperCase();
+		if (upperCaseKey in values ) {console.log("fred", values,upperCaseKey);}
+		const cleanedKey = removeAccents(upperCaseKey);
+		toUpperCaseKeysValues[cleanedKey] = values[key];
     }
 
     return {
