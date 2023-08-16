@@ -1,4 +1,5 @@
 {
     "codegpt.apiKey": "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",
-    "codegpt.promptPrefix.documentation": "Ecrivez documentation avec ce code: "
+    "codegpt.promptPrefix.documentation": "Ecrivez documentation avec ce code: ",
+    "git.ignoreLimitWarning": true
 }
