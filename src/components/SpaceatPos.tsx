@@ -4,12 +4,12 @@ function trouverPosition1ereLettre(chaine: any): number {
 
   let chaineEnMajuscules: string = "3r0r";  // Valeur par défaut en cas d'erreur
 
-  try {
-    chaineEnMajuscules = chaine.toString().toUpperCase() ||'' ;
-  } catch (error) {
-    console.error("Une erreur s'est produite lors de la conversion en majuscules :", error);
-  }
-
+  // try {
+    // chaineEnMajuscules = chaine.toString().toUpperCase() ||'' ;
+  // } catch (error) {
+  //   console.error("Une erreur s'est produite lors de la conversion en majuscules :", error);
+  // }
+  chaineEnMajuscules = chaine.toString().toUpperCase() ||'' ;
   for (let i: number = 2; i < (chaineEnMajuscules.length - 2); i++) {
     const code: number = chaineEnMajuscules.charCodeAt(i);
     if (code >= 65 && code <= 90) {

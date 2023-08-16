@@ -1,0 +1,129 @@
+import React, {useCallback} from 'react'
+import Dropzone from 'react-dropzone'
+import {Col, Container, Row} from "react-bootstrap";
+import {read, utils} from "xlsx";
+import {useDispatch, useSelector} from "react-redux";
+import {RootState} from "../stores/rootStore";
+import {Data} from "../stores/data/DataReducer";
+import DataAction from "../stores/data/DataAction";
+import DataTable from "./data-table";
+import Statistics from "./statistics";
+
+
+function removeAccentsAndUpperCase(input: string): string {
+	const accentsMap: Record<string, string> = {
+	  'à': 'a', 'á': 'a', 'â': 'a', 'ã': 'a', 'ä': 'a', 'å': 'a', 'æ': 'ae',
+	  'é': 'e', 'è': 'e', 'ê': 'e',
+	  // Ajoutez ici d'autres substitutions d'accents si nécessaire
+	};
+  
+	return input.normalize('NFD').replace(/[\u0300-\u036f]/g, match => accentsMap[match] || '').toUpperCase();
+  }
+
+function removeAccents(str: string) {
+    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}
+
+function cleanData(values: any): Data {
+	const toUpperCaseKeysValues: any = {};
+	for (const key in values) {
+		// if (key.includes('EMPTY')) {
+		// 	console.log("EMPTY VALUES @ row :  ", values.__rowNum__);
+		// 	// deleteRow(1);
+		// } 
+		// else 
+		// {
+			const upperCaseKey = key.toUpperCase();
+			if (upperCaseKey in values ) {console.log("upperCaseKey", values,upperCaseKey);}
+			const cleanedKey = removeAccents(upperCaseKey);
+			toUpperCaseKeysValues[cleanedKey] = values[key];
+		}
+    // }
+
+    return {
+        rank: toUpperCaseKeysValues["POS"] || toUpperCaseKeysValues["NUMERO"] || toUpperCaseKeysValues["RANG"] || toUpperCaseKeysValues["N°"],
+        prepa: toUpperCaseKeysValues["ZONE"] || toUpperCaseKeysValues["PREPA"] ,
+        reference: toUpperCaseKeysValues["N° PRODUIT"] ||  toUpperCaseKeysValues["REFERENCE"] || toUpperCaseKeysValues["REF"] || toUpperCaseKeysValues["COILS"] || toUpperCaseKeysValues["BRAMES"],
+        weight: toUpperCaseKeysValues["POIDS"] || toUpperCaseKeysValues["TONS"],
+        position: toUpperCaseKeysValues["POSITION"],
+        destination: toUpperCaseKeysValues["DESTINATION"] || toUpperCaseKeysValues["DEST"] || "stock"
+    };
+}
+
+function Ze_ValidXls(workbook: any){
+	const Ze_sheetName = workbook.SheetNames[0];	//devrait être le nom de la 1ere feuille à traiter
+	const Ze_sheet = workbook.Sheets[Ze_sheetName];	//objet feuille
+	// const Ze_rows: string[][] = utils.sheet_to_json(Ze_sheet, { header: 1 });
+	const Ze_rows: string[][] = utils.sheet_to_json(Ze_sheet); 	//convertion en json sans headers
+	const Ze_headers: string[] = ["N°", "RANG", "POS"];			//elts header utiles
+	const Ze_validRows: string[][] = [];
+	let Ze_upped = ""
+	for (let sheetIndex = 0; sheetIndex < Ze_sheet.length; sheetIndex++) {
+		const row = Ze_sheet[sheetIndex];
+	
+		for (const header of Ze_headers) {
+		  Ze_upped = removeAccentsAndUpperCase(row[0]);
+	
+		  if (Ze_upped.includes(removeAccentsAndUpperCase(header))) {
+			// Le header est présent dans la ligne, vous pouvez faire quelque chose ici
+			console.log(`Header "${header}" trouvé à la ligne ${sheetIndex + 1}`);
+			// Arrêtez la boucle interne dès qu'un header est trouvé
+			break;
+		  }
+		}
+	}
+}
+
+function Main() {
+	const dispatch = useDispatch();
+	const loaded = useSelector<RootState, boolean>(state => state.data.loaded);
+	const onDrop = useCallback((acceptedFiles: any) => {
+		// Do something with the files
+		const file = acceptedFiles[0];
+		const reader = new FileReader();
+		// const name = file.name;
+		// Ze_ValidXls(reader);
+		reader.onload = function (evt) {
+			const rawData = evt.target?.result;
+			if(!rawData) return;
+			const workbook = read(rawData, {type: 'binary'});
+			dispatch(DataAction.importData(utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]).map(cleanData)));
+			// dispatch(DataAction.moveRow(row.original.reference)); 
+			dispatch(DataAction.changeOriginalpos("stock"));//je change la detination de ref cale1,cale2, etc..
+		};
+		reader.readAsBinaryString(file);
+	}, []);
+
+	return (
+		<Container className="p-2">
+			{loaded ? <Row>
+				<Col>
+					<DataTable />
+				</Col>
+				<Col>
+					<Statistics />
+				</Col>
+			</Row> :
+			<Row>
+				<Col>
+					<Dropzone onDrop={onDrop}>
+						{({getRootProps, getInputProps, isDragActive}) => (
+							<section className="dropzone">
+								<div {...getRootProps()}>
+									<input {...getInputProps()} />
+									{
+										isDragActive ?
+											<p>                 </p> :
+											<p>      Excel      </p>
+									}
+								</div>
+							</section>
+						)}
+					</Dropzone>
+				</Col>
+			</Row>}
+		</Container>
+	);
+}
+
+export default Main;
