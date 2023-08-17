@@ -12,9 +12,9 @@ function init() {
     if(data) {
         store.dispatch(DataAction.load(data));
     }
-    setInterval(() => {
-        store.dispatch(DataAction.save());
-    }, 30 * 1000);
+    // setInterval(() => {
+    //     store.dispatch(DataAction.save());
+    // }, 30 * 1000);
 }
 
 init();

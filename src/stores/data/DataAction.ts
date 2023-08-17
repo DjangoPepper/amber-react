@@ -9,10 +9,15 @@ export default class DataAction {
 	public static SAVE = "DataAction.SAVE";
 	public static LOAD = "DataAction.LOAD";
 	public static CLEAR = "DataAction.CLEAR";
+	public static REMOVE = "DataAction.REMOVE";
 
 	public static CHANGE_COULEUR = "DataAction.CHANGE_COULEUR";
 	public static CHANGE_ORIGINAL_POS = "DataAction.ORIGINAL_POS";
-	public static DELETE_A_ROW = "DatgaAction.DELETE_A_ROW";
+	public static DELETE_ROW = "DataAction.DELETE_ROW";
+	
+	public static deleteRow(rank: string): AnyAction {
+		return { type: DataAction.DELETE_ROW, payload: rank };
+	}
 
 	public static changeCouleur(cale: any[]): AnyAction {
 		return { type: DataAction.CHANGE_COULEUR, payload: cale };
@@ -21,11 +26,6 @@ export default class DataAction {
 	public static changeOriginalpos(destination: string): AnyAction {
 		return { type: DataAction.CHANGE_ORIGINAL_POS, payload: "stock"};
 	}
-
-	public static deleteRow(rang: string): AnyAction {
-		return { type: DataAction.DELETE_A_ROW, payload: -1};
-	}
-
 	
 	public static importData(data: any[]): AnyAction {
 		return { type: DataAction.IMPORT_DATA, payload: data };
