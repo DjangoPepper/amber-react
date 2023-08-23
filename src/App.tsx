@@ -7,14 +7,16 @@ import {store} from "./stores/rootStore";
 import { useLeavePageConfirm } from "./components/use-leave";
 import DataAction from "./stores/data/DataAction";
 
+let backupInterval = 99 * 1000; //30 * 1000 ms = 30s
+
 function init() {
     const data = window.localStorage.getItem("data");
     if(data) {
         store.dispatch(DataAction.load(data));
     }
-    // setInterval(() => {
-    //     store.dispatch(DataAction.save());
-    // }, 30 * 1000);
+    setInterval(() => {
+        store.dispatch(DataAction.save());
+    }, backupInterval);
 }
 
 init();

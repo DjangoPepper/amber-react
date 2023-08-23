@@ -8,6 +8,7 @@ import {Data} from "../stores/data/DataReducer";
 import DataAction from "../stores/data/DataAction";
 import DataTable from "./data-table";
 import Statistics from "./statistics";
+import XLSX from 'xlsx'
 
 function removeAccents(str: string) {
     return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
@@ -20,7 +21,7 @@ function cleanData(values: any): Data {
 		// if (upperCaseKey in values ) {console.log("fred", values,upperCaseKey);}
 		const cleanedKey = removeAccents(upperCaseKey);
 		toUpperCaseKeysValues[cleanedKey] = values[key];
-    }
+	}
 
     return {
         rank: toUpperCaseKeysValues["POS"] || toUpperCaseKeysValues["NUMERO"] || toUpperCaseKeysValues["RANG"] || toUpperCaseKeysValues["N°"],
@@ -46,39 +47,64 @@ function Main() {
 			if(!rawData) return;
 			
 			const workbook = read(rawData, {type: 'binary'});
-			const DsheetName = workbook.SheetNames[0];
-			const Dsheet = workbook.Sheets[DsheetName];
-			const Drows:string [][] = utils.sheet_to_json(Dsheet, { header: 1 }); // Utilisation de header: 
-			const Erows:string [][] = utils.sheet_to_json(Dsheet); // Utilisation de header: 
-			
-			const Dheader: string[] = ["N°", "RANG", "POS"];
-			let suppRow = 0;
-			for (let i = 0; i < 10; i++) {
-				// if (i < Drows.length) {
-					
-					let zeup: string = Drows[i][0].toUpperCase(); 
-					if (Dheader.includes(zeup)) {
-						console.log('Header inclus dans la ligne n°', i + 1);
-						//supp les rows precedentes sans header
-						// for(let j = 0; j < suppRow; j++){
-						// 	Drows.splice(j, 1); // Supprime la ligne où il n'y a pas d'en-tête
-						// }
-						//relance l'interval de sauvegarde et les disptach.
-						break
-					} else {
-						console.log("Pas d'header dans la ligne n°", i + 1);
-						suppRow = suppRow +1;
-						// Drows.splice(i, 1); // Supprime la ligne où il n'y a pas d'en-tête
-        				// i--; 				// Décrémente i pour compenser la suppression d'élément
-					}
-				// } else {
-				// 	console.log('Index de ligne en dehors des limites du tableau.');
-				// }
-			}
+			const sheetName = workbook.SheetNames[0];
+			const sheetWinwin = workbook.Sheets['winwin'];
+			const sheet = workbook.Sheets[sheetName];
 
-			// dispatch(DataAction.importData(utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]).map(cleanData)));
-			// // dispatch(DataAction.moveRow(row.original.reference)); //je change la detination de ref cale1,cale2, etc..
-			// dispatch(DataAction.changeOriginalpos("stock"));
+			//
+			// const sheetRange = sheet['!ref']; // Valeur au format 'A1:X10' par exemple
+			// const sheetAutofilter = sheet['!autofilter'] //valeur au format "B4:E4" par exemple
+			// const sheetMargins = sheet['!margins']	//
+			// if (sheet['!margins']) {
+            //     delete sheet['!margins'];
+            // }
+			// /* {
+			// 	left: 0.7086614173228347,
+			// 	right: 0.7086614173228347,
+			// 	top: 0.7480314960629921,
+			// 	bottom: 0.7480314960629921,
+			// 	header: 0.31496062992125984,
+			// 	footer: 0.31496062992125984,
+			//   } */
+            // console.log("Sheet range: ", sheetRange);
+			// console.log("Sheet autofilter: ", sheetAutofilter);
+			// console.log("Sheet margins: ", sheetMargins);
+			
+			// // Créer un nouvel objet ressemblant à sheet avec la clé et la valeur de la plage
+            // /* const newSheet = {
+            //     ...sheet,
+            //     '!ref': sheetRange
+            // }; */
+			const newSheet: { [key: string]: any } = {
+				...sheet,
+				// '!ref': sheetRange
+			};
+
+			// Supprimer le contenu entre '<t' et '>' dans chaque cellule de 'newSheet'
+            for (const cellKey in newSheet) {
+                if (newSheet.hasOwnProperty(cellKey) && cellKey !== ('!ref' || '!margins' || '!autofilter')) {
+					const cell = newSheet[cellKey];
+                    if (cell && cell.r) {
+                        cell.r = cell.r.replace(/<t[^>]*>/g, '<t>');
+                    }
+                }
+				if (newSheet.hasOwnProperty(cellKey) && cellKey == '!margins' ) {
+					// const cellM = newSheet[cellKey];
+
+                }
+            }
+            
+			// Utilisez le nouvel objet newSheet comme vous le feriez avec sheet
+            console.log("New sheet with removed content:", newSheet);
+
+
+
+			//
+			dispatch(DataAction.importData(utils.sheet_to_json(newSheet).map(cleanData)));
+			// dispatch(DataAction.importData(utils.sheet_to_json(sheet).map(cleanData)));
+			// dispatch(DataAction.importData(utils.sheet_to_json(selectedSheet).map(cleanData)));
+				// // dispatch(DataAction.moveRow(row.original.reference)); //je change la detination de ref cale1,cale2, etc..
+			dispatch(DataAction.changeOriginalpos("stock"));
 		};
 		reader.readAsBinaryString(file);
 	}, []);
