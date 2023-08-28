@@ -3,6 +3,7 @@ import {RootState} from "../stores/rootStore";
 import {Data} from "../stores/data/DataReducer";
 import {Table} from "react-bootstrap";
 import {colors} from "../utils/destination";
+import React from 'react';
 
 export default function Statistics() {
 	const data = useSelector<RootState, Data[]>((state) => state.data.data);

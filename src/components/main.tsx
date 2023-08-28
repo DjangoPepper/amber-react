@@ -8,11 +8,10 @@ import {Data} from "../stores/data/DataReducer";
 import DataAction from "../stores/data/DataAction";
 import DataTable from "./data-table";
 import Statistics from "./statistics";
-// import XLSX from 'xlsx';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-// import Modal from "react-modal"; // Vérifiez si le chemin est correct
-let ShowLine: number[] = [];
+
+
 
 function copySheetWithHeadersAndNumbers(sheet: any, headersRow: number): any {
     const range = utils.decode_range(sheet['!ref']);
@@ -31,15 +30,25 @@ function copySheetWithHeadersAndNumbers(sheet: any, headersRow: number): any {
     for (let row = headersRow + 1; row <= range.e.r; row++) {
         const firstCellAddress = utils.encode_cell({ r: row, c: range.s.c });
         const firstCell = sheet[firstCellAddress];
+		// const thirdCellAddress = utils.encode_cell({ r: row, c: range.s.c +2});
+        // const thirdCell = sheet[firstCellAddress];
+
         
         if (firstCell !== undefined && typeof firstCell.v === 'number') {
             // Insérer la ligne dans la nouvelle feuille
             for (let col = range.s.c; col <= range.e.c; col++) {
                 const cellAddress = utils.encode_cell({ r: row, c: col });
-                const cell = sheet[cellAddress];
-                if (cell !== undefined) {
-                    copiedSheet[utils.encode_cell({ r: newRow, c: col })] = cell;
-                }
+                const cell = sheet[cellAddress];		
+				
+				if (cell !== undefined) {
+
+					
+					if (cell.t === 'n') {
+						copiedSheet[utils.encode_cell({ r: newRow, c: col })] = { ...cell, v: parseFloat(cell.v) };
+					}else{
+						copiedSheet[utils.encode_cell({ r: newRow, c: col })] = cell;
+					}
+				}
             }
             newRow++;
         }
@@ -56,7 +65,6 @@ function copySheetWithHeadersAndNumbers(sheet: any, headersRow: number): any {
 }
 
 
-
 function fillUndefinedNumberCells(sheet: any) {
     const range = utils.decode_range(sheet['!ref']);
 
@@ -66,65 +74,12 @@ function fillUndefinedNumberCells(sheet: any) {
             const cell = sheet[cellAddress];
 
             if (cell === undefined) {
-                sheet[cellAddress] = { t: "n", v: "", h: "", w: "" };
+                sheet[cellAddress] = { t: 'n', v:null  , h:null , w:null  };
             }
         }
     }
 }
   
-function deleteLine(newsheet: any, row: number) {
-	const range = utils.decode_range(newsheet['!ref']);
-	for (let col = range.s.c; col <= range.e.c; col++) {
-		const cellAddress = utils.encode_cell({ r: row, c: col });
-		delete newsheet[cellAddress];
-	}
-}
-  
-
-function estLignevide(sheet: any, row: number): boolean {
-	const range = utils.decode_range(sheet['!ref']);
-	ShowLine = [];
-	
-	for (let col = range.s.c; col <= range.e.c; col++) {
-		const cellAddress = utils.encode_cell({ r: row, c: col });
-		const cell = sheet[cellAddress];
-		if (cell === undefined || cell === null || cell.v === ''){
-			ShowLine.push(0);
-		} else {
-			ShowLine.push(cell.v);
-		}
-
-	  if (cell !== null && cell !== undefined && cell.v !== '') {
-		return false; // Au moins une cellule n'est pas vide
-	  }
-	}
-	
-	return true; // Toutes les cellules sont vides
-}
-
-function estD3Vide(sheet: any, row: number): boolean {
-const range = utils.decode_range(sheet['!ref']);
-
-for (let col = range.s.c; col <= Math.min(range.s.c + 2, range.e.c); col++) {
-	const cellAddress = utils.encode_cell({ r: row, c: col });
-	const cell = sheet[cellAddress];
-
-	if (cell === undefined || cell === null || cell.v === ''){
-		ShowLine.push(0);
-		return true;
-	} else {
-		ShowLine.push(cell.v);
-		return false;
-	}
-
-//   if (cell === null || cell === undefined || cell.v === '') {
-// 	return true; // Au moins une des trois premières cellules est vide
-//   }
-}
-return false; // Aucune des trois premières cellules n'est vide
-}
-  
-
 function reconstructRefWithoutEmptyRows(newsheet: any) {
     const range = utils.decode_range(newsheet['!ref']);
     let newRef = '';
@@ -286,7 +241,7 @@ function Main() {
 		} 
 		else if (workbook.Sheets['Bobines']){
 			Sheet = workbook.Sheets['Bobines'];
-			toast.info('Bobines EXTENDED sheet exist', { position: toast.POSITION.TOP_RIGHT })// la feuille Bobines existe
+			// toast.info('Bobines EXTENDED sheet exist', { position: toast.POSITION.TOP_RIGHT })// la feuille Bobines existe
 			
 			reconstructRefWithoutEmptyRows(Sheet);
 			
