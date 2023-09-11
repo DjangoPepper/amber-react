@@ -1,4 +1,6 @@
 import React from "react";
+
+import { SketchPicker, ColorResult } from "react-color";
 import { useState } from 'react';
 import {
     createColumnHelper,
@@ -14,7 +16,7 @@ import {
     PaginationState} from "@tanstack/react-table";
 
 import {utils, writeFile } from "xlsx";
-import {Button, Form, Table as TableRS} from "react-bootstrap";
+import {Button, Modal, Form, Table as TableRS} from "react-bootstrap";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../stores/rootStore";
 import {Data} from "../stores/data/DataReducer";
@@ -34,8 +36,6 @@ const monthNames = [
     'jan', 'fev', 'mar', 'avr', 'mai', 'juin',
     'juil', 'aou', 'sep', 'oct', 'nov', 'dec'
   ];
-
-  
 
 function backupCurrentDateTime(): string {
   const now = new Date();
@@ -134,30 +134,56 @@ const useColumns = function useColumns(): any[] {
 
     return columns;
 }
-
+//***********************************************************************/
+//***********************************************************************/
+//***********************************************************************/
+//***********************************************************************/
+//***********************************************************************/
 export default function DataTable() {
+    const [showModal, setShowModal] = useState(false);
+    const [newSelectedValue, setNewSelectedValue] = useState('');
+    const [newColor, setNewColor] = useState('');
+    const [textColor, setTextColor] = useState('black'); // État pour gérer la couleur du texte
+    const [selectedColor, setSelectedColor] = useState('#fff'); // Couleur par défaut
+    
+    // Accédez à la valeur sélectionnée depuis l'état Redux
+    const selectedCale = useSelector<RootState, string>((state) => state.data.selectedCale);
+    
+    const handleStabiloClick = () => { 
+        setShowModal(true); 
+    };
+    const handleCloseModal = () => { 
+        setShowModal(false); 
+    };
+    const handleColorChange = (color: ColorResult) => {
+        setSelectedColor(color.hex);
+      };
+    
+    const handleSaveChanges = () => {
+        // Mettez à jour la couleur pour toutes les destinations identiques
+        const updatedData = data.map((item) => {
+          if (item.destination === newSelectedValue) {
+            return { ...item, color: newColor };
+          }
+          return item;
+        });
+    
+        // Mettez à jour l'état des données avec les modifications
+        // dispatch(DataAction.updateData(updatedData));
+       
+        dispatch(DataAction.changeCouleur([newSelectedValue]));
+    
+        // Fermez la fenêtre contextuelle
+        setShowModal(false);
+      };
+
     const dispatch = useDispatch();
     const [sorting, setSorting] = React.useState<SortingState>([]);
     const [globalFilter, setGlobalFilter] = React.useState('')
     const cale = useSelector<RootState, string>(state => state.data.selectedCale);
     const data = useSelector<RootState, Data[]>(state => state.data.data);
     const columns = useColumns();
-    //
-    // const [{ pageIndex, pageSize }, setPagination] =
-    //     React.useState<PaginationState>({
-    //         pageIndex: 0,
-    //         pageSize: 40,
-    //     }
-    // )
     
-    // const pagination = React.useMemo(
-    //     () => ({
-    //         pageIndex,
-    //         pageSize,
-    //     }),
-    //     [pageIndex, pageSize ]
-    // )
-
     const table = useReactTable({
         data,
         columns,
@@ -208,7 +234,7 @@ export default function DataTable() {
     
     const [hold, setHold] = useState('');
     
-    const [selectedColor, setSelectedColor] = useState('');
+    // const [selectedColor, setSelectedColor] = useState('');
     
     const handleHoldChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         dispatch(DataAction.changeCale(e.target.value)) 
@@ -219,172 +245,211 @@ export default function DataTable() {
         setSelectedColor(selectedOption ? selectedOption.color : '');    
     }
 
-    return <>
-        <div className="d-flex">
-            <div style={{maxWidth: 90}}>
-                {/* 11 chiffres POUR LE CHAMP search de rang*/}
-                <DebouncedInput
-                    value={globalFilter ?? ''}
-                    onChange={value => setGlobalFilter(String(value))}
-                    className="p-2 font-lg shadow border border-block"
-                    placeholder="Filtre"
-                />
+    return ( 
+        <>
+            <div className="d-flex">
+                <div style={{maxWidth: 90}}>
+                    {/* 11 chiffres POUR LE CHAMP search de rang*/}
+                    <DebouncedInput
+                        value={globalFilter ?? ''}
+                        onChange={value => setGlobalFilter(String(value))}
+                        className="p-2 font-lg shadow border border-block"
+                        placeholder="Filtre"
+                    />
+                </div>
+                &nbsp;
+                <div style={{maxWidth: 350 }}>
+                    {/* largeur form select stock cale */}
+                    <Form.Select placeholder="vers..." value={cale} 
+                        onChange={(e) => handleHoldChange(e)}
+                        style={{ backgroundColor: selectedColor }}
+                        >
+                        { destinations.map(
+                            d => <option key={d.name} value={d.name} style={{backgroundColor:d.color}}>
+                                {d.name}
+                            </option>
+                        )}
+                    </Form.Select>
+                </div>
+                &nbsp;
+                <Button variant="success" onClick={exportData}>Export</Button>
+                &nbsp;
+                <Button variant="danger" onClick={clear}>Import</Button>
+                &nbsp;
+                <Button variant="warning" onClick={handleStabiloClick}>Stabilo</Button>
+                &nbsp;
             </div>
-            &nbsp;
-            <div style={{maxWidth: 350 }}>
-                {/* largeur form select stock cale */}
-                <Form.Select placeholder="vers..." value={cale} 
-                    onChange={(e) => handleHoldChange(e)}
-                    style={{ backgroundColor: selectedColor }}
-                    >
-                    { destinations.map(
-                        d => <option key={d.name} value={d.name} style={{backgroundColor:d.color}}>
-                            {d.name}
-                        </option>
-                    )}
-                </Form.Select>
-            </div>
-            &nbsp;
-            <Button variant="success" onClick={exportData}>Export</Button>
-            &nbsp;
-            <Button variant="danger" onClick={clear}>Import</Button>
-            &nbsp;
-        </div>
-        <thead>
-            {table.getHeaderGroups().map(headerGroup => (
-                <tr key={headerGroup.id}>
-                    {headerGroup.headers.map(header => (
-                        <th key={header.id}>
-                            {header.isPlaceholder
-                                ? null
-                                : <div
-                                    {...{
-                                        className: header.column.getCanSort()
-                                            ? 'cursor-pointer select-none'
-                                            : '',
-                                    }}
-                                >
-                                    <div {...{
-                                        onClick: header.column.getToggleSortingHandler(),
-                                    }}>
-                                        {flexRender(
-                                            header.column.columnDef.header,
-                                            header.getContext()
-                                        )}
-                                        {{
-                                            asc: ' 🔼',
-                                            desc: ' 🔽',
-                                        }[header.column.getIsSorted() as string] ?? null}
-                                    </div>
-                                    {header.column.getCanFilter() ? (
-                                        <div>
-                                            <Filter column={header.column} table={table} />
-                                        </div>
-                                    ) : null}
-                                </div>}
-                        </th>
-                    ))}
-                </tr>
-            ))}
-        </thead>
-        <div ref={tableContainerRef} className="overflow-auto" style={{maxHeight: "490px"}}>
-            {/* hauteur du tableau data 500 px*/}
-            <TableRS>
-                <tbody className="overflow-auto" style={{maxHeight: "100px"}}>
-                    {table.getRowModel().rows.map(row => {
-                        return (
-                            <tr key={row.id} style={{backgroundColor: colors[row.getValue("destination") as string]}}>
-                                {row.getVisibleCells().map(cell => {
-                                    return (
-                                        <td key={cell.id}>
+            <thead>
+                {table.getHeaderGroups().map(headerGroup => (
+                    <tr key={headerGroup.id}>
+                        {headerGroup.headers.map(header => (
+                            <th key={header.id}>
+                                {header.isPlaceholder
+                                    ? null
+                                    : <div
+                                        {...{
+                                            className: header.column.getCanSort()
+                                                ? 'cursor-pointer select-none'
+                                                : '',
+                                        }}
+                                    >
+                                        <div {...{
+                                            onClick: header.column.getToggleSortingHandler(),
+                                        }}>
                                             {flexRender(
-                                                cell.column.columnDef.cell,
-                                                cell.getContext()
+                                                header.column.columnDef.header,
+                                                header.getContext()
                                             )}
-                                        </td>
-                                    )
-                                })}
-                            </tr>
-                        )
-                    })}
-                </tbody>
+                                            {{
+                                                asc: ' 🔼',
+                                                desc: ' 🔽',
+                                            }[header.column.getIsSorted() as string] ?? null}
+                                        </div>
+                                        {header.column.getCanFilter() ? (
+                                            <div>
+                                                <Filter column={header.column} table={table} />
+                                            </div>
+                                        ) : null}
+                                    </div>}
+                            </th>
+                        ))}
+                    </tr>
+                ))}
+            </thead>
+            <div ref={tableContainerRef} className="overflow-auto" style={{maxHeight: "490px"}}>
+                {/* hauteur du tableau data 500 px*/}
+                <TableRS>
+                    <tbody className="overflow-auto" style={{maxHeight: "100px"}}>
+                        {table.getRowModel().rows.map(row => {
+                            return (
+                                <tr 
+                                    key={row.id} 
+                                    style={{
+                                        backgroundColor: colors[row.getValue("destination") as string]}}>
+                                    {row.getVisibleCells().map(cell => {
+                                        return (
+                                            <td key={cell.id}>
+                                                {flexRender(
+                                                    cell.column.columnDef.cell,
+                                                    cell.getContext()
+                                                )}
+                                            </td>
+                                        )
+                                    })}
+                                </tr>
+                            )
+                        })}
+                    </tbody>
 
-                <tfoot>
-                </tfoot>
-            </TableRS>
-        </div>
-		<div className="h-2" />
-		<div className="flex items-center gap-2">
-			<button
-				className="border rounded p-1"
-				onClick={() => table.setPageIndex(0)}
-				disabled={!table.getCanPreviousPage()}
-			>
-				{'<<'}
-			</button>&nbsp;&nbsp;&nbsp;&nbsp;
-			
+                    <tfoot>
+                    </tfoot>
+                </TableRS>
+            </div>
+            <div className="h-2" />
+            <div className="flex items-center gap-2">
+                <button
+                    className="border rounded p-1"
+                    onClick={() => table.setPageIndex(0)}
+                    disabled={!table.getCanPreviousPage()}
+                >
+                    {'<<'}
+                </button>&nbsp;&nbsp;&nbsp;&nbsp;
+                
 
 
-            <button
-				className="border rounded p-1"
-				onClick={() => table.previousPage()}
-				disabled={!table.getCanPreviousPage()}
-			>
-				{'<'}
-			</button>&nbsp;&nbsp;&nbsp;&nbsp;
+                <button
+                    className="border rounded p-1"
+                    onClick={() => table.previousPage()}
+                    disabled={!table.getCanPreviousPage()}
+                >
+                    {'<'}
+                </button>&nbsp;&nbsp;&nbsp;&nbsp;
 
-            <button
-				className="border rounded p-1"
-				onClick={() => table.nextPage()}
-				disabled={!table.getCanNextPage()}
-			>
-				{'>'}
-			</button>&nbsp;&nbsp;&nbsp;&nbsp;
+                <button
+                    className="border rounded p-1"
+                    onClick={() => table.nextPage()}
+                    disabled={!table.getCanNextPage()}
+                >
+                    {'>'}
+                </button>&nbsp;&nbsp;&nbsp;&nbsp;
 
-            <button
-				className="border rounded p-1"
-				onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-				disabled={!table.getCanNextPage()}
-                // onclick={() => table.index
-			>
-				{'>>'}
-			</button>&nbsp;&nbsp;&nbsp;&nbsp;
+                <button
+                    className="border rounded p-1"
+                    onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+                    disabled={!table.getCanNextPage()}
+                    // onclick={() => table.index
+                >
+                    {'>>'}
+                </button>&nbsp;&nbsp;&nbsp;&nbsp;
 
-			<span className="flex items-center gap-1">
-				{/* <div>Page</div> */}
-				<strong>
-					{table.getState().pagination.pageIndex + 1} of{' '}
-					{table.getPageCount()}
-				</strong>
-			</span>
-			&nbsp;&nbsp;
-			<span className="flex items-center gap-1">
-				| Vers : &nbsp;&nbsp;&nbsp;&nbsp;
-				<input
-					type="number"
-					defaultValue={table.getState().pagination.pageIndex + 1}
-					onChange={e => {
-						const page = e.target.value ? Number(e.target.value) - 1 : 0
-						table.setPageIndex(page)
-					}}
-					className="border p-1 rounded w-16"
-					style={{maxWidth: 40 }}
-				/>
-				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			</span>
-			<select
-				value={table.getState().pagination.pageSize}
-				onChange={e => {
-					table.setPageSize(Number(e.target.value))
-				}}
-			>
-				{[10, 40, 80, 120, 200].map(pageSize => (
-					<option key={pageSize} value={pageSize}>
-						{pageSize}
-					</option>
-				))}
-			</select>
-			
-		</div>		
-    </>
+                <span className="flex items-center gap-1">
+                    {/* <div>Page</div> */}
+                    <strong>
+                        {table.getState().pagination.pageIndex + 1} of{' '}
+                        {table.getPageCount()}
+                    </strong>
+                </span>
+                &nbsp;&nbsp;
+                <span className="flex items-center gap-1">
+                    | Vers : &nbsp;&nbsp;&nbsp;&nbsp;
+                    <input
+                        type="number"
+                        defaultValue={table.getState().pagination.pageIndex + 1}
+                        onChange={e => {
+                            const page = e.target.value ? Number(e.target.value) - 1 : 0
+                            table.setPageIndex(page)
+                        }}
+                        className="border p-1 rounded w-16"
+                        style={{maxWidth: 40 }}
+                    />
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                </span>
+                <select
+                    value={table.getState().pagination.pageSize}
+                    onChange={e => {
+                        table.setPageSize(Number(e.target.value))
+                    }}
+                >
+                    {[10, 40, 80, 120, 200].map(pageSize => (
+                        <option key={pageSize} value={pageSize}>
+                            {pageSize}
+                        </option>
+                    ))}
+                </select>
+                
+            </div>
+
+            {/* Modale pour modifier la valeur et la couleur */}
+            <Modal show={showModal} onHide={handleCloseModal}>
+            <Modal.Header closeButton>
+                <Modal.Title>Modifier la valeur et la couleur</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                <Form.Group>
+                <Form.Label>Nouvelle valeur</Form.Label>
+                <Form.Control
+                    type="text"
+                    value={newSelectedValue}
+                    onChange={(e) => setNewSelectedValue(e.target.value)}
+                />
+                </Form.Group>
+                <Form.Group>
+                <Form.Label>Nouvelle couleur</Form.Label>
+                <SketchPicker
+                    color={selectedColor}
+                    onChange={handleColorChange}
+                />
+                </Form.Group>
+            </Modal.Body>
+            <Modal.Footer>
+                <Button variant="secondary" onClick={handleCloseModal}>
+                Annuler
+                </Button>
+                <Button variant="primary" onClick={handleSaveChanges}>
+                Enregistrer
+                </Button>
+            </Modal.Footer>
+            </Modal>
+        </>
+    );
 }

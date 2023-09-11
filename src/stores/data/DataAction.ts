@@ -15,6 +15,7 @@ export default class DataAction {
 	public static CHANGE_ORIGINAL_POS = "DataAction.ORIGINAL_POS";
 	public static DELETE_ROW = "DataAction.DELETE_ROW";
 	
+
 	public static deleteRow(rank: string): AnyAction {
 		return { type: DataAction.DELETE_ROW, payload: rank };
 	}
