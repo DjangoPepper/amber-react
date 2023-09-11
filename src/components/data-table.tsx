@@ -142,22 +142,27 @@ export default function DataTable() {
     const cale = useSelector<RootState, string>(state => state.data.selectedCale);
     const data = useSelector<RootState, Data[]>(state => state.data.data);
     const columns = useColumns();
-    //
-    // const [{ pageIndex, pageSize }, setPagination] =
-    //     React.useState<PaginationState>({
-    //         pageIndex: 0,
-    //         pageSize: 40,
-    //     }
-    // )
-    
-    // const pagination = React.useMemo(
-    //     () => ({
-    //         pageIndex,
-    //         pageSize,
-    //     }),
-    //     [pageIndex, pageSize ]
-    // )
+    //FRED #############################################################
+    //FRED #############################################################
 
+    const [isColorPickerOpen, setIsColorPickerOpen] = useState<boolean>(false); // État pour suivre si la fenêtre contextuelle est ouverte
+    const [selectedColor, setSelectedColor] = useState<string>(''); // Couleur sélectionnée
+    // Gestionnaire de double-clic sur une option
+    const handleOptionDoubleClick = (color: string) => {
+        setSelectedColor(color); // Mettre à jour la couleur sélectionnée
+        setIsColorPickerOpen(true); // Ouvrir la fenêtre contextuelle
+    };
+    // Gestionnaire de changement de couleur
+    const handleColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setSelectedColor(e.target.value); // Mettre à jour la couleur sélectionnée
+    };
+    // Gestionnaire de fermeture de la fenêtre contextuelle
+    const handleCloseColorPicker = () => {
+        setIsColorPickerOpen(false); // Fermer la fenêtre contextuelle
+    };
+    
+    //FRED #############################################################
+    //FRED #############################################################
     const table = useReactTable({
         data,
         columns,
@@ -191,7 +196,6 @@ export default function DataTable() {
         debugTable: true,
     }
     );
-    
     const tableContainerRef = React.useRef<HTMLDivElement>(null)
     const exportData = () => {
         const aoa: any[][] = [HEADER.map(h => h.name)];
@@ -208,7 +212,6 @@ export default function DataTable() {
     
     const [hold, setHold] = useState('');
     
-    const [selectedColor, setSelectedColor] = useState('');
     
     const handleHoldChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         dispatch(DataAction.changeCale(e.target.value)) 
@@ -233,22 +236,53 @@ export default function DataTable() {
             &nbsp;
             <div style={{maxWidth: 350 }}>
                 {/* largeur form select stock cale */}
-                <Form.Select placeholder="vers..." value={cale} 
+                {/* // FRED ########################################"" */}
+                {/* // FRED ########################################"" */}
+                {/* // FRED ########################################"" */}
+                <Form.Select 
+                    placeholder="vers..." 
+                    value={cale} 
                     onChange={(e) => handleHoldChange(e)}
                     style={{ backgroundColor: selectedColor }}
-                    >
-                    { destinations.map(
-                        d => <option key={d.name} value={d.name} style={{backgroundColor:d.color}}>
+                >
+                
+                    { destinations.map((d) => (                        
+                        <option 
+                            key={d.name} 
+                            value={d.name} 
+                            style={{backgroundColor:d.color}}
+                            onDoubleClick={() => handleOptionDoubleClick(d.color)}
+                        >
                             {d.name}
                         </option>
-                    )}
+                        ))}
                 </Form.Select>
+                {isColorPickerOpen && (
+                    <div className="color-picker">
+                        <input
+                            type="color"
+                            value={selectedColor}
+                            onChange={handleColorChange}
+                    />
+                    <button onClick={handleCloseColorPicker}>Fermer</button>
+                    </div>
+                    )}
+                
+                {/* // FRED ########################################"" */}
+                {/* // FRED ########################################"" */}
+                {/* // FRED ########################################"" */}
+
             </div>
+            
+
             &nbsp;
             <Button variant="success" onClick={exportData}>Export</Button>
             &nbsp;
             <Button variant="danger" onClick={clear}>Import</Button>
             &nbsp;
+            
+            
+
         </div>
         <thead>
             {table.getHeaderGroups().map(headerGroup => (
@@ -385,6 +419,7 @@ export default function DataTable() {
 				))}
 			</select>
 			
-		</div>		
+		</div>	
+        	
     </>
 }

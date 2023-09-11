@@ -207,7 +207,7 @@ function cleanData(values: any): Data {
         reference: toUpperCaseKeysValues["N° PRODUIT"] ||  toUpperCaseKeysValues["REFERENCE"] || toUpperCaseKeysValues["REF"] || toUpperCaseKeysValues["COILS"] || toUpperCaseKeysValues["BRAMES"],
         weight: toUpperCaseKeysValues["POIDS"] || toUpperCaseKeysValues["TONS"],
         position: toUpperCaseKeysValues["POSITION"],
-        destination: toUpperCaseKeysValues["DESTINATION"] || toUpperCaseKeysValues["DEST"] || "stock"
+        destination: toUpperCaseKeysValues["ZONE"] || toUpperCaseKeysValues["DESTINATION"] || toUpperCaseKeysValues["DEST"] || "stock"
     };
 }
 
@@ -236,12 +236,14 @@ function Main() {
 
 		if (workbook.Sheets['winwin']){																// la feuille simplifiée existe
 				Sheet = workbook.Sheets['winwin'];
-			toast.info('winwin SIMPLIFIED sheet exist', { position: toast.POSITION.TOP_RIGHT })
+			toast.info('winwin Feuille simplifiée détecté', { position: toast.POSITION.TOP_RIGHT })
+			// Résoudre les formules
+			risolveFormulas(Sheet);
 				
 		} 
 		else if (workbook.Sheets['Bobines']){
 			Sheet = workbook.Sheets['Bobines'];
-			// toast.info('Bobines EXTENDED sheet exist', { position: toast.POSITION.TOP_RIGHT })// la feuille Bobines existe
+			toast.info('Feuille Bobines', { position: toast.POSITION.TOP_RIGHT })// la feuille Bobines existe
 			
 			reconstructRefWithoutEmptyRows(Sheet);
 			
@@ -271,8 +273,8 @@ function Main() {
 		}
 		else {
 			Sheet = workbook.Sheets[workbook.SheetNames[0]];
-			toast.error('winwin or Bobines sheet does not exist', { position: toast.POSITION.TOP_RIGHT })
-			toast.info('sheet0 successfully imported !', { position: toast.POSITION.TOP_RIGHT })				
+			toast.error('winwin or Bobines non trouvées', { position: toast.POSITION.TOP_RIGHT })
+			toast.info('Feuil1 importée !', { position: toast.POSITION.TOP_RIGHT })				
 		}
 		
 		// Utilisez le nouvel objet newSheet comme vous le feriez avec sheet
