@@ -193,7 +193,7 @@ export default function DataTable() {
                 }
             },
         },
-// #####################################################################################################################
+
         getRowId: (row) => {
             return row.reference;
         },
@@ -248,6 +248,7 @@ export default function DataTable() {
                     value={cale} 
                     onChange={(e) => handleHoldChange(e)}
                     style={{ backgroundColor: selectedColor }}
+                    onDoubleClick={() => handleOptionDoubleClick(selectedOptionIndex)}
                 >
                 
                     { destinations.map((d, index) => (                        
