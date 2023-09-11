@@ -10,6 +10,7 @@ import DataTable from "./data-table";
 import Statistics from "./statistics";
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Modal from "react-modal"
 
 
 

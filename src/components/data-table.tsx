@@ -22,8 +22,8 @@ import DebouncedInput from "./debounceInput";
 import DataAction from "../stores/data/DataAction";
 import {colors, destinations, HEADER} from "../utils/destination";
 import Filter, {fuzzyFilter} from "./filter";
-import './index-tanstack.css'
-
+import './index-tanstack.css';
+import Modal from "react-modal";
 
 //FRED ****************************************************************
 import SpaceatPos from "./SpaceatPos";
@@ -144,22 +144,26 @@ export default function DataTable() {
     const columns = useColumns();
     //FRED #############################################################
     //FRED #############################################################
-
+    const [selectedOptionIndex, setSelectedOptionIndex] = useState<number>(-1); // Nouvel état pour l'index de l'option sélectionnée
     const [isColorPickerOpen, setIsColorPickerOpen] = useState<boolean>(false); // État pour suivre si la fenêtre contextuelle est ouverte
     const [selectedColor, setSelectedColor] = useState<string>(''); // Couleur sélectionnée
+
     // Gestionnaire de double-clic sur une option
-    const handleOptionDoubleClick = (color: string) => {
-        setSelectedColor(color); // Mettre à jour la couleur sélectionnée
+    const handleOptionDoubleClick = (index: number) => {
+        setSelectedOptionIndex(index); // Définir l'index de l'option sélectionnée
         setIsColorPickerOpen(true); // Ouvrir la fenêtre contextuelle
     };
+
     // Gestionnaire de changement de couleur
     const handleColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSelectedColor(e.target.value); // Mettre à jour la couleur sélectionnée
     };
+
     // Gestionnaire de fermeture de la fenêtre contextuelle
     const handleCloseColorPicker = () => {
         setIsColorPickerOpen(false); // Fermer la fenêtre contextuelle
-    };
+        setSelectedOptionIndex(-1); // Réinitialiser l'index de l'option sélectionnée
+    }; 
     
     //FRED #############################################################
     //FRED #############################################################
@@ -246,27 +250,32 @@ export default function DataTable() {
                     style={{ backgroundColor: selectedColor }}
                 >
                 
-                    { destinations.map((d) => (                        
+                    { destinations.map((d, index) => (                        
                         <option 
                             key={d.name} 
                             value={d.name} 
                             style={{backgroundColor:d.color}}
-                            onDoubleClick={() => handleOptionDoubleClick(d.color)}
+                            onDoubleClick={() => handleOptionDoubleClick(index)}
                         >
                             {d.name}
                         </option>
                         ))}
                 </Form.Select>
-                {isColorPickerOpen && (
-                    <div className="color-picker">
-                        <input
-                            type="color"
-                            value={selectedColor}
-                            onChange={handleColorChange}
+
+                <Modal
+                    isOpen={isColorPickerOpen && selectedOptionIndex !== -1}
+                    onRequestClose={handleCloseColorPicker}
+                    contentLabel="Choisir une couleur"
+                >
+                    {/* Contenu de la fenêtre modale */}
+                    <h2>Choisir une couleur</h2>
+                    <input
+                        type="color"
+                        value={selectedColor}
+                        onChange={handleColorChange}
                     />
                     <button onClick={handleCloseColorPicker}>Fermer</button>
-                    </div>
-                    )}
+            </Modal>
                 
                 {/* // FRED ########################################"" */}
                 {/* // FRED ########################################"" */}
