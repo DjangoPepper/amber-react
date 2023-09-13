@@ -140,6 +140,7 @@ const useColumns = function useColumns(): any[] {
 //***********************************************************************/
 //***********************************************************************/
 export default function DataTable() {
+    
     const [showModal, setShowModal] = useState(false);
     const [newSelectedValue, setNewSelectedValue] = useState('');
     const [newColor, setNewColor] = useState('');
@@ -244,7 +245,7 @@ export default function DataTable() {
         setHold(selectedValue);
         setSelectedColor(selectedOption ? selectedOption.color : '');    
     }
-
+    const isStabiloButtonVisible = cale !== "stock"; // Condition pour déterminer la visibilité du bouton STABILO
     return ( 
         <>
             <div className="d-flex">
@@ -276,7 +277,10 @@ export default function DataTable() {
                 &nbsp;
                 <Button variant="danger" onClick={clear}>Import</Button>
                 &nbsp;
-                <Button variant="warning" onClick={handleStabiloClick}>Stabilo</Button>
+                {isStabiloButtonVisible && (
+                    <Button variant="warning" onClick={handleStabiloClick}>Stabilo</Button>
+                )}
+                {/* <Button variant="warning" onClick={handleStabiloClick}>Stabilo</Button> */}
                 &nbsp;
             </div>
             <thead>
