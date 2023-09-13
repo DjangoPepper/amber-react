@@ -246,6 +246,7 @@ export default function DataTable() {
         setSelectedColor(selectedOption ? selectedOption.color : '');    
     }
     const isStabiloButtonVisible = cale !== "stock"; // Condition pour déterminer la visibilité du bouton STABILO
+    const TempColors = destinations.map((d) => d.color);
     return ( 
         <>
             <div className="d-flex">
