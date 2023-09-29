@@ -75,7 +75,7 @@ const EditableCell = ({ getValue, row, column, table }: any) => {
             value={value as string}
             onChange={e => setValue(e.target.value)}
             onBlur={onBlur}
-            style={{width: "55px"}}
+            style={{width: "59px"}}
             // largeur prepa box
         />
     )

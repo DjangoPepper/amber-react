@@ -236,12 +236,12 @@ function Main() {
 
 		if (workbook.Sheets['winwin']){																// la feuille simplifiée existe
 				Sheet = workbook.Sheets['winwin'];
-			toast.info('winwin SIMPLIFIED sheet exist', { position: toast.POSITION.TOP_RIGHT })
+				toast.info('SIMPLIFIED sheet', { position: toast.POSITION.TOP_RIGHT })
 				
 		} 
 		else if (workbook.Sheets['Bobines']){
 			Sheet = workbook.Sheets['Bobines'];
-			// toast.info('Bobines EXTENDED sheet exist', { position: toast.POSITION.TOP_RIGHT })// la feuille Bobines existe
+			toast.info('Bobines sheet', { position: toast.POSITION.TOP_RIGHT })// la feuille Bobines existe
 			
 			reconstructRefWithoutEmptyRows(Sheet);
 			
@@ -258,7 +258,7 @@ function Main() {
 			removeBalisesXml(Sheet);
 
 			// //trouve la ligne de la feuille avec les headers
-			const headersRow = findHeaderRow(Sheet, ['N°','NUMERO', 'RANG', 'POS']);
+			const headersRow = findHeaderRow(Sheet, ['N°','NUMERO', 'RANG', 'POS', 'POSITION']);
 			
 			//creer les cellules vides
 			fillUndefinedNumberCells(Sheet);
@@ -272,7 +272,7 @@ function Main() {
 		else {
 			Sheet = workbook.Sheets[workbook.SheetNames[0]];
 			toast.error('winwin or Bobines sheet does not exist', { position: toast.POSITION.TOP_RIGHT })
-			toast.info('sheet0 successfully imported !', { position: toast.POSITION.TOP_RIGHT })				
+			toast.info('default sheet imported !', { position: toast.POSITION.TOP_RIGHT })				
 		}
 		
 		// Utilisez le nouvel objet newSheet comme vous le feriez avec sheet
