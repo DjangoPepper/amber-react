@@ -11,7 +11,35 @@ import Statistics from "./statistics";
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+//function cleanData(values: any): Data {
+function organizeData(oSheet: any): Data {
+	toast.info('organizing current sheet', { position: toast.POSITION.TOP_RIGHT })// la feuille Bobines existe
+			
+			reconstructRefWithoutEmptyRows(oSheet);
+			
+			// // effacement des cellules fusionnées
+			deleteExcelMergesInfos(oSheet);
 
+			// Traitement des margins
+			deleteExcelMarginsInfos(oSheet);
+
+			// Résoudre les formules
+			risolveFormulas(oSheet);
+
+			//enleve les infos XML  dans r 
+			removeBalisesXml(oSheet);
+
+			// //trouve la ligne de la feuille avec les headers
+			const headersRow = findHeaderRow(oSheet, ['N°','NUMERO', 'RANG', 'POS', 'POSITION']);
+			
+			//creer les cellules vides
+			fillUndefinedNumberCells(oSheet);
+
+			//cree une copie de la feuille simplifiée avec les headers en premier puis toutes les cellules  dont la premiere celulles est un nombre			
+			oSheet = copySheetWithHeadersAndNumbers(oSheet, headersRow);
+			return oSheet;
+
+}
 
 function copySheetWithHeadersAndNumbers(sheet: any, headersRow: number): any {
     const range = utils.decode_range(sheet['!ref']);
@@ -240,8 +268,10 @@ function Main() {
 				
 		} 
 		else if (workbook.Sheets['Bobines']){
-			Sheet = workbook.Sheets['Bobines'];
-			toast.info('Bobines sheet', { position: toast.POSITION.TOP_RIGHT })// la feuille Bobines existe
+			// Sheet = workbook.Sheets['Bobines'];
+			// Sheet = organizeData(Sheet);
+			Sheet = organizeData(workbook.Sheets['Bobines']);
+			/* toast.info('Bobines sheet', { position: toast.POSITION.TOP_RIGHT })// la feuille Bobines existe
 			
 			reconstructRefWithoutEmptyRows(Sheet);
 			
@@ -266,12 +296,13 @@ function Main() {
 			//cree une copie de la feuille simplifiée avec les headers en premier puis toutes les cellules  dont la premiere celulles est un nombre			
 			Sheet = copySheetWithHeadersAndNumbers(Sheet, headersRow);
 
-
+ */
+			// Sheet = organizeData(Sheet);
 
 		}
 		else {
 			Sheet = workbook.Sheets[workbook.SheetNames[0]];
-			toast.error('winwin or Bobines sheet does not exist', { position: toast.POSITION.TOP_RIGHT })
+			toast.error("prepared sheets doesn't exist", { position: toast.POSITION.TOP_RIGHT })
 			toast.info('default sheet imported !', { position: toast.POSITION.TOP_RIGHT })				
 		}
 		
@@ -283,7 +314,7 @@ function Main() {
 		// dispatch(DataAction.importData(utils.sheet_to_json(selectedSheet).map(cleanData)));
 			// // dispatch(DataAction.moveRow(row.original.reference)); //je change la detination de ref cale1,cale2, etc..
 		dispatch(DataAction.changeOriginalpos("stock"));
-		toast.success('Data imported successfully!', { position: toast.POSITION.TOP_RIGHT })
+		toast.success('Data imported', { position: toast.POSITION.TOP_RIGHT })
 	};
 		reader.readAsBinaryString(file);
 	}, []);
