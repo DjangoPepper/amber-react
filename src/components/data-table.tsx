@@ -280,15 +280,19 @@ export default function DataTable() {
                     </Form.Select>
                 </div>
                 &nbsp;
+                {isStabiloButtonVisible && (
+                    <Button variant="warning" onClick={handleStabiloClick}>S</Button>
+                )}
+                &nbsp;
                 <Button variant="success" onClick={exportData}>Export</Button>
                 &nbsp;
                 <Button variant="danger" onClick={clear}>Import</Button>
                 &nbsp;
-                {isStabiloButtonVisible && (
+                {/* {isStabiloButtonVisible && (
                     <Button variant="warning" onClick={handleStabiloClick}>Stabilo</Button>
                 )}
                 {/* <Button variant="warning" onClick={handleStabiloClick}>Stabilo</Button> */}
-                &nbsp;
+                {/* &nbsp; */}
             </div>
             <thead>
                 {table.getHeaderGroups().map(headerGroup => (
