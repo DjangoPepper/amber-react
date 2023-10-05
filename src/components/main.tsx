@@ -11,23 +11,28 @@ import Statistics from "./statistics";
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-//function cleanData(values: any): Data {
-function organizeData(oSheet: any): Data {
+
+
+function CleanExcelSheet(oSheet: any): Data {
 	toast.info('organizing current sheet', { position: toast.POSITION.TOP_RIGHT })// la feuille Bobines existe
 			
-			reconstructRefWithoutEmptyRows(oSheet);
-			
-			// // effacement des cellules fusionnées
+			// effacement des cellules fusionnées
 			deleteExcelMergesInfos(oSheet);
 
 			// Traitement des margins
 			deleteExcelMarginsInfos(oSheet);
 
-			// Résoudre les formules
+			// Traitement des lignes vides
+			reconstructRefWithoutEmptyRows(oSheet);
+			
+			// Résolution des formules
 			risolveFormulas(oSheet);
 
-			//enleve les infos XML  dans r 
-			removeBalisesXml(oSheet);
+			// Supprimer les proprietes inutiles
+			removeProprietes(oSheet);
+
+			//Suppression des infos XML dans r 
+			// removeBalisesXml(oSheet);
 
 			// //trouve la ligne de la feuille avec les headers
 			const headersRow = findHeaderRow(oSheet, ['N°','NUMERO', 'RANG', 'POS', 'POSITION']);
@@ -37,8 +42,153 @@ function organizeData(oSheet: any): Data {
 
 			//cree une copie de la feuille simplifiée avec les headers en premier puis toutes les cellules  dont la premiere celulles est un nombre			
 			oSheet = copySheetWithHeadersAndNumbers(oSheet, headersRow);
+
+			// Suppression des lignes Null
+			SuppressionCellulesNull(oSheet);
+
+			// reconstruction de la propriété !ref;
+			reconstruitRef(oSheet, oSheet['!ref']);
+			// deleteExcelMergesInfos(oSheet);
+
+			// Supprimer les apostrophes
+			// SupprimerLesApostrophes(oSheet);
+
 			return oSheet;
 
+}
+
+function removeProprietes(newsheet: any) {
+	// const range = utils.decode_range(!ref);
+	const range = utils.decode_range(newsheet['!ref']);
+	let newRef = '';
+	let startRow = range.s.r;
+	let endRow = range.e.r;
+	let startCol = range.s.c;
+	let endCol = range.e.c;
+	
+	for (let Rrow = startRow; Rrow <= endRow; Rrow++) {
+		for (let Rcol = startCol; Rcol <= endCol; Rcol++) {
+			const cellAddress = utils.encode_cell({ r: Rrow, c: Rcol });
+			const cell = newsheet[cellAddress];
+			
+			if (cell !== undefined && cell.v !== null && cell.v !== '') {
+				// newRef = cellAddress;
+				newRef = utils.encode_range({ s: { c: 0, r: 0 }, e: { c: Rcol, r: Rrow }});
+			}
+		}
+	}
+	// newRef = utils.encode_range({ s: { c: 0, r: 0 }, e: { c: utils.decode_col(newRef), r: utils.decode_row(newRef)}});	
+	return newRef;
+}
+
+function simplifieProprietesTetV(cell: any) {
+    if (!cell) {
+        return null; // Retourner null si la cellule est null ou undefined
+    }
+
+    const nouvelleCell = {
+        t: cell.t,
+        v: cell.v
+    };
+	if (cell && cell.t === 's' && cell.v !== null && cell.v !== '' && cell.v.startsWith("'")) {
+		// Supprimer l'apostrophe en trop de toutes les propriétés
+		cell.v = cell.v.substring(1);
+		// cell.r = `<t>${cell.v}</t>`;
+		// cell.h = cell.v;
+		// cell.w = cell.v;
+  	}
+    return nouvelleCell;
+}
+
+// // Exemple d'utilisation :
+// const cell = {
+//     t: 's',
+//     v: 'Valeur de la cellule',
+//     r: '<t>Valeur de la cellule</t>',
+//     h: 'Valeur de la cellule',
+//     w: 'Valeur de la cellule'
+// };
+
+// const nouvelleCell = conserverProprietesTetV(cell);
+
+// console.log(nouvelleCell);
+
+
+function SupprimerLesApostrophes(newsheet: any){
+	const Range = utils.decode_range(newsheet['!ref']);
+	for (let row = Range.s.r; row <= Range.e.r; row++) {
+		for (let col = Range.s.c; col <= Range.e.c; col++) {
+			const cellAddress = utils.encode_cell({ r: row, c: col });
+			const cell = newsheet[cellAddress];
+			// if (cell && cell.f) {
+			// 	const calculatedValue = utils.format_cell(cell);
+			// 	cell.v = calculatedValue;
+			// 	delete cell.f;
+			// 	delete cell.F;
+			supprimerApostropheDansLaCellule(cell); 
+			}
+		}
+}
+
+function supprimerApostropheDansLaCellule(cell: any): any {
+//   if (cell.t === 's' && cell.v.startsWith("'")) {
+	if (cell && cell.t === 's' && cell.v !== null && cell.v !== '' && cell.v.startsWith("'")) {
+		// Supprimer l'apostrophe en trop de toutes les propriétés
+		cell.v = cell.v.substring(1);
+		cell.r = `<t>${cell.v}</t>`;
+		cell.h = cell.v;
+		cell.w = cell.v;
+  	}
+  return cell;
+}
+
+function reconstruitRef(newesheet: any, newref: any): string {
+
+	const range = utils.decode_range(newref);
+	let newRef = '';
+	let startRow = range.s.r;
+	let endRow = range.e.r;
+	let startCol = range.s.c;
+	let endCol = range.e.c;
+	
+	for (let Rrow = startRow; Rrow <= endRow; Rrow++) {
+		for (let Rcol = startCol; Rcol <= endCol; Rcol++) {
+			const cellAddress = utils.encode_cell({ r: Rrow, c: Rcol });
+			const cell = newesheet[cellAddress];
+			
+			if (cell !== undefined && cell.v !== null && cell.v !== '') {
+				// newRef = cellAddress;
+				newRef = utils.encode_range({ s: { c: 0, r: 0 }, e: { c: Rcol, r: Rrow }});
+			}
+		}
+	}
+	// newRef = utils.encode_range({ s: { c: 0, r: 0 }, e: { c: utils.decode_col(newRef), r: utils.decode_row(newRef)}});	
+	return newRef;
+}
+
+function SuppressionCellulesNull(newsheet: any): any {
+	const range = utils.decode_range(newsheet['!ref']);
+	let newRef = '';
+	let startRow = range.s.r;
+	let endRow = range.e.r;
+	let startCol = range.s.c;
+	let endCol = range.e.c;
+	
+
+	while (endRow >= startRow) {
+
+		// for (let col = startCol; col <= endCol; col++) {
+		for (let col = endCol; col >= startCol; col--) {
+			const cellAddress = utils.encode_cell({ r: endRow, c: col });
+			const cell = newsheet[cellAddress];
+
+			if (Number.isNaN(cell.v) || cell.v === null) {
+				delete newsheet[cellAddress];
+			}
+		}
+    endRow--;
+  	}
+  	return newsheet;
 }
 
 function copySheetWithHeadersAndNumbers(sheet: any, headersRow: number): any {
@@ -91,7 +241,6 @@ function copySheetWithHeadersAndNumbers(sheet: any, headersRow: number): any {
 
     return copiedSheet;
 }
-
 
 function fillUndefinedNumberCells(sheet: any) {
     const range = utils.decode_range(sheet['!ref']);
@@ -220,19 +369,30 @@ function removeAccents(str: string) {
     return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 }
 
+function removeAccentsAndApostrophes(str: string) {
+    // Supprimer les accents
+    const withoutAccents = str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    
+    // Supprimer les apostrophes
+    const withoutApostrophes = withoutAccents.replace(/'/g, '');
+    
+    return withoutApostrophes;
+}
+
 function cleanData(values: any): Data {
 	const toUpperCaseKeysValues: any = {};
 	for (const key in values) {
 		const upperCaseKey = key.toUpperCase();
 		// if (upperCaseKey in values ) {console.log("fred", values,upperCaseKey);}
 		const cleanedKey = removeAccents(upperCaseKey);
+		// const cleanedKey = removeAccentsAndApostrophes(upperCaseKey);
 		toUpperCaseKeysValues[cleanedKey] = values[key];
 	}
 
     return {
         rank: toUpperCaseKeysValues["POS"] || toUpperCaseKeysValues["NUMERO"] || toUpperCaseKeysValues["RANG"] || toUpperCaseKeysValues["N°"],
         prepa: toUpperCaseKeysValues["ZONE"] || toUpperCaseKeysValues["PREPA"] ,
-        reference: toUpperCaseKeysValues["N° PRODUIT"] ||  toUpperCaseKeysValues["REFERENCE"] || toUpperCaseKeysValues["REF"] || toUpperCaseKeysValues["COILS"] || toUpperCaseKeysValues["BRAMES"],
+        reference: toUpperCaseKeysValues["N° DE COILS"] || toUpperCaseKeysValues["N° DE BRAME"] || toUpperCaseKeysValues["N° PRODUIT"] ||  toUpperCaseKeysValues["REFERENCE"] || toUpperCaseKeysValues["REF"] || toUpperCaseKeysValues["COILS"] || toUpperCaseKeysValues["BRAMES"],
         weight: toUpperCaseKeysValues["POIDS"] || toUpperCaseKeysValues["TONS"],
         position: toUpperCaseKeysValues["POSITION"],
         destination: toUpperCaseKeysValues["DESTINATION"] || toUpperCaseKeysValues["DEST"] || "stock"
@@ -264,46 +424,29 @@ function Main() {
 
 		if (workbook.Sheets['winwin']){																// la feuille simplifiée existe
 				Sheet = workbook.Sheets['winwin'];
-				toast.info('SIMPLIFIED sheet', { position: toast.POSITION.TOP_RIGHT })
+				toast.info('SIMPLIFIED sheet', { position: toast.POSITION.TOP_RIGHT, autoClose: 1000 })
+				// toast('🦄 Wow so easy!', {
+				// 	position: "top-right",
+				// 	autoClose: 5000,
+				// 	hideProgressBar: false,
+				// 	closeOnClick: true,
+				// 	pauseOnHover: true,
+				// 	draggable: true,
+				// 	progress: undefined,
+				// 	theme: "light",
+				// 	});
 				
 		} 
 		else if (workbook.Sheets['Bobines']){
-			// Sheet = workbook.Sheets['Bobines'];
-			// Sheet = organizeData(Sheet);
-			Sheet = organizeData(workbook.Sheets['Bobines']);
-			/* toast.info('Bobines sheet', { position: toast.POSITION.TOP_RIGHT })// la feuille Bobines existe
-			
-			reconstructRefWithoutEmptyRows(Sheet);
-			
-			// // effacement des cellules fusionnées
-			deleteExcelMergesInfos(Sheet);
-
-			// Traitement des margins
-			deleteExcelMarginsInfos(Sheet);
-
-			// Résoudre les formules
-			risolveFormulas(Sheet);
-
-			//enleve les infos XML  dans r 
-			removeBalisesXml(Sheet);
-
-			// //trouve la ligne de la feuille avec les headers
-			const headersRow = findHeaderRow(Sheet, ['N°','NUMERO', 'RANG', 'POS', 'POSITION']);
-			
-			//creer les cellules vides
-			fillUndefinedNumberCells(Sheet);
-
-			//cree une copie de la feuille simplifiée avec les headers en premier puis toutes les cellules  dont la premiere celulles est un nombre			
-			Sheet = copySheetWithHeadersAndNumbers(Sheet, headersRow);
-
- */
-			// Sheet = organizeData(Sheet);
-
+			Sheet = CleanExcelSheet(workbook.Sheets['Bobines']);
+			toast.info('Bobines sheet find', { position: toast.POSITION.TOP_RIGHT })
 		}
 		else {
-			Sheet = workbook.Sheets[workbook.SheetNames[0]];
-			toast.error("prepared sheets doesn't exist", { position: toast.POSITION.TOP_RIGHT })
-			toast.info('default sheet imported !', { position: toast.POSITION.TOP_RIGHT })				
+			// Sheet = workbook.Sheets[workbook.SheetNames[0]];
+			Sheet = CleanExcelSheet(workbook.Sheets[workbook.SheetNames[0]]);
+			toast.error("Defined sheet doesn't exist", { position: toast.POSITION.TOP_RIGHT })
+			toast.info('first sheet imported !', { position: toast.POSITION.TOP_RIGHT, autoClose: 1000 })
+							
 		}
 		
 		// Utilisez le nouvel objet newSheet comme vous le feriez avec sheet
