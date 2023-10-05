@@ -75,7 +75,7 @@ const EditableCell = ({ getValue, row, column, table }: any) => {
             value={value as string}
             onChange={e => setValue(e.target.value)}
             onBlur={onBlur}
-            style={{width: "55px"}}
+            style={{width: "59px"}}
             // largeur prepa box
         />
     )
@@ -141,23 +141,28 @@ const useColumns = function useColumns(): any[] {
 //***********************************************************************/
 export default function DataTable() {
     
-    const [showModal, setShowModal] = useState(false);
-    const [newSelectedValue, setNewSelectedValue] = useState('');
-    const [newColor, setNewColor] = useState('');
+    // const [showModal, setShowModal] = useState(false);
+    
+    const [newSelectedValue, setNewSelectedValue] = useState<string>('');
+    const [newColor, setNewColor] = useState<string>('');
     const [textColor, setTextColor] = useState('black'); // État pour gérer la couleur du texte
-    const [selectedColor, setSelectedColor] = useState('#fff'); // Couleur par défaut
+    // const [selectedColor, setSelectedColor] = useState('#fff'); // Couleur par défaut
+    const [selectedColors, setSelectedColors] = useState<{ [key: string]: string }>(colors); // Couleur par défaut
     
     // Accédez à la valeur sélectionnée depuis l'état Redux
     const selectedCale = useSelector<RootState, string>((state) => state.data.selectedCale);
     
     const handleStabiloClick = () => { 
-        setShowModal(true); 
+        // setShowModal(true); 
+        setNewSelectedValue(selectedCale);
     };
     const handleCloseModal = () => { 
-        setShowModal(false); 
+        // setShowModal(false); 
+        setNewSelectedValue(""); 
     };
     const handleColorChange = (color: ColorResult) => {
-        setSelectedColor(color.hex);
+        // setSelectedColor(color.hex);
+        setSelectedColors({...selectedColors, [newSelectedValue]: color.hex});
       };
     
     const handleSaveChanges = () => {
@@ -175,7 +180,8 @@ export default function DataTable() {
         dispatch(DataAction.changeCouleur([newSelectedValue]));
     
         // Fermez la fenêtre contextuelle
-        setShowModal(false);
+        // setShowModal(false);
+        setNewSelectedValue("");
       };
 
     const dispatch = useDispatch();
@@ -243,10 +249,10 @@ export default function DataTable() {
         const selectedOption = destinations.find((d) => d.name === selectedValue);
 
         setHold(selectedValue);
-        setSelectedColor(selectedOption ? selectedOption.color : '');    
+        // setSelectedColor(selectedOption ? selectedOption.color : '');    
     }
     const isStabiloButtonVisible = cale !== "stock"; // Condition pour déterminer la visibilité du bouton STABILO
-    const TempColors = destinations.map((d) => d.color);
+    // const TempColors = destinations.map((d) => d.color);
     return ( 
         <>
             <div className="d-flex">
@@ -264,7 +270,7 @@ export default function DataTable() {
                     {/* largeur form select stock cale */}
                     <Form.Select placeholder="vers..." value={cale} 
                         onChange={(e) => handleHoldChange(e)}
-                        style={{ backgroundColor: selectedColor }}
+                        style={{ backgroundColor: selectedColors[cale] }}
                         >
                         { destinations.map(
                             d => <option key={d.name} value={d.name} style={{backgroundColor:d.color}}>
@@ -274,15 +280,19 @@ export default function DataTable() {
                     </Form.Select>
                 </div>
                 &nbsp;
+                {isStabiloButtonVisible && (
+                    <Button variant="warning" onClick={handleStabiloClick}>S</Button>
+                )}
+                &nbsp;
                 <Button variant="success" onClick={exportData}>Export</Button>
                 &nbsp;
                 <Button variant="danger" onClick={clear}>Import</Button>
                 &nbsp;
-                {isStabiloButtonVisible && (
+                {/* {isStabiloButtonVisible && (
                     <Button variant="warning" onClick={handleStabiloClick}>Stabilo</Button>
                 )}
                 {/* <Button variant="warning" onClick={handleStabiloClick}>Stabilo</Button> */}
-                &nbsp;
+                {/* &nbsp; */}
             </div>
             <thead>
                 {table.getHeaderGroups().map(headerGroup => (
@@ -330,7 +340,8 @@ export default function DataTable() {
                                 <tr 
                                     key={row.id} 
                                     style={{
-                                        backgroundColor: colors[row.getValue("destination") as string]}}>
+                                        // backgroundColor: colors[row.getValue("destination") as string]}}>
+                                        backgroundColor: selectedColors[row.getValue("destination") as string]}}>
                                     {row.getVisibleCells().map(cell => {
                                         return (
                                             <td key={cell.id}>
@@ -425,23 +436,25 @@ export default function DataTable() {
             </div>
 
             {/* Modale pour modifier la valeur et la couleur */}
-            <Modal show={showModal} onHide={handleCloseModal}>
+            {/* <Modal show={showModal} onHide={handleCloseModal}> */}
+            <Modal show={Boolean(newSelectedValue)} onHide={handleCloseModal}>
             <Modal.Header closeButton>
                 <Modal.Title>Modifier la valeur et la couleur</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <Form.Group>
+                {/* <Form.Group>
                 <Form.Label>Nouvelle valeur</Form.Label>
                 <Form.Control
                     type="text"
                     value={newSelectedValue}
                     onChange={(e) => setNewSelectedValue(e.target.value)}
                 />
-                </Form.Group>
+                </Form.Group> */}
                 <Form.Group>
                 <Form.Label>Nouvelle couleur</Form.Label>
                 <SketchPicker
-                    color={selectedColor}
+                    // color={selectedColor}
+                    color={selectedColors[newSelectedValue]}
                     onChange={handleColorChange}
                 />
                 </Form.Group>
