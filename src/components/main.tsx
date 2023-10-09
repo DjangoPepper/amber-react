@@ -337,7 +337,7 @@ function Main() {
 
 		if (workbook.Sheets['winwin']){																// la feuille simplifiée existe
 				Sheet = workbook.Sheets['winwin'];
-				toast.info('SIMPLIFIED sheet', { position: toast.POSITION.TOP_RIGHT, autoClose: 1000 })
+				toast.info('SIMPLIFIED sheet', { position: toast.POSITION.TOP_RIGHT, autoClose: 5000 })
 				// toast('🦄 Wow so easy!', {
 				// 	position: "top-right",
 				// 	autoClose: 5000,
@@ -354,11 +354,15 @@ function Main() {
 			Sheet = CleanExcelSheet(workbook.Sheets['Bobines']);
 			toast.info('Bobines sheet find', { position: toast.POSITION.TOP_RIGHT })
 		}
+		else if (workbook.Sheets['Brames']){
+			Sheet = CleanExcelSheet(workbook.Sheets['Brames']);
+			toast.info('Brames sheet find', { position: toast.POSITION.TOP_RIGHT })
+		}
 		else {
 			// Sheet = workbook.Sheets[workbook.SheetNames[0]];
 			Sheet = CleanExcelSheet(workbook.Sheets[workbook.SheetNames[0]]);
-			toast.error("Defined sheet doesn't exist", { position: toast.POSITION.TOP_RIGHT })
-			toast.info('first sheet imported !', { position: toast.POSITION.TOP_RIGHT, autoClose: 1000 })
+			// toast.error("Defined sheet doesn't exist", { position: toast.POSITION.TOP_RIGHT })
+			toast.info('first sheet default imported !', { position: toast.POSITION.TOP_RIGHT, autoClose: 1000 })
 							
 		}
 		
