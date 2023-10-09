@@ -81,66 +81,6 @@ function removeProprietes(newsheet: any) {
 	return newRef;
 }
 
-function simplifieProprietesTetV(cell: any) {
-    if (!cell) {
-        return null; // Retourner null si la cellule est null ou undefined
-    }
-
-    const nouvelleCell = {
-        t: cell.t,
-        v: cell.v
-    };
-	if (cell && cell.t === 's' && cell.v !== null && cell.v !== '' && cell.v.startsWith("'")) {
-		// Supprimer l'apostrophe en trop de toutes les propriétés
-		cell.v = cell.v.substring(1);
-		// cell.r = `<t>${cell.v}</t>`;
-		// cell.h = cell.v;
-		// cell.w = cell.v;
-  	}
-    return nouvelleCell;
-}
-
-// // Exemple d'utilisation :
-// const cell = {
-//     t: 's',
-//     v: 'Valeur de la cellule',
-//     r: '<t>Valeur de la cellule</t>',
-//     h: 'Valeur de la cellule',
-//     w: 'Valeur de la cellule'
-// };
-
-// const nouvelleCell = conserverProprietesTetV(cell);
-
-// console.log(nouvelleCell);
-
-
-function SupprimerLesApostrophes(newsheet: any){
-	const Range = utils.decode_range(newsheet['!ref']);
-	for (let row = Range.s.r; row <= Range.e.r; row++) {
-		for (let col = Range.s.c; col <= Range.e.c; col++) {
-			const cellAddress = utils.encode_cell({ r: row, c: col });
-			const cell = newsheet[cellAddress];
-			// if (cell && cell.f) {
-			// 	const calculatedValue = utils.format_cell(cell);
-			// 	cell.v = calculatedValue;
-			// 	delete cell.f;
-			// 	delete cell.F;
-			supprimerApostropheDansLaCellule(cell); 
-			}
-		}
-}
-
-function supprimerApostropheDansLaCellule(cell: any): any {
-//   if (cell.t === 's' && cell.v.startsWith("'")) {
-	if (cell && cell.t === 's' && cell.v !== null && cell.v !== '' && cell.v.startsWith("'")) {
-		// Supprimer l'apostrophe en trop de toutes les propriétés
-		cell.v = cell.v.substring(1);
-		cell.r = `<t>${cell.v}</t>`;
-		cell.h = cell.v;
-		cell.w = cell.v;
-  	}
-  return cell;
-}
 
 function reconstruitRef(newesheet: any, newref: any): string {
 
@@ -168,7 +108,6 @@ function reconstruitRef(newesheet: any, newref: any): string {
 
 function SuppressionCellulesNull(newsheet: any): any {
 	const range = utils.decode_range(newsheet['!ref']);
-	let newRef = '';
 	let startRow = range.s.r;
 	let endRow = range.e.r;
 	let startCol = range.s.c;
@@ -333,22 +272,6 @@ function deleteExcelMergesInfos(newsheet: any) {
 		}
 };
 
-function removeBalisesXml(newSheet: any) {
-	// Supprimer le contenu entre '<t' et '>' dans chaque cellule de 'newSheet'
-	for (const cellKey in newSheet) {
-		if (newSheet.hasOwnProperty(cellKey) && cellKey !== ('!ref' || '!margins' || '!autofilter')) {
-			const cell = newSheet[cellKey];
-			if (cell && cell.r) {
-				cell.r = cell.r.replace(/<t[^>]*>/g, '<t>');
-			}
-		}
-		// if (newSheet.hasOwnProperty(cellKey) && cellKey === '!margins' ) {
-		// 	// const cellM = newSheet[cellKey];
-
-		// }
-	}
-}
-
 function risolveFormulas(newsheet: any){
 	const formulaRange = utils.decode_range(newsheet['!ref']);
 	for (let row = formulaRange.s.r; row <= formulaRange.e.r; row++) {
@@ -367,16 +290,6 @@ function risolveFormulas(newsheet: any){
 
 function removeAccents(str: string) {
     return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-}
-
-function removeAccentsAndApostrophes(str: string) {
-    // Supprimer les accents
-    const withoutAccents = str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-    
-    // Supprimer les apostrophes
-    const withoutApostrophes = withoutAccents.replace(/'/g, '');
-    
-    return withoutApostrophes;
 }
 
 function cleanData(values: any): Data {
@@ -459,7 +372,7 @@ function Main() {
 		dispatch(DataAction.changeOriginalpos("stock"));
 		toast.success('Data imported', { position: toast.POSITION.TOP_RIGHT })
 	};
-		reader.readAsBinaryString(file);
+	reader.readAsBinaryString(file);
 	}, []);
 
 	return (
@@ -493,7 +406,6 @@ function Main() {
 		<ToastContainer />
 		
 		</Container>
-
 	);
 }
 
