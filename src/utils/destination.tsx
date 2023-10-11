@@ -23,7 +23,7 @@ export const destinations = [
     {name: "C3", color: "#9d64e2", index:3},
     {name: "C4", color: "#f447d1", index:4},
     {name: "C5", color: "#fdff5b", index:5},
-    {name: "C6", color: "2e447d1", index:6},
+    {name: "C6", color: "11447d1", index:6},
 ]
 
 

@@ -12,8 +12,8 @@ import {
     RowData,
     SortingState,
     useReactTable,
-    getPaginationRowModel,
-    PaginationState} from "@tanstack/react-table";
+    getPaginationRowModel
+    } from "@tanstack/react-table";
 
 import {utils, writeFile } from "xlsx";
 import {Button, Modal, Form, Table as TableRS} from "react-bootstrap";
@@ -89,8 +89,6 @@ const globalFilterFn: FilterFn<Data> = (row, columnId, filterValue: string) => {
 
     return value?.toLowerCase().includes(search);
 };
-
-const pagePrev  = -1 ;
 
 const useColumns = function useColumns(): any[] {
     const dispatch = useDispatch();
