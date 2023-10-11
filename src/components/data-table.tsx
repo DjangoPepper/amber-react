@@ -139,18 +139,21 @@ const useColumns = function useColumns(): any[] {
 //***********************************************************************/
 //***********************************************************************/
 export default function DataTable() {
-    
+    const dispatch = useDispatch();
     // const [showModal, setShowModal] = useState(false);
     const [PickerColorForSelectedCale, setPickerColorForSelectedCale] = useState<{ [key: string]: string }>({});
-
     const [newSelectedCale, setnewSelectedCale] = useState<string>('');
     const [newColor, setNewColor] = useState<string>('');
-    const [textColor, setTextColor] = useState('black'); // État pour gérer la couleur du texte
+    //const [textColor, setTextColor] = useState('black'); // État pour gérer la couleur du texte
     // const [selectedColor, setSelectedColor] = useState('#fff'); // Couleur par défaut
-    const [selectedColors, setSelectedColors] = useState<{ [key: string]: string }>(colors); // Couleur par défaut
+    // const [selectedColors, setSelectedColors] = useState<{ [key: string]: string }>(colors); // Couleur par défaut
     
     // Accédez à la valeur sélectionnée depuis l'état Redux
     const selectedCale = useSelector<RootState, string>((state) => state.data.selectedCale);
+    const selectedColors = useSelector<RootState, { [key: string]: string }>((state) => state.data.pickerColors);
+    const setSelectedColors = (colors: { [key: string]: string }) => {
+        dispatch(DataAction.changePickColors(colors));
+    }
     
     const handleStabiloClick = () => { 
         // setShowModal(true); 
@@ -187,7 +190,7 @@ export default function DataTable() {
         setnewSelectedCale("");
       };
 
-    const dispatch = useDispatch();
+    
     const [sorting, setSorting] = React.useState<SortingState>([]);
     const [globalFilter, setGlobalFilter] = React.useState('')
     const cale = useSelector<RootState, string>(state => state.data.selectedCale);
@@ -210,8 +213,6 @@ export default function DataTable() {
         getFilteredRowModel: getFilteredRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
         autoResetPageIndex: false,
-        // manualPagination: false,
-        // onPaginationChange: setPagination,
         
         meta: {
             updateData: (reference, columnId, value) => {
@@ -241,7 +242,6 @@ export default function DataTable() {
     };
 
     const clear = () => dispatch(DataAction.clear());
-    
     const [hold, setHold] = useState('');
     
     // const [selectedColor, setSelectedColor] = useState('');
@@ -449,8 +449,10 @@ export default function DataTable() {
                 <Form.Label>Nouvelle couleur</Form.Label>
                 <SketchPicker
                     // color={selectedColor} // color fixé par tableau
+                    
                     // color={selectedColors[newSelectedCale]}
                     // onChange={handleColorChange}
+                    
                     color={PickerColorForSelectedCale[newSelectedCale] || '' }
                     onChange={handleColorChange}
                 />

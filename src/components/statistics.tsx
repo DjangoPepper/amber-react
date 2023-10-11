@@ -5,8 +5,11 @@ import {Table} from "react-bootstrap";
 import {colors} from "../utils/destination";
 import React from 'react';
 
+
 export default function Statistics() {
 	const data = useSelector<RootState, Data[]>((state) => state.data.data);
+	const selectedColors = useSelector<RootState, { [key: string]: string }>((state) => state.data.pickerColors);
+	
 	let totalCount = 0;
 	let totalWeight = 0;
 
@@ -58,7 +61,8 @@ export default function Statistics() {
 		  <tbody>
 			{keys.map((k) => (
 			  <tr key={k}>
-				<td style={{ backgroundColor: colors[k] }}>{k}</td>
+				{/* <td style={{ backgroundColor: colors[k] }}>{k}</td> */}
+				<td style={{ backgroundColor: selectedColors[k] }}>{k}</td>
 				<td>{statistics[k].count}</td>
 				<td>{statistics[k].weight.toLocaleString("en-US")}</td>
 			  </tr>

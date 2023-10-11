@@ -12,6 +12,7 @@ export default class DataAction {
 	public static REMOVE = "DataAction.REMOVE";
 
 	public static CHANGE_COULEUR = "DataAction.CHANGE_COULEUR";
+	public static CHANGE_PICKCOLORS = "DataAction.CHANGE_PICKCOLORS";
 	public static CHANGE_ORIGINAL_POS = "DataAction.ORIGINAL_POS";
 	public static DELETE_ROW = "DataAction.DELETE_ROW";
 	
@@ -23,7 +24,9 @@ export default class DataAction {
 	public static changeCouleur(cale: any[]): AnyAction {
 		return { type: DataAction.CHANGE_COULEUR, payload: cale };
 	}
-	
+	public static changePickColors(colors: { [key: string]: string }): AnyAction {
+		return { type: DataAction.CHANGE_PICKCOLORS, payload: colors };
+	}
 	public static changeOriginalpos(destination: string): AnyAction {
 		return { type: DataAction.CHANGE_ORIGINAL_POS, payload: "stock"};
 	}

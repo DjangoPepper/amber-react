@@ -1,6 +1,7 @@
 import { AnyAction } from "redux";
 import DataAction from "./DataAction";
 import {Reducer} from "@reduxjs/toolkit";
+import { colors } from "../../utils/destination";
 
 export type Data = {
     rank: number
@@ -16,6 +17,7 @@ interface DataState {
     selectedCale: string;
     selectedPrepa: string;
     loaded: boolean;
+    pickerColors: { [key: string]: string };
     saved: boolean;
 }
 
@@ -31,7 +33,8 @@ const initialState: DataState = {
     selectedCale: "stock",
     selectedPrepa: "_",
     loaded: false,
-    saved: true
+    saved: true,
+    pickerColors: colors 
 };
 
 export const dataReducer: Reducer<DataState> = (state = initialState, action: AnyAction): DataState => {
@@ -54,9 +57,24 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
                     selectedCale: action.payload,
                 }
             case DataAction.CHANGE_COULEUR:
+                
+                // state.selectedCale = action.payload;
+                // return state;
+                // const oldstate = {...state};
+                // state.data.push('')
+                // console.log(oldstate === state );
+                // console.log(oldstate.data === state.data);
+
+                // return state
                 return {
                     ...state,
                     selectedCale: action.payload,
+                }
+            case DataAction.CHANGE_PICKCOLORS:
+                
+                return {
+                    ...state,
+                    pickerColors: action.payload,
                 }
             case DataAction.MOVE_ROW:
                 const d = state.data.find(r => r.reference === action.payload);

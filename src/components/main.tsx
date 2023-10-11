@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react'
+import React, {useCallback, useState} from 'react'
 import Dropzone from 'react-dropzone'
 import {Col, Container, Row} from "react-bootstrap";
 import {read, utils} from "xlsx";
@@ -378,6 +378,7 @@ function Main() {
 	};
 	reader.readAsBinaryString(file);
 	}, []);
+	// const [mavariablelocale, setMavariablelocale] = useState()
 
 	return (
 		<Container className="p-2">
