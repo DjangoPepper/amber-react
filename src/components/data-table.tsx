@@ -142,7 +142,7 @@ export default function DataTable() {
     
     // const [showModal, setShowModal] = useState(false);
     
-    const [newSelectedValue, setNewSelectedValue] = useState<string>('');
+    const [newSelectedCale, setnewSelectedCale] = useState<string>('');
     const [newColor, setNewColor] = useState<string>('');
     const [textColor, setTextColor] = useState('black'); // État pour gérer la couleur du texte
     // const [selectedColor, setSelectedColor] = useState('#fff'); // Couleur par défaut
@@ -153,21 +153,21 @@ export default function DataTable() {
     
     const handleStabiloClick = () => { 
         // setShowModal(true); 
-        setNewSelectedValue(selectedCale);
+        setnewSelectedCale(selectedCale);
     };
     const handleCloseModal = () => { 
         // setShowModal(false); 
-        setNewSelectedValue(""); 
+        setnewSelectedCale(""); 
     };
     const handleColorChange = (color: ColorResult) => {
         // setSelectedColor(color.hex);
-        setSelectedColors({...selectedColors, [newSelectedValue]: color.hex});
+        setSelectedColors({...selectedColors, [newSelectedCale]: color.hex});
       };
     
     const handleSaveChanges = () => {
         // Mettez à jour la couleur pour toutes les destinations identiques
         const updatedData = data.map((item) => {
-          if (item.destination === newSelectedValue) {
+          if (item.destination === newSelectedCale) {
             return { ...item, color: newColor };
           }
           return item;
@@ -176,11 +176,11 @@ export default function DataTable() {
         // Mettez à jour l'état des données avec les modifications
         // dispatch(DataAction.updateData(updatedData));
        
-        dispatch(DataAction.changeCouleur([newSelectedValue]));
+        dispatch(DataAction.changeCouleur([newSelectedCale]));
     
         // Fermez la fenêtre contextuelle
         // setShowModal(false);
-        setNewSelectedValue("");
+        setnewSelectedCale("");
       };
 
     const dispatch = useDispatch();
@@ -436,24 +436,16 @@ export default function DataTable() {
 
             {/* Modale pour modifier la valeur et la couleur */}
             {/* <Modal show={showModal} onHide={handleCloseModal}> */}
-            <Modal show={Boolean(newSelectedValue)} onHide={handleCloseModal}>
+            <Modal show={Boolean(newSelectedCale)} onHide={handleCloseModal}>
             <Modal.Header closeButton>
                 <Modal.Title>Modifier la valeur et la couleur</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                {/* <Form.Group>
-                <Form.Label>Nouvelle valeur</Form.Label>
-                <Form.Control
-                    type="text"
-                    value={newSelectedValue}
-                    onChange={(e) => setNewSelectedValue(e.target.value)}
-                />
-                </Form.Group> */}
                 <Form.Group>
                 <Form.Label>Nouvelle couleur</Form.Label>
                 <SketchPicker
                     // color={selectedColor}
-                    color={selectedColors[newSelectedValue]}
+                    color={selectedColors[newSelectedCale]}
                     onChange={handleColorChange}
                 />
                 </Form.Group>
