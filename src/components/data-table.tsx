@@ -141,7 +141,8 @@ const useColumns = function useColumns(): any[] {
 export default function DataTable() {
     
     // const [showModal, setShowModal] = useState(false);
-    
+    const [PickerColorForSelectedCale, setPickerColorForSelectedCale] = useState<{ [key: string]: string }>({});
+
     const [newSelectedCale, setnewSelectedCale] = useState<string>('');
     const [newColor, setNewColor] = useState<string>('');
     const [textColor, setTextColor] = useState('black'); // État pour gérer la couleur du texte
@@ -162,7 +163,10 @@ export default function DataTable() {
     const handleColorChange = (color: ColorResult) => {
         // setSelectedColor(color.hex);
         setSelectedColors({...selectedColors, [newSelectedCale]: color.hex});
-      };
+
+        const updateStickerdColors = { ...PickerColorForSelectedCale, [selectedCale]: color.hex };
+        setPickerColorForSelectedCale(updateStickerdColors);
+    };
     
     const handleSaveChanges = () => {
         // Mettez à jour la couleur pour toutes les destinations identiques
@@ -444,8 +448,10 @@ export default function DataTable() {
                 <Form.Group>
                 <Form.Label>Nouvelle couleur</Form.Label>
                 <SketchPicker
-                    // color={selectedColor}
-                    color={selectedColors[newSelectedCale]}
+                    // color={selectedColor} // color fixé par tableau
+                    // color={selectedColors[newSelectedCale]}
+                    // onChange={handleColorChange}
+                    color={PickerColorForSelectedCale[newSelectedCale] || '' }
                     onChange={handleColorChange}
                 />
                 </Form.Group>
