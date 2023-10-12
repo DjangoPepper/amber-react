@@ -17,13 +17,17 @@ export const HEADER: IHeader[] = [
 ]
 
 export const destinations = [
-    {name: "stock", color: "#fff", index:0},
-    {name: "C1", color: "#00c87a", index:1},
-    {name: "C2", color: "#3cbefc", index:2},
-    {name: "C3", color: "#9d64e2", index:3},
-    {name: "C4", color: "#f447d1", index:4},
-    {name: "C5", color: "#fdff5b", index:5},
-    {name: "C6", color: "11447d1", index:6},
+    {name: "stock", color: "#ffffff", index:0},
+    {name: "H1",    color: "#00c87a", index:1},
+    {name: "H2",    color: "#f447d1", index:2},
+    {name: "H3",    color: "#ff9b2c", index:3},
+    {name: "H4",    color: "#3cbefc", index:4},
+    {name: "H5",    color: "#fdff5b", index:5},
+    {name: "H6",    color: "#80ff00", index:6},
+    {name: "H7",    color: "#8000ff", index:7},
+    {name: "H8",    color: "#76ecfb", index:8},
+    {name: "H9",    color: "#fb1a1b", index:9},
+    {name: "H10",   color: "#fc20df", index:10},
 ]
 
 
