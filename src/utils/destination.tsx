@@ -24,10 +24,10 @@ export const destinations = [
     {name: "H4",    color: "#3cbefc", index:4},
     {name: "H5",    color: "#fdff5b", index:5},
     {name: "H6",    color: "#80ff00", index:6},
-    {name: "H7",    color: "#8000ff", index:7},
-    {name: "H8",    color: "#76ecfb", index:8},
-    {name: "H9",    color: "#fb1a1b", index:9},
-    {name: "H10",   color: "#fc20df", index:10},
+    {name: "H7",    color: "#f03c28", index:7},
+    {name: "H8",    color: "#006ee6", index:8},
+    {name: "H9",    color: "#800080", index:9},
+    {name: "H10",   color: "#008000", index:10},
 ]
 
 
