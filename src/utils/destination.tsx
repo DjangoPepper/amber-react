@@ -6,6 +6,8 @@ interface IHeader {
     default?: string;
 }
 
+
+
 export const HEADER: IHeader[] = [
     {key: "rank", name :"RANG" },
     {key: "prepa", name :"PREPA" },
