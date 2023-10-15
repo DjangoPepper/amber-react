@@ -15,7 +15,19 @@ export default class DataAction {
 	public static CHANGE_PICKCOLORS = "DataAction.CHANGE_PICKCOLORS";
 	public static CHANGE_ORIGINAL_POS = "DataAction.ORIGINAL_POS";
 	public static DELETE_ROW = "DataAction.DELETE_ROW";
-	
+	//fred
+	public static CHANGE_PREVIOUS_QTT = "DataAction.CHANGE_PREVIOUS_QTT";
+	public static CHANGE_PREVIOUS_TONS = "DataAction.CHANGE_PREVIOUS_TONS";
+
+	public static changePreviousQTT(qtt: number): AnyAction {
+		return { type: DataAction.CHANGE_PREVIOUS_QTT, payload: qtt };
+	}
+
+	public static changePreviousTONS(tons: number): AnyAction {
+		return { type: DataAction.CHANGE_PREVIOUS_TONS, payload: tons };
+	}
+
+	//fred
 
 	public static deleteRow(rank: string): AnyAction {
 		return { type: DataAction.DELETE_ROW, payload: rank };

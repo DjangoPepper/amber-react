@@ -19,6 +19,8 @@ interface DataState {
     loaded: boolean;
     pickerColors: { [key: string]: string };
     saved: boolean;
+    previous_QTT: number;
+    previous_TONS: number;
 }
 
 interface Statistics {
@@ -34,11 +36,27 @@ const initialState: DataState = {
     selectedPrepa: "_",
     loaded: false,
     saved: true,
-    pickerColors: colors 
+    pickerColors: colors,
+    previous_QTT: 0,
+    previous_TONS: 0, 
 };
 
 export const dataReducer: Reducer<DataState> = (state = initialState, action: AnyAction): DataState => {
         switch (action.type) {
+            //fred
+            case DataAction.CHANGE_PREVIOUS_QTT:
+                return {
+                ...state,
+                previous_QTT: action.payload,
+            }
+
+            case DataAction.CHANGE_PREVIOUS_TONS:
+                return {
+                    ...state,
+                    previous_TONS: action.payload,
+            }
+
+            //fred
             case DataAction.IMPORT_DATA:
                 return {
                     ...state,
