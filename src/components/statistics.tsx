@@ -90,6 +90,8 @@ export default function Statistics() {
 			  <th>ACTU_TO</th>
 			  <th>PREV_QT</th>
 			  <th>PREV_TO</th>
+			  <th>TTL_QT</th>
+	          <th>TTL_TO</th>
 			</tr>
 		  </thead>
 		  <tbody>
@@ -101,7 +103,10 @@ export default function Statistics() {
 				{/* <td>{parseFloat(statistics[k].weight).toFixed(3).toLocaleString("en-US")}</td>
 				 */}
 				<td>
-				{	parseFloat(statistics[k].weight).toLocaleString("en-US", { minimumFractionDigits: 3, maximumFractionDigits: 3 })}
+				{	parseFloat(statistics[k].weight).toLocaleString("en-US", { 
+					minimumFractionDigits: 3, 
+					maximumFractionDigits: 3,
+				})}
 				</td>
 
 				{/* //fred */}
@@ -123,9 +128,16 @@ export default function Statistics() {
 						onChange={(e) => handlePrevToChange(k, e.target.value)}
 					/>
 				</td>
-				{/* <td>
-  					{parseFloat(prevValues[k].prevTo).toLocaleString("en-US")}
-				</td> */}
+				<td>{statistics[k].count + (prevValues[k] ? parseFloat(prevValues[k].prevQt) : 0)}</td>
+            	<td>
+					{(
+						parseFloat(statistics[k].weight) +
+						(prevValues[k] ? parseFloat(prevValues[k].prevTo) : 0)
+					).toLocaleString("en-US", {
+						minimumFractionDigits: 3,
+						maximumFractionDigits: 3,
+					})}
+					</td>
 				{/* //fred */}
 			  </tr>
 			))}
