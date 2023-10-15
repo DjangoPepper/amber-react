@@ -95,52 +95,55 @@ export default function Statistics() {
 			</tr>
 		  </thead>
 		  <tbody>
-			{keys.map((k) => (
-			  <tr key={k}>
-				{/* <td style={{ backgroundColor: colors[k] }}>{k}</td> */}
+		  {keys.map((k) => (
+			<tr key={k}>
 				<td style={{ backgroundColor: selectedColors[k] }}>{k}</td>
 				<td>{statistics[k].count}</td>
-				{/* <td>{parseFloat(statistics[k].weight).toFixed(3).toLocaleString("en-US")}</td>
-				 */}
 				<td>
-				{	parseFloat(statistics[k].weight).toLocaleString("en-US", { 
-					minimumFractionDigits: 3, 
+				{parseFloat(statistics[k].weight).toLocaleString("en-US", {
+					minimumFractionDigits: 3,
 					maximumFractionDigits: 3,
 				})}
 				</td>
-
-				{/* //fred */}
-				{/* colonne prevQt */}
-				<td>
+				{k === 'stock' ? (
+				<>
+					<td colSpan={2}></td> {/* Colspan pour fusionner les deux colonnes */}
+				</>
+				) : (
+				<>
+					<td>
 					<input
 						type="text"
 						style={{ width: '45px' }}
-						value={prevValues[k] ? prevValues[k].prevQt : 0} // Utilisez prevValues[k].prevQt pour la valeur
+						value={prevValues[k] ? prevValues[k].prevQt : 0}
 						onChange={(e) => handlePrevQtChange(k, e.target.value)}
 					/>
-				</td>
-				{/* colonne prevTo */}
-				<td>
+					</td>
+					<td>
 					<input
 						type="text"
 						style={{ width: '80px' }}
-						value={prevValues[k] ? prevValues[k].prevTo : 0} // Utilisez prevValues[k].prevTo pour la valeur
+						value={prevValues[k] ? prevValues[k].prevTo : 0}
 						onChange={(e) => handlePrevToChange(k, e.target.value)}
 					/>
-				</td>
-				<td>{statistics[k].count + (prevValues[k] ? parseFloat(prevValues[k].prevQt) : 0)}</td>
-            	<td>
-					{(
-						parseFloat(statistics[k].weight) +
-						(prevValues[k] ? parseFloat(prevValues[k].prevTo) : 0)
-					).toLocaleString("en-US", {
-						minimumFractionDigits: 3,
-						maximumFractionDigits: 3,
-					})}
 					</td>
-				{/* //fred */}
-			  </tr>
-			))}
+				</>
+				)}
+				<td>
+				{statistics[k].count + (prevValues[k] ? parseFloat(prevValues[k].prevQt) : 0)}
+				</td>
+				<td>
+				{(
+					parseFloat(statistics[k].weight) +
+					(prevValues[k] ? parseFloat(prevValues[k].prevTo) : 0)
+				).toLocaleString("en-US", {
+					minimumFractionDigits: 3,
+					maximumFractionDigits: 3,
+				})}
+				</td>
+			</tr>
+		))}
+
 
 
 
