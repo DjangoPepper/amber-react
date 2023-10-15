@@ -13,40 +13,30 @@ export default function Statistics() {
 	const dispatch = useDispatch();	
 
 	// Créez un état pour stocker les valeurs prevQt et prevTo pour chaque destination
-	const [prevValues, setPrevValues] = useState<{ [key: string]: { prevQt: number; prevTo: number } }>({});
+	// const [prevValues, setPrevValues] = useState<{ [key: string]: { prevQt: number; prevTo: number } }>({});
+	const [prevValues, setPrevValues] = useState<{ [key: string]: { prevQt: string; prevTo: string } }>({});
+
 
   	const [prevQt, setPrevQt] = useState<number>(0);
   	const [prevTo, setPrevTo] = useState<number>(0);
-
-	/* const handlePrevQtChange = (k: string, value: string) => {  
-		const numericValue = +value; // ou parseFloat(value)
-		setPrevQt(numericValue);
-		dispatch(DataAction.changePreviousQTT({ destination: k, value: numericValue }));
-	};
-	  
-	const handlePrevToChange = (k: string, value: string) => {
-	const numericValue = +value
-	setPrevTo(numericValue);
-	dispatch(DataAction.changePreviousTONS({ destination: k, value: numericValue }));
-	}; */
-	
 	const handlePrevQtChange = (k: string, value: string) => {
-		const numericValue = +value;
-		setPrevValues((prevValues) => ({
-		  ...prevValues,
-		  [k]: { prevQt: numericValue, prevTo: prevValues[k] ? prevValues[k].prevTo : 0 },
-		}));
-		dispatch(DataAction.changePreviousQTT({ destination: k, value: numericValue }));
-	  };
+	setPrevValues((prevValues) => ({
+		...prevValues,
+		[k]: { prevQt: value, prevTo: prevValues[k] ? prevValues[k].prevTo : '0' }, // Stockez la valeur en tant que chaîne
+	}));
+	const numericValue = parseFloat(value); // Convertissez la chaîne en nombre
+	dispatch(DataAction.changePreviousQTT({ destination: k, value: numericValue }));
+	};
 	
-	  const handlePrevToChange = (k: string, value: string) => {
-		const numericValue = +value;
+	const handlePrevToChange = (k: string, value: string) => {
 		setPrevValues((prevValues) => ({
 		  ...prevValues,
-		  [k]: { prevQt: prevValues[k] ? prevValues[k].prevQt : 0, prevTo: numericValue },
+		  [k]: { prevQt: prevValues[k] ? prevValues[k].prevQt : '0', prevTo: value }, // Stockez la valeur en tant que chaîne
 		}));
+		const numericValue = parseFloat(value); // Convertissez la chaîne en nombre
 		dispatch(DataAction.changePreviousTONS({ destination: k, value: numericValue }));
 	  };
+	  
 	//fred
 	
 	const data = useSelector<RootState, Data[]>((state) => state.data.data);
@@ -108,25 +98,34 @@ export default function Statistics() {
 				{/* <td style={{ backgroundColor: colors[k] }}>{k}</td> */}
 				<td style={{ backgroundColor: selectedColors[k] }}>{k}</td>
 				<td>{statistics[k].count}</td>
-				<td>{statistics[k].weight.toLocaleString("en-US")}</td>
+				{/* <td>{parseFloat(statistics[k].weight).toFixed(3).toLocaleString("en-US")}</td>
+				 */}
+				<td>
+				{	parseFloat(statistics[k].weight).toLocaleString("en-US", { minimumFractionDigits: 3, maximumFractionDigits: 3 })}
+				</td>
+
 				{/* //fred */}
 				{/* colonne prevQt */}
 				<td>
 					<input
 						type="text"
-						style={{ width: '60px' }}
+						style={{ width: '45px' }}
 						value={prevValues[k] ? prevValues[k].prevQt : 0} // Utilisez prevValues[k].prevQt pour la valeur
 						onChange={(e) => handlePrevQtChange(k, e.target.value)}
 					/>
 				</td>
+				{/* colonne prevTo */}
 				<td>
 					<input
 						type="text"
-						style={{ width: '60px' }}
+						style={{ width: '80px' }}
 						value={prevValues[k] ? prevValues[k].prevTo : 0} // Utilisez prevValues[k].prevTo pour la valeur
 						onChange={(e) => handlePrevToChange(k, e.target.value)}
 					/>
 				</td>
+				{/* <td>
+  					{parseFloat(prevValues[k].prevTo).toLocaleString("en-US")}
+				</td> */}
 				{/* //fred */}
 			  </tr>
 			))}
