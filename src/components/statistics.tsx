@@ -3,7 +3,7 @@ import {RootState} from "../stores/rootStore";
 import {Data} from "../stores/data/DataReducer";
 import {Table} from "react-bootstrap";
 import {colors} from "../utils/destination";
-import React from 'react';
+import React, { useState } from 'react';
 //FRed
 import DataAction from "../stores/data/DataAction";
 //FRed
@@ -12,22 +12,16 @@ export default function Statistics() {
 	//fred
 	const dispatch = useDispatch();
 	const handlePrevQtChange = (k: string, value: string) => {
-		const numericValue = parseFloat(value);
-		// Mettez à jour l'état local ou le state Redux ici pour PREV_QT
-		// Vous pouvez également disposer d'un tableau ou d'un objet pour stocker ces valeurs
-	  
-		// Envoyez la valeur dans Redux en utilisant votre action
-		// dispatch(DataAction.CHANGE_PREVIOUS_QTT:({ destination: k, value: value }));
-		dispatch(DataAction.changePreviousQTT({ destination: k, value: numericValue }));
-	  };
+    // Convertissez la valeur en nombre (type number)
+    const numericValue = +value; // ou parseFloat(value)
+
+    // Envoyez la valeur dans Redux en utilisant votre action
+    dispatch(DataAction.changePreviousQTT({ destination: k, value: numericValue }));
+};
 	  
 	  const handlePrevToChange = (k: string, value: string) => {
-		const numericValue = parseFloat(value);
-		// Mettez à jour l'état local ou le state Redux ici pour PREV_TO
-		// Vous pouvez également disposer d'un tableau ou d'un objet pour stocker ces valeurs
-	  
-		// Envoyez la valeur dans Redux en utilisant votre action
-		// dispatch(DataAction.CHANGE_PREVIOUS_TONS:({ destination: k, value: value }));
+		// const numericValue = parseFloat(value);
+		const numericValue = +value
 		dispatch(DataAction.changePreviousTONS({ destination: k, value: numericValue }));
 	  };
 	  
@@ -46,8 +40,10 @@ export default function Statistics() {
 	let totalstockWeight = 0;
 
 	//FRED
-	let prevQt = 0;
-	let prevTo = 0;
+	// let prevQt = 0;
+	// let prevTo = 0;
+	const [prevQt, setPrevQt] = useState<number>(0);
+  	const [prevTo, setPrevTo] = useState<number>(0);
 	//FRED
   
 	const statistics = data.reduce<any>((p, row) => {
@@ -101,14 +97,16 @@ export default function Statistics() {
 				{/* //fred */}
 				<td>
 					<input
-						type="number"
+						type="text"
+						style={{ width: '60px' }}
 						value={prevQt} // Utilisez la valeur du state local pour le champ d'entrée
 						onChange={(e) => handlePrevQtChange(k, e.target.value)} // Gérez les changements dans une fonction handlePrevQtChange
 					/>
 				</td>
 				<td>
 					<input
-						type="number"
+						type="text"
+						style={{ width: '60px' }}
 						value={prevTo} // Utilisez la valeur du state local pour le champ d'entrée
 						onChange={(e) => handlePrevToChange(k, e.target.value)} // Gérez les changements dans une fonction handlePrevToChange
 					/>
