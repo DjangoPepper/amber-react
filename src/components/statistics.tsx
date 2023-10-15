@@ -10,23 +10,45 @@ import DataAction from "../stores/data/DataAction";
 
 export default function Statistics() {
 	//fred
-	const dispatch = useDispatch();
-	const handlePrevQtChange = (k: string, value: string) => {
-    // Convertissez la valeur en nombre (type number)
-    const numericValue = +value; // ou parseFloat(value)
+	const dispatch = useDispatch();	
 
-    // Envoyez la valeur dans Redux en utilisant votre action
-    dispatch(DataAction.changePreviousQTT({ destination: k, value: numericValue }));
-};
+	// Créez un état pour stocker les valeurs prevQt et prevTo pour chaque destination
+	const [prevValues, setPrevValues] = useState<{ [key: string]: { prevQt: number; prevTo: number } }>({});
+
+  	const [prevQt, setPrevQt] = useState<number>(0);
+  	const [prevTo, setPrevTo] = useState<number>(0);
+
+	/* const handlePrevQtChange = (k: string, value: string) => {  
+		const numericValue = +value; // ou parseFloat(value)
+		setPrevQt(numericValue);
+		dispatch(DataAction.changePreviousQTT({ destination: k, value: numericValue }));
+	};
 	  
+	const handlePrevToChange = (k: string, value: string) => {
+	const numericValue = +value
+	setPrevTo(numericValue);
+	dispatch(DataAction.changePreviousTONS({ destination: k, value: numericValue }));
+	}; */
+	
+	const handlePrevQtChange = (k: string, value: string) => {
+		const numericValue = +value;
+		setPrevValues((prevValues) => ({
+		  ...prevValues,
+		  [k]: { prevQt: numericValue, prevTo: prevValues[k] ? prevValues[k].prevTo : 0 },
+		}));
+		dispatch(DataAction.changePreviousQTT({ destination: k, value: numericValue }));
+	  };
+	
 	  const handlePrevToChange = (k: string, value: string) => {
-		// const numericValue = parseFloat(value);
-		const numericValue = +value
+		const numericValue = +value;
+		setPrevValues((prevValues) => ({
+		  ...prevValues,
+		  [k]: { prevQt: prevValues[k] ? prevValues[k].prevQt : 0, prevTo: numericValue },
+		}));
 		dispatch(DataAction.changePreviousTONS({ destination: k, value: numericValue }));
 	  };
-	  
-	  
 	//fred
+	
 	const data = useSelector<RootState, Data[]>((state) => state.data.data);
 	const selectedColors = useSelector<RootState, { [key: string]: string }>((state) => state.data.pickerColors);
 	
@@ -39,13 +61,6 @@ export default function Statistics() {
 	let totalstockCount = 0;
 	let totalstockWeight = 0;
 
-	//FRED
-	// let prevQt = 0;
-	// let prevTo = 0;
-	const [prevQt, setPrevQt] = useState<number>(0);
-  	const [prevTo, setPrevTo] = useState<number>(0);
-	//FRED
-  
 	const statistics = data.reduce<any>((p, row) => {
 		if (!p[row.destination]) {
 		p[row.destination] = { count: 0, weight: 0 };
@@ -95,20 +110,21 @@ export default function Statistics() {
 				<td>{statistics[k].count}</td>
 				<td>{statistics[k].weight.toLocaleString("en-US")}</td>
 				{/* //fred */}
+				{/* colonne prevQt */}
 				<td>
 					<input
 						type="text"
 						style={{ width: '60px' }}
-						value={prevQt} // Utilisez la valeur du state local pour le champ d'entrée
-						onChange={(e) => handlePrevQtChange(k, e.target.value)} // Gérez les changements dans une fonction handlePrevQtChange
+						value={prevValues[k] ? prevValues[k].prevQt : 0} // Utilisez prevValues[k].prevQt pour la valeur
+						onChange={(e) => handlePrevQtChange(k, e.target.value)}
 					/>
 				</td>
 				<td>
 					<input
 						type="text"
 						style={{ width: '60px' }}
-						value={prevTo} // Utilisez la valeur du state local pour le champ d'entrée
-						onChange={(e) => handlePrevToChange(k, e.target.value)} // Gérez les changements dans une fonction handlePrevToChange
+						value={prevValues[k] ? prevValues[k].prevTo : 0} // Utilisez prevValues[k].prevTo pour la valeur
+						onChange={(e) => handlePrevToChange(k, e.target.value)}
 					/>
 				</td>
 				{/* //fred */}
