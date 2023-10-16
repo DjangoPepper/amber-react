@@ -21,6 +21,7 @@ interface DataState {
     saved: boolean;
     previous_QTT: number;
     previous_TONS: number;
+    maxi_TONS: number;
 }
 
 interface Statistics {
@@ -39,11 +40,17 @@ const initialState: DataState = {
     pickerColors: colors,
     previous_QTT: 0,
     previous_TONS: 0, 
+    maxi_TONS: 0,
 };
 
 export const dataReducer: Reducer<DataState> = (state = initialState, action: AnyAction): DataState => {
         switch (action.type) {
             //fred
+            case DataAction.CHANGE_MAXI_TONS:
+                return {
+                    ...state,
+                    maxi_TONS: action.payload,
+            }
             case DataAction.CHANGE_PREVIOUS_QTT:
                 return {
                 ...state,

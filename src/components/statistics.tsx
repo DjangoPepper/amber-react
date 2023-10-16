@@ -24,7 +24,14 @@ export default function Statistics() {
 		dispatch(DataAction.changePreviousQTT({ destination: k, value: numericValue }));
 	  };
 	  
-	  
+	const handle_MaxiToChange = (k: string, value: string) => {
+	setprevious_Values((previous_Values) => ({
+		...previous_Values,
+		[k]: { prevQt: previous_Values[k] ? previous_Values[k].prevQt : '0', maxi_Tons: value },
+	}));
+	let numericValue = parseFloat(value) || 0;
+	dispatch(DataAction.changeMaxiTONS({ destination: k, value: numericValue }));
+	};  
 	
 	const handle_PrevToChange = (k: string, value: string) => {
 		setprevious_Values((previous_Values) => ({
@@ -131,8 +138,8 @@ export default function Statistics() {
     </td>
     {k === 'stock' ? (
        <>
-        {/* <td colSpan={2}></td>  */}
-        <td></td> 
+        <td colSpan={7}></td> 
+        <td> </td> 
       </>
     ) : (
       <> 
@@ -178,7 +185,15 @@ export default function Statistics() {
 			(statistics[k].count + (previous_Values[k]?.prevQt ? parseFloat(previous_Values[k].prevQt) : 0))
 			).toFixed(3)}
         </td>
-      
+{/* MAXI_TO */}
+		<td>
+          <input
+            type="text"
+            style={{ width: '80px' }}
+            value={previous_Values[k] ? previous_Values[k].maxi_Tons : 0}
+            onChange={(e) => handle_MaxiToChange(k, e.target.value)}
+          />
+        </td>
 	  </>
     )
 	} 
@@ -199,22 +214,21 @@ export default function Statistics() {
 			  <td>{totalCalesCount + totalPreviousCalesCount}</td>
 			  <td>{(totalCalesWeight + totalPreviousCalesWeight).toLocaleString("en-US")}</td>
 			  <td>{((totalCalesWeight + totalPreviousCalesWeight)/(totalCalesCount + totalPreviousCalesCount)).toLocaleString("en-US")}</td>
-
 			</tr>
 
-			<tr>
+			{/* <tr> */}
 			  {/* <td>Total Général</td>
 			  <td>{totalCalesCount+totalPreviousCalesCount}</td>
 			  <td>{(totalCalesWeight+totalPreviousCalesWeight).toLocaleString("en-US")}</td> */}
-				<td>Total Général</td>
-          		<td>{totalCount}</td>
+				{/* <td>Total Général</td>
+          		<td>{(totalCalesCount + totalPreviousCalesCount)}</td>
 				<td>
 					{(totalWeight + totalPreviousCalesWeight).toLocaleString("en-US", {
 					minimumFractionDigits: 3,
 					maximumFractionDigits: 3,
 					})}
-				</td>			  
-			</tr>
+				</td>			   */}
+			{/* </tr> */}
 
 		  </tbody>
 		</Table>

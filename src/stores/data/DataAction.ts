@@ -18,6 +18,11 @@ export default class DataAction {
 	//fred
 	public static CHANGE_PREVIOUS_QTT = "DataAction.CHANGE_PREVIOUS_QTT";
 	public static CHANGE_PREVIOUS_TONS = "DataAction.CHANGE_PREVIOUS_TONS";
+	public static CHANGE_MAXI_TONS = "DataAction.CHANGE_MAXI_TONS";
+
+	public static changeMaxiTONS(tons: { destination: string; value: number }): AnyAction {
+		return { type: DataAction.CHANGE_MAXI_TONS, payload: tons };
+	}
 
 	public static changePreviousQTT(qtt: { destination: string; value: number }): AnyAction {
 		return { type: DataAction.CHANGE_PREVIOUS_QTT, payload: qtt };
