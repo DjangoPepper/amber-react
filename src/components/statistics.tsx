@@ -15,26 +15,6 @@ export default function Statistics() {
 	const [prevQt, setPrevQt] = useState<number>(0);
   	const [previous_Tons, setPrevTo] = useState<number>(0);
 	
-	// const handle_PrevQtChange = (k: string, value: string) => {
-	// setprevious_Values((previous_Values) => ({
-	// 	...previous_Values,
-	// 	[k]: { prevQt: value, previous_Tons: previous_Values[k] ? previous_Values[k].previous_Tons : '0' }, 
-	// }));
-
-	// let numericValue = parseFloat(value) || 0;
-
-	// dispatch(DataAction.changePreviousQTT({ destination: k, value: numericValue }));
-	// };
-	// const handle_PrevQtChange = (k: string, value: string) => {
-	// 	let numericValue = parseFloat(value) || 0; // Calculer numericValue en premier
-	  
-	// 	setprevious_Values((previous_Values) => ({
-	// 	  ...previous_Values,
-	// 	  [k]: { prevQt: value, previous_Tons: previous_Values[k] ? previous_Values[k].previous_Tons : '0' }, 
-	// 	}));
-	  
-	// 	dispatch(DataAction.changePreviousQTT({ destination: k, value: numericValue }));
-	//   };
 	const handle_PrevQtChange = (k: string, value: string) => {
 		setprevious_Values((previous_Values) => ({
 		  ...previous_Values,
@@ -49,7 +29,7 @@ export default function Statistics() {
 	const handle_PrevToChange = (k: string, value: string) => {
 		setprevious_Values((previous_Values) => ({
 		  ...previous_Values,
-		  [k]: { prevQt: previous_Values[k] ? previous_Values[k].prevQt : '0', previous_Tons: value }, // Stockez la valeur en tant que chaîne
+		  [k]: { prevQt: previous_Values[k] ? previous_Values[k].prevQt : '0', previous_Tons: value },
 		}));
 		let numericValue = parseFloat(value) || 0;
 		dispatch(DataAction.changePreviousTONS({ destination: k, value: numericValue }));
@@ -66,8 +46,20 @@ export default function Statistics() {
 	let totalCalesCount = 0;
 	let totalCalesWeight = 0;
 
+	// let totalPreviousCalesCount = 0;
+	// let totalPreviousCalesWeight = 0;
+
 	let totalstockCount = 0;
 	let totalstockWeight = 0;
+
+	const totalPreviousCalesCount = Object.keys(previous_Values).reduce((total, k) => {
+		return total + (previous_Values[k] ? parseFloat(previous_Values[k].prevQt) : 0);
+	  }, 0);
+	
+	const totalPreviousCalesWeight = Object.keys(previous_Values).reduce((total, k) => {
+	return total + (previous_Values[k]?.previous_Tons ? parseFloat(previous_Values[k].previous_Tons) : 0);
+	}, 0);
+
 
 	const statistics = data.reduce<any>((p, row) => {
 		if (!p[row.destination]) {
@@ -77,17 +69,21 @@ export default function Statistics() {
 		p[row.destination].weight += row.weight;
 		return p;
 	}, {});
+
   
-	// Calcul du cumul total
+	// Calcul du cumul des totaux
 	Object.values(statistics).forEach((destinationStats: any ) => {    
 		totalCount += destinationStats.count;
 		totalWeight += destinationStats.weight;
+		totalCalesCount = totalCount ;
+    	totalCalesWeight = totalWeight;
 
 		if (statistics.stock) {
 			totalstockCount = statistics.stock.count;
 			totalstockWeight = statistics.stock.weight;	
-			totalCalesCount  = totalCount - totalstockCount;
-			totalCalesWeight = totalWeight - totalstockWeight;
+			totalCalesCount  = totalCount   - totalstockCount;
+			totalCalesWeight = totalWeight  - totalstockWeight;
+			
 		}
 		else {
 			totalstockCount = 0;
@@ -111,6 +107,7 @@ export default function Statistics() {
 			  <th>TTL_QT</th>
 	          <th>TTL_TO</th>
 			  <th>  PU  </th>
+			  <th> MAXI </th>
 			  <th>LET_QT</th>
 			  <th>LET_TO</th>
 			</tr>
@@ -121,26 +118,26 @@ export default function Statistics() {
 
 {keys.map((k) => (
   <tr key={k}>
-	{/* DEST */}
+{/* DEST */}
     <td style={{ backgroundColor: selectedColors[k] }}>{k}</td>
-    {/* ACTU_QT */}
+{/* ACTU_QT */}
 	<td>{statistics[k].count}</td>
-    {/* ACTU_TO */}
+{/* ACTU_TO */}
 	<td>
       {parseFloat(statistics[k].weight).toLocaleString("en-US", {
         minimumFractionDigits: 3,
         maximumFractionDigits: 3,
       })}
     </td>
-    {/* {k === 'stock' ? ( */}
-      {/* <>
-        <td colSpan={4}></td> 
+    {k === 'stock' ? (
+       <>
+        {/* <td colSpan={2}></td>  */}
         <td></td> 
       </>
     ) : (
-      <> */}
+      <> 
 	  	
-		{/* PREV_QT */}
+{/* PREV_QT */}
         <td>
           <input
             type="text"
@@ -150,7 +147,7 @@ export default function Statistics() {
           />
         </td>
 		
-		{/* PREV_TO */}
+{/* PREV_TO */}
         <td>
           <input
             type="text"
@@ -160,39 +157,18 @@ export default function Statistics() {
           />
         </td>
 
-		{/* TTL_QT */}
-        {/* <td>
-          {statistics[k].count + (previous_Values[k] ? parseFloat(previous_Values[k].prevQt) : 0)}
-        </td> */}
-		
-		{/* Vérifiez si TTL_QT est NaN, sinon affichez la valeur, sinon affichez 0 pour PREV_QT */}
-		{/* <td>
-		{isNaN(parseFloat(statistics[k].weight)) ? 0 : parseFloat(statistics[k].weight).toFixed(3)}
-		</td> */}
-		
-		{/* TTL_TO */}
-        {/* <td>
-			{(
-				parseFloat(statistics[k].weight) +
-				(previous_Values[k]?.previous_Tons ? parseFloat(previous_Values[k].previous_Tons) : 0)
-				).toLocaleString("en-US", {
-				minimumFractionDigits: 3,
-				maximumFractionDigits: 3,
-			})}
-        </td> */}
-
-		{/* TTL_QT */}
+{/* TTL_QT */}
 				<td>
                   {isNaN(statistics[k].count + (previous_Values[k] ? parseFloat(previous_Values[k].prevQt) : 0)) ? 0 : (statistics[k].count + (previous_Values[k] ? parseFloat(previous_Values[k].prevQt) : 0))}
                 </td>
 		
-		{/* TTL_TO */}
+{/* TTL_TO */}
                 {/* Vérifiez si TTL_TO est NaN, sinon affichez la valeur, sinon affichez 0 pour PREV_TO */}
                 <td>
                   {isNaN(parseFloat(statistics[k].weight) + (previous_Values[k]?.previous_Tons ? parseFloat(previous_Values[k].previous_Tons) : 0)) ? 0 : (parseFloat(statistics[k].weight) + (previous_Values[k]?.previous_Tons ? parseFloat(previous_Values[k].previous_Tons) : 0)).toLocaleString("en-US", { minimumFractionDigits: 3, maximumFractionDigits: 3 })}
                 </td>
 
-		{/* PU */}
+{/* PU */}
         <td>
 		{(
 			(
@@ -203,9 +179,9 @@ export default function Statistics() {
 			).toFixed(3)}
         </td>
       
-	  {/* </> */}
-    {/* ) */}
-	{/* } */}
+	  </>
+    )
+	} 
   </tr>
 ))}
 
@@ -215,15 +191,29 @@ export default function Statistics() {
 {/* PARTIE BASSE */}
 
 			<tr>
-			  <td>Total Cales</td>
+			  <td>Totaux</td>
 			  <td>{totalCalesCount}</td>
 			  <td>{totalCalesWeight.toLocaleString("en-US")}</td>
+			  <td>{totalPreviousCalesCount}</td>
+			  <td>{totalPreviousCalesWeight.toLocaleString("en-US")}</td>
+			  <td>{totalCalesCount + totalPreviousCalesCount}</td>
+			  <td>{(totalCalesWeight + totalPreviousCalesWeight).toLocaleString("en-US")}</td>
+			  <td>{((totalCalesWeight + totalPreviousCalesWeight)/(totalCalesCount + totalPreviousCalesCount)).toLocaleString("en-US")}</td>
+
 			</tr>
 
 			<tr>
-			  <td>Total Général</td>
-			  <td>{totalCount}</td>
-			  <td>{totalWeight.toLocaleString("en-US")}</td>
+			  {/* <td>Total Général</td>
+			  <td>{totalCalesCount+totalPreviousCalesCount}</td>
+			  <td>{(totalCalesWeight+totalPreviousCalesWeight).toLocaleString("en-US")}</td> */}
+				<td>Total Général</td>
+          		<td>{totalCount}</td>
+				<td>
+					{(totalWeight + totalPreviousCalesWeight).toLocaleString("en-US", {
+					minimumFractionDigits: 3,
+					maximumFractionDigits: 3,
+					})}
+				</td>			  
 			</tr>
 
 		  </tbody>
