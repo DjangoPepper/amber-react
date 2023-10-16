@@ -11,29 +11,47 @@ import DataAction from "../stores/data/DataAction";
 export default function Statistics() {
 	//fred
 	const dispatch = useDispatch();	
-
-	// Créez un état pour stocker les valeurs prevQt et prevTo pour chaque destination
-	// const [prevValues, setPrevValues] = useState<{ [key: string]: { prevQt: number; prevTo: number } }>({});
-	const [prevValues, setPrevValues] = useState<{ [key: string]: { prevQt: string; prevTo: string } }>({});
-
-
-  	const [prevQt, setPrevQt] = useState<number>(0);
-  	const [prevTo, setPrevTo] = useState<number>(0);
-	const handlePrevQtChange = (k: string, value: string) => {
-	setPrevValues((prevValues) => ({
-		...prevValues,
-		[k]: { prevQt: value, prevTo: prevValues[k] ? prevValues[k].prevTo : '0' }, // Stockez la valeur en tant que chaîne
-	}));
-	const numericValue = parseFloat(value); // Convertissez la chaîne en nombre
-	dispatch(DataAction.changePreviousQTT({ destination: k, value: numericValue }));
-	};
+	const [previous_Values, setprevious_Values] = useState<{ [key: string]: { prevQt: string; previous_Tons: string } }>({});
+	const [prevQt, setPrevQt] = useState<number>(0);
+  	const [previous_Tons, setPrevTo] = useState<number>(0);
 	
-	const handlePrevToChange = (k: string, value: string) => {
-		setPrevValues((prevValues) => ({
-		  ...prevValues,
-		  [k]: { prevQt: prevValues[k] ? prevValues[k].prevQt : '0', prevTo: value }, // Stockez la valeur en tant que chaîne
+	// const handle_PrevQtChange = (k: string, value: string) => {
+	// setprevious_Values((previous_Values) => ({
+	// 	...previous_Values,
+	// 	[k]: { prevQt: value, previous_Tons: previous_Values[k] ? previous_Values[k].previous_Tons : '0' }, 
+	// }));
+
+	// let numericValue = parseFloat(value) || 0;
+
+	// dispatch(DataAction.changePreviousQTT({ destination: k, value: numericValue }));
+	// };
+	// const handle_PrevQtChange = (k: string, value: string) => {
+	// 	let numericValue = parseFloat(value) || 0; // Calculer numericValue en premier
+	  
+	// 	setprevious_Values((previous_Values) => ({
+	// 	  ...previous_Values,
+	// 	  [k]: { prevQt: value, previous_Tons: previous_Values[k] ? previous_Values[k].previous_Tons : '0' }, 
+	// 	}));
+	  
+	// 	dispatch(DataAction.changePreviousQTT({ destination: k, value: numericValue }));
+	//   };
+	const handle_PrevQtChange = (k: string, value: string) => {
+		setprevious_Values((previous_Values) => ({
+		  ...previous_Values,
+		  [k]: { prevQt: value, previous_Tons: previous_Values[k] ? previous_Values[k].previous_Tons : '0' },
 		}));
-		const numericValue = parseFloat(value); // Convertissez la chaîne en nombre
+		let numericValue = parseFloat(value) || 0;
+		dispatch(DataAction.changePreviousQTT({ destination: k, value: numericValue }));
+	  };
+	  
+	  
+	
+	const handle_PrevToChange = (k: string, value: string) => {
+		setprevious_Values((previous_Values) => ({
+		  ...previous_Values,
+		  [k]: { prevQt: previous_Values[k] ? previous_Values[k].prevQt : '0', previous_Tons: value }, // Stockez la valeur en tant que chaîne
+		}));
+		let numericValue = parseFloat(value) || 0;
 		dispatch(DataAction.changePreviousTONS({ destination: k, value: numericValue }));
 	  };
 	  
@@ -92,57 +110,104 @@ export default function Statistics() {
 			  <th>PREV_TO</th>
 			  <th>TTL_QT</th>
 	          <th>TTL_TO</th>
+			  <th>  PU  </th>
+			  <th>LET_QT</th>
+			  <th>LET_TO</th>
 			</tr>
 		  </thead>
 		  <tbody>
-		  {keys.map((k) => (
-			<tr key={k}>
-				<td style={{ backgroundColor: selectedColors[k] }}>{k}</td>
-				<td>{statistics[k].count}</td>
-				<td>
-				{parseFloat(statistics[k].weight).toLocaleString("en-US", {
-					minimumFractionDigits: 3,
-					maximumFractionDigits: 3,
-				})}
-				</td>
-				{k === 'stock' ? (
-				<>
-					<td colSpan={2}></td> {/* Colspan pour fusionner les deux colonnes */}
-				</>
-				) : (
-				<>
-					<td>
-					<input
-						type="text"
-						style={{ width: '45px' }}
-						value={prevValues[k] ? prevValues[k].prevQt : 0}
-						onChange={(e) => handlePrevQtChange(k, e.target.value)}
-					/>
-					</td>
-					<td>
-					<input
-						type="text"
-						style={{ width: '80px' }}
-						value={prevValues[k] ? prevValues[k].prevTo : 0}
-						onChange={(e) => handlePrevToChange(k, e.target.value)}
-					/>
-					</td>
-				</>
-				)}
-				<td>
-				{statistics[k].count + (prevValues[k] ? parseFloat(prevValues[k].prevQt) : 0)}
-				</td>
-				<td>
-				{(
-					parseFloat(statistics[k].weight) +
-					(prevValues[k] ? parseFloat(prevValues[k].prevTo) : 0)
+{/* PARTIE HAUTE */}
+		 
+
+{keys.map((k) => (
+  <tr key={k}>
+	{/* DEST */}
+    <td style={{ backgroundColor: selectedColors[k] }}>{k}</td>
+    {/* ACTU_QT */}
+	<td>{statistics[k].count}</td>
+    {/* ACTU_TO */}
+	<td>
+      {parseFloat(statistics[k].weight).toLocaleString("en-US", {
+        minimumFractionDigits: 3,
+        maximumFractionDigits: 3,
+      })}
+    </td>
+    {/* {k === 'stock' ? ( */}
+      {/* <>
+        <td colSpan={4}></td> 
+        <td></td> 
+      </>
+    ) : (
+      <> */}
+	  	
+		{/* PREV_QT */}
+        <td>
+          <input
+            type="text"
+            style={{ width: '45px' }}
+            value={previous_Values[k] ? previous_Values[k].prevQt : 0}
+            onChange={(e) => handle_PrevQtChange(k, e.target.value)}
+          />
+        </td>
+		
+		{/* PREV_TO */}
+        <td>
+          <input
+            type="text"
+            style={{ width: '80px' }}
+            value={previous_Values[k] ? previous_Values[k].previous_Tons : 0}
+            onChange={(e) => handle_PrevToChange(k, e.target.value)}
+          />
+        </td>
+
+		{/* TTL_QT */}
+        {/* <td>
+          {statistics[k].count + (previous_Values[k] ? parseFloat(previous_Values[k].prevQt) : 0)}
+        </td> */}
+		
+		{/* Vérifiez si TTL_QT est NaN, sinon affichez la valeur, sinon affichez 0 pour PREV_QT */}
+		{/* <td>
+		{isNaN(parseFloat(statistics[k].weight)) ? 0 : parseFloat(statistics[k].weight).toFixed(3)}
+		</td> */}
+		
+		{/* TTL_TO */}
+        {/* <td>
+			{(
+				parseFloat(statistics[k].weight) +
+				(previous_Values[k]?.previous_Tons ? parseFloat(previous_Values[k].previous_Tons) : 0)
 				).toLocaleString("en-US", {
-					minimumFractionDigits: 3,
-					maximumFractionDigits: 3,
-				})}
-				</td>
-			</tr>
-		))}
+				minimumFractionDigits: 3,
+				maximumFractionDigits: 3,
+			})}
+        </td> */}
+
+		{/* TTL_QT */}
+				<td>
+                  {isNaN(statistics[k].count + (previous_Values[k] ? parseFloat(previous_Values[k].prevQt) : 0)) ? 0 : (statistics[k].count + (previous_Values[k] ? parseFloat(previous_Values[k].prevQt) : 0))}
+                </td>
+		
+		{/* TTL_TO */}
+                {/* Vérifiez si TTL_TO est NaN, sinon affichez la valeur, sinon affichez 0 pour PREV_TO */}
+                <td>
+                  {isNaN(parseFloat(statistics[k].weight) + (previous_Values[k]?.previous_Tons ? parseFloat(previous_Values[k].previous_Tons) : 0)) ? 0 : (parseFloat(statistics[k].weight) + (previous_Values[k]?.previous_Tons ? parseFloat(previous_Values[k].previous_Tons) : 0)).toLocaleString("en-US", { minimumFractionDigits: 3, maximumFractionDigits: 3 })}
+                </td>
+
+		{/* PU */}
+        <td>
+		{(
+			(
+				parseFloat(statistics[k].weight) +
+				(previous_Values[k]?.previous_Tons ? parseFloat(previous_Values[k].previous_Tons) : 0)
+			) /
+			(statistics[k].count + (previous_Values[k]?.prevQt ? parseFloat(previous_Values[k].prevQt) : 0))
+			).toFixed(3)}
+        </td>
+      
+	  {/* </> */}
+    {/* ) */}
+	{/* } */}
+  </tr>
+))}
 
 
 
