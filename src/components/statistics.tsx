@@ -11,12 +11,14 @@ import DataAction from "../stores/data/DataAction";
 export default function Statistics() {
 	//fred
 	const dispatch = useDispatch();	
-	const [previous_Values, setprevious_Values] = useState<{ [key: string]: { prevQt: string; previous_Tons: string } }>({});
-	const [prevQt, setPrevQt] = useState<number>(0);
-  	const [previous_Tons, setPrevTo] = useState<number>(0);
-	
+	const [previous_Values, set_previous_Values] = useState<{ [key: string]: { prevQt: string; previous_Tons: string } }>({});
+	const [previous_Qt, set_Previous_Qt] = useState<number>(0);
+  	const [previous_Tons, set_Previous_Tons] = useState<number>(0);
+	const [maxi_To, set_maxi_To] = useState<number>(0);
+	const [maxi_Values, set_maxi_Values] = useState<{ [key: string]: { maxi_To: string } }>({});
+
 	const handle_PrevQtChange = (k: string, value: string) => {
-		setprevious_Values((previous_Values) => ({
+		set_previous_Values((previous_Values) => ({
 		  ...previous_Values,
 		  [k]: { prevQt: value, previous_Tons: previous_Values[k] ? previous_Values[k].previous_Tons : '0' },
 		}));
@@ -24,17 +26,35 @@ export default function Statistics() {
 		dispatch(DataAction.changePreviousQTT({ destination: k, value: numericValue }));
 	  };
 	  
-	const handle_MaxiToChange = (k: string, value: string) => {
-	setprevious_Values((previous_Values) => ({
-		...previous_Values,
-		[k]: { prevQt: previous_Values[k] ? previous_Values[k].prevQt : '0', maxi_Tons: value },
-	}));
-	let numericValue = parseFloat(value) || 0;
-	dispatch(DataAction.changeMaxiTONS({ destination: k, value: numericValue }));
-	};  
+	// const handle_maxi_ToChange = (k: string, value: string) => {
+	// set_previous_Values((previous_Values) => ({
+	// 	...previous_Values,
+	// 	[k]: { prevQt: previous_Values[k] ? previous_Values[k].prevQt : '0', maxi_Tons: value },
+	// }));
+	// let numericValue = parseFloat(value) || 0;
+	// dispatch(DataAction.changemaxi_ToNS({ destination: k, value: numericValue }));
+	// };  
 	
+	// const handlemaxi_ToChange = (k: string, value: string) => {
+	// 	set_maxi_Values((maxi_Values: any) => ({
+	// 	  ...maxi_Values,
+	// 	  [k]: { maxi_To: value}, // Stockez la valeur en tant que chaîne
+	// 	}));
+	// 	let numericValue = parseFloat(value) || 0; // Convertissez la chaîne en nombre
+	// 	dispatch(DataAction.changeMaxiTONS({ destination: k, value: numericValue }));
+	//   };
+	
+	const handlemaxi_ToChange = (k: string, value: string) => {
+		set_maxi_Values((maxi_Values: any) => ({
+		  ...maxi_Values,
+		  [k]: { maxi_To: value },
+		}));
+		const numericValue = parseFloat(value);
+		dispatch(DataAction.changeMaxiTONS({ destination: k, value: numericValue }));
+	};
+
 	const handle_PrevToChange = (k: string, value: string) => {
-		setprevious_Values((previous_Values) => ({
+		set_previous_Values((previous_Values) => ({
 		  ...previous_Values,
 		  [k]: { prevQt: previous_Values[k] ? previous_Values[k].prevQt : '0', previous_Tons: value },
 		}));
@@ -53,12 +73,17 @@ export default function Statistics() {
 	let totalCalesCount = 0;
 	let totalCalesWeight = 0;
 
-	// let totalPreviousCalesCount = 0;
-	// let totalPreviousCalesWeight = 0;
-
 	let totalstockCount = 0;
 	let totalstockWeight = 0;
 
+	// const totalMaxiCalesWeight = Object.keys(previous_Values).reduce((total, k) => {
+	// 	return total + (previous_Values[k] ? parseFloat(previous_Values[k].prevQt) : 0);
+	//   }, 0);
+	
+	const totalMaxiCalesWeight = Object.keys(maxi_Values).reduce((total, k) => {
+		return total + (maxi_Values[k] ? parseFloat(maxi_Values[k].maxi_To) : 0);
+	  }, 0);
+	
 	const totalPreviousCalesCount = Object.keys(previous_Values).reduce((total, k) => {
 		return total + (previous_Values[k] ? parseFloat(previous_Values[k].prevQt) : 0);
 	  }, 0);
@@ -84,6 +109,7 @@ export default function Statistics() {
 		totalWeight += destinationStats.weight;
 		totalCalesCount = totalCount ;
     	totalCalesWeight = totalWeight;
+		// totalMaxiCalesCount = totalCount
 
 		if (statistics.stock) {
 			totalstockCount = statistics.stock.count;
@@ -115,6 +141,7 @@ export default function Statistics() {
 	          <th>TTL_TO</th>
 			  <th>  PU  </th>
 			  <th> MAXI </th>
+			  <th> DIFF_TO</th>
 			  <th>LET_QT</th>
 			  <th>LET_TO</th>
 			</tr>
@@ -124,6 +151,7 @@ export default function Statistics() {
 		 
 
 {keys.map((k) => (
+
   <tr key={k}>
 {/* DEST */}
     <td style={{ backgroundColor: selectedColors[k] }}>{k}</td>
@@ -187,13 +215,19 @@ export default function Statistics() {
         </td>
 {/* MAXI_TO */}
 		<td>
-          <input
-            type="text"
-            style={{ width: '80px' }}
-            value={previous_Values[k] ? previous_Values[k].maxi_Tons : 0}
-            onChange={(e) => handle_MaxiToChange(k, e.target.value)}
-          />
-        </td>
+			<input
+				type="text"
+				style={{ width: '80px' }}
+				value={maxi_Values[k] ? maxi_Values[k].maxi_To : 0} // Utilisez prevValues[k].prevTo pour la valeur 
+				onChange={(e) => handlemaxi_ToChange(k, e.target.value)}
+			/>
+		</td>
+{/* DIFF_TO */}
+		<td> 
+
+		</td>
+
+{/* retour de condition stock */}		
 	  </>
     )
 	} 
@@ -214,6 +248,7 @@ export default function Statistics() {
 			  <td>{totalCalesCount + totalPreviousCalesCount}</td>
 			  <td>{(totalCalesWeight + totalPreviousCalesWeight).toLocaleString("en-US")}</td>
 			  <td>{((totalCalesWeight + totalPreviousCalesWeight)/(totalCalesCount + totalPreviousCalesCount)).toLocaleString("en-US")}</td>
+			  <td>{(totalMaxiCalesWeight).toLocaleString("en-US")}</td>
 			</tr>
 
 			{/* <tr> */}
