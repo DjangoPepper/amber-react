@@ -245,13 +245,11 @@ export default function Statistics() {
 		
 		<td>
 				{/* { (maxi_Values[k]?.maxi_To             ? parseFloat(maxi_Values[k].maxi_To) : 0 ) -				 */}
-                {  zeb = isNaN(parseFloat(statistics[k].weight) + (previous_Values_TO[k]?.previous_Tons ? 
-					        parseFloat(previous_Values_TO[k].previous_Tons) : 0)) ? 0 : 
-						 
-						 (parseFloat(statistics[k].weight) + (previous_Values_TO[k]?.previous_Tons ? 
-						 parseFloat(previous_Values_TO[k].previous_Tons) : 0))
-						//  .toLocaleString("en-US", { minimumFractionDigits: 3, maximumFractionDigits: 3 })}
-						 }
+                {  isNaN
+				(parseFloat(maxi_Values[k]?.maxi_To) - parseFloat(statistics[k].weight) - (previous_Values_TO[k]?.previous_Tons ? parseFloat(previous_Values_TO[k].previous_Tons) : 0))
+				 ? 0 : 
+			 	(parseFloat(maxi_Values[k]?.maxi_To) - parseFloat(statistics[k].weight) - (previous_Values_TO[k]?.previous_Tons ? parseFloat(previous_Values_TO[k].previous_Tons) : 0)).toLocaleString("en-US", { minimumFractionDigits: 3, maximumFractionDigits: 3 })
+				}		 
 		</td>
 
 {/* retour de condition stock */}		
