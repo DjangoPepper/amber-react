@@ -45,7 +45,7 @@ function isolelalettre(numberastext: string, position: number): string {
 function definehowmanyspace(originalNumber: string): string {
 	let newnumber: string;
 	if ( originalNumber !== undefined && originalNumber !== null ){
-		console.log('definehowmanyspace can not defined originalNumber ')	
+		// console.log('definehowmanyspace can not defined originalNumber ')	
 		originalNumber = originalNumber.toString().toUpperCase() || ''; 
 	}
 	else {
