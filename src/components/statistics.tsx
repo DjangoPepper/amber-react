@@ -76,9 +76,6 @@ export default function Statistics() {
 	let totalstockCount = 0;
 	let totalstockWeight = 0;
 
-	// const totalMaxiCalesWeight = Object.keys(previous_Values).reduce((total, k) => {
-	// 	return total + (previous_Values[k] ? parseFloat(previous_Values[k].prevQt) : 0);
-	//   }, 0);
 	
 	const totalMaxiCalesWeight = Object.keys(maxi_Values).reduce((total, k) => {
 		return total + (maxi_Values[k] ? parseFloat(maxi_Values[k].maxi_To) : 0);
@@ -109,7 +106,7 @@ export default function Statistics() {
 		totalWeight += destinationStats.weight;
 		totalCalesCount = totalCount ;
     	totalCalesWeight = totalWeight;
-		// totalMaxiCalesCount = totalCount
+
 
 		if (statistics.stock) {
 			totalstockCount = statistics.stock.count;
@@ -198,7 +195,6 @@ export default function Statistics() {
                 </td>
 		
 {/* TTL_TO */}
-                {/* Vérifiez si TTL_TO est NaN, sinon affichez la valeur, sinon affichez 0 pour PREV_TO */}
                 <td>
                   {isNaN(parseFloat(statistics[k].weight) + (previous_Values[k]?.previous_Tons ? parseFloat(previous_Values[k].previous_Tons) : 0)) ? 0 : (parseFloat(statistics[k].weight) + (previous_Values[k]?.previous_Tons ? parseFloat(previous_Values[k].previous_Tons) : 0)).toLocaleString("en-US", { minimumFractionDigits: 3, maximumFractionDigits: 3 })}
                 </td>
@@ -213,6 +209,7 @@ export default function Statistics() {
 			(statistics[k].count + (previous_Values[k]?.prevQt ? parseFloat(previous_Values[k].prevQt) : 0))
 			).toFixed(3)}
         </td>
+
 {/* MAXI_TO */}
 		<td>
 			<input
@@ -222,6 +219,7 @@ export default function Statistics() {
 				onChange={(e) => handlemaxi_ToChange(k, e.target.value)}
 			/>
 		</td>
+		
 {/* DIFF_TO */}
 		<td> 
 
