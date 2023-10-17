@@ -7,6 +7,7 @@ import React, { useState } from 'react';
 //FRed
 import DataAction from "../stores/data/DataAction";
 import { stat } from "fs";
+
 //FRed
 
 export default function Statistics() {
@@ -139,8 +140,12 @@ export default function Statistics() {
 	});
 
 	const keys = Object.keys(statistics).sort();
-		
 	return (
+		<div>
+		  {/* <p className="red-text">Texte en rouge</p>
+		  <p className="green-text">Texte en vert</p>
+		  <p className="blue-text">Texte en bleu</p>
+		  <div className="light-gray-background">Fond gris très clair</div> */}
 		<Table>
 		  <thead>
 			<tr>
@@ -240,17 +245,22 @@ export default function Statistics() {
 		</td>
 
 {/* DIFF_TO */}
-			{/* // (maxi_Values[k]?.maxi_To             ? parseFloat(maxi_Values[k].maxi_To) : 0 )
-			// (previous_Values_TO[k].previous_Tons      ? parseFloat(previous_Values_TO[k].previous_Tons) : 0 ) */}
-		
-		<td>
-				{/* { (maxi_Values[k]?.maxi_To             ? parseFloat(maxi_Values[k].maxi_To) : 0 ) -				 */}
+		{/* <td>
                 {  isNaN
 				(parseFloat(maxi_Values[k]?.maxi_To) - parseFloat(statistics[k].weight) - (previous_Values_TO[k]?.previous_Tons ? parseFloat(previous_Values_TO[k].previous_Tons) : 0))
 				 ? 0 : 
 			 	(parseFloat(maxi_Values[k]?.maxi_To) - parseFloat(statistics[k].weight) - (previous_Values_TO[k]?.previous_Tons ? parseFloat(previous_Values_TO[k].previous_Tons) : 0)).toLocaleString("en-US", { minimumFractionDigits: 3, maximumFractionDigits: 3 })
 				}		 
-		</td>
+		</td> */}
+		{/* DIFF_TO */}
+<td className={
+	parseFloat(maxi_Values[k]?.maxi_To) - parseFloat(statistics[k].weight) - (previous_Values_TO[k]?.previous_Tons ? parseFloat(previous_Values_TO[k].previous_Tons) : 0) < 0 ? 'red-text' : '' }>
+  {isNaN(
+	parseFloat(maxi_Values[k]?.maxi_To) - parseFloat(statistics[k].weight) - (previous_Values_TO[k]?.previous_Tons ? parseFloat(previous_Values_TO[k].previous_Tons) : 0)) ? 0 : (
+	parseFloat(maxi_Values[k]?.maxi_To) - parseFloat(statistics[k].weight) - (previous_Values_TO[k]?.previous_Tons ? parseFloat(previous_Values_TO[k].previous_Tons) : 0))
+	.toLocaleString("en-US", { minimumFractionDigits: 3, maximumFractionDigits: 3 })}
+</td>
+
 
 {/* retour de condition stock */}		
 	  </>
@@ -292,5 +302,6 @@ export default function Statistics() {
 
 		  </tbody>
 		</Table>
+		</div>
 	  );
 	}

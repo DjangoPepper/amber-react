@@ -1,3 +1,16 @@
+/* body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+} */
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -5,6 +18,26 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Styles pour le texte en rouge */
+.red-text {
+  color: red;
+}
+
+/* Styles pour le texte en vert */
+.green-text {
+  color: green;
+}
+
+/* Styles pour le texte en bleu */
+.blue-text {
+  color: blue;
+}
+
+/* Styles pour le fond gris très clair */
+.light-gray-background {
+  background-color: #ece0e0; /* Vous pouvez ajuster la couleur selon vos préférences */
 }
 
 code {
