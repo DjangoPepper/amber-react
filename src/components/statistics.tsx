@@ -12,8 +12,9 @@ import { stat } from "fs";
 export default function Statistics() {
 	//fred
 	const dispatch = useDispatch();	
-	const [previous_Values, set_previous_Values] = useState<{ [key: string]: { prevQt: string; previous_Tons: string } }>({});
-	const [previous_Qt, set_Previous_Qt] = useState<number>(0);
+	const [previous_Values_TO, set_previous_Values_TO] = useState<{ [key: string]: { prevTO: string; previous_Tons: string } }>({});
+	const [previous_Values_QT, set_previous_Values_QT] = useState<{ [key: string]: { prevQt: string; previous_QT: string } }>({});
+	const [previous_QT, set_previous_QT] = useState<number>(0);
   	const [previous_Tons, set_Previous_Tons] = useState<number>(0);
 	const [maxi_To, set_maxi_To] = useState<number>(0);
 	const [maxi_Values, set_maxi_Values] = useState<{ [key: string]: { maxi_To: string } }>({});
@@ -58,18 +59,18 @@ export default function Statistics() {
 	  };
 
 	const handle_PrevQt_Change = (k: string, value: string) => {
-		set_previous_Values((previous_Values) => ({
-		  ...previous_Values,
-		  [k]: { prevQt: value, previous_Tons: previous_Values[k] ? previous_Values[k].previous_Tons : '0' },
+		set_previous_Values_QT((previous_Values_Qt) => ({
+		  ...previous_Values_Qt,
+		  [k]: { prevQt: value, previous_QT: previous_Values_Qt[k] ? previous_Values_Qt[k].previous_QT : '0' },
 		}));
 		let numericValue = parseFloat(value) || 0;
 		dispatch(DataAction.changePreviousQTT({ destination: k, value: numericValue }));
 	  };
 
 	const handle_PrevTo_Change = (k: string, value: string) => {
-		set_previous_Values((previous_Values) => ({
-		  ...previous_Values,
-		  [k]: { prevQt: previous_Values[k] ? previous_Values[k].prevQt : '0', previous_Tons: value },
+		set_previous_Values_TO((previous_Values_TO) => ({
+		  ...previous_Values_TO,
+		  [k]: { prevTO: previous_Values_TO[k] ? previous_Values_TO[k].prevTO : '0', previous_Tons: value },
 		}));
 		let numericValue = parseFloat(value) || 0;
 		dispatch(DataAction.changePreviousTONS({ destination: k, value: numericValue }));
@@ -95,12 +96,12 @@ export default function Statistics() {
 		return total + (maxi_Values[k] ? parseFloat(maxi_Values[k].maxi_To) : 0);
 	  }, 0);
 	
-	const totalPreviousCalesCount = Object.keys(previous_Values).reduce((total, k) => {
-		return total + (previous_Values[k] ? parseFloat(previous_Values[k].prevQt) : 0);
+	const totalPreviousCalesCount = Object.keys(previous_Values_QT).reduce((total, k) => {
+		return total + (previous_Values_QT[k] ? parseFloat(previous_Values_QT[k].prevQt) : 0);
 	  }, 0);
 	
-	const totalPreviousCalesWeight = Object.keys(previous_Values).reduce((total, k) => {
-	return total + (previous_Values[k]?.previous_Tons ? parseFloat(previous_Values[k].previous_Tons) : 0);
+	const totalPreviousCalesWeight = Object.keys(previous_Values_TO).reduce((total, k) => {
+	return total + (previous_Values_TO[k]?.previous_Tons ? parseFloat(previous_Values_TO[k].previous_Tons) : 0);
 	}, 0);
 
 
@@ -188,7 +189,7 @@ export default function Statistics() {
           <input
             type="text"
             style={{ width: '45px' }}
-            value={previous_Values[k] ? previous_Values[k].prevQt : 0}
+            value={previous_Values_QT[k] ? previous_Values_QT[k].prevQt : 0}
             onChange={(e) => handle_PrevQt_Change(k, e.target.value)}
           />
         </td>
@@ -198,22 +199,22 @@ export default function Statistics() {
           <input
             type="text"
             style={{ width: '80px' }}
-            value={previous_Values[k] ? previous_Values[k].previous_Tons : 0}
+            value={previous_Values_TO[k] ? previous_Values_TO[k].previous_Tons : 0}
             onChange={(e) => handle_PrevTo_Change(k, e.target.value)}
           />
         </td>
 
 {/* TTL_QT */}
 				<td>
-                  {isNaN(statistics[k].count + (previous_Values[k] ? parseFloat(previous_Values[k].prevQt) : 0)) ? 0 : (statistics[k].count + (previous_Values[k] ? parseFloat(previous_Values[k].prevQt) : 0))}
+                  {isNaN(statistics[k].count + (previous_Values_QT[k] ? parseFloat(previous_Values_QT[k].prevQt) : 0)) ? 0 : (statistics[k].count + (previous_Values_QT[k] ? parseFloat(previous_Values_QT[k].prevQt) : 0))}
                 </td>
 		
 {/* TTL_TO */}
                 <td>
-                  {isNaN(parseFloat(statistics[k].weight) + (previous_Values[k]?.previous_Tons ? 
-					     parseFloat(previous_Values[k].previous_Tons) : 0)) ? 0 : 
-						 (parseFloat(statistics[k].weight) + (previous_Values[k]?.previous_Tons ? 
-						 parseFloat(previous_Values[k].previous_Tons) : 0))
+                  {isNaN(parseFloat(statistics[k].weight) + (previous_Values_TO[k]?.previous_Tons ? 
+					     parseFloat(previous_Values_TO[k].previous_Tons) : 0)) ? 0 : 
+						 (parseFloat(statistics[k].weight) + (previous_Values_TO[k]?.previous_Tons ? 
+						 parseFloat(previous_Values_TO[k].previous_Tons) : 0))
 						 .toLocaleString("en-US", { minimumFractionDigits: 3, maximumFractionDigits: 3 })}
                 </td>
 
@@ -222,9 +223,9 @@ export default function Statistics() {
 		{(
 			(
 				parseFloat(statistics[k].weight) +
-				(previous_Values[k]?.previous_Tons ? parseFloat(previous_Values[k].previous_Tons) : 0)
+				(previous_Values_TO[k]?.previous_Tons ? parseFloat(previous_Values_TO[k].previous_Tons) : 0)
 			) /
-			(statistics[k].count + (previous_Values[k]?.prevQt ? parseFloat(previous_Values[k].prevQt) : 0))
+			(statistics[k].count + (previous_Values_QT[k]?.prevQt ? parseFloat(previous_Values_QT[k].prevQt) : 0))
 			).toFixed(3)}
         </td>
 
@@ -240,15 +241,15 @@ export default function Statistics() {
 
 {/* DIFF_TO */}
 			{/* // (maxi_Values[k]?.maxi_To             ? parseFloat(maxi_Values[k].maxi_To) : 0 )
-			// (previous_Values[k].previous_Tons      ? parseFloat(previous_Values[k].previous_Tons) : 0 ) */}
+			// (previous_Values_TO[k].previous_Tons      ? parseFloat(previous_Values_TO[k].previous_Tons) : 0 ) */}
 		
 		<td>
 				{/* { (maxi_Values[k]?.maxi_To             ? parseFloat(maxi_Values[k].maxi_To) : 0 ) -				 */}
-                {  zeb = isNaN(parseFloat(statistics[k].weight) + (previous_Values[k]?.previous_Tons ? 
-					        parseFloat(previous_Values[k].previous_Tons) : 0)) ? 0 : 
+                {  zeb = isNaN(parseFloat(statistics[k].weight) + (previous_Values_TO[k]?.previous_Tons ? 
+					        parseFloat(previous_Values_TO[k].previous_Tons) : 0)) ? 0 : 
 						 
-						 (parseFloat(statistics[k].weight) + (previous_Values[k]?.previous_Tons ? 
-						 parseFloat(previous_Values[k].previous_Tons) : 0))
+						 (parseFloat(statistics[k].weight) + (previous_Values_TO[k]?.previous_Tons ? 
+						 parseFloat(previous_Values_TO[k].previous_Tons) : 0))
 						//  .toLocaleString("en-US", { minimumFractionDigits: 3, maximumFractionDigits: 3 })}
 						 }
 		</td>
