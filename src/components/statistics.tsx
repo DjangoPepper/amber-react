@@ -17,38 +17,38 @@ export default function Statistics() {
 	const [previous_Values_QT, set_previous_Values_QT] = useState<{ [key: string]: { prevQt: string; previous_QT: string } }>({});
 	const [previous_QT, set_previous_QT] = useState<number>(0);
   	const [previous_Tons, set_Previous_Tons] = useState<number>(0);
-	const [maxi_To, set_maxi_To] = useState<number>(0);
+	// const [maxi_To, set_maxi_To] = useState<number>(0);
 	const [maxi_Values, set_maxi_Values] = useState<{ [key: string]: { maxi_To: string } }>({});
-	const [diff_Values, set_diff_Values] = useState<{ [key: string]: { diff_To: string } }>({});
+	// const [diff_Values, set_diff_Values] = useState<{ [key: string]: { diff_To: string } }>({});
 	const [letqtt_Values, set_letqtt_Values] = useState<{ [key: string]: { let_Qt: string } }>({});
-	const [lettons_Values, set_lettons_Values] = useState<{ [key: string]: { let_To: string } }>({});
+	// const [lettons_Values, set_lettons_Values] = useState<{ [key: string]: { let_To: string } }>({});
 
-	const handlelettons_ToChange = (k: string, value: string) => {
-		set_lettons_Values((lettons_Values: any) => ({
-		  ...lettons_Values,
-		  [k]: { let_To: value },
-		}));
-		const numericValue = parseFloat(value);
-		dispatch(DataAction.changeLetTONS({ destination: k, value: numericValue }));
-	  };
+	// const handlelettons_ToChange = (k: string, value: string) => {
+	// 	set_lettons_Values((lettons_Values: any) => ({
+	// 	  ...lettons_Values,
+	// 	  [k]: { let_To: value },
+	// 	}));
+	// 	const numericValue = parseFloat(value);
+	// 	dispatch(DataAction.changeLetTONS({ destination: k, value: numericValue }));
+	//   };
 
-	const handleletqtt_ToChange = (k: string, value: string) => {
-		set_letqtt_Values((letqtt_Values: any) => ({
-		  ...letqtt_Values,
-		  [k]: { let_QT: value },
-		}));
-		const numericValue = parseFloat(value);
-		dispatch(DataAction.changeLetQTT({ destination: k, value: numericValue }));
-	  };
+	// const handleletqtt_ToChange = (k: string, value: string) => {
+	// 	set_letqtt_Values((letqtt_Values: any) => ({
+	// 	  ...letqtt_Values,
+	// 	  [k]: { let_QT: value },
+	// 	}));
+	// 	const numericValue = parseFloat(value);
+	// 	dispatch(DataAction.changeLetQTT({ destination: k, value: numericValue }));
+	//   };
 
-	const handlediff_ToChange = (k: string, value: string) => {
-		set_diff_Values((maxi_Values: any) => ({
-		  ...diff_Values,
-		  [k]: { diff_To: value },
-		}));
-		const numericValue = parseFloat(value);
-		dispatch(DataAction.changeDiffTONS({ destination: k, value: numericValue }));
-	  };
+	// const handlediff_ToChange = (k: string, value: string) => {
+	// 	set_diff_Values((maxi_Values: any) => ({
+	// 	  ...diff_Values,
+	// 	  [k]: { diff_To: value },
+	// 	}));
+	// 	const numericValue = parseFloat(value);
+	// 	dispatch(DataAction.changeDiffTONS({ destination: k, value: numericValue }));
+	//   };
 
 	const handlemaxi_ToChange = (k: string, value: string) => {
 		set_maxi_Values((maxi_Values: any) => ({
@@ -91,8 +91,16 @@ export default function Statistics() {
 	let totalstockCount = 0;
 	let totalstockWeight = 0;
 	 
-	let zeb = 0;
+	// let zeb = 0;
 	
+	const totalLetTo = Object.keys(letqtt_Values).reduce((total, k) => {
+		return total + (letqtt_Values[k] ? parseFloat(letqtt_Values[k].let_Qt) : 0);
+	  }, 0);
+
+	// const totalDiffTo = Object.keys(diff_Values).reduce((total, k) => {
+	// 	return total + (diff_Values[k] ? parseFloat(diff_Values[k].diff_To) : 0);
+	//   }, 0);
+	  
 	const totalMaxiCalesWeight = Object.keys(maxi_Values).reduce((total, k) => {
 		return total + (maxi_Values[k] ? parseFloat(maxi_Values[k].maxi_To) : 0);
 	  }, 0);
@@ -142,10 +150,6 @@ export default function Statistics() {
 	const keys = Object.keys(statistics).sort();
 	return (
 		<div>
-		  {/* <p className="red-text">Texte en rouge</p>
-		  <p className="green-text">Texte en vert</p>
-		  <p className="blue-text">Texte en bleu</p>
-		  <div className="light-gray-background">Fond gris très clair</div> */}
 		<Table>
 		  <thead>
 			<tr>
@@ -160,7 +164,6 @@ export default function Statistics() {
 			  <th> MAXI </th>
 			  <th> DIFF_TO</th>
 			  <th>LET_QT</th>
-			  <th>LET_TO</th>
 			</tr>
 		  </thead>
 		  <tbody>
@@ -245,21 +248,50 @@ export default function Statistics() {
 		</td>
 
 {/* DIFF_TO */}
-		{/* <td>
-                {  isNaN
-				(parseFloat(maxi_Values[k]?.maxi_To) - parseFloat(statistics[k].weight) - (previous_Values_TO[k]?.previous_Tons ? parseFloat(previous_Values_TO[k].previous_Tons) : 0))
-				 ? 0 : 
-			 	(parseFloat(maxi_Values[k]?.maxi_To) - parseFloat(statistics[k].weight) - (previous_Values_TO[k]?.previous_Tons ? parseFloat(previous_Values_TO[k].previous_Tons) : 0)).toLocaleString("en-US", { minimumFractionDigits: 3, maximumFractionDigits: 3 })
-				}		 
-		</td> */}
-		{/* DIFF_TO */}
-<td className={
-	parseFloat(maxi_Values[k]?.maxi_To) - parseFloat(statistics[k].weight) - (previous_Values_TO[k]?.previous_Tons ? parseFloat(previous_Values_TO[k].previous_Tons) : 0) < 0 ? 'red-text' : '' }>
-  {isNaN(
-	parseFloat(maxi_Values[k]?.maxi_To) - parseFloat(statistics[k].weight) - (previous_Values_TO[k]?.previous_Tons ? parseFloat(previous_Values_TO[k].previous_Tons) : 0)) ? 0 : (
-	parseFloat(maxi_Values[k]?.maxi_To) - parseFloat(statistics[k].weight) - (previous_Values_TO[k]?.previous_Tons ? parseFloat(previous_Values_TO[k].previous_Tons) : 0))
-	.toLocaleString("en-US", { minimumFractionDigits: 3, maximumFractionDigits: 3 })}
-</td>
+		<td className={
+				parseFloat(maxi_Values[k]?.maxi_To) - parseFloat(statistics[k].weight) - (previous_Values_TO[k]?.previous_Tons ? parseFloat(previous_Values_TO[k].previous_Tons) : 0) < 0 ? 'red-text' : '' }>
+			{isNaN(
+				parseFloat(maxi_Values[k]?.maxi_To) - parseFloat(statistics[k].weight) - (previous_Values_TO[k]?.previous_Tons ? parseFloat(previous_Values_TO[k].previous_Tons) : 0)) ? 0 : (
+				parseFloat(maxi_Values[k]?.maxi_To) - parseFloat(statistics[k].weight) - (previous_Values_TO[k]?.previous_Tons ? parseFloat(previous_Values_TO[k].previous_Tons) : 0))
+				.toLocaleString("en-US", { minimumFractionDigits: 3, maximumFractionDigits: 3 })
+			}
+		</td>
+
+{/* LET_QT */}
+		<td className={Math.floor(
+		(
+			isNaN(parseFloat(maxi_Values[k]?.maxi_To) - parseFloat(statistics[k].weight) - (previous_Values_TO[k]?.previous_Tons ? parseFloat(previous_Values_TO[k].previous_Tons) : 0)) ?
+			0 :
+			(
+			parseFloat(maxi_Values[k]?.maxi_To) - parseFloat(statistics[k].weight) - (previous_Values_TO[k]?.previous_Tons ? parseFloat(previous_Values_TO[k].previous_Tons) : 0)
+			) /
+			(
+			(
+				parseFloat(statistics[k].weight) +
+				(previous_Values_TO[k]?.previous_Tons ? parseFloat(previous_Values_TO[k].previous_Tons) : 0)
+			) /
+			(statistics[k].count + (previous_Values_QT[k]?.prevQt ? parseFloat(previous_Values_QT[k].prevQt) : 0))
+			)
+		)
+		) < 0 ? 'red-text' : ''}>
+		{(
+			isNaN(parseFloat(maxi_Values[k]?.maxi_To) - parseFloat(statistics[k].weight) - (previous_Values_TO[k]?.previous_Tons ? parseFloat(previous_Values_TO[k].previous_Tons) : 0)) ?
+			0 :
+			Math.floor(
+			(
+				parseFloat(maxi_Values[k]?.maxi_To) - parseFloat(statistics[k].weight) - (previous_Values_TO[k]?.previous_Tons ? parseFloat(previous_Values_TO[k].previous_Tons) : 0)
+			) /
+			(
+				(
+				parseFloat(statistics[k].weight) +
+				(previous_Values_TO[k]?.previous_Tons ? parseFloat(previous_Values_TO[k].previous_Tons) : 0)
+				) /
+				(statistics[k].count + (previous_Values_QT[k]?.prevQt ? parseFloat(previous_Values_QT[k].prevQt) : 0))
+			)
+			)
+		).toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
+		</td>
+
 
 
 {/* retour de condition stock */}		
@@ -284,6 +316,12 @@ export default function Statistics() {
 			  <td>{(totalCalesWeight + totalPreviousCalesWeight).toLocaleString("en-US")}</td>
 			  <td>{((totalCalesWeight + totalPreviousCalesWeight)/(totalCalesCount + totalPreviousCalesCount)).toLocaleString("en-US")}</td>
 			  <td>{(totalMaxiCalesWeight).toLocaleString("en-US")}</td>
+			  <td>{(totalMaxiCalesWeight - (totalCalesWeight + totalPreviousCalesWeight)).toLocaleString("en-US")}</td>
+			  <td>{(totalLetTo).toLocaleString("en-US")}</td>
+
+			 
+
+
 			</tr>
 
 			{/* <tr> */}
