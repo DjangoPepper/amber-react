@@ -6,6 +6,7 @@ import {colors} from "../utils/destination";
 import React, { useState } from 'react';
 //FRed
 import DataAction from "../stores/data/DataAction";
+import { stat } from "fs";
 //FRed
 
 export default function Statistics() {
@@ -16,34 +17,37 @@ export default function Statistics() {
   	const [previous_Tons, set_Previous_Tons] = useState<number>(0);
 	const [maxi_To, set_maxi_To] = useState<number>(0);
 	const [maxi_Values, set_maxi_Values] = useState<{ [key: string]: { maxi_To: string } }>({});
+	const [diff_Values, set_diff_Values] = useState<{ [key: string]: { diff_To: string } }>({});
+	const [letqtt_Values, set_letqtt_Values] = useState<{ [key: string]: { let_Qt: string } }>({});
+	const [lettons_Values, set_lettons_Values] = useState<{ [key: string]: { let_To: string } }>({});
 
-	const handle_PrevQtChange = (k: string, value: string) => {
-		set_previous_Values((previous_Values) => ({
-		  ...previous_Values,
-		  [k]: { prevQt: value, previous_Tons: previous_Values[k] ? previous_Values[k].previous_Tons : '0' },
+	const handlelettons_ToChange = (k: string, value: string) => {
+		set_lettons_Values((lettons_Values: any) => ({
+		  ...lettons_Values,
+		  [k]: { let_To: value },
 		}));
-		let numericValue = parseFloat(value) || 0;
-		dispatch(DataAction.changePreviousQTT({ destination: k, value: numericValue }));
+		const numericValue = parseFloat(value);
+		dispatch(DataAction.changeLetTONS({ destination: k, value: numericValue }));
 	  };
-	  
-	// const handle_maxi_ToChange = (k: string, value: string) => {
-	// set_previous_Values((previous_Values) => ({
-	// 	...previous_Values,
-	// 	[k]: { prevQt: previous_Values[k] ? previous_Values[k].prevQt : '0', maxi_Tons: value },
-	// }));
-	// let numericValue = parseFloat(value) || 0;
-	// dispatch(DataAction.changemaxi_ToNS({ destination: k, value: numericValue }));
-	// };  
-	
-	// const handlemaxi_ToChange = (k: string, value: string) => {
-	// 	set_maxi_Values((maxi_Values: any) => ({
-	// 	  ...maxi_Values,
-	// 	  [k]: { maxi_To: value}, // Stockez la valeur en tant que chaîne
-	// 	}));
-	// 	let numericValue = parseFloat(value) || 0; // Convertissez la chaîne en nombre
-	// 	dispatch(DataAction.changeMaxiTONS({ destination: k, value: numericValue }));
-	//   };
-	
+
+	const handleletqtt_ToChange = (k: string, value: string) => {
+		set_letqtt_Values((letqtt_Values: any) => ({
+		  ...letqtt_Values,
+		  [k]: { let_QT: value },
+		}));
+		const numericValue = parseFloat(value);
+		dispatch(DataAction.changeLetQTT({ destination: k, value: numericValue }));
+	  };
+
+	const handlediff_ToChange = (k: string, value: string) => {
+		set_diff_Values((maxi_Values: any) => ({
+		  ...diff_Values,
+		  [k]: { diff_To: value },
+		}));
+		const numericValue = parseFloat(value);
+		dispatch(DataAction.changeDiffTONS({ destination: k, value: numericValue }));
+	  };
+
 	const handlemaxi_ToChange = (k: string, value: string) => {
 		set_maxi_Values((maxi_Values: any) => ({
 		  ...maxi_Values,
@@ -51,9 +55,18 @@ export default function Statistics() {
 		}));
 		const numericValue = parseFloat(value);
 		dispatch(DataAction.changeMaxiTONS({ destination: k, value: numericValue }));
-	};
+	  };
 
-	const handle_PrevToChange = (k: string, value: string) => {
+	const handle_PrevQt_Change = (k: string, value: string) => {
+		set_previous_Values((previous_Values) => ({
+		  ...previous_Values,
+		  [k]: { prevQt: value, previous_Tons: previous_Values[k] ? previous_Values[k].previous_Tons : '0' },
+		}));
+		let numericValue = parseFloat(value) || 0;
+		dispatch(DataAction.changePreviousQTT({ destination: k, value: numericValue }));
+	  };
+
+	const handle_PrevTo_Change = (k: string, value: string) => {
 		set_previous_Values((previous_Values) => ({
 		  ...previous_Values,
 		  [k]: { prevQt: previous_Values[k] ? previous_Values[k].prevQt : '0', previous_Tons: value },
@@ -75,7 +88,8 @@ export default function Statistics() {
 
 	let totalstockCount = 0;
 	let totalstockWeight = 0;
-
+	 
+	let zeb = 0;
 	
 	const totalMaxiCalesWeight = Object.keys(maxi_Values).reduce((total, k) => {
 		return total + (maxi_Values[k] ? parseFloat(maxi_Values[k].maxi_To) : 0);
@@ -175,7 +189,7 @@ export default function Statistics() {
             type="text"
             style={{ width: '45px' }}
             value={previous_Values[k] ? previous_Values[k].prevQt : 0}
-            onChange={(e) => handle_PrevQtChange(k, e.target.value)}
+            onChange={(e) => handle_PrevQt_Change(k, e.target.value)}
           />
         </td>
 		
@@ -185,7 +199,7 @@ export default function Statistics() {
             type="text"
             style={{ width: '80px' }}
             value={previous_Values[k] ? previous_Values[k].previous_Tons : 0}
-            onChange={(e) => handle_PrevToChange(k, e.target.value)}
+            onChange={(e) => handle_PrevTo_Change(k, e.target.value)}
           />
         </td>
 
@@ -196,7 +210,11 @@ export default function Statistics() {
 		
 {/* TTL_TO */}
                 <td>
-                  {isNaN(parseFloat(statistics[k].weight) + (previous_Values[k]?.previous_Tons ? parseFloat(previous_Values[k].previous_Tons) : 0)) ? 0 : (parseFloat(statistics[k].weight) + (previous_Values[k]?.previous_Tons ? parseFloat(previous_Values[k].previous_Tons) : 0)).toLocaleString("en-US", { minimumFractionDigits: 3, maximumFractionDigits: 3 })}
+                  {isNaN(parseFloat(statistics[k].weight) + (previous_Values[k]?.previous_Tons ? 
+					     parseFloat(previous_Values[k].previous_Tons) : 0)) ? 0 : 
+						 (parseFloat(statistics[k].weight) + (previous_Values[k]?.previous_Tons ? 
+						 parseFloat(previous_Values[k].previous_Tons) : 0))
+						 .toLocaleString("en-US", { minimumFractionDigits: 3, maximumFractionDigits: 3 })}
                 </td>
 
 {/* PU */}
@@ -219,10 +237,20 @@ export default function Statistics() {
 				onChange={(e) => handlemaxi_ToChange(k, e.target.value)}
 			/>
 		</td>
-		
-{/* DIFF_TO */}
-		<td> 
 
+{/* DIFF_TO */}
+			{/* // (maxi_Values[k]?.maxi_To             ? parseFloat(maxi_Values[k].maxi_To) : 0 )
+			// (previous_Values[k].previous_Tons      ? parseFloat(previous_Values[k].previous_Tons) : 0 ) */}
+		
+		<td>
+				{/* { (maxi_Values[k]?.maxi_To             ? parseFloat(maxi_Values[k].maxi_To) : 0 ) -				 */}
+                {  zeb = isNaN(parseFloat(statistics[k].weight) + (previous_Values[k]?.previous_Tons ? 
+					        parseFloat(previous_Values[k].previous_Tons) : 0)) ? 0 : 
+						 
+						 (parseFloat(statistics[k].weight) + (previous_Values[k]?.previous_Tons ? 
+						 parseFloat(previous_Values[k].previous_Tons) : 0))
+						//  .toLocaleString("en-US", { minimumFractionDigits: 3, maximumFractionDigits: 3 })}
+						 }
 		</td>
 
 {/* retour de condition stock */}		
