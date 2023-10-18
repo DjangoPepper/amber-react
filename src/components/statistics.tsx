@@ -302,7 +302,7 @@ export default function Statistics() {
 							{/* retour de condition stock */}		
 							</>
 						)
-					}	 
+					} {/* end stock	  */}
 			</tr>
 	))}
 
