@@ -4,10 +4,10 @@ import DataAction from "../stores/data/DataAction";
 
 import {Data} from "../stores/data/DataReducer";
 import {Table} from "react-bootstrap";
-import {colors} from "../utils/destination";
+// import {colors} from "../utils/destination";
 import React, { useState } from 'react';
 
-import { stat } from "fs";
+// import { stat } from "fs";
 
 export default function Statistics() {
 
@@ -62,36 +62,25 @@ export default function Statistics() {
 	const dispatch = useDispatch();	
 	const [previous_Values_TO, set_previous_Values_TO] = useState<{ [key: string]: { prevTO: string; previous_Tons: string } }>({});
 	const [previous_Values_QT, set_previous_Values_QT] = useState<{ [key: string]: { prevQt: string; previous_QT: string } }>({});
-	const [previous_QT, set_previous_QT] = useState<number>(0);
-  	const [previous_Tons, set_Previous_Tons] = useState<number>(0);
+	// const [previous_QT, set_previous_QT] = useState<number>(0);
+  	// const [previous_Tons, set_Previous_Tons] = useState<number>(0);
 	const [maxi_Values, set_maxi_Values] = useState<{ [key: string]: { maxi_To: string } }>({});
-	const [letqtt_Values, set_letqtt_Values] = useState<{ [key: string]: { let_Qt: string } }>({});
+	// const [letqtt_Values, set_letqtt_Values] = useState<{ [key: string]: { let_Qt: string } }>({});
 	const data = useSelector<RootState, Data[]>((state) => state.data.data);
 	const selectedColors = useSelector<RootState, { [key: string]: string }>((state) => state.data.pickerColors);
-	// const [checkboxState, setCheckboxState] = useState<{ [key: string]: boolean }>({});
-	// const checkboxStates = useSelector<RootState, { [key: string]: boolean }>((state) => state.data.checkboxStates);
-	// const [checkboxStates, setCheckboxStates] = useState(false);
 	const [checkboxStates, setCheckboxStates] = useState<{ [key: string]: boolean }>({});
 
-	// Supposons que vous avez une liste de destinations dans votre "data"
-	// Vous pouvez initialiser checkboxStates comme suit :
 	const initialCheckboxStates: { [key: string]: boolean } = {};
 	data.forEach((row) => {
-		initialCheckboxStates[row.destination] = false;
+		initialCheckboxStates[row.destination] = true;
 	});
 	setCheckboxStates(initialCheckboxStates);
 
-
-	// const handleCheckboxChange = (destination: string) => {
-	// 	dispatch(DataAction.toggleCheckbox(destination, !checkboxStates[destination]));
-	//   };
 	const handleCheckboxChange = (destination: string) => {
-		// Utilisez la fonction setCheckboxStates pour mettre à jour l'état
 		setCheckboxStates((prevState) => ({
 		  ...prevState,
 		  [destination]: !prevState[destination],
 		}));
-		// Dispatchez vos actions ou effectuez d'autres opérations nécessaires ici.
 	  };
 	  
 
