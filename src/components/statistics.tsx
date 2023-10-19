@@ -4,28 +4,15 @@ import {Data} from "../stores/data/DataReducer";
 import {Table} from "react-bootstrap";
 import {colors} from "../utils/destination";
 import React, { useState } from 'react';
-//FRed
+
 import DataAction from "../stores/data/DataAction";
 import { stat } from "fs";
 
-//FRed
-
 export default function Statistics() {
-	//fred
 
-	
-
-	const dispatch = useDispatch();	
-	const [previous_Values_TO, set_previous_Values_TO] = useState<{ [key: string]: { prevTO: string; previous_Tons: string } }>({});
-	const [previous_Values_QT, set_previous_Values_QT] = useState<{ [key: string]: { prevQt: string; previous_QT: string } }>({});
-	const [previous_QT, set_previous_QT] = useState<number>(0);
-  	const [previous_Tons, set_Previous_Tons] = useState<number>(0);
-	// const [maxi_To, set_maxi_To] = useState<number>(0);
-	const [maxi_Values, set_maxi_Values] = useState<{ [key: string]: { maxi_To: string } }>({});
-	// const [diff_Values, set_diff_Values] = useState<{ [key: string]: { diff_To: string } }>({});
-	const [letqtt_Values, set_letqtt_Values] = useState<{ [key: string]: { let_Qt: string } }>({});
 	// const [lettons_Values, set_lettons_Values] = useState<{ [key: string]: { let_To: string } }>({});
-
+	// const [maxi_To, set_maxi_To] = useState<number>(0);
+	// const [diff_Values, set_diff_Values] = useState<{ [key: string]: { diff_To: string } }>({});
 	// const handlelettons_ToChange = (k: string, value: string) => {
 	// 	set_lettons_Values((lettons_Values: any) => ({
 	// 	  ...lettons_Values,
@@ -52,6 +39,34 @@ export default function Statistics() {
 	// 	const numericValue = parseFloat(value);
 	// 	dispatch(DataAction.changeDiffTONS({ destination: k, value: numericValue }));
 	//   };
+		 	
+	// const totalLetTo = Object.keys(letqtt_Values).reduce((total, k) => {
+	// 	return total + (letqtt_Values[k] ? parseFloat(letqtt_Values[k].let_Qt) : 0);
+	//   }, 0);
+
+	// const totalDiffTo = Object.keys(diff_Values).reduce((total, k) => {
+	// 	return total + (diff_Values[k] ? parseFloat(diff_Values[k].diff_To) : 0);
+	//   }, 0);
+
+	
+	let totalCount = 0;
+	let totalWeight = 0;
+
+	let totalCalesCount = 0;
+	let totalCalesWeight = 0;
+
+	let totalstockCount = 0;
+	let totalstockWeight = 0;
+	  
+	const dispatch = useDispatch();	
+	const [previous_Values_TO, set_previous_Values_TO] = useState<{ [key: string]: { prevTO: string; previous_Tons: string } }>({});
+	const [previous_Values_QT, set_previous_Values_QT] = useState<{ [key: string]: { prevQt: string; previous_QT: string } }>({});
+	const [previous_QT, set_previous_QT] = useState<number>(0);
+  	const [previous_Tons, set_Previous_Tons] = useState<number>(0);
+	const [maxi_Values, set_maxi_Values] = useState<{ [key: string]: { maxi_To: string } }>({});
+	const [letqtt_Values, set_letqtt_Values] = useState<{ [key: string]: { let_Qt: string } }>({});
+	const data = useSelector<RootState, Data[]>((state) => state.data.data);
+	const selectedColors = useSelector<RootState, { [key: string]: string }>((state) => state.data.pickerColors);
 
 	const handlemaxi_ToChange = (k: string, value: string) => {
 		set_maxi_Values((maxi_Values: any) => ({
@@ -79,31 +94,7 @@ export default function Statistics() {
 		let numericValue = parseFloat(value) || 0;
 		dispatch(DataAction.changePreviousTONS({ destination: k, value: numericValue }));
 	  };
-	  
-	//fred
 	
-	const data = useSelector<RootState, Data[]>((state) => state.data.data);
-	const selectedColors = useSelector<RootState, { [key: string]: string }>((state) => state.data.pickerColors);
-	
-	let totalCount = 0;
-	let totalWeight = 0;
-
-	let totalCalesCount = 0;
-	let totalCalesWeight = 0;
-
-	let totalstockCount = 0;
-	let totalstockWeight = 0;
-	 
-	// let zeb = 0;
-	
-	const totalLetTo = Object.keys(letqtt_Values).reduce((total, k) => {
-		return total + (letqtt_Values[k] ? parseFloat(letqtt_Values[k].let_Qt) : 0);
-	  }, 0);
-
-	// const totalDiffTo = Object.keys(diff_Values).reduce((total, k) => {
-	// 	return total + (diff_Values[k] ? parseFloat(diff_Values[k].diff_To) : 0);
-	//   }, 0);
-	  
 	const totalMaxiCalesWeight = Object.keys(maxi_Values).reduce((total, k) => {
 		return total + (maxi_Values[k] ? parseFloat(maxi_Values[k].maxi_To) : 0);
 	  }, 0);
@@ -151,12 +142,28 @@ export default function Statistics() {
 	});
 
 	const keys = Object.keys(statistics).sort();
+	
+	// État local pour suivre l'état des cases à cocher
+	const [checkboxStates, setCheckboxStates] = useState<{ [key: string]: boolean }>({});
+
+	// Fonction pour mettre à jour l'état de la case à cocher
+	const handleCheckboxChange = (destination: string) => {
+	  setCheckboxStates({
+		...checkboxStates,
+		[destination]: !checkboxStates[destination],
+	  });
+	};
+
 	return (
 		<div>
 		<Table>
+
+			{/* PARTIE HEAD */}
+			
 			<thead>
 				<tr>
 					<th>DesT</th>
+					<th>KeeP</th> {/* Nouvelle colonne avec des cases à cocher */}
 					<th>ACTU_QT</th>
 					<th>ACTU_TO</th>
 					<th>PREV_QT</th>
@@ -170,22 +177,32 @@ export default function Statistics() {
 				</tr>
 			</thead>
 		  	<tbody>
+			
+			
 			{/* PARTIE HAUTE */}
 					
 			{keys.map((k) => (
-			<tr key={k}>
+			// <tr key={k}>
+			<tr key={k} style={{ display: checkboxStates[k] || statistics[k].count > 0 ? "table-row" : "none" }}>
+
+				
 				{/* DEST */}
-				<td style={
-					{ backgroundColor: selectedColors[k] }}>{k}
+				<td style={{ backgroundColor: selectedColors[k] }}>{k}
 				</td>
+				<td>
+                	{/* <input type="checkbox" />  */}
+					{/* Ajoutez la case à cocher ici */}
+					<input
+						type="checkbox"
+						checked={checkboxStates[k] || false}
+						onChange={() => handleCheckboxChange(k)}
+					/>
+              	</td>
 				{/* ACTU_QT */}
 				<td>{statistics[k].count}</td>
 				{/* ACTU_TO */}
 				<td>
-				{parseFloat(statistics[k].weight).toLocaleString("en-US", {
-					minimumFractionDigits: 3,
-					maximumFractionDigits: 3,
-				})}
+				{parseFloat(statistics[k].weight).toLocaleString("en-US", {minimumFractionDigits: 3, maximumFractionDigits: 3,})}
 				</td>
 					{k === 'stock' ? (
 						<>
@@ -313,6 +330,7 @@ export default function Statistics() {
 
 				<tr>
 				<td>Totaux</td>
+				<td> </td> 
 				<td>{totalCalesCount}</td>
 				<td>{totalCalesWeight.toLocaleString("en-US")}</td>
 				
@@ -336,12 +354,6 @@ export default function Statistics() {
 					</td>
 
 				{/* LETQT*/}
-					{/* <td>
-						{Math.floor(
-							(totalMaxiCalesWeight - (totalCalesWeight + totalPreviousCalesWeight)) /
-							((totalCalesWeight + totalPreviousCalesWeight) / (totalCalesCount + totalPreviousCalesCount))
-						).toLocaleString("en-US")}
-					</td> */}
 					<td className={Math.floor(
 							(totalMaxiCalesWeight - (totalCalesWeight + totalPreviousCalesWeight)) /
 							((totalCalesWeight + totalPreviousCalesWeight) / (totalCalesCount + totalPreviousCalesCount))
@@ -351,27 +363,7 @@ export default function Statistics() {
 							((totalCalesWeight + totalPreviousCalesWeight) / (totalCalesCount + totalPreviousCalesCount))
 						).toLocaleString("en-US")}
 					</td>
-
-
-				
-
-
 				</tr>
-
-				{/* <tr> */}
-				{/* <td>Total Général</td>
-				<td>{totalCalesCount+totalPreviousCalesCount}</td>
-				<td>{(totalCalesWeight+totalPreviousCalesWeight).toLocaleString("en-US")}</td> */}
-					{/* <td>Total Général</td>
-					<td>{(totalCalesCount + totalPreviousCalesCount)}</td>
-					<td>
-						{(totalWeight + totalPreviousCalesWeight).toLocaleString("en-US", {
-						minimumFractionDigits: 3,
-						maximumFractionDigits: 3,
-						})}
-					</td>			   */}
-				{/* </tr> */}
-
 			</tbody>
 			</Table>
 			</div>

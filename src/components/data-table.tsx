@@ -106,10 +106,10 @@ const useColumns = function useColumns(): any[] {
         columnHelper.accessor('reference', {
             header: 'REF',
             cell: ({row}: any) =>
-                <Button onClick={() => {
+                <Button 
+                    onClick={() => {
                     dispatch(DataAction.moveRow(row.original.reference)); //je change la detination de ref cale1,cale2, etc..
-                }}
-
+                    }}
                 >
                     {SpaceatPos(row.original.reference)}
                 </Button>,
@@ -141,7 +141,7 @@ export default function DataTable() {
     const [PickerColorForSelectedCale, setPickerColorForSelectedCale] = useState<{ [key: string]: string }>({});
     const [newSelectedCale, setnewSelectedCale] = useState<string>('');
     const [newColor, setNewColor] = useState<string>('');
-    //const [textColor, setTextColor] = useState('black'); // État pour gérer la couleur du texte
+    // const [textColor, setTextColor] = useState('black'); // État pour gérer la couleur du texte
     // const [selectedColor, setSelectedColor] = useState('#fff'); // Couleur par défaut
     // const [selectedColors, setSelectedColors] = useState<{ [key: string]: string }>(colors); // Couleur par défaut
     
@@ -199,7 +199,6 @@ export default function DataTable() {
         state: {
             sorting,
             globalFilter,
-            // pagination
         },
         onGlobalFilterChange: setGlobalFilter,
         globalFilterFn,
@@ -209,7 +208,6 @@ export default function DataTable() {
         getFilteredRowModel: getFilteredRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
         autoResetPageIndex: false,
-        
         meta: {
             updateData: (reference, columnId, value) => {
                 if(columnId === "prepa") {
@@ -217,10 +215,8 @@ export default function DataTable() {
                 }
             },
         },
-// #####################################################################################################################
-        getRowId: (row) => {
-            return row.reference;
-        },
+
+        getRowId: (row) => {return row.reference; } ,
         debugTable: true,
     }
     );
@@ -240,18 +236,27 @@ export default function DataTable() {
     const clear = () => dispatch(DataAction.clear());
     const [hold, setHold] = useState('');
     
-    // const [selectedColor, setSelectedColor] = useState('');
-    
     const handleHoldChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         dispatch(DataAction.changeCale(e.target.value)) 
-        const selectedValue = (e.target.value);
-        const selectedOption = destinations.find((d) => d.name === selectedValue);
-
-        setHold(selectedValue);
-        // setSelectedColor(selectedOption ? selectedOption.color : '');    
+        const selectedWorkingHoldValue = (e.target.value);
+        const selectedWorkingHoldOption = destinations.find((d) => d.name === selectedWorkingHoldValue);
+        setHold(selectedWorkingHoldValue);
+        
     }
+
     const isStabiloButtonVisible = cale !== "stock"; // Condition pour déterminer la visibilité du bouton STABILO
     // const TempColors = destinations.map((d) => d.color);
+    
+    // const [checkedRows, setCheckedRows] = useState<{ [key: number]: boolean }>({});
+    const [checkedRows, setCheckedRows] = useState<{ [key: number]: boolean }>({});
+    const handleCheckboxClick = (reference: number) => {
+        const updatedCheckedRows = { ...checkedRows };
+        updatedCheckedRows[reference] = !updatedCheckedRows[reference];
+        setCheckedRows(updatedCheckedRows);
+    };
+
+
+
     return ( 
         <>
             <div className="d-flex">
@@ -334,13 +339,30 @@ export default function DataTable() {
                 {/* hauteur du tableau data 500 px*/}
                 <TableRS>
                     <tbody className="overflow-auto" style={{maxHeight: "100px"}}>
-                        {table.getRowModel().rows.map(row => {
-                            return (
+                    {table.getRowModel().rows.map(row => {
+                        // const reference = row.original.reference as number;
+                        const reference = parseInt(row.original.reference, 10);
+                        
+                        const isChecked = checkedRows[reference] || false;
+
+            return (
                                 <tr 
                                     key={row.id} 
                                     style={{
                                         // backgroundColor: colors[row.getValue("destination") as string]}}>
-                                        backgroundColor: selectedColors[row.getValue("destination") as string]}}>
+                                        backgroundColor: selectedColors[row.getValue("destination") as string]
+                                    }}
+                                >
+                                    {/* //fred jeudi */}
+                                    {/* <td>
+                                        <input
+                                            type="checkbox"
+                                            checked={isChecked}
+                                            onClick={() => handleCheckboxClick(reference)}
+                                        />
+                                    </td> */}
+                                    {/* //fred jeudi */}
+                                    
                                     {row.getVisibleCells().map(cell => {
                                         return (
                                             <td key={cell.id}>
@@ -444,11 +466,8 @@ export default function DataTable() {
                 <Form.Group>
                 <Form.Label>Nouvelle couleur</Form.Label>
                 <SketchPicker
-                    // color={selectedColor} // color fixé par tableau
-                    
+                    // color={selectedColor} // color fixé par tableau                    
                     // color={selectedColors[newSelectedCale]}
-                    // onChange={handleColorChange}
-                    
                     color={PickerColorForSelectedCale[newSelectedCale] || '' }
                     onChange={handleColorChange}
                 />
