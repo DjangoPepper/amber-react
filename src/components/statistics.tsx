@@ -118,7 +118,6 @@ export default function Statistics() {
 	}, {});
 
   
-	// Calcul du cumul des totaux
 	Object.values(statistics).forEach((destinationStats: any ) => {    
 		totalCount += destinationStats.count;
 		totalWeight += destinationStats.weight;
