@@ -1,11 +1,12 @@
 import {useSelector, useDispatch} from "react-redux";
 import {RootState} from "../stores/rootStore";
+import DataAction from "../stores/data/DataAction";
+
 import {Data} from "../stores/data/DataReducer";
 import {Table} from "react-bootstrap";
 import {colors} from "../utils/destination";
 import React, { useState } from 'react';
 
-import DataAction from "../stores/data/DataAction";
 import { stat } from "fs";
 
 export default function Statistics() {
@@ -67,6 +68,32 @@ export default function Statistics() {
 	const [letqtt_Values, set_letqtt_Values] = useState<{ [key: string]: { let_Qt: string } }>({});
 	const data = useSelector<RootState, Data[]>((state) => state.data.data);
 	const selectedColors = useSelector<RootState, { [key: string]: string }>((state) => state.data.pickerColors);
+	// const [checkboxState, setCheckboxState] = useState<{ [key: string]: boolean }>({});
+	// const checkboxStates = useSelector<RootState, { [key: string]: boolean }>((state) => state.data.checkboxStates);
+	// const [checkboxStates, setCheckboxStates] = useState(false);
+	const [checkboxStates, setCheckboxStates] = useState<{ [key: string]: boolean }>({});
+
+	// Supposons que vous avez une liste de destinations dans votre "data"
+	// Vous pouvez initialiser checkboxStates comme suit :
+	const initialCheckboxStates: { [key: string]: boolean } = {};
+	data.forEach((row) => {
+		initialCheckboxStates[row.destination] = false;
+	});
+	setCheckboxStates(initialCheckboxStates);
+
+
+	// const handleCheckboxChange = (destination: string) => {
+	// 	dispatch(DataAction.toggleCheckbox(destination, !checkboxStates[destination]));
+	//   };
+	const handleCheckboxChange = (destination: string) => {
+		// Utilisez la fonction setCheckboxStates pour mettre à jour l'état
+		setCheckboxStates((prevState) => ({
+		  ...prevState,
+		  [destination]: !prevState[destination],
+		}));
+		// Dispatchez vos actions ou effectuez d'autres opérations nécessaires ici.
+	  };
+	  
 
 	const handlemaxi_ToChange = (k: string, value: string) => {
 		set_maxi_Values((maxi_Values: any) => ({
@@ -142,23 +169,14 @@ export default function Statistics() {
 
 	const keys = Object.keys(statistics).sort();
 	
-	// État local pour suivre l'état des cases à cocher
-	const [checkboxStates, setCheckboxStates] = useState<{ [key: string]: boolean }>({});
 
-	// Fonction pour mettre à jour l'état de la case à cocher
-	const handleCheckboxChange = (destination: string) => {
-	  setCheckboxStates({
-		...checkboxStates,
-		[destination]: !checkboxStates[destination],
-	  });
-	};
+	
+
 
 	return (
 		<div>
 		<Table>
-
-			{/* PARTIE HEAD */}
-			
+			{/* ... En-tête de table ... */}		
 			<thead>
 				<tr>
 					<th>DesT</th>
@@ -177,26 +195,26 @@ export default function Statistics() {
 			</thead>
 		  	<tbody>
 			
-			
 			{/* PARTIE HAUTE */}
 					
 			{keys.map((k) => (
-			// <tr key={k}>
-			<tr key={k} style={{ display: checkboxStates[k] || statistics[k].count > 0 ? "table-row" : "none" }}>
-
+			<tr key={k}>
 				
 				{/* DEST */}
-				<td style={{ backgroundColor: selectedColors[k] }}>{k}
-				</td>
+				<td style={{ backgroundColor: selectedColors[k] }}>{k}</td>
+				
+				{/* CHECKBOX */}
 				<td>
-                	{/* <input type="checkbox" />  */}
-					{/* Ajoutez la case à cocher ici */}
-					<input
-						type="checkbox"
-						checked={checkboxStates[k] || false}
-						onChange={() => handleCheckboxChange(k)}
-					/>
+				<input
+                //   type="checkbox"
+                //   checked={checkboxStates[k]}
+                //   onChange={() => handleCheckboxChange(k)}
+				type="checkbox" 
+				checked={checkboxStates[k] || false} 
+				onChange={() => handleCheckboxChange(k)}
+                />
               	</td>
+
 				{/* ACTU_QT */}
 				<td>{statistics[k].count}</td>
 				{/* ACTU_TO */}
@@ -368,3 +386,5 @@ export default function Statistics() {
 			</div>
 		);
 		}
+
+

@@ -1,4 +1,5 @@
 import {AnyAction} from "redux";
+import { destinations } from "../../utils/destination";
 
 export default class DataAction {
 	public static IMPORT_DATA = "DataAction.IMPORT_DATA";
@@ -24,6 +25,12 @@ export default class DataAction {
 	public static CHANGE_LET_QTT = "DataAction.CHANGE_LET_QTT";
 	public static CHANGE_LET_TONS = "DataAction.CHANGE_LET_TONS";
 	
+	public static TOGGLE_CHECKBOX = "DataAction.TOGGLE_CHECKBOX";
+
+	public static toggleCheckbox(destination: string, isChecked: boolean): AnyAction {
+	return { type: DataAction.TOGGLE_CHECKBOX, payload: { destination, isChecked } };
+	}
+
 	public static changeLetTONS(lettons: { destination: string; value: number }): AnyAction {
 		return { type: DataAction.CHANGE_LET_TONS, payload: lettons };
 	}

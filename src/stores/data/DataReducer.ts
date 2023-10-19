@@ -25,6 +25,7 @@ interface DataState {
     diff_TONS: number;
     let_QTT: number;
     let_TONS: number;
+    checkboxStates: {};
 }
 
 interface Statistics {
@@ -47,11 +48,19 @@ const initialState: DataState = {
     diff_TONS: 0,
     let_QTT: 0,
     let_TONS: 0,
+    checkboxStates: {},
 };
 
 export const dataReducer: Reducer<DataState> = (state = initialState, action: AnyAction): DataState => {
         switch (action.type) {
             //fred
+
+            case DataAction.TOGGLE_CHECKBOX:
+                return {
+                    ...state,
+                    checkboxStates: action.payload,
+            }
+
             case DataAction.CHANGE_DIFF_TONS:
                 return {
                     ...state,
