@@ -4,10 +4,10 @@ import DataAction from "../stores/data/DataAction";
 
 import {Data} from "../stores/data/DataReducer";
 import {Table} from "react-bootstrap";
-// import {colors} from "../utils/destination";
+import {colors} from "../utils/destination";
 import React, { useState } from 'react';
 
-// import { stat } from "fs";
+import { stat } from "fs";
 
 export default function Statistics() {
 
@@ -70,16 +70,17 @@ export default function Statistics() {
 	const selectedColors = useSelector<RootState, { [key: string]: string }>((state) => state.data.pickerColors);
 	const [checkboxStates, setCheckboxStates] = useState<{ [key: string]: boolean }>({});
 
-	const initialCheckboxStates: { [key: string]: boolean } = {};
-	data.forEach((row) => {
+	// const initialCheckboxStates: { [key: string]: boolean } = {};
+	/* data.forEach((row) => {
+		// initialCheckboxStates[row.destination] = false;
 		initialCheckboxStates[row.destination] = true;
-	});
-	setCheckboxStates(initialCheckboxStates);
+	}); */
+	// setCheckboxStates(initialCheckboxStates);
 
 	const handleCheckboxChange = (destination: string) => {
 		setCheckboxStates((prevState) => ({
 		  ...prevState,
-		  [destination]: !prevState[destination],
+		  [statistics]: !prevState[statistics],
 		}));
 	  };
 	  
@@ -195,11 +196,9 @@ export default function Statistics() {
 				{/* CHECKBOX */}
 				<td>
 				<input
-                //   type="checkbox"
-                //   checked={checkboxStates[k]}
-                //   onChange={() => handleCheckboxChange(k)}
 				type="checkbox" 
-				checked={checkboxStates[k] || false} 
+				// checked={checkboxStates[k] || true} 
+				checked={checkboxStates[k]} 
 				onChange={() => handleCheckboxChange(k)}
                 />
               	</td>

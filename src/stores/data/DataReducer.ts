@@ -32,6 +32,7 @@ interface Statistics {
     [destination: string]: {
       count: number;
       weight: number;
+      checkbox: boolean;
     };
   }
   
