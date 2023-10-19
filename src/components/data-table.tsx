@@ -187,7 +187,6 @@ export default function DataTable() {
         setnewSelectedCale("");
       };
 
-    
     const [sorting, setSorting] = React.useState<SortingState>([]);
     const [globalFilter, setGlobalFilter] = React.useState('')
     const cale = useSelector<RootState, string>(state => state.data.selectedCale);
