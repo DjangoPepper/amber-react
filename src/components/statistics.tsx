@@ -4,10 +4,9 @@ import DataAction from "../stores/data/DataAction";
 
 import {Data} from "../stores/data/DataReducer";
 import {Table} from "react-bootstrap";
-import {colors} from "../utils/destination";
 import React, { useState } from 'react';
 
-import { stat } from "fs";
+
 
 export default function Statistics() {
 
@@ -127,10 +126,11 @@ export default function Statistics() {
 
 	const statistics = data.reduce<any>((p, row) => {
 		if (!p[row.destination]) {
-		p[row.destination] = { count: 0, weight: 0 };
+		p[row.destination] = { count: 0, weight: 0, checkbox: false };
 		}
 		p[row.destination].count += 1;
 		p[row.destination].weight += row.weight;
+		// p[row.destination].checkbox = true;
 		return p;
 	}, {});
 
@@ -209,15 +209,19 @@ export default function Statistics() {
 				<td>
 				{parseFloat(statistics[k].weight).toLocaleString("en-US", {minimumFractionDigits: 3, maximumFractionDigits: 3,})}
 				</td>
-					{k === 'stock' ? (
+
+					{/* si dest est stock passe 7 colonnes */}
+					{k === 'stock' ? ( 
 						<>
 							<td colSpan={7}></td> 
 							<td> </td> 
 						</>
 						) 
 						: 
+						
 						(
 							<> 					
+								{/* sinon affiche toute les colonnes */}
 								{/* PREV_QT */}
 								<td>
 								<input

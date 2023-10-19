@@ -5,11 +5,11 @@ import { colors } from "../../utils/destination";
 
 export type Data = {
     rank: number
-    prepa: string
     reference: string
     weight: number
-    position: string
     destination: string
+    position: string
+    prepa: string
 }
 
 interface DataState {
@@ -25,14 +25,14 @@ interface DataState {
     diff_TONS: number;
     let_QTT: number;
     let_TONS: number;
-    checkboxStates: {};
+    HoldcheckboxState: { [key: string]: boolean };
 }
 
 interface Statistics {
     [destination: string]: {
       count: number;
       weight: number;
-      checkbox: boolean;
+      SinglecheckboxSate: boolean;
     };
   }
   
@@ -49,7 +49,7 @@ const initialState: DataState = {
     diff_TONS: 0,
     let_QTT: 0,
     let_TONS: 0,
-    checkboxStates: {},
+    HoldcheckboxState: {},
 };
 
 export const dataReducer: Reducer<DataState> = (state = initialState, action: AnyAction): DataState => {
@@ -59,7 +59,7 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
             case DataAction.TOGGLE_CHECKBOX:
                 return {
                     ...state,
-                    checkboxStates: action.payload,
+                    HoldcheckboxState: action.payload,
             }
 
             case DataAction.CHANGE_DIFF_TONS:
