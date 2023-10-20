@@ -5,7 +5,7 @@ import DataAction from "../stores/data/DataAction";
 import {Data} from "../stores/data/DataReducer";
 import {Table} from "react-bootstrap";
 import React, { useState } from 'react';
-
+import {affectation} from "../utils/destination"
 
 
 export default function Statistics() {
@@ -120,10 +120,6 @@ export default function Statistics() {
 
 	const keys = Object.keys(statistics).sort();
 	
-
-	
-
-
 	return (
 		<div>
 		<Table>
@@ -148,151 +144,162 @@ export default function Statistics() {
 			
 			{/* PARTIE HAUTE */}
 					
-			{keys.map((k) => {
-				console.log("Valeur de k :", k); // Affiche la valeur de k dans la console
-				return (
-					<tr key={k}>
-						
-						{/* DEST */}
-						<td style={{ backgroundColor: selectedColors[k] }}>{k}</td>
-						
-						{/* CHECKBOX */}
-						<td>
-						<input
-						type="checkbox" 
-						checked={checkbox_Hold_State [k]} 
-						onChange={() => handleCheckboxChange(k)}
-						/>
-						</td>
+			{/* {keys.map((k) => { */}
+			{/* {destination.affectation.map(k) => { */}
+			{affectation.map((affectationItem) => {
+				const k = affectationItem.name;
 
-						{/* ACTU_QT */}
-						<td>{statistics[k].count}</td>
-						{/* ACTU_TO */}
-						<td>
-						{parseFloat(statistics[k].weight).toLocaleString("en-US", {minimumFractionDigits: 3, maximumFractionDigits: 3,})}
-						</td>
+				console.log("Valeur de k testé :", k)
+				console.log("affectationItem testé :", affectationItem)
+				
+				if (checkbox_Hold_State[k] || (statistics[k] && statistics[k].count > 0)) {
+				console.log("Valeur de k retenu :", k); // Affiche la valeur de k dans la console
+				console.log("Valeur affectationItem :", affectationItem); // Affiche la valeur de k dans la console
+					return (
+						<tr key={k}>
+							
+							{/* DEST */}
+							<td style={{ backgroundColor: selectedColors[k] }}>{k}</td>
+							
+							{/* CHECKBOX */}
+							<td>
+							<input
+							type="checkbox" 
+							checked={checkbox_Hold_State [k]} 
+							onChange={() => handleCheckboxChange(k)}
+							/>
+							</td>
 
-							{/* si dest est stock passe 7 colonnes */}
-							{k === 'stock' ? ( 
-								<>
-									<td colSpan={7}></td> 
-									<td> </td> 
-								</>
-								) 
-								: 
-								
-								(
-									<> 					
-										{/* sinon affiche toute les colonnes */}
-										{/* PREV_QT */}
-										<td>
-										<input
-											type="text"
-											style={{ width: '45px' }}
-											value={previous_Values_QT[k] ? previous_Values_QT[k].prevQt : 0}
-											onChange={(e) => handle_PrevQt_Change(k, e.target.value)}
-										/>
-										</td>
-												
-										{/* PREV_TO */}
-										<td>
-										<input
-											type="text"
-											style={{ width: '80px' }}
-											value={previous_Values_TO[k] ? previous_Values_TO[k].previous_Tons : 0}
-											onChange={(e) => handle_PrevTo_Change(k, e.target.value)}
-										/>
-										</td>
+							{/* ACTU_QT */}
+							<td>{statistics[k].count}</td>
+							{/* ACTU_TO */}
+							<td>
+							{parseFloat(statistics[k].weight).toLocaleString("en-US", {minimumFractionDigits: 3, maximumFractionDigits: 3,})}
+							</td>
 
-										{/* TTL_QT */}
-										<td>
-										{isNaN(statistics[k].count + (previous_Values_QT[k] ? parseFloat(previous_Values_QT[k].prevQt) : 0)) ? 0 : (statistics[k].count + (previous_Values_QT[k] ? parseFloat(previous_Values_QT[k].prevQt) : 0))}
-										</td>
-												
-										{/* TTL_TO */}
-										<td>
-										{isNaN(parseFloat(statistics[k].weight) + (previous_Values_TO[k]?.previous_Tons ? 
-												parseFloat(previous_Values_TO[k].previous_Tons) : 0)) ? 0 : 
-												(parseFloat(statistics[k].weight) + (previous_Values_TO[k]?.previous_Tons ? 
-												parseFloat(previous_Values_TO[k].previous_Tons) : 0))
-												.toLocaleString("en-US", { minimumFractionDigits: 3, maximumFractionDigits: 3 })}
-										</td>
-
-
-										{/* PU */}
-										<td>
-										{(
-											(
-												parseFloat(statistics[k].weight) +
-												(previous_Values_TO[k]?.previous_Tons ? parseFloat(previous_Values_TO[k].previous_Tons) : 0)
-											) /
-											(statistics[k].count + (previous_Values_QT[k]?.prevQt ? parseFloat(previous_Values_QT[k].prevQt) : 0))
-											).toFixed(3)}
-										</td>
-
-										{/* MAXI_TO */}
-										<td>
+								{/* si dest est stock passe 7 colonnes */}
+								{k === 'stock' ? ( 
+									<>
+										<td colSpan={7}></td> 
+										<td> </td> 
+									</>
+									) 
+									: 
+									
+									(
+										<> 					
+											{/* sinon affiche toute les colonnes */}
+											{/* PREV_QT */}
+											<td>
+											<input
+												type="text"
+												style={{ width: '45px' }}
+												value={previous_Values_QT[k] ? previous_Values_QT[k].prevQt : 0}
+												onChange={(e) => handle_PrevQt_Change(k, e.target.value)}
+											/>
+											</td>
+													
+											{/* PREV_TO */}
+											<td>
 											<input
 												type="text"
 												style={{ width: '80px' }}
-												value={maxi_Values[k] ? maxi_Values[k].maxi_To : 0} // Utilisez prevValues[k].prevTo pour la valeur 
-												onChange={(e) => handlemaxi_ToChange(k, e.target.value)}
+												value={previous_Values_TO[k] ? previous_Values_TO[k].previous_Tons : 0}
+												onChange={(e) => handle_PrevTo_Change(k, e.target.value)}
 											/>
-										</td>
+											</td>
 
-										{/* DIFF_TO */}
-										<td className={
-												parseFloat(maxi_Values[k]?.maxi_To) - parseFloat(statistics[k].weight) - (previous_Values_TO[k]?.previous_Tons ? parseFloat(previous_Values_TO[k].previous_Tons) : 0) < 0 ? 'red-text' : '' }>
-											{isNaN(
-												parseFloat(maxi_Values[k]?.maxi_To) - parseFloat(statistics[k].weight) - (previous_Values_TO[k]?.previous_Tons ? parseFloat(previous_Values_TO[k].previous_Tons) : 0)) ? 0 : (
-												parseFloat(maxi_Values[k]?.maxi_To) - parseFloat(statistics[k].weight) - (previous_Values_TO[k]?.previous_Tons ? parseFloat(previous_Values_TO[k].previous_Tons) : 0))
-												.toLocaleString("en-US", { minimumFractionDigits: 3, maximumFractionDigits: 3 })
-											}
-										</td>
+											{/* TTL_QT */}
+											<td>
+											{isNaN(statistics[k].count + (previous_Values_QT[k] ? parseFloat(previous_Values_QT[k].prevQt) : 0)) ? 0 : (statistics[k].count + (previous_Values_QT[k] ? parseFloat(previous_Values_QT[k].prevQt) : 0))}
+											</td>
+													
+											{/* TTL_TO */}
+											<td>
+											{isNaN(parseFloat(statistics[k].weight) + (previous_Values_TO[k]?.previous_Tons ? 
+													parseFloat(previous_Values_TO[k].previous_Tons) : 0)) ? 0 : 
+													(parseFloat(statistics[k].weight) + (previous_Values_TO[k]?.previous_Tons ? 
+													parseFloat(previous_Values_TO[k].previous_Tons) : 0))
+													.toLocaleString("en-US", { minimumFractionDigits: 3, maximumFractionDigits: 3 })}
+											</td>
 
-										{/* LET_QT */}
-										<td className={Math.floor(
-										(
-											isNaN(parseFloat(maxi_Values[k]?.maxi_To) - parseFloat(statistics[k].weight) - (previous_Values_TO[k]?.previous_Tons ? parseFloat(previous_Values_TO[k].previous_Tons) : 0)) ?
-											0 :
-											(
-											parseFloat(maxi_Values[k]?.maxi_To) - parseFloat(statistics[k].weight) - (previous_Values_TO[k]?.previous_Tons ? parseFloat(previous_Values_TO[k].previous_Tons) : 0)
-											) /
-											(
-											(
-												parseFloat(statistics[k].weight) +
-												(previous_Values_TO[k]?.previous_Tons ? parseFloat(previous_Values_TO[k].previous_Tons) : 0)
-											) /
-											(statistics[k].count + (previous_Values_QT[k]?.prevQt ? parseFloat(previous_Values_QT[k].prevQt) : 0))
-											)
-										)
-										) < 0 ? 'red-text' : ''}>
-										{(
-											isNaN(parseFloat(maxi_Values[k]?.maxi_To) - parseFloat(statistics[k].weight) - (previous_Values_TO[k]?.previous_Tons ? parseFloat(previous_Values_TO[k].previous_Tons) : 0)) ?
-											0 :
-											Math.floor(
-											(
-												parseFloat(maxi_Values[k]?.maxi_To) - parseFloat(statistics[k].weight) - (previous_Values_TO[k]?.previous_Tons ? parseFloat(previous_Values_TO[k].previous_Tons) : 0)
-											) /
-											(
+
+											{/* PU */}
+											<td>
+											{(
 												(
-												parseFloat(statistics[k].weight) +
-												(previous_Values_TO[k]?.previous_Tons ? parseFloat(previous_Values_TO[k].previous_Tons) : 0)
+													parseFloat(statistics[k].weight) +
+													(previous_Values_TO[k]?.previous_Tons ? parseFloat(previous_Values_TO[k].previous_Tons) : 0)
 												) /
 												(statistics[k].count + (previous_Values_QT[k]?.prevQt ? parseFloat(previous_Values_QT[k].prevQt) : 0))
+												).toFixed(3)}
+											</td>
+
+											{/* MAXI_TO */}
+											<td>
+												<input
+													type="text"
+													style={{ width: '80px' }}
+													value={maxi_Values[k] ? maxi_Values[k].maxi_To : 0} // Utilisez prevValues[k].prevTo pour la valeur 
+													onChange={(e) => handlemaxi_ToChange(k, e.target.value)}
+												/>
+											</td>
+
+											{/* DIFF_TO */}
+											<td className={
+													parseFloat(maxi_Values[k]?.maxi_To) - parseFloat(statistics[k].weight) - (previous_Values_TO[k]?.previous_Tons ? parseFloat(previous_Values_TO[k].previous_Tons) : 0) < 0 ? 'red-text' : '' }>
+												{isNaN(
+													parseFloat(maxi_Values[k]?.maxi_To) - parseFloat(statistics[k].weight) - (previous_Values_TO[k]?.previous_Tons ? parseFloat(previous_Values_TO[k].previous_Tons) : 0)) ? 0 : (
+													parseFloat(maxi_Values[k]?.maxi_To) - parseFloat(statistics[k].weight) - (previous_Values_TO[k]?.previous_Tons ? parseFloat(previous_Values_TO[k].previous_Tons) : 0))
+													.toLocaleString("en-US", { minimumFractionDigits: 3, maximumFractionDigits: 3 })
+												}
+											</td>
+
+											{/* LET_QT */}
+											<td className={Math.floor(
+											(
+												isNaN(parseFloat(maxi_Values[k]?.maxi_To) - parseFloat(statistics[k].weight) - (previous_Values_TO[k]?.previous_Tons ? parseFloat(previous_Values_TO[k].previous_Tons) : 0)) ?
+												0 :
+												(
+												parseFloat(maxi_Values[k]?.maxi_To) - parseFloat(statistics[k].weight) - (previous_Values_TO[k]?.previous_Tons ? parseFloat(previous_Values_TO[k].previous_Tons) : 0)
+												) /
+												(
+												(
+													parseFloat(statistics[k].weight) +
+													(previous_Values_TO[k]?.previous_Tons ? parseFloat(previous_Values_TO[k].previous_Tons) : 0)
+												) /
+												(statistics[k].count + (previous_Values_QT[k]?.prevQt ? parseFloat(previous_Values_QT[k].prevQt) : 0))
+												)
 											)
-											)
-										).toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
-										</td>
+											) < 0 ? 'red-text' : ''}>
+											{(
+												isNaN(parseFloat(maxi_Values[k]?.maxi_To) - parseFloat(statistics[k].weight) - (previous_Values_TO[k]?.previous_Tons ? parseFloat(previous_Values_TO[k].previous_Tons) : 0)) ?
+												0 :
+												Math.floor(
+												(
+													parseFloat(maxi_Values[k]?.maxi_To) - parseFloat(statistics[k].weight) - (previous_Values_TO[k]?.previous_Tons ? parseFloat(previous_Values_TO[k].previous_Tons) : 0)
+												) /
+												(
+													(
+													parseFloat(statistics[k].weight) +
+													(previous_Values_TO[k]?.previous_Tons ? parseFloat(previous_Values_TO[k].previous_Tons) : 0)
+													) /
+													(statistics[k].count + (previous_Values_QT[k]?.prevQt ? parseFloat(previous_Values_QT[k].prevQt) : 0))
+												)
+												)
+											).toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
+											</td>
 
 
 
-									{/* retour de condition stock */}		
-									</>
-								)
-							} {/* end stock	  */}
-					</tr>
-				);
+										{/* retour de condition stock */}		
+										</>
+									)
+								} {/* end stock	  */}
+						</tr>
+					);
+				}
+				return null;
 			})}
 
 
