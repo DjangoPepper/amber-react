@@ -22,7 +22,7 @@ import {RootState} from "../stores/rootStore";
 import {Data} from "../stores/data/DataReducer";
 import DebouncedInput from "./debounceInput";
 import DataAction from "../stores/data/DataAction";
-import {colors, destinations, HEADER} from "../utils/destination";
+import {colors, affectation, HEADER} from "../utils/destination";
 import Filter, {fuzzyFilter} from "./filter";
 import './index-tanstack.css'
 
@@ -169,7 +169,7 @@ export default function DataTable() {
     };
     
     const handleSaveChanges = () => {
-        // Mettez à jour la couleur pour toutes les destinations identiques
+        // Mettez à jour la couleur pour toutes les affectation identiques
         const updatedData = data.map((item) => {
           if (item.destination === newSelectedCale) {
             return { ...item, color: newColor };
@@ -239,13 +239,13 @@ export default function DataTable() {
     const handleHoldChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         dispatch(DataAction.changeCale(e.target.value)) 
         const selectedWorkingHoldValue = (e.target.value);
-        const selectedWorkingHoldOption = destinations.find((d) => d.name === selectedWorkingHoldValue);
+        const selectedWorkingHoldOption = affectation.find((d) => d.name === selectedWorkingHoldValue);
         setHold(selectedWorkingHoldValue);
         
     }
 
     const isStabiloButtonVisible = cale !== "stock"; // Condition pour déterminer la visibilité du bouton STABILO
-    // const TempColors = destinations.map((d) => d.color);
+    // const TempColors = affectation.map((d) => d.color);
     
     // const [checkedRows, setCheckedRows] = useState<{ [key: number]: boolean }>({});
     const [checkedRows, setCheckedRows] = useState<{ [key: number]: boolean }>({});

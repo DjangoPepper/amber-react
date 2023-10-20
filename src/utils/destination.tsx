@@ -16,7 +16,7 @@ export const HEADER: IHeader[] = [
     {key: "destination", name :"DEST", default: "NE" },
 ]
 
-export const destinations = [
+export const affectation = [
     {name: "stock", color: "#ffffff", index:0},
     {name: "H1",    color: "#00c87a", index:1},
     {name: "H2",    color: "#f447d1", index:2},
@@ -31,7 +31,7 @@ export const destinations = [
 ]
 
 
-export const colors = destinations.reduce<{[key: string]: string}>((obj, d) => {
+export const colors = affectation.reduce<{[key: string]: string}>((obj, d) => {
     obj[d.name] = d.color;
     return obj;
 }, {})
