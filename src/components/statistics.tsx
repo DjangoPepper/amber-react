@@ -10,45 +10,6 @@ import React, { useState } from 'react';
 
 export default function Statistics() {
 
-	// const [lettons_Values, set_lettons_Values] = useState<{ [key: string]: { let_To: string } }>({});
-	// const [maxi_To, set_maxi_To] = useState<number>(0);
-	// const [diff_Values, set_diff_Values] = useState<{ [key: string]: { diff_To: string } }>({});
-	// const handlelettons_ToChange = (k: string, value: string) => {
-	// 	set_lettons_Values((lettons_Values: any) => ({
-	// 	  ...lettons_Values,
-	// 	  [k]: { let_To: value },
-	// 	}));
-	// 	const numericValue = parseFloat(value);
-	// 	dispatch(DataAction.changeLetTONS({ destination: k, value: numericValue }));
-	//   };
-
-	// const handleletqtt_ToChange = (k: string, value: string) => {
-	// 	set_letqtt_Values((letqtt_Values: any) => ({
-	// 	  ...letqtt_Values,
-	// 	  [k]: { let_QT: value },
-	// 	}));
-	// 	const numericValue = parseFloat(value);
-	// 	dispatch(DataAction.changeLetQTT({ destination: k, value: numericValue }));
-	//   };
-
-	// const handlediff_ToChange = (k: string, value: string) => {
-	// 	set_diff_Values((maxi_Values: any) => ({
-	// 	  ...diff_Values,
-	// 	  [k]: { diff_To: value },
-	// 	}));
-	// 	const numericValue = parseFloat(value);
-	// 	dispatch(DataAction.changeDiffTONS({ destination: k, value: numericValue }));
-	//   };
-		 	
-	// const totalLetTo = Object.keys(letqtt_Values).reduce((total, k) => {
-	// 	return total + (letqtt_Values[k] ? parseFloat(letqtt_Values[k].let_Qt) : 0);
-	//   }, 0);
-
-	// const totalDiffTo = Object.keys(diff_Values).reduce((total, k) => {
-	// 	return total + (diff_Values[k] ? parseFloat(diff_Values[k].diff_To) : 0);
-	//   }, 0);
-
-	
 	let totalCount = 0;
 	let totalWeight = 0;
 
@@ -61,28 +22,28 @@ export default function Statistics() {
 	const dispatch = useDispatch();	
 	const [previous_Values_TO, set_previous_Values_TO] = useState<{ [key: string]: { prevTO: string; previous_Tons: string } }>({});
 	const [previous_Values_QT, set_previous_Values_QT] = useState<{ [key: string]: { prevQt: string; previous_QT: string } }>({});
-	// const [previous_QT, set_previous_QT] = useState<number>(0);
-  	// const [previous_Tons, set_Previous_Tons] = useState<number>(0);
 	const [maxi_Values, set_maxi_Values] = useState<{ [key: string]: { maxi_To: string } }>({});
-	// const [letqtt_Values, set_letqtt_Values] = useState<{ [key: string]: { let_Qt: string } }>({});
 	const data = useSelector<RootState, Data[]>((state) => state.data.data);
 	const selectedColors = useSelector<RootState, { [key: string]: string }>((state) => state.data.pickerColors);
-	const [checkboxStates, setCheckboxStates] = useState<{ [key: string]: boolean }>({});
+	const [checkbox_Hold_State, set_checkbox_Hold_State] = useState<{ [key: string]: boolean }>({});
 
-	// const initialCheckboxStates: { [key: string]: boolean } = {};
-	/* data.forEach((row) => {
-		// initialCheckboxStates[row.destination] = false;
-		initialCheckboxStates[row.destination] = true;
-	}); */
-	// setCheckboxStates(initialCheckboxStates);
-
-	const handleCheckboxChange = (destination: string) => {
-		setCheckboxStates((prevState) => ({
-		  ...prevState,
-		  [statistics]: !prevState[statistics],
-		}));
-	  };
+	
+	const handleCheckboxChange = (k: string) => {
+		// Créez une copie de l'état actuel des cases à cocher
+		const updatedCheckboxState = { ...checkbox_Hold_State };
 	  
+		// Vérifiez si la destination k est déjà dans l'état des cases à cocher
+		if (updatedCheckboxState[k] !== undefined) {
+		  // Si oui, basculez simplement la valeur (true devient false, false devient true)
+		  updatedCheckboxState[k] = !updatedCheckboxState[k];
+		} else {
+		  // Si la destination n'est pas dans l'état, ajoutez-la et définissez-la comme cochée (true)
+		  updatedCheckboxState[k] = true;
+		}
+	  
+		// Mettez à jour l'état des cases à cocher avec la nouvelle valeur
+		set_checkbox_Hold_State(updatedCheckboxState);
+	  }; 
 
 	const handlemaxi_ToChange = (k: string, value: string) => {
 		set_maxi_Values((maxi_Values: any) => ({
@@ -187,150 +148,152 @@ export default function Statistics() {
 			
 			{/* PARTIE HAUTE */}
 					
-			{keys.map((k) => (
-			<tr key={k}>
-				
-				{/* DEST */}
-				<td style={{ backgroundColor: selectedColors[k] }}>{k}</td>
-				
-				{/* CHECKBOX */}
-				<td>
-				<input
-				type="checkbox" 
-				// checked={checkboxStates[k] || true} 
-				checked={checkboxStates[k]} 
-				onChange={() => handleCheckboxChange(k)}
-                />
-              	</td>
-
-				{/* ACTU_QT */}
-				<td>{statistics[k].count}</td>
-				{/* ACTU_TO */}
-				<td>
-				{parseFloat(statistics[k].weight).toLocaleString("en-US", {minimumFractionDigits: 3, maximumFractionDigits: 3,})}
-				</td>
-
-					{/* si dest est stock passe 7 colonnes */}
-					{k === 'stock' ? ( 
-						<>
-							<td colSpan={7}></td> 
-							<td> </td> 
-						</>
-						) 
-						: 
+			{keys.map((k) => {
+				console.log("Valeur de k :", k); // Affiche la valeur de k dans la console
+				return (
+					<tr key={k}>
 						
-						(
-							<> 					
-								{/* sinon affiche toute les colonnes */}
-								{/* PREV_QT */}
-								<td>
-								<input
-									type="text"
-									style={{ width: '45px' }}
-									value={previous_Values_QT[k] ? previous_Values_QT[k].prevQt : 0}
-									onChange={(e) => handle_PrevQt_Change(k, e.target.value)}
-								/>
-								</td>
-										
-								{/* PREV_TO */}
-								<td>
-								<input
-									type="text"
-									style={{ width: '80px' }}
-									value={previous_Values_TO[k] ? previous_Values_TO[k].previous_Tons : 0}
-									onChange={(e) => handle_PrevTo_Change(k, e.target.value)}
-								/>
-								</td>
+						{/* DEST */}
+						<td style={{ backgroundColor: selectedColors[k] }}>{k}</td>
+						
+						{/* CHECKBOX */}
+						<td>
+						<input
+						type="checkbox" 
+						checked={checkbox_Hold_State [k]} 
+						onChange={() => handleCheckboxChange(k)}
+						/>
+						</td>
 
-								{/* TTL_QT */}
-								<td>
-								{isNaN(statistics[k].count + (previous_Values_QT[k] ? parseFloat(previous_Values_QT[k].prevQt) : 0)) ? 0 : (statistics[k].count + (previous_Values_QT[k] ? parseFloat(previous_Values_QT[k].prevQt) : 0))}
-								</td>
-										
-								{/* TTL_TO */}
-								<td>
-								{isNaN(parseFloat(statistics[k].weight) + (previous_Values_TO[k]?.previous_Tons ? 
-										parseFloat(previous_Values_TO[k].previous_Tons) : 0)) ? 0 : 
-										(parseFloat(statistics[k].weight) + (previous_Values_TO[k]?.previous_Tons ? 
-										parseFloat(previous_Values_TO[k].previous_Tons) : 0))
-										.toLocaleString("en-US", { minimumFractionDigits: 3, maximumFractionDigits: 3 })}
-								</td>
+						{/* ACTU_QT */}
+						<td>{statistics[k].count}</td>
+						{/* ACTU_TO */}
+						<td>
+						{parseFloat(statistics[k].weight).toLocaleString("en-US", {minimumFractionDigits: 3, maximumFractionDigits: 3,})}
+						</td>
 
-
-								{/* PU */}
-								<td>
-								{(
-									(
-										parseFloat(statistics[k].weight) +
-										(previous_Values_TO[k]?.previous_Tons ? parseFloat(previous_Values_TO[k].previous_Tons) : 0)
-									) /
-									(statistics[k].count + (previous_Values_QT[k]?.prevQt ? parseFloat(previous_Values_QT[k].prevQt) : 0))
-									).toFixed(3)}
-								</td>
-
-								{/* MAXI_TO */}
-								<td>
-									<input
-										type="text"
-										style={{ width: '80px' }}
-										value={maxi_Values[k] ? maxi_Values[k].maxi_To : 0} // Utilisez prevValues[k].prevTo pour la valeur 
-										onChange={(e) => handlemaxi_ToChange(k, e.target.value)}
-									/>
-								</td>
-
-								{/* DIFF_TO */}
-								<td className={
-										parseFloat(maxi_Values[k]?.maxi_To) - parseFloat(statistics[k].weight) - (previous_Values_TO[k]?.previous_Tons ? parseFloat(previous_Values_TO[k].previous_Tons) : 0) < 0 ? 'red-text' : '' }>
-									{isNaN(
-										parseFloat(maxi_Values[k]?.maxi_To) - parseFloat(statistics[k].weight) - (previous_Values_TO[k]?.previous_Tons ? parseFloat(previous_Values_TO[k].previous_Tons) : 0)) ? 0 : (
-										parseFloat(maxi_Values[k]?.maxi_To) - parseFloat(statistics[k].weight) - (previous_Values_TO[k]?.previous_Tons ? parseFloat(previous_Values_TO[k].previous_Tons) : 0))
-										.toLocaleString("en-US", { minimumFractionDigits: 3, maximumFractionDigits: 3 })
-									}
-								</td>
-
-								{/* LET_QT */}
-								<td className={Math.floor(
+							{/* si dest est stock passe 7 colonnes */}
+							{k === 'stock' ? ( 
+								<>
+									<td colSpan={7}></td> 
+									<td> </td> 
+								</>
+								) 
+								: 
+								
 								(
-									isNaN(parseFloat(maxi_Values[k]?.maxi_To) - parseFloat(statistics[k].weight) - (previous_Values_TO[k]?.previous_Tons ? parseFloat(previous_Values_TO[k].previous_Tons) : 0)) ?
-									0 :
-									(
-									parseFloat(maxi_Values[k]?.maxi_To) - parseFloat(statistics[k].weight) - (previous_Values_TO[k]?.previous_Tons ? parseFloat(previous_Values_TO[k].previous_Tons) : 0)
-									) /
-									(
-									(
-										parseFloat(statistics[k].weight) +
-										(previous_Values_TO[k]?.previous_Tons ? parseFloat(previous_Values_TO[k].previous_Tons) : 0)
-									) /
-									(statistics[k].count + (previous_Values_QT[k]?.prevQt ? parseFloat(previous_Values_QT[k].prevQt) : 0))
-									)
-								)
-								) < 0 ? 'red-text' : ''}>
-								{(
-									isNaN(parseFloat(maxi_Values[k]?.maxi_To) - parseFloat(statistics[k].weight) - (previous_Values_TO[k]?.previous_Tons ? parseFloat(previous_Values_TO[k].previous_Tons) : 0)) ?
-									0 :
-									Math.floor(
-									(
-										parseFloat(maxi_Values[k]?.maxi_To) - parseFloat(statistics[k].weight) - (previous_Values_TO[k]?.previous_Tons ? parseFloat(previous_Values_TO[k].previous_Tons) : 0)
-									) /
-									(
+									<> 					
+										{/* sinon affiche toute les colonnes */}
+										{/* PREV_QT */}
+										<td>
+										<input
+											type="text"
+											style={{ width: '45px' }}
+											value={previous_Values_QT[k] ? previous_Values_QT[k].prevQt : 0}
+											onChange={(e) => handle_PrevQt_Change(k, e.target.value)}
+										/>
+										</td>
+												
+										{/* PREV_TO */}
+										<td>
+										<input
+											type="text"
+											style={{ width: '80px' }}
+											value={previous_Values_TO[k] ? previous_Values_TO[k].previous_Tons : 0}
+											onChange={(e) => handle_PrevTo_Change(k, e.target.value)}
+										/>
+										</td>
+
+										{/* TTL_QT */}
+										<td>
+										{isNaN(statistics[k].count + (previous_Values_QT[k] ? parseFloat(previous_Values_QT[k].prevQt) : 0)) ? 0 : (statistics[k].count + (previous_Values_QT[k] ? parseFloat(previous_Values_QT[k].prevQt) : 0))}
+										</td>
+												
+										{/* TTL_TO */}
+										<td>
+										{isNaN(parseFloat(statistics[k].weight) + (previous_Values_TO[k]?.previous_Tons ? 
+												parseFloat(previous_Values_TO[k].previous_Tons) : 0)) ? 0 : 
+												(parseFloat(statistics[k].weight) + (previous_Values_TO[k]?.previous_Tons ? 
+												parseFloat(previous_Values_TO[k].previous_Tons) : 0))
+												.toLocaleString("en-US", { minimumFractionDigits: 3, maximumFractionDigits: 3 })}
+										</td>
+
+
+										{/* PU */}
+										<td>
+										{(
+											(
+												parseFloat(statistics[k].weight) +
+												(previous_Values_TO[k]?.previous_Tons ? parseFloat(previous_Values_TO[k].previous_Tons) : 0)
+											) /
+											(statistics[k].count + (previous_Values_QT[k]?.prevQt ? parseFloat(previous_Values_QT[k].prevQt) : 0))
+											).toFixed(3)}
+										</td>
+
+										{/* MAXI_TO */}
+										<td>
+											<input
+												type="text"
+												style={{ width: '80px' }}
+												value={maxi_Values[k] ? maxi_Values[k].maxi_To : 0} // Utilisez prevValues[k].prevTo pour la valeur 
+												onChange={(e) => handlemaxi_ToChange(k, e.target.value)}
+											/>
+										</td>
+
+										{/* DIFF_TO */}
+										<td className={
+												parseFloat(maxi_Values[k]?.maxi_To) - parseFloat(statistics[k].weight) - (previous_Values_TO[k]?.previous_Tons ? parseFloat(previous_Values_TO[k].previous_Tons) : 0) < 0 ? 'red-text' : '' }>
+											{isNaN(
+												parseFloat(maxi_Values[k]?.maxi_To) - parseFloat(statistics[k].weight) - (previous_Values_TO[k]?.previous_Tons ? parseFloat(previous_Values_TO[k].previous_Tons) : 0)) ? 0 : (
+												parseFloat(maxi_Values[k]?.maxi_To) - parseFloat(statistics[k].weight) - (previous_Values_TO[k]?.previous_Tons ? parseFloat(previous_Values_TO[k].previous_Tons) : 0))
+												.toLocaleString("en-US", { minimumFractionDigits: 3, maximumFractionDigits: 3 })
+											}
+										</td>
+
+										{/* LET_QT */}
+										<td className={Math.floor(
 										(
-										parseFloat(statistics[k].weight) +
-										(previous_Values_TO[k]?.previous_Tons ? parseFloat(previous_Values_TO[k].previous_Tons) : 0)
-										) /
-										(statistics[k].count + (previous_Values_QT[k]?.prevQt ? parseFloat(previous_Values_QT[k].prevQt) : 0))
-									)
-									)
-								).toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
-								</td>
+											isNaN(parseFloat(maxi_Values[k]?.maxi_To) - parseFloat(statistics[k].weight) - (previous_Values_TO[k]?.previous_Tons ? parseFloat(previous_Values_TO[k].previous_Tons) : 0)) ?
+											0 :
+											(
+											parseFloat(maxi_Values[k]?.maxi_To) - parseFloat(statistics[k].weight) - (previous_Values_TO[k]?.previous_Tons ? parseFloat(previous_Values_TO[k].previous_Tons) : 0)
+											) /
+											(
+											(
+												parseFloat(statistics[k].weight) +
+												(previous_Values_TO[k]?.previous_Tons ? parseFloat(previous_Values_TO[k].previous_Tons) : 0)
+											) /
+											(statistics[k].count + (previous_Values_QT[k]?.prevQt ? parseFloat(previous_Values_QT[k].prevQt) : 0))
+											)
+										)
+										) < 0 ? 'red-text' : ''}>
+										{(
+											isNaN(parseFloat(maxi_Values[k]?.maxi_To) - parseFloat(statistics[k].weight) - (previous_Values_TO[k]?.previous_Tons ? parseFloat(previous_Values_TO[k].previous_Tons) : 0)) ?
+											0 :
+											Math.floor(
+											(
+												parseFloat(maxi_Values[k]?.maxi_To) - parseFloat(statistics[k].weight) - (previous_Values_TO[k]?.previous_Tons ? parseFloat(previous_Values_TO[k].previous_Tons) : 0)
+											) /
+											(
+												(
+												parseFloat(statistics[k].weight) +
+												(previous_Values_TO[k]?.previous_Tons ? parseFloat(previous_Values_TO[k].previous_Tons) : 0)
+												) /
+												(statistics[k].count + (previous_Values_QT[k]?.prevQt ? parseFloat(previous_Values_QT[k].prevQt) : 0))
+											)
+											)
+										).toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
+										</td>
 
 
 
-							{/* retour de condition stock */}		
-							</>
-						)
-					} {/* end stock	  */}
-			</tr>
-	))}
+									{/* retour de condition stock */}		
+									</>
+								)
+							} {/* end stock	  */}
+					</tr>
+				);
+			})}
 
 
 
