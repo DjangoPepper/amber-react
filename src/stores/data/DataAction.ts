@@ -1,5 +1,5 @@
 import {AnyAction} from "redux";
-import { destinations } from "../../utils/destination";
+import { affectation } from "../../utils/destination";
 
 export default class DataAction {
 	public static IMPORT_DATA = "DataAction.IMPORT_DATA";

@@ -276,7 +276,7 @@ export default function DataTable() {
                         onChange={(e) => handleHoldChange(e)}
                         style={{ backgroundColor: selectedColors[cale] }}
                         >
-                        { destinations.map(
+                        { affectation.map(
                             d => <option key={d.name} value={d.name} style={{backgroundColor:d.color}}>
                                 {d.name}
                             </option>
