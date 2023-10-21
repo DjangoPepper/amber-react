@@ -1,7 +1,7 @@
 import { AnyAction } from "redux";
 import DataAction from "./DataAction";
 import {Reducer} from "@reduxjs/toolkit";
-import { colors } from "../../utils/destination";
+import { affectation, colors } from "../../utils/destination";
 
 export type Data = {
     rank: number
@@ -11,6 +11,11 @@ export type Data = {
     position: string
     prepa: string
 }
+
+// interface AppState {
+//     visibleStates: boolean[];
+//     // Autres propriétés de l'état
+//   }
 
 interface DataState {
     data: Data[];
@@ -25,7 +30,9 @@ interface DataState {
     diff_TONS: number;
     let_QTT: number;
     let_TONS: number;
-    HoldcheckboxState: { [key: string]: boolean };
+    // visibleStates: boolean;
+    visibleStates: boolean[];
+    
 }
 
 interface Statistics {
@@ -49,19 +56,22 @@ const initialState: DataState = {
     diff_TONS: 0,
     let_QTT: 0,
     let_TONS: 0,
-    HoldcheckboxState: {},
+    // visibleStates: false,
+    visibleStates: affectation.map(item => item.visibleState),
 };
 
 export const dataReducer: Reducer<DataState> = (state = initialState, action: AnyAction): DataState => {
         switch (action.type) {
             //fred
 
-            case DataAction.TOGGLE_CHECKBOX:
+            case DataAction.TOGGLE_VISIBLE_STATE:
+                const updatedVisibleStates = [...state.visibleStates];
+                updatedVisibleStates[action.itemIndex] = action.isVisible;
                 return {
                     ...state,
-                    HoldcheckboxState: action.payload,
-            }
-
+                    visibleStates: updatedVisibleStates,
+                }
+            
             case DataAction.CHANGE_DIFF_TONS:
                 return {
                     ...state,
@@ -182,3 +192,4 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
                 return state;
         }
     };
+export default dataReducer;

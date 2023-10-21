@@ -25,10 +25,10 @@ export default class DataAction {
 	public static CHANGE_LET_QTT = "DataAction.CHANGE_LET_QTT";
 	public static CHANGE_LET_TONS = "DataAction.CHANGE_LET_TONS";
 	
-	public static TOGGLE_CHECKBOX = "DataAction.TOGGLE_CHECKBOX";
+	public static TOGGLE_VISIBLE_STATE = "DataAction.TOGGLE_VISIBLE_STATE";
 
-	public static toggleCheckbox(destination: string, isChecked: boolean): AnyAction {
-	return { type: DataAction.TOGGLE_CHECKBOX, payload: { destination, isChecked } };
+	public static ToggleVisibleStateAction (itemIndex: number, isVisible: boolean): AnyAction {
+	return { type: DataAction.TOGGLE_VISIBLE_STATE, payload: { itemIndex, isVisible } };
 	}
 
 	public static changeLetTONS(lettons: { destination: string; value: number }): AnyAction {
