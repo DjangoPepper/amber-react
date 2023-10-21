@@ -148,13 +148,18 @@ export default function Statistics() {
 			{/* {destination.affectation.map(k) => { */}
 			{affectation.map((affectationItem) => {
 				const k = affectationItem.name;
+				const statisticsForK = statistics[k];
 
-				console.log("Valeur de k testé :", k)
-				console.log("affectationItem testé :", affectationItem)
+				// console.log("Name de k testé :", k)
+				// console.log("affectationItem testé :", affectationItem)
 				
-				if (checkbox_Hold_State[k] || (statistics[k] && statistics[k].count > 0)) {
-				console.log("Valeur de k retenu :", k); // Affiche la valeur de k dans la console
-				console.log("Valeur affectationItem :", affectationItem); // Affiche la valeur de k dans la console
+				// if (checkbox_Hold_State[k] || (statisticsForK  && statisticsForK.count > 0)) {
+				// console.log("Nom de k :", k); // Affiche la valeur de k dans la console
+				// console.log("Valeur affectationItem :", affectationItem); // Affiche la valeur de k dans la console
+				if (
+					checkbox_Hold_State[k] ||
+					(statisticsForK && !isNaN(statisticsForK.count) && statisticsForK.count > 0)
+				  ) {
 					return (
 						<tr key={k}>
 							
