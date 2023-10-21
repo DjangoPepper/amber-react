@@ -128,16 +128,16 @@ export default function Statistics() {
 				<tr>
 					<th>DesT</th>
 					<th>KeeP</th> {/* Nouvelle colonne avec des cases à cocher */}
-					<th>ACTU_QT</th>
-					<th>ACTU_TO</th>
-					<th>PREV_QT</th>
-					<th>PREV_TO</th>
-					<th>TTL_QT</th>
-					<th>TTL_TO</th>
-					<th>  PU  </th>
-					<th> MAXI </th>
-					<th> DIFF_TO</th>
-					<th>LET_QT</th>
+					<th>TD_Q</th>
+					<th>TD_T</th>
+					<th>PV_Q</th>
+					<th>PV_T</th>
+					<th>TT_Q</th>
+					<th>TT_T</th>
+					<th> PU  </th>
+					<th>MAXI </th>
+					<th> DIF </th>
+					<th>LET_Q</th>
 				</tr>
 			</thead>
 		  	<tbody>
@@ -148,18 +148,18 @@ export default function Statistics() {
 			{/* {destination.affectation.map(k) => { */}
 			{affectation.map((affectationItem) => {
 				const k = affectationItem.name;
-				const statisticsForK = statistics[k];
-
-				// console.log("Name de k testé :", k)
-				// console.log("affectationItem testé :", affectationItem)
-				
-				// if (checkbox_Hold_State[k] || (statisticsForK  && statisticsForK.count > 0)) {
-				// console.log("Nom de k :", k); // Affiche la valeur de k dans la console
-				// console.log("Valeur affectationItem :", affectationItem); // Affiche la valeur de k dans la console
+				// const statisticsForKCount = statistics[k].count;
+				const statisticsForK = statistics[k] || {}; // Utilisez un objet vide par défaut
+				// const local_updatedCheckboxState=updatedCheckboxState[k];
+				// const local_checkbox_Hold_State[k];
 				if (
 					checkbox_Hold_State[k] ||
-					(statisticsForK && !isNaN(statisticsForK.count) && statisticsForK.count > 0)
+					(statisticsForK && 
+						!isNaN(statisticsForK.count) 
+						&& statisticsForK.count > 0)
 				  ) {
+					console.log("visible : ", affectationItem.name)
+					
 					return (
 						<tr key={k}>
 							
@@ -175,9 +175,9 @@ export default function Statistics() {
 							/>
 							</td>
 
-							{/* ACTU_QT */}
+							{/* DAY_Q */}
 							<td>{statistics[k].count}</td>
-							{/* ACTU_TO */}
+							{/* DAY_T */}
 							<td>
 							{parseFloat(statistics[k].weight).toLocaleString("en-US", {minimumFractionDigits: 3, maximumFractionDigits: 3,})}
 							</td>
@@ -194,7 +194,7 @@ export default function Statistics() {
 									(
 										<> 					
 											{/* sinon affiche toute les colonnes */}
-											{/* PREV_QT */}
+											{/* PREV_Q */}
 											<td>
 											<input
 												type="text"
@@ -204,7 +204,7 @@ export default function Statistics() {
 											/>
 											</td>
 													
-											{/* PREV_TO */}
+											{/* PREV_T */}
 											<td>
 											<input
 												type="text"
@@ -214,12 +214,12 @@ export default function Statistics() {
 											/>
 											</td>
 
-											{/* TTL_QT */}
+											{/* TTL_Q */}
 											<td>
 											{isNaN(statistics[k].count + (previous_Values_QT[k] ? parseFloat(previous_Values_QT[k].prevQt) : 0)) ? 0 : (statistics[k].count + (previous_Values_QT[k] ? parseFloat(previous_Values_QT[k].prevQt) : 0))}
 											</td>
 													
-											{/* TTL_TO */}
+											{/* TTL_T */}
 											<td>
 											{isNaN(parseFloat(statistics[k].weight) + (previous_Values_TO[k]?.previous_Tons ? 
 													parseFloat(previous_Values_TO[k].previous_Tons) : 0)) ? 0 : 
@@ -304,6 +304,7 @@ export default function Statistics() {
 						</tr>
 					);
 				}
+				console.log("return : ", affectationItem.name)
 				return null;
 			})}
 

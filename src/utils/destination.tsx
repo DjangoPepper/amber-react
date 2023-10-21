@@ -17,17 +17,17 @@ export const HEADER: IHeader[] = [
 ]
 
 export const affectation = [
-    {name: "stock", color: "#ffffff", index:0,  checkbox_Hold_State: false},
-    {name: "H1",    color: "#00c87a", index:1,  checkbox_Hold_State: false},
-    {name: "H2",    color: "#f447d1", index:2,  checkbox_Hold_State: false},
-    {name: "H3",    color: "#3cbefc", index:3,  checkbox_Hold_State: false},
-    {name: "H4",    color: "#ff9b2c", index:4,  checkbox_Hold_State: false},
-    {name: "H5",    color: "#800080", index:5,  checkbox_Hold_State: false},
-    {name: "H6",    color: "#80ff00", index:6,  checkbox_Hold_State: false},
-    {name: "H7",    color: "#f03c28", index:7,  checkbox_Hold_State: false},
-    {name: "H8",    color: "#006ee6", index:8,  checkbox_Hold_State: false},
-    {name: "H9",    color: "#fdff5b", index:9,  checkbox_Hold_State: false},
-    {name: "H10",   color: "#008000", index:10, checkbox_Hold_State: false},
+    {name: "stock", color: "#ffffff", index:0,  visibleState: false},
+    {name: "H1",    color: "#00c87a", index:1,  visibleState: false},
+    {name: "H2",    color: "#f447d1", index:2,  visibleState: false},
+    {name: "H3",    color: "#3cbefc", index:3,  visibleState: false},
+    {name: "H4",    color: "#ff9b2c", index:4,  visibleState: false},
+    {name: "H5",    color: "#800080", index:5,  visibleState: false},
+    {name: "H6",    color: "#80ff00", index:6,  visibleState: false},
+    {name: "H7",    color: "#f03c28", index:7,  visibleState: false},
+    {name: "H8",    color: "#006ee6", index:8,  visibleState: false},
+    {name: "H9",    color: "#fdff5b", index:9,  visibleState: false},
+    {name: "H10",   color: "#008000", index:10, visibleState: false},
 ]
 
 
