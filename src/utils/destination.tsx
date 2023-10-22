@@ -17,7 +17,7 @@ export const HEADER: IHeader[] = [
 ]
 
 export const affectation = [
-    {name: "stock", color: "#ffffff", index:0,  visibleState:false},
+    {name: "stock", color: "#ffffff", index:0,  visibleState:true},
     {name: "H1",    color: "#00c87a", index:1,  visibleState:false},
     {name: "H2",    color: "#f447d1", index:2,  visibleState:false},
     {name: "H3",    color: "#3cbefc", index:3,  visibleState:false},
