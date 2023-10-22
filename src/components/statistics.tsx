@@ -25,10 +25,9 @@ export default function Statistics() {
 	const [maxi_Values, set_maxi_Values] = useState<{ [key: string]: { maxi_To: string } }>({});
 	const data = useSelector<RootState, Data[]>((state) => state.data.data);
 	const selectedColors = useSelector<RootState, { [key: string]: string }>((state) => state.data.pickerColors);
+	
+	//fred deprecated
 	const [checkbox_Hold_State, set_checkbox_Hold_State] = useState<{ [key: string]: boolean }>({});
-
-	
-	
 	const handleCheckboxChange = (k: string) => {
 		// Créez une copie de l'état actuel des cases à cocher
 		const updatedCheckboxState = { ...checkbox_Hold_State };
@@ -45,7 +44,10 @@ export default function Statistics() {
 		// Mettez à jour l'état des cases à cocher avec la nouvelle valeur
 		set_checkbox_Hold_State(updatedCheckboxState);
 	  }; 
+	//fred deprecated
+	
 
+	
 	const handlemaxi_ToChange = (k: string, value: string) => {
 		set_maxi_Values((maxi_Values: any) => ({
 		  ...maxi_Values,
@@ -149,7 +151,7 @@ export default function Statistics() {
 			{/* {destination.affectation.map(k) => { */}
 			{affectation.map((affectationItem) => {
 				const k = affectationItem.name;
-				const statisticsForKCount = statistics[k].count;
+				// const statisticsForKCount = statistics[k].count || {};
 				const statisticsForK = statistics[k] || {}; // Utilisez un objet vide par défaut
 				// const local_updatedCheckboxState=updatedCheckboxState[k];
 				// const local_checkbox_Hold_State[k];

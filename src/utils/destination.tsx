@@ -1,4 +1,7 @@
 // import React from "react";
+import { connect } from 'react-redux';
+import { updateAffectationVisibility } from '../stores/data/destinationActions'
+import Statistics from '../components/statistics';
 
 interface IHeader {
     key: string;
@@ -30,8 +33,22 @@ export const affectation = [
     {name: "H10",   color: "#008000", index:10, visibleState:false},
 ]
 
-
 export const colors = affectation.reduce<{[key: string]: string}>((obj, d) => {
     obj[d.name] = d.color;
     return obj;
 }, {})
+
+const mapStateToProps = (state: { destination: { affectations: any; }; }) => {
+  return {
+    affectations: state.destination.affectations,
+  };
+};
+
+const mapDispatchToProps = (dispatch: (arg0: { type: string; payload: { affectationName: any; visibility: any; }; }) => any) => {
+  return {
+    updateVisibility: (affectationName: any, visibility: any) =>
+      dispatch(updateAffectationVisibility(affectationName, visibility)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Statistics);

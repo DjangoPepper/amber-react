@@ -64,13 +64,13 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
         switch (action.type) {
             //fred
             
-            case DataAction.TOGGLE_VISIBLE_STATE:
-                const updatedVisibleStates = [...state.visibleStates];
-                updatedVisibleStates[action.itemIndex] = action.isVisible;
-                return {
-                    ...state,
-                    visibleStates: updatedVisibleStates,
-                }
+            // case DataAction.TOGGLE_VISIBLE_STATE:
+            //     const updatedVisibleStates = [...state.visibleStates];
+            //     updatedVisibleStates[action.itemIndex] = action.isVisible;
+            //     return {
+            //         ...state,
+            //         visibleStates: updatedVisibleStates,
+            //     }
             
             case DataAction.CHANGE_DIFF_TONS:
                 return {
