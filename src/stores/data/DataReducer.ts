@@ -39,7 +39,7 @@ interface Statistics {
     [destination: string]: {
       count: number;
       weight: number;
-      SinglecheckboxSate: boolean;
+    //   SinglecheckboxSate: boolean;
     };
   }
   
@@ -63,7 +63,7 @@ const initialState: DataState = {
 export const dataReducer: Reducer<DataState> = (state = initialState, action: AnyAction): DataState => {
         switch (action.type) {
             //fred
-
+            
             case DataAction.TOGGLE_VISIBLE_STATE:
                 const updatedVisibleStates = [...state.visibleStates];
                 updatedVisibleStates[action.itemIndex] = action.isVisible;
