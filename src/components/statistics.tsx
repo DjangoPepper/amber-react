@@ -308,7 +308,7 @@ export default function Statistics() {
 						</tr>
 					);
 				}
-				console.log("return : ", affectationItem.name)
+				console.log("Invisible : ", affectationItem.name)
 				return null;
 			})}
 
