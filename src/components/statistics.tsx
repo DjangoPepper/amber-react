@@ -1,11 +1,11 @@
-import {useSelector, useDispatch} from "react-redux";
-import {RootState} from "../stores/rootStore";
+import { useSelector, useDispatch} from "react-redux";
+import { RootState } from "../stores/rootStore";
 import DataAction from "../stores/data/DataAction";
-
-import {Data} from "../stores/data/DataReducer";
-import {Table} from "react-bootstrap";
-import React, { useState } from 'react';
-import {affectation} from "../utils/destination"
+import { Data } from "../stores/data/DataReducer";
+import { Table } from "react-bootstrap";
+import React, { useState, useEffect } from 'react';
+import { affectation} from "../utils/destination"
+import { updateAffectationVisibility } from '../stores/data/destinationActions';
 
 
 export default function Statistics() {
@@ -46,8 +46,6 @@ export default function Statistics() {
 	  }; 
 	//fred deprecated
 	
-
-	
 	const handlemaxi_ToChange = (k: string, value: string) => {
 		set_maxi_Values((maxi_Values: any) => ({
 		  ...maxi_Values,
@@ -87,7 +85,6 @@ export default function Statistics() {
 	return total + (previous_Values_TO[k]?.previous_Tons ? parseFloat(previous_Values_TO[k].previous_Tons) : 0);
 	}, 0);
 
-
 	const statistics = data.reduce<any>((p, row) => {
 		if (!p[row.destination]) {
 		p[row.destination] = { count: 0, weight: 0, checkbox: false };
@@ -97,7 +94,6 @@ export default function Statistics() {
 		// p[row.destination].checkbox = true;
 		return p;
 	}, {});
-
   
 	Object.values(statistics).forEach((destinationStats: any ) => {    
 		totalCount += destinationStats.count;
@@ -121,7 +117,16 @@ export default function Statistics() {
 		}
 	});
 
-	const keys = Object.keys(statistics).sort();
+	// Cette fonction sera exécutée au démarrage du composant
+	useEffect(() => {
+		// Parcourez le tableau affectation et envoyez chaque état "visibleState" dans Redux
+		affectation.forEach((item) => {
+		// Utilisez votre action ou fonction pour mettre à jour l'état dans Redux
+		dispatch(updateAffectationVisibility(item.name, item.visibleState));
+		});
+	}, [dispatch]); // Assurez-vous de lister dispatch comme dépendance pour éviter les avertissements
+
+	// const keys = Object.keys(statistics).sort();
 	
 	return (
 		<div>
@@ -150,44 +155,49 @@ export default function Statistics() {
 			{/* {keys.map((k) => { */}
 			{/* {destination.affectation.map(k) => { */}
 			{affectation.map((affectationItem) => {
-				const k = affectationItem.name;
+				// const k = affectationItem.name;
+				// const j =  affectationItem.visibleState;
+
+				// const statisticsForK = statistics[k] || {}; // Utilisez un objet vide par défaut
+				const stattisticsByNameAffectation = statistics[affectationItem.name] || {}; // Utilisez un objet vide par défaut
 				// const statisticsForKCount = statistics[k].count || {};
-				const statisticsForK = statistics[k] || {}; // Utilisez un objet vide par défaut
 				// const local_updatedCheckboxState=updatedCheckboxState[k];
 				// const local_checkbox_Hold_State[k];
 				
 				if (
-					checkbox_Hold_State[k] ||
-					(statisticsForK && 
-						!isNaN(statisticsForK.count) 
-						&& statisticsForK.count > 0)
+					// checkbox_Hold_State[k] ||
+					// affectationItem.visibleState || 
+					// (stattisticsByNameAffectation && !isNaN(stattisticsByNameAffectation.count) && stattisticsByNameAffectation.count > 0)
+					stattisticsByNameAffectation.checkbox || // Utilisez stattisticsByNameAffectation.checkbox ici
+					(stattisticsByNameAffectation && !isNaN(stattisticsByNameAffectation.count) && stattisticsByNameAffectation.count > 0)
 				  ) {
 					console.log("visible : ", affectationItem.name)
 					
 					return (
-						<tr key={k}>
+						<tr key={affectationItem.name}>
 							
 							{/* DEST */}
-							<td style={{ backgroundColor: selectedColors[k] }}>{k}</td>
+							<td style={{ backgroundColor: selectedColors[affectationItem.name] }}>{affectationItem.name}</td>
 							
 							{/* CHECKBOX */}
 							<td>
 							<input
 							type="checkbox" 
-							checked={checkbox_Hold_State [k]} 
-							onChange={() => handleCheckboxChange(k)}
+							checked={checkbox_Hold_State[affectationItem.name]} 
+							// checked={affectationItem.visibleState[k]} 
+							onChange={() => handleCheckboxChange(affectationItem.name)}
 							/>
 							</td>
 
 							{/* DAY_Q */}
-							<td>{statistics[k].count}</td>
+							<td>{statistics[affectationItem.name].count}</td>
 							{/* DAY_T */}
 							<td>
-							{parseFloat(statistics[k].weight).toLocaleString("en-US", {minimumFractionDigits: 3, maximumFractionDigits: 3,})}
+							{parseFloat(statistics[affectationItem.name].weight).toLocaleString("en-US", {minimumFractionDigits: 3, maximumFractionDigits: 3,})}
 							</td>
 
 								{/* si dest est stock passe 7 colonnes */}
-								{k === 'stock' ? ( 
+								{affectationItem.name === 'stock' ? ( 
 									<>
 										<td colSpan={7}></td> 
 										<td> </td> 
@@ -203,8 +213,8 @@ export default function Statistics() {
 											<input
 												type="text"
 												style={{ width: '45px' }}
-												value={previous_Values_QT[k] ? previous_Values_QT[k].prevQt : 0}
-												onChange={(e) => handle_PrevQt_Change(k, e.target.value)}
+												value={previous_Values_QT[affectationItem.name] ? previous_Values_QT[affectationItem.name].prevQt : 0}
+												onChange={(e) => handle_PrevQt_Change(affectationItem.name, e.target.value)}
 											/>
 											</td>
 													
@@ -213,22 +223,22 @@ export default function Statistics() {
 											<input
 												type="text"
 												style={{ width: '80px' }}
-												value={previous_Values_TO[k] ? previous_Values_TO[k].previous_Tons : 0}
-												onChange={(e) => handle_PrevTo_Change(k, e.target.value)}
+												value={previous_Values_TO[affectationItem.name] ? previous_Values_TO[affectationItem.name].previous_Tons : 0}
+												onChange={(e) => handle_PrevTo_Change(affectationItem.name, e.target.value)}
 											/>
 											</td>
 
 											{/* TTL_Q */}
 											<td>
-											{isNaN(statistics[k].count + (previous_Values_QT[k] ? parseFloat(previous_Values_QT[k].prevQt) : 0)) ? 0 : (statistics[k].count + (previous_Values_QT[k] ? parseFloat(previous_Values_QT[k].prevQt) : 0))}
+											{isNaN(statistics[affectationItem.name].count + (previous_Values_QT[affectationItem.name] ? parseFloat(previous_Values_QT[affectationItem.name].prevQt) : 0)) ? 0 : (statistics[affectationItem.name].count + (previous_Values_QT[affectationItem.name] ? parseFloat(previous_Values_QT[affectationItem.name].prevQt) : 0))}
 											</td>
 													
 											{/* TTL_T */}
 											<td>
-											{isNaN(parseFloat(statistics[k].weight) + (previous_Values_TO[k]?.previous_Tons ? 
-													parseFloat(previous_Values_TO[k].previous_Tons) : 0)) ? 0 : 
-													(parseFloat(statistics[k].weight) + (previous_Values_TO[k]?.previous_Tons ? 
-													parseFloat(previous_Values_TO[k].previous_Tons) : 0))
+											{isNaN(parseFloat(statistics[affectationItem.name].weight) + (previous_Values_TO[affectationItem.name]?.previous_Tons ? 
+													parseFloat(previous_Values_TO[affectationItem.name].previous_Tons) : 0)) ? 0 : 
+													(parseFloat(statistics[affectationItem.name].weight) + (previous_Values_TO[affectationItem.name]?.previous_Tons ? 
+													parseFloat(previous_Values_TO[affectationItem.name].previous_Tons) : 0))
 													.toLocaleString("en-US", { minimumFractionDigits: 3, maximumFractionDigits: 3 })}
 											</td>
 
@@ -237,10 +247,10 @@ export default function Statistics() {
 											<td>
 											{(
 												(
-													parseFloat(statistics[k].weight) +
-													(previous_Values_TO[k]?.previous_Tons ? parseFloat(previous_Values_TO[k].previous_Tons) : 0)
+													parseFloat(statistics[affectationItem.name].weight) +
+													(previous_Values_TO[affectationItem.name]?.previous_Tons ? parseFloat(previous_Values_TO[affectationItem.name].previous_Tons) : 0)
 												) /
-												(statistics[k].count + (previous_Values_QT[k]?.prevQt ? parseFloat(previous_Values_QT[k].prevQt) : 0))
+												(statistics[affectationItem.name].count + (previous_Values_QT[affectationItem.name]?.prevQt ? parseFloat(previous_Values_QT[affectationItem.name].prevQt) : 0))
 												).toFixed(3)}
 											</td>
 
@@ -249,17 +259,17 @@ export default function Statistics() {
 												<input
 													type="text"
 													style={{ width: '80px' }}
-													value={maxi_Values[k] ? maxi_Values[k].maxi_To : 0} // Utilisez prevValues[k].prevTo pour la valeur 
-													onChange={(e) => handlemaxi_ToChange(k, e.target.value)}
+													value={maxi_Values[affectationItem.name] ? maxi_Values[affectationItem.name].maxi_To : 0} // Utilisez prevValues[affectationItem.name].prevTo pour la valeur 
+													onChange={(e) => handlemaxi_ToChange(affectationItem.name, e.target.value)}
 												/>
 											</td>
 
 											{/* DIFF_TO */}
 											<td className={
-													parseFloat(maxi_Values[k]?.maxi_To) - parseFloat(statistics[k].weight) - (previous_Values_TO[k]?.previous_Tons ? parseFloat(previous_Values_TO[k].previous_Tons) : 0) < 0 ? 'red-text' : '' }>
+													parseFloat(maxi_Values[affectationItem.name]?.maxi_To) - parseFloat(statistics[affectationItem.name].weight) - (previous_Values_TO[affectationItem.name]?.previous_Tons ? parseFloat(previous_Values_TO[affectationItem.name].previous_Tons) : 0) < 0 ? 'red-text' : '' }>
 												{isNaN(
-													parseFloat(maxi_Values[k]?.maxi_To) - parseFloat(statistics[k].weight) - (previous_Values_TO[k]?.previous_Tons ? parseFloat(previous_Values_TO[k].previous_Tons) : 0)) ? 0 : (
-													parseFloat(maxi_Values[k]?.maxi_To) - parseFloat(statistics[k].weight) - (previous_Values_TO[k]?.previous_Tons ? parseFloat(previous_Values_TO[k].previous_Tons) : 0))
+													parseFloat(maxi_Values[affectationItem.name]?.maxi_To) - parseFloat(statistics[affectationItem.name].weight) - (previous_Values_TO[affectationItem.name]?.previous_Tons ? parseFloat(previous_Values_TO[affectationItem.name].previous_Tons) : 0)) ? 0 : (
+													parseFloat(maxi_Values[affectationItem.name]?.maxi_To) - parseFloat(statistics[affectationItem.name].weight) - (previous_Values_TO[affectationItem.name]?.previous_Tons ? parseFloat(previous_Values_TO[affectationItem.name].previous_Tons) : 0))
 													.toLocaleString("en-US", { minimumFractionDigits: 3, maximumFractionDigits: 3 })
 												}
 											</td>
@@ -267,33 +277,33 @@ export default function Statistics() {
 											{/* LET_QT */}
 											<td className={Math.floor(
 											(
-												isNaN(parseFloat(maxi_Values[k]?.maxi_To) - parseFloat(statistics[k].weight) - (previous_Values_TO[k]?.previous_Tons ? parseFloat(previous_Values_TO[k].previous_Tons) : 0)) ?
+												isNaN(parseFloat(maxi_Values[affectationItem.name]?.maxi_To) - parseFloat(statistics[affectationItem.name].weight) - (previous_Values_TO[affectationItem.name]?.previous_Tons ? parseFloat(previous_Values_TO[affectationItem.name].previous_Tons) : 0)) ?
 												0 :
 												(
-												parseFloat(maxi_Values[k]?.maxi_To) - parseFloat(statistics[k].weight) - (previous_Values_TO[k]?.previous_Tons ? parseFloat(previous_Values_TO[k].previous_Tons) : 0)
+												parseFloat(maxi_Values[affectationItem.name]?.maxi_To) - parseFloat(statistics[affectationItem.name].weight) - (previous_Values_TO[affectationItem.name]?.previous_Tons ? parseFloat(previous_Values_TO[affectationItem.name].previous_Tons) : 0)
 												) /
 												(
 												(
-													parseFloat(statistics[k].weight) +
-													(previous_Values_TO[k]?.previous_Tons ? parseFloat(previous_Values_TO[k].previous_Tons) : 0)
+													parseFloat(statistics[affectationItem.name].weight) +
+													(previous_Values_TO[affectationItem.name]?.previous_Tons ? parseFloat(previous_Values_TO[affectationItem.name].previous_Tons) : 0)
 												) /
-												(statistics[k].count + (previous_Values_QT[k]?.prevQt ? parseFloat(previous_Values_QT[k].prevQt) : 0))
+												(statistics[affectationItem.name].count + (previous_Values_QT[affectationItem.name]?.prevQt ? parseFloat(previous_Values_QT[affectationItem.name].prevQt) : 0))
 												)
 											)
 											) < 0 ? 'red-text' : ''}>
 											{(
-												isNaN(parseFloat(maxi_Values[k]?.maxi_To) - parseFloat(statistics[k].weight) - (previous_Values_TO[k]?.previous_Tons ? parseFloat(previous_Values_TO[k].previous_Tons) : 0)) ?
+												isNaN(parseFloat(maxi_Values[affectationItem.name]?.maxi_To) - parseFloat(statistics[affectationItem.name].weight) - (previous_Values_TO[affectationItem.name]?.previous_Tons ? parseFloat(previous_Values_TO[affectationItem.name].previous_Tons) : 0)) ?
 												0 :
 												Math.floor(
 												(
-													parseFloat(maxi_Values[k]?.maxi_To) - parseFloat(statistics[k].weight) - (previous_Values_TO[k]?.previous_Tons ? parseFloat(previous_Values_TO[k].previous_Tons) : 0)
+													parseFloat(maxi_Values[affectationItem.name]?.maxi_To) - parseFloat(statistics[affectationItem.name].weight) - (previous_Values_TO[affectationItem.name]?.previous_Tons ? parseFloat(previous_Values_TO[affectationItem.name].previous_Tons) : 0)
 												) /
 												(
 													(
-													parseFloat(statistics[k].weight) +
-													(previous_Values_TO[k]?.previous_Tons ? parseFloat(previous_Values_TO[k].previous_Tons) : 0)
+													parseFloat(statistics[affectationItem.name].weight) +
+													(previous_Values_TO[affectationItem.name]?.previous_Tons ? parseFloat(previous_Values_TO[affectationItem.name].previous_Tons) : 0)
 													) /
-													(statistics[k].count + (previous_Values_QT[k]?.prevQt ? parseFloat(previous_Values_QT[k].prevQt) : 0))
+													(statistics[affectationItem.name].count + (previous_Values_QT[affectationItem.name]?.prevQt ? parseFloat(previous_Values_QT[affectationItem.name].prevQt) : 0))
 												)
 												)
 											).toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}

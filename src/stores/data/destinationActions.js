@@ -9,3 +9,4 @@ export const updateAffectationVisibility = (affectationName, visibility) => {
     },
   };
 };
+

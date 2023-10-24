@@ -31,6 +31,7 @@ export const affectation = [
     {name: "H8",    color: "#006ee6", index:8,  visibleState:false},
     {name: "H9",    color: "#fdff5b", index:9,  visibleState:false},
     {name: "H10",   color: "#008000", index:10, visibleState:false},
+    {name: "AVARIE", color: "#ffffff", index:0,  visibleState:true},
 ]
 
 export const colors = affectation.reduce<{[key: string]: string}>((obj, d) => {
