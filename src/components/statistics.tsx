@@ -105,8 +105,10 @@ export default function Statistics() {
 		if (statistics.stock) {
 			totalstockCount = statistics.stock.count;
 			totalstockWeight = statistics.stock.weight;	
+			totalstockWeight = parseFloat(totalstockWeight.toFixed(3))
 			totalCalesCount  = totalCount   - totalstockCount;
 			totalCalesWeight = totalWeight  - totalstockWeight;
+			totalCalesWeight = parseFloat(totalCalesWeight.toFixed(3));
 			
 		}
 		else {
@@ -151,26 +153,13 @@ export default function Statistics() {
 		  	<tbody>
 			
 			{/* PARTIE HAUTE */}
-					
-			{/* {keys.map((k) => { */}
-			{/* {destination.affectation.map(k) => { */}
 			{affectation.map((affectationItem) => {
-				// const k = affectationItem.name;
-				// const j =  affectationItem.visibleState;
-
-				// const statisticsForK = statistics[k] || {}; // Utilisez un objet vide par défaut
 				const stattisticsByNameAffectation = statistics[affectationItem.name] || {}; // Utilisez un objet vide par défaut
-				// const statisticsForKCount = statistics[k].count || {};
-				// const local_updatedCheckboxState=updatedCheckboxState[k];
-				// const local_checkbox_Hold_State[k];
 				
 				if (
-					// checkbox_Hold_State[k] ||
-					// affectationItem.visibleState || 
-					// (stattisticsByNameAffectation && !isNaN(stattisticsByNameAffectation.count) && stattisticsByNameAffectation.count > 0)
-					stattisticsByNameAffectation.checkbox || // Utilisez stattisticsByNameAffectation.checkbox ici
+					stattisticsByNameAffectation.checkbox || 
 					(stattisticsByNameAffectation && !isNaN(stattisticsByNameAffectation.count) && stattisticsByNameAffectation.count > 0)
-				  ) {
+				) {
 					console.log("visible : ", affectationItem.name)
 					
 					return (
