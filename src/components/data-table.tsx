@@ -249,11 +249,11 @@ export default function DataTable() {
     
     // const [checkedRows, setCheckedRows] = useState<{ [key: number]: boolean }>({});
     const [checkedRows, setCheckedRows] = useState<{ [key: number]: boolean }>({});
-    const handleCheckboxClick = (reference: number) => {
-        const updatedCheckedRows = { ...checkedRows };
-        updatedCheckedRows[reference] = !updatedCheckedRows[reference];
-        setCheckedRows(updatedCheckedRows);
-    };
+    // const handleCheckboxClick = (reference: number) => {
+    //     const updatedCheckedRows = { ...checkedRows };
+    //     updatedCheckedRows[reference] = !updatedCheckedRows[reference];
+    //     setCheckedRows(updatedCheckedRows);
+    // };
 
 
 

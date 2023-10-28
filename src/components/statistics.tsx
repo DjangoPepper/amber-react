@@ -28,6 +28,7 @@ export default function Statistics() {
 	
 	//fred deprecated
 	const [checkbox_Hold_State, set_checkbox_Hold_State] = useState<{ [key: string]: boolean }>({});
+	
 	const handleCheckboxChange = (k: string) => {
 		// Créez une copie de l'état actuel des cases à cocher
 		const updatedCheckboxState = { ...checkbox_Hold_State };
@@ -40,10 +41,9 @@ export default function Statistics() {
 		  // Si la destination n'est pas dans l'état, ajoutez-la et définissez-la comme cochée (true)
 		  updatedCheckboxState[k] = true;
 		}
-	  
 		// Mettez à jour l'état des cases à cocher avec la nouvelle valeur
 		set_checkbox_Hold_State(updatedCheckboxState);
-	  }; 
+	}; 
 	//fred deprecated
 	
 	const handlemaxi_ToChange = (k: string, value: string) => {
@@ -87,11 +87,10 @@ export default function Statistics() {
 
 	const statistics = data.reduce<any>((p, row) => {
 		if (!p[row.destination]) {
-		p[row.destination] = { count: 0, weight: 0, checkbox: false };
+		p[row.destination] = { count: 0, weight: 0  };
 		}
 		p[row.destination].count += 1;
-		p[row.destination].weight += row.weight;
-		// p[row.destination].checkbox = true;
+		p[row.destination].weight += parseFloat((row.weight).toFixed(3));
 		return p;
 	}, {});
   
@@ -154,11 +153,18 @@ export default function Statistics() {
 			
 			{/* PARTIE HAUTE */}
 			{affectation.map((affectationItem) => {
-				const stattisticsByNameAffectation = statistics[affectationItem.name] || {}; // Utilisez un objet vide par défaut
+
+				const statistics_array = statistics[affectationItem.name] || {}; // Utilisez un objet vide par défaut
+				// let chsafin = checkbox_Hold_State[affectationItem.name] || {};
+				let chsafin = checkbox_Hold_State[affectationItem.name] || false;
 				
 				if (
-					stattisticsByNameAffectation.checkbox || 
-					(stattisticsByNameAffectation && !isNaN(stattisticsByNameAffectation.count) && stattisticsByNameAffectation.count > 0)
+					chsafin || 
+					(
+						statistics_array && 
+						!isNaN(statistics_array.count) && 
+						statistics_array.count > 0
+					)
 				) {
 					console.log("visible : ", affectationItem.name)
 					
@@ -179,10 +185,14 @@ export default function Statistics() {
 							</td>
 
 							{/* DAY_Q */}
-							<td>{statistics[affectationItem.name].count}</td>
+							{/* <td>{ statistics[affectationItem.name].count}</td> */}
+							<td>{statistics[affectationItem.name] ? statistics[affectationItem.name].count : 0}</td>
+
 							{/* DAY_T */}
 							<td>
-							{parseFloat(statistics[affectationItem.name].weight).toLocaleString("en-US", {minimumFractionDigits: 3, maximumFractionDigits: 3,})}
+							{/* {parseFloat(statistics[affectationItem.name].weight).toLocaleString("en-US", {minimumFractionDigits: 3, maximumFractionDigits: 3,})} */}
+							{statistics[affectationItem.name] ? parseFloat(statistics[affectationItem.name].weight).toLocaleString("en-US", {minimumFractionDigits: 3, maximumFractionDigits: 3,}) : "0.000"}
+
 							</td>
 
 								{/* si dest est stock passe 7 colonnes */}
@@ -219,21 +229,41 @@ export default function Statistics() {
 
 											{/* TTL_Q */}
 											<td>
-											{isNaN(statistics[affectationItem.name].count + (previous_Values_QT[affectationItem.name] ? parseFloat(previous_Values_QT[affectationItem.name].prevQt) : 0)) ? 0 : (statistics[affectationItem.name].count + (previous_Values_QT[affectationItem.name] ? parseFloat(previous_Values_QT[affectationItem.name].prevQt) : 0))}
+											{/* {isNaN(statistics[affectationItem.name].count + (previous_Values_QT[affectationItem.name] ? parseFloat(previous_Values_QT[affectationItem.name].prevQt) : 0)) ? 0 : (statistics[affectationItem.name].count + (previous_Values_QT[affectationItem.name] ? parseFloat(previous_Values_QT[affectationItem.name].prevQt) : 0))} */}
+											{statistics[affectationItem.name] ? (isNaN(statistics[affectationItem.name].count + (previous_Values_QT[affectationItem.name] ? parseFloat(previous_Values_QT[affectationItem.name].prevQt) : 0)) ? 0 : (statistics[affectationItem.name].count + (previous_Values_QT[affectationItem.name] ? parseFloat(previous_Values_QT[affectationItem.name].prevQt) : 0))): 0}
+
 											</td>
 													
 											{/* TTL_T */}
-											<td>
+											{/* <td>
 											{isNaN(parseFloat(statistics[affectationItem.name].weight) + (previous_Values_TO[affectationItem.name]?.previous_Tons ? 
 													parseFloat(previous_Values_TO[affectationItem.name].previous_Tons) : 0)) ? 0 : 
 													(parseFloat(statistics[affectationItem.name].weight) + (previous_Values_TO[affectationItem.name]?.previous_Tons ? 
 													parseFloat(previous_Values_TO[affectationItem.name].previous_Tons) : 0))
 													.toLocaleString("en-US", { minimumFractionDigits: 3, maximumFractionDigits: 3 })}
+											</td> */}
+											<td>
+											{statistics[affectationItem.name] ? (
+												isNaN(
+												parseFloat(statistics[affectationItem.name].weight) +
+													(previous_Values_TO[affectationItem.name]?.previous_Tons
+													? parseFloat(previous_Values_TO[affectationItem.name].previous_Tons)
+													: 0)
+												)
+												? 0
+												: (
+													parseFloat(statistics[affectationItem.name].weight) +
+													(previous_Values_TO[affectationItem.name]?.previous_Tons
+														? parseFloat(previous_Values_TO[affectationItem.name].previous_Tons)
+														: 0)
+													).toLocaleString("en-US", { minimumFractionDigits: 3, maximumFractionDigits: 3 })
+											) : 0}
 											</td>
 
 
+
 											{/* PU */}
-											<td>
+											{/* <td>
 											{(
 												(
 													parseFloat(statistics[affectationItem.name].weight) +
@@ -241,7 +271,19 @@ export default function Statistics() {
 												) /
 												(statistics[affectationItem.name].count + (previous_Values_QT[affectationItem.name]?.prevQt ? parseFloat(previous_Values_QT[affectationItem.name].prevQt) : 0))
 												).toFixed(3)}
+											</td> */}
+											<td>
+												{statistics[affectationItem.name] ? (
+													(
+													(
+														parseFloat(statistics[affectationItem.name].weight) +
+														(previous_Values_TO[affectationItem.name]?.previous_Tons ? parseFloat(previous_Values_TO[affectationItem.name].previous_Tons) : 0)
+													) /
+													(statistics[affectationItem.name].count + (previous_Values_QT[affectationItem.name]?.prevQt ? parseFloat(previous_Values_QT[affectationItem.name].prevQt) : 0))
+													).toFixed(3)
+												) : 0}
 											</td>
+
 
 											{/* MAXI_TO */}
 											<td>
@@ -254,51 +296,98 @@ export default function Statistics() {
 											</td>
 
 											{/* DIFF_TO */}
-											<td className={
+											{/* <td className={
 													parseFloat(maxi_Values[affectationItem.name]?.maxi_To) - parseFloat(statistics[affectationItem.name].weight) - (previous_Values_TO[affectationItem.name]?.previous_Tons ? parseFloat(previous_Values_TO[affectationItem.name].previous_Tons) : 0) < 0 ? 'red-text' : '' }>
 												{isNaN(
 													parseFloat(maxi_Values[affectationItem.name]?.maxi_To) - parseFloat(statistics[affectationItem.name].weight) - (previous_Values_TO[affectationItem.name]?.previous_Tons ? parseFloat(previous_Values_TO[affectationItem.name].previous_Tons) : 0)) ? 0 : (
 													parseFloat(maxi_Values[affectationItem.name]?.maxi_To) - parseFloat(statistics[affectationItem.name].weight) - (previous_Values_TO[affectationItem.name]?.previous_Tons ? parseFloat(previous_Values_TO[affectationItem.name].previous_Tons) : 0))
 													.toLocaleString("en-US", { minimumFractionDigits: 3, maximumFractionDigits: 3 })
 												}
+											</td> */}
+											<td className={
+												statistics[affectationItem.name] &&
+												parseFloat(maxi_Values[affectationItem.name]?.maxi_To) - parseFloat(statistics[affectationItem.name].weight) - (previous_Values_TO[affectationItem.name]?.previous_Tons ? parseFloat(previous_Values_TO[affectationItem.name].previous_Tons) : 0) < 0 ? 'red-text' : ''
+												}>
+												{statistics[affectationItem.name] ? (
+													isNaN(
+													parseFloat(maxi_Values[affectationItem.name]?.maxi_To) - parseFloat(statistics[affectationItem.name].weight) - (previous_Values_TO[affectationItem.name]?.previous_Tons ? parseFloat(previous_Values_TO[affectationItem.name].previous_Tons) : 0)
+													) ? 0 : (
+													parseFloat(maxi_Values[affectationItem.name]?.maxi_To) - parseFloat(statistics[affectationItem.name].weight) - (previous_Values_TO[affectationItem.name]?.previous_Tons ? parseFloat(previous_Values_TO[affectationItem.name].previous_Tons) : 0)
+													).toLocaleString("en-US", { minimumFractionDigits: 3, maximumFractionDigits: 3 })
+												) : 0}
 											</td>
+
 
 											{/* LET_QT */}
-											<td className={Math.floor(
-											(
-												isNaN(parseFloat(maxi_Values[affectationItem.name]?.maxi_To) - parseFloat(statistics[affectationItem.name].weight) - (previous_Values_TO[affectationItem.name]?.previous_Tons ? parseFloat(previous_Values_TO[affectationItem.name].previous_Tons) : 0)) ?
-												0 :
+											{/* <td className={Math.floor(
 												(
-												parseFloat(maxi_Values[affectationItem.name]?.maxi_To) - parseFloat(statistics[affectationItem.name].weight) - (previous_Values_TO[affectationItem.name]?.previous_Tons ? parseFloat(previous_Values_TO[affectationItem.name].previous_Tons) : 0)
-												) /
-												(
-												(
-													parseFloat(statistics[affectationItem.name].weight) +
-													(previous_Values_TO[affectationItem.name]?.previous_Tons ? parseFloat(previous_Values_TO[affectationItem.name].previous_Tons) : 0)
-												) /
-												(statistics[affectationItem.name].count + (previous_Values_QT[affectationItem.name]?.prevQt ? parseFloat(previous_Values_QT[affectationItem.name].prevQt) : 0))
-												)
-											)
-											) < 0 ? 'red-text' : ''}>
-											{(
-												isNaN(parseFloat(maxi_Values[affectationItem.name]?.maxi_To) - parseFloat(statistics[affectationItem.name].weight) - (previous_Values_TO[affectationItem.name]?.previous_Tons ? parseFloat(previous_Values_TO[affectationItem.name].previous_Tons) : 0)) ?
-												0 :
-												Math.floor(
-												(
-													parseFloat(maxi_Values[affectationItem.name]?.maxi_To) - parseFloat(statistics[affectationItem.name].weight) - (previous_Values_TO[affectationItem.name]?.previous_Tons ? parseFloat(previous_Values_TO[affectationItem.name].previous_Tons) : 0)
-												) /
-												(
+													isNaN(parseFloat(maxi_Values[affectationItem.name]?.maxi_To) - parseFloat(statistics[affectationItem.name].weight) - (previous_Values_TO[affectationItem.name]?.previous_Tons ? parseFloat(previous_Values_TO[affectationItem.name].previous_Tons) : 0)) ?
+													0 :
 													(
-													parseFloat(statistics[affectationItem.name].weight) +
-													(previous_Values_TO[affectationItem.name]?.previous_Tons ? parseFloat(previous_Values_TO[affectationItem.name].previous_Tons) : 0)
+													parseFloat(maxi_Values[affectationItem.name]?.maxi_To) - parseFloat(statistics[affectationItem.name].weight) - (previous_Values_TO[affectationItem.name]?.previous_Tons ? parseFloat(previous_Values_TO[affectationItem.name].previous_Tons) : 0)
+													) / (
+													(
+														parseFloat(statistics[affectationItem.name].weight) +
+														(previous_Values_TO[affectationItem.name]?.previous_Tons ? parseFloat(previous_Values_TO[affectationItem.name].previous_Tons) : 0)
 													) /
 													(statistics[affectationItem.name].count + (previous_Values_QT[affectationItem.name]?.prevQt ? parseFloat(previous_Values_QT[affectationItem.name].prevQt) : 0))
+													)
 												)
-												)
-											).toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
+												) < 0 ? 'red-text' : ''}>
+												{(
+													isNaN(parseFloat(maxi_Values[affectationItem.name]?.maxi_To) - parseFloat(statistics[affectationItem.name].weight) - (previous_Values_TO[affectationItem.name]?.previous_Tons ? parseFloat(previous_Values_TO[affectationItem.name].previous_Tons) : 0)) ?
+													0 :
+													Math.floor(
+													(
+														parseFloat(maxi_Values[affectationItem.name]?.maxi_To) - parseFloat(statistics[affectationItem.name].weight) - (previous_Values_TO[affectationItem.name]?.previous_Tons ? parseFloat(previous_Values_TO[affectationItem.name].previous_Tons) : 0)
+													) /
+													(
+														(
+														parseFloat(statistics[affectationItem.name].weight) +
+														(previous_Values_TO[affectationItem.name]?.previous_Tons ? parseFloat(previous_Values_TO[affectationItem.name].previous_Tons) : 0)
+														) /
+														(statistics[affectationItem.name].count + (previous_Values_QT[affectationItem.name]?.prevQt ? parseFloat(previous_Values_QT[affectationItem.name].prevQt) : 0))
+													)
+													)
+												).toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
+											</td> */}
+											<td className={
+												(() => {
+													try {
+													const maxiTo = parseFloat(maxi_Values[affectationItem.name]?.maxi_To) || 0;
+													const statsWeight = parseFloat(statistics[affectationItem.name]?.weight) || 0;
+													const prevTO = parseFloat(previous_Values_TO[affectationItem.name]?.previous_Tons) || 0;
+													const prevQT = parseFloat(previous_Values_QT[affectationItem.name]?.prevQt) || 0;
+
+													const result = (maxiTo - statsWeight - prevTO) / (
+														(statsWeight + prevTO) /
+														(statistics[affectationItem.name]?.count + prevQT)
+													);
+
+													return Math.floor(isNaN(result) ? 0 : result) < 0 ? 'red-text' : '';
+													} catch (error) {
+													return 'red-text';
+													}
+												})()
+												}>
+												{(() => {
+													try {
+													const maxiTo = parseFloat(maxi_Values[affectationItem.name]?.maxi_To) || 0;
+													const statsWeight = parseFloat(statistics[affectationItem.name]?.weight) || 0;
+													const prevTO = parseFloat(previous_Values_TO[affectationItem.name]?.previous_Tons) || 0;
+													const prevQT = parseFloat(previous_Values_QT[affectationItem.name]?.prevQt) || 0;
+
+													const result = (maxiTo - statsWeight - prevTO) / (
+														(statsWeight + prevTO) /
+														(statistics[affectationItem.name]?.count + prevQT)
+													);
+
+													return isNaN(result) ? 0 : Math.floor(result).toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+													} catch (error) {
+													return '0';
+													}
+												})()}
 											</td>
-
-
 
 										{/* retour de condition stock */}		
 										</>
