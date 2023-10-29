@@ -281,16 +281,38 @@ export default function Statistics() {
 											{/* <td className={
 
 											</td> */}
-											<td>
+											{/* <td>
 												{(
 													parseFloat(maxi_Values[affectationItem.name]?.maxi_To ?? 0) - 
 													(
 													(parseFloat(statistics[affectationItem.name]?.weight) || 0) +
 													(parseFloat(previous_Values_TO[affectationItem.name]?.previous_Tons) || 0)
-													)
+													)< 0 ? 'red-text' : 'blue-text';
 													).toLocaleString("en-US", { minimumFractionDigits: 3, maximumFractionDigits: 3 })
 												}
+											</td> */}
+											<td className={
+												(
+														(parseFloat(maxi_Values[affectationItem.name]?.maxi_To ?? 0) - 
+															(
+																(parseFloat(statistics[affectationItem.name]?.weight) || 0) +
+																(parseFloat(previous_Values_TO[affectationItem.name]?.previous_Tons) || 0)
+															)
+														) < 0 ? 'red-text' : 'blue-text'
+												)
+											}
+												>
+											{
+												(
+													parseFloat(maxi_Values[affectationItem.name]?.maxi_To ?? 0) - 
+													(
+													(parseFloat(statistics[affectationItem.name]?.weight) || 0) +
+													(parseFloat(previous_Values_TO[affectationItem.name]?.previous_Tons) || 0)
+													)
+												).toLocaleString("en-US", { minimumFractionDigits: 3, maximumFractionDigits: 3 })
+											}
 											</td>
+
 											{/* LET_QT */}
 											{/* <td className={Math.floor(
 												(
@@ -337,7 +359,7 @@ export default function Statistics() {
 														(statistics[affectationItem.name]?.count + prevQT)
 													);
 
-													return Math.floor(isNaN(result) ? 0 : result) < 0 ? 'red-text' : '';
+													return Math.floor(isNaN(result) ? 0 : result) < 0 ? 'red-text' : 'blue-text';
 													} catch (error) {
 													return 'red-text';
 													}
