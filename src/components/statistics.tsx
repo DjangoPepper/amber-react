@@ -229,31 +229,12 @@ export default function Statistics() {
 
 											{/* TTL_Q */}
 											<td>
-											{/* {isNaN(statistics[affectationItem.name].count + (previous_Values_QT[affectationItem.name] ? parseFloat(previous_Values_QT[affectationItem.name].prevQt) : 0)) ? 0 : (statistics[affectationItem.name].count + (previous_Values_QT[affectationItem.name] ? parseFloat(previous_Values_QT[affectationItem.name].prevQt) : 0))} */}
-											{/* {statistics[affectationItem.name] ? (isNaN(statistics[affectationItem.name].count + (previous_Values_QT[affectationItem.name] ? parseFloat(previous_Values_QT[affectationItem.name].prevQt) : 0)) ? 0 : (statistics[affectationItem.name].count + (previous_Values_QT[affectationItem.name] ? parseFloat(previous_Values_QT[affectationItem.name].prevQt) : 0))): 0} */}
-											{/* {statistics[affectationItem.name] ? (												isNaN(statistics[affectationItem.name].count) || isNaN(parseFloat(previous_Values_QT[affectationItem.name]?.prevQt))													? 0													: statistics[affectationItem.name].count + parseFloat(previous_Values_QT[affectationItem.name].prevQt)) : 0} */}
 											{statistics[affectationItem.name]?.count ?? 0 
 											+ 
 											(previous_Values_QT[affectationItem.name]?.prevQt ? parseFloat(previous_Values_QT[affectationItem.name].prevQt) : 0)}
-
-
 											</td>
 													
-											{/* TTL_T */}
-											{/* <td>
-											{isNaN(parseFloat(statistics[affectationItem.name].weight) + (previous_Values_TO[affectationItem.name]?.previous_Tons ? 
-													parseFloat(previous_Values_TO[affectationItem.name].previous_Tons) : 0)) ? 0 : 
-													(parseFloat(statistics[affectationItem.name].weight) + (previous_Values_TO[affectationItem.name]?.previous_Tons ? 
-													parseFloat(previous_Values_TO[affectationItem.name].previous_Tons) : 0))
-													.toLocaleString("en-US", { minimumFractionDigits: 3, maximumFractionDigits: 3 })}
-											</td> */}
-											{/* <td>
-											{statistics[affectationItem.name]?.weight ?? 0 +
-												(previous_Values_TO[affectationItem.name]?.previous_Tons
-												? parseFloat(previous_Values_TO[affectationItem.name].previous_Tons)
-												: 0).toLocaleString("en-US", { minimumFractionDigits: 3, maximumFractionDigits: 3 })
-											}
-											</td> */}
+											{/* TTL_T */}											
 											<td>
 												{(
 													(statistics[affectationItem.name]?.weight ?? 0) +
@@ -265,29 +246,26 @@ export default function Statistics() {
 
 
 
-											{/* PU */}
-											{/* <td>
+											{/* PU */}											
+											<td>
 											{(
 												(
-													parseFloat(statistics[affectationItem.name].weight) +
-													(previous_Values_TO[affectationItem.name]?.previous_Tons ? parseFloat(previous_Values_TO[affectationItem.name].previous_Tons) : 0)
-												) /
-												(statistics[affectationItem.name].count + (previous_Values_QT[affectationItem.name]?.prevQt ? parseFloat(previous_Values_QT[affectationItem.name].prevQt) : 0))
-												).toFixed(3)}
-											</td> */}
-											<td>
-												{statistics[affectationItem.name] ? (
-													(
-													(
-														parseFloat(statistics[affectationItem.name].weight) +
-														(previous_Values_TO[affectationItem.name]?.previous_Tons ? parseFloat(previous_Values_TO[affectationItem.name].previous_Tons) : 0)
-													) /
-													(statistics[affectationItem.name].count + (previous_Values_QT[affectationItem.name]?.prevQt ? parseFloat(previous_Values_QT[affectationItem.name].prevQt) : 0))
-													).toFixed(3)
-												) : 0}
+													(statistics[affectationItem.name]?.weight ?? 0) +
+													(previous_Values_TO[affectationItem.name]?.previous_Tons
+													? parseFloat(previous_Values_TO[affectationItem.name].previous_Tons)
+													: 0)
+												)
+												// .toLocaleString("en-US", { minimumFractionDigits: 3, maximumFractionDigits: 3 })
+												/
+												(
+												(statistics[affectationItem.name]?.count ?? 0 
+													+ 
+												(previous_Values_QT[affectationItem.name]?.prevQt ? parseFloat(previous_Values_QT[affectationItem.name].prevQt) : 0))
+												)
+											).toLocaleString("en-US", { minimumFractionDigits: 3, maximumFractionDigits: 3 })}
 											</td>
 
-
+											
 											{/* MAXI_TO */}
 											<td>
 												<input
