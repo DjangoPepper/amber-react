@@ -285,7 +285,7 @@ export default function Statistics() {
 													.toLocaleString("en-US", { minimumFractionDigits: 3, maximumFractionDigits: 3 })
 												}
 											</td> */}
-											<td className={
+											{/* <td className={
 												statistics[affectationItem.name] &&
 												parseFloat(maxi_Values[affectationItem.name]?.maxi_To) - parseFloat(statistics[affectationItem.name].weight) - (previous_Values_TO[affectationItem.name]?.previous_Tons ? parseFloat(previous_Values_TO[affectationItem.name].previous_Tons) : 0) < 0 ? 'red-text' : ''
 												}>
@@ -296,8 +296,20 @@ export default function Statistics() {
 													parseFloat(maxi_Values[affectationItem.name]?.maxi_To) - parseFloat(statistics[affectationItem.name].weight) - (previous_Values_TO[affectationItem.name]?.previous_Tons ? parseFloat(previous_Values_TO[affectationItem.name].previous_Tons) : 0)
 													).toLocaleString("en-US", { minimumFractionDigits: 3, maximumFractionDigits: 3 })
 												) : 0}
-											</td>
-
+											</td> */}
+											{/* {	
+												( 	
+													parseFloat((maxi_Values[affectationItem.name] ? maxi_Values[affectationItem.name].maxi_To : 0)) - 
+													(statistics[affectationItem.name]?.weight ?? 0) +
+													(previous_Values_TO[affectationItem.name]?.previous_Tons ? parseFloat(previous_Values_TO[affectationItem.name].previous_Tons) : 0)
+												).toLocaleString("en-US", { minimumFractionDigits: 3, maximumFractionDigits: 3 })}
+											} */}
+											{(
+												parseFloat(maxi_Values[affectationItem.name]?.maxi_To ?? 0) - 
+												(parseFloat(statistics[affectationItem.name]?.weight) || 0) +
+												(parseFloat(previous_Values_TO[affectationItem.name]?.previous_Tons) || 0)
+												).toLocaleString("en-US", { minimumFractionDigits: 3, maximumFractionDigits: 3 })
+											}
 
 											{/* LET_QT */}
 											{/* <td className={Math.floor(
