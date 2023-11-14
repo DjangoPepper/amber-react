@@ -180,15 +180,15 @@ export default function Statistics() {
 					<th>PREV_T</th>
 					<th>TT_Q</th>
 					<th>TT_T</th>
-					<Button
+					{/* <Button
 						variant={Extended_Tally_Value ? "info" : "secondary"}
 						onClick={handle_Extended_Tally}
 					>
 						E
-					</Button>
-					{/* <Button variant="info" onClick={handle_Extended_Tally}>
-						E
 					</Button> */}
+					<Button variant="info" onClick={handle_Extended_Tally}>
+						E
+					</Button>
 					{/* <Button variant="warning" onClick={handleStabiloClick}>S</Button> */}
 					{/* <Button variant="info" onClick={(e) => handle_Extended_Tally}>E</Button> */}
 					
@@ -721,7 +721,6 @@ export default function Statistics() {
 			</tbody>
 		</Table>
 )}
-
 {/* *********************************************************************************************** */}
 {/* *********************************************************************************************** */}
 
