@@ -29,7 +29,9 @@ export default function Statistics() {
 	const selectedColors = useSelector<RootState, { [key: string]: string }>((state) => state.data.pickerColors);
 	
 	//fred deprecated
-	const [Extended_Tally_Value, set_Extended_Tally_Value] = useState(false);
+	// const [Extended_Tally_Value, set_Extended_Tally_Value] = useState(false);
+	const [Extended_Tally_Value, set_Extended_Tally_Value] = React.useState(false);
+
 	
 	const handle_Extended_Tally = () => {
 		set_Extended_Tally_Value((prevValue) => {
@@ -178,9 +180,15 @@ export default function Statistics() {
 					<th>PREV_T</th>
 					<th>TT_Q</th>
 					<th>TT_T</th>
-					<Button variant="info" onClick={handle_Extended_Tally}>
+					<Button
+						variant={Extended_Tally_Value ? "info" : "secondary"}
+						onClick={handle_Extended_Tally}
+					>
 						E
 					</Button>
+					{/* <Button variant="info" onClick={handle_Extended_Tally}>
+						E
+					</Button> */}
 					{/* <Button variant="warning" onClick={handleStabiloClick}>S</Button> */}
 					{/* <Button variant="info" onClick={(e) => handle_Extended_Tally}>E</Button> */}
 					
@@ -451,7 +459,7 @@ export default function Statistics() {
 {/* *********************************************************************************************** */}
 {/* *********************************************************************************************** */}
 {/* *********************************************************************************************** */}
-
+{Extended_Tally_Value && (
 <Table>
 			{/* ... En-tête de table ... */}		
 			<thead>
@@ -712,6 +720,7 @@ export default function Statistics() {
 				</tr>
 			</tbody>
 		</Table>
+)}
 
 {/* *********************************************************************************************** */}
 {/* *********************************************************************************************** */}
