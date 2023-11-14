@@ -140,6 +140,8 @@ export default function DataTable() {
     // const [showModal, setShowModal] = useState(false);
     const [PickerColorForSelectedCale, setPickerColorForSelectedCale] = useState<{ [key: string]: string }>({});
     const [newSelectedCale, setnewSelectedCale] = useState<string>('');
+    // const [ExtentedTally, setExtentedTally] = useState<string>('');
+
     const [newColor, setNewColor] = useState<string>('');
     // const [textColor, setTextColor] = useState('black'); // État pour gérer la couleur du texte
     // const [selectedColor, setSelectedColor] = useState('#fff'); // Couleur par défaut
@@ -152,14 +154,20 @@ export default function DataTable() {
         dispatch(DataAction.changePickColors(colors));
     }
     
+    // const [ExtentedTally, setExtentedTally] = useState<string>('');
+    // const handleExtentedTally = () => { 
+    //     setExtentedTally(ExtentedTally);
+    // };
+
     const handleStabiloClick = () => { 
-        // setShowModal(true); 
         setnewSelectedCale(selectedCale);
     };
+
     const handleCloseModal = () => { 
         // setShowModal(false); 
         setnewSelectedCale(""); 
     };
+
     const handleColorChange = (color: ColorResult) => {
         // setSelectedColor(color.hex);
         setSelectedColors({...selectedColors, [newSelectedCale]: color.hex});
@@ -292,11 +300,7 @@ export default function DataTable() {
                 &nbsp;
                 <Button variant="danger" onClick={clear}>Import</Button>
                 &nbsp;
-                {/* {isStabiloButtonVisible && (
-                    <Button variant="warning" onClick={handleStabiloClick}>Stabilo</Button>
-                )}
-                {/* <Button variant="warning" onClick={handleStabiloClick}>Stabilo</Button> */}
-                {/* &nbsp; */}
+                
             </div>
             <thead>
                 {table.getHeaderGroups().map(headerGroup => (
