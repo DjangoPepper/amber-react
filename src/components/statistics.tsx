@@ -20,10 +20,10 @@ export default function Statistics() {
 
 	let totalstockCount = 0;
 	let totalstockWeight = 0;
-	  
+	
 	const dispatch = useDispatch();	
-	const [previous_Values_TO, set_previous_Values_TO] = useState<{ [key: string]: { prevTO: string; previous_Tons: string } }>({});
-	const [previous_Values_QT, set_previous_Values_QT] = useState<{ [key: string]: { prevQt: string; previous_QT: string } }>({});
+	const [previous_Values_TO, set_previous_Values_TO] = useState<{ [key: string]: { prevTO: string; previous_TONS: string } }>({});
+	const [previous_Values_QT, set_previous_Values_QT] = useState<{ [key: string]: { prevQT: string; previous_QT: string } }>({});
 	const [maxi_Values, set_maxi_Values] = useState<{ [key: string]: { maxi_To: string } }>({});
 	const data = useSelector<RootState, Data[]>((state) => state.data.data);
 	const selectedColors = useSelector<RootState, { [key: string]: string }>((state) => state.data.pickerColors);
@@ -35,11 +35,11 @@ export default function Statistics() {
 	
 	const handle_Extended_Tally = () => {
 		set_Extended_Tally_Value((prevValue) => {
-		  console.log("handle_Extended_Tally :", prevValue);
-		  return !prevValue;
+			console.log("handle_Extended_Tally :", prevValue);
+			return !prevValue;
 		});
-	  };
-	  
+		};
+	
 
 	// const [Extented_Tally, set_Extented_Tally] = useState<{ [key: string]: boolean }>({});
 	/* const updated_Extended_Tally: { [key: string]: boolean } = {}; // Remplacez le type selon votre besoin
@@ -85,17 +85,17 @@ export default function Statistics() {
 	
 	const handlemaxi_ToChange = (k: string, value: string) => {
 		set_maxi_Values((maxi_Values: any) => ({
-		  ...maxi_Values,
-		  [k]: { maxi_To: value },
+			...maxi_Values,
+			[k]: { maxi_To: value },
 		}));
 		const numericValue = parseFloat(value);
 		dispatch(DataAction.changeMaxiTONS({ destination: k, value: numericValue }));
 	};
 
-	const handle_PrevQt_Change = (k: string, value: string) => {
+	const handle_prevQT_Change = (k: string, value: string) => {
 		set_previous_Values_QT((previous_Values_Qt) => ({
-		  ...previous_Values_Qt,
-		  [k]: { prevQt: value, previous_QT: previous_Values_Qt[k] ? previous_Values_Qt[k].previous_QT : '0' },
+			...previous_Values_Qt,
+			[k]: { prevQT: value, previous_QT: previous_Values_Qt[k] ? previous_Values_Qt[k].previous_QT : '0' },
 		}));
 		let numericValue = parseFloat(value) || 0;
 		dispatch(DataAction.changePreviousQTT({ destination: k, value: numericValue }));
@@ -103,8 +103,8 @@ export default function Statistics() {
 
 	const handle_PrevTo_Change = (k: string, value: string) => {
 		set_previous_Values_TO((previous_Values_TO) => ({
-		  ...previous_Values_TO,
-		  [k]: { prevTO: previous_Values_TO[k] ? previous_Values_TO[k].prevTO : '0', previous_Tons: value },
+			...previous_Values_TO,
+			[k]: { prevTO: previous_Values_TO[k] ? previous_Values_TO[k].prevTO : '0', previous_TONS: value },
 		}));
 		let numericValue = parseFloat(value) || 0;
 		dispatch(DataAction.changePreviousTONS({ destination: k, value: numericValue }));
@@ -115,11 +115,11 @@ export default function Statistics() {
 	}, 0);
 	
 	const totalPreviousCalesCount = Object.keys(previous_Values_QT).reduce((total, k) => {
-		return total + (previous_Values_QT[k] ? parseFloat(previous_Values_QT[k].prevQt) : 0);
+		return total + (previous_Values_QT[k] ? parseFloat(previous_Values_QT[k].prevQT) : 0);
 	}, 0);
 	
 	const totalPreviousCalesWeight = Object.keys(previous_Values_TO).reduce((total, k) => {
-		return total + (previous_Values_TO[k]?.previous_Tons ? parseFloat(previous_Values_TO[k].previous_Tons) : 0);
+		return total + (previous_Values_TO[k]?.previous_TONS ? parseFloat(previous_Values_TO[k].previous_TONS) : 0);
 	}, 0);
 
 	const statistics = data.reduce<any>((p, row) => {
@@ -130,12 +130,12 @@ export default function Statistics() {
 		p[row.destination].weight += parseFloat((row.weight).toFixed(3));
 		return p;
 	}, {});
-  
+
 	Object.values(statistics).forEach((destinationStats: any ) => {    
 		totalCount += destinationStats.count;
 		totalWeight += destinationStats.weight;
 		totalCalesCount = totalCount ;
-    	totalCalesWeight = totalWeight;
+		totalCalesWeight = totalWeight;
 
 
 		if (statistics.stock) {
@@ -206,7 +206,7 @@ export default function Statistics() {
 					<th>Q</th> */}
 				</tr>
 			</thead>
-		  	<tbody>
+			<tbody>
 			
 {/* HEADERS */}
 			{affectation.map((affectationItem) => {
@@ -265,8 +265,15 @@ export default function Statistics() {
 												<input
 													type="text"
 													style={{ width: '45px' }}
-													value={previous_Values_QT[affectationItem.name] ? previous_Values_QT[affectationItem.name].prevQt : 0}
-													onChange={(e) => handle_PrevQt_Change(affectationItem.name, e.target.value)}
+													value={
+														// statistics[affectationItem.name]?.count ?? 0
+														previous_Values_QT[affectationItem.name] ? 
+															previous_Values_QT[affectationItem.name].prevQT 
+															// previous_Values_QT[affectationItem.name].previous_QT
+															: 
+															0
+													}
+													onChange={(e) => handle_prevQT_Change(affectationItem.name, e.target.value)}
 												/>
 											</td>
 													
@@ -275,7 +282,12 @@ export default function Statistics() {
 												<input
 													type="text"
 													style={{ width: '80px' }}
-													value={previous_Values_TO[affectationItem.name] ? previous_Values_TO[affectationItem.name].previous_Tons : 0}
+													value={
+														previous_Values_TO[affectationItem.name] ? 
+															previous_Values_TO[affectationItem.name].previous_TONS 
+															: 
+															0
+													}
 													onChange={(e) => handle_PrevTo_Change(affectationItem.name, e.target.value)}
 												/>
 											</td>
@@ -284,13 +296,13 @@ export default function Statistics() {
 											{/* <td>
 												{statistics[affectationItem.name]?.count ?? 0 
 												+ 
-												(previous_Values_QT[affectationItem.name]?.prevQt ? parseFloat(previous_Values_QT[affectationItem.name].prevQt) : 0)}
+												(previous_Values_QT[affectationItem.name]?.prevQT ? parseFloat(previous_Values_QT[affectationItem.name].prevQT) : 0)}
 											</td> */}
 											<td>
 												{(
 													(statistics[affectationItem.name]?.count ?? 0) +
-													(previous_Values_QT[affectationItem.name]?.prevQt
-													? parseFloat(previous_Values_QT[affectationItem.name].prevQt)
+													(previous_Values_QT[affectationItem.name]?.prevQT
+													? parseFloat(previous_Values_QT[affectationItem.name].prevQT)
 													: 0)
 												)
 												}
@@ -300,8 +312,8 @@ export default function Statistics() {
 											<td>
 												{(
 													(statistics[affectationItem.name]?.weight ?? 0) +
-													(previous_Values_TO[affectationItem.name]?.previous_Tons
-													? parseFloat(previous_Values_TO[affectationItem.name].previous_Tons)
+													(previous_Values_TO[affectationItem.name]?.previous_TONS
+													? parseFloat(previous_Values_TO[affectationItem.name].previous_TONS)
 													: 0)
 												).toLocaleString("en-US", { minimumFractionDigits: 3, maximumFractionDigits: 3 })}
 											</td>
@@ -311,8 +323,8 @@ export default function Statistics() {
 												{(
 													(
 														(statistics[affectationItem.name]?.weight ?? 0) +
-														(previous_Values_TO[affectationItem.name]?.previous_Tons
-														? parseFloat(previous_Values_TO[affectationItem.name].previous_Tons)
+														(previous_Values_TO[affectationItem.name]?.previous_TONS
+														? parseFloat(previous_Values_TO[affectationItem.name].previous_TONS)
 														: 0)
 													)
 													// .toLocaleString("en-US", { minimumFractionDigits: 3, maximumFractionDigits: 3 })
@@ -320,7 +332,7 @@ export default function Statistics() {
 													(
 													(statistics[affectationItem.name]?.count ?? 0 
 														+ 
-													(previous_Values_QT[affectationItem.name]?.prevQt ? parseFloat(previous_Values_QT[affectationItem.name].prevQt) : 0))
+													(previous_Values_QT[affectationItem.name]?.prevQT ? parseFloat(previous_Values_QT[affectationItem.name].prevQT) : 0))
 													)
 												).toLocaleString("en-US", { minimumFractionDigits: 3, maximumFractionDigits: 3 })}
 											</td>
@@ -345,7 +357,7 @@ export default function Statistics() {
 														(parseFloat(maxi_Values[affectationItem.name]?.maxi_To ?? 0) - 
 															(
 																(parseFloat(statistics[affectationItem.name]?.weight) || 0) +
-																(parseFloat(previous_Values_TO[affectationItem.name]?.previous_Tons) || 0)
+																(parseFloat(previous_Values_TO[affectationItem.name]?.previous_TONS) || 0)
 															)
 														) < 0 ? 'red-text' : 'blue-text'
 												)
@@ -356,7 +368,7 @@ export default function Statistics() {
 													parseFloat(maxi_Values[affectationItem.name]?.maxi_To ?? 0) - 
 													(
 													(parseFloat(statistics[affectationItem.name]?.weight) || 0) +
-													(parseFloat(previous_Values_TO[affectationItem.name]?.previous_Tons) || 0)
+													(parseFloat(previous_Values_TO[affectationItem.name]?.previous_TONS) || 0)
 													)
 												).toLocaleString("en-US", { minimumFractionDigits: 3, maximumFractionDigits: 3 })
 											}
@@ -369,8 +381,8 @@ export default function Statistics() {
 													try {
 													const maxiTo = parseFloat(maxi_Values[affectationItem.name]?.maxi_To) || 0;
 													const statsWeight = parseFloat(statistics[affectationItem.name]?.weight) || 0;
-													const prevTO = parseFloat(previous_Values_TO[affectationItem.name]?.previous_Tons) || 0;
-													const prevQT = parseFloat(previous_Values_QT[affectationItem.name]?.prevQt) || 0;
+													const prevTO = parseFloat(previous_Values_TO[affectationItem.name]?.previous_TONS) || 0;
+													const prevQT = parseFloat(previous_Values_QT[affectationItem.name]?.prevQT) || 0;
 
 													const result = (maxiTo - statsWeight - prevTO) / (
 														(statsWeight + prevTO) /
@@ -387,8 +399,8 @@ export default function Statistics() {
 													try {
 													const maxiTo = parseFloat(maxi_Values[affectationItem.name]?.maxi_To) || 0;
 													const statsWeight = parseFloat(statistics[affectationItem.name]?.weight) || 0;
-													const prevTO = parseFloat(previous_Values_TO[affectationItem.name]?.previous_Tons) || 0;
-													const prevQT = parseFloat(previous_Values_QT[affectationItem.name]?.prevQt) || 0;
+													const prevTO = parseFloat(previous_Values_TO[affectationItem.name]?.previous_TONS) || 0;
+													const prevQT = parseFloat(previous_Values_QT[affectationItem.name]?.prevQT) || 0;
 
 													const result = (maxiTo - statsWeight - prevTO) / (
 														(statsWeight + prevTO) /
@@ -423,13 +435,13 @@ export default function Statistics() {
 				<td>Totaux</td>
 {/* Q */}
 				<td> </td>					 									
-				<td>{totalCalesCount}</td>										
+				<td>{isNaN(totalCalesCount) ? 0 : totalCalesCount}</td>										
 {/* T */}
-				<td>{totalCalesWeight.toLocaleString("en-US")}</td>				
+				<td>{isNaN(totalCalesWeight) ? 0 : totalCalesWeight.toLocaleString("en-US")}</td>				
 {/*PREV_Q */}				
-				<td>{totalPreviousCalesCount}</td>								
+				<td>{isNaN(totalPreviousCalesCount) ? 0 : totalPreviousCalesCount}</td>								
 {/*PREV_T */}
-				<td>{totalPreviousCalesWeight.toLocaleString("en-US")}</td>
+				<td>{isNaN(totalPreviousCalesWeight) ? 0 : totalPreviousCalesWeight.toLocaleString("en-US")}</td>
 {/*TT_Q */}				
 				<td>{totalCalesCount + totalPreviousCalesCount}</td>							
 {/*TT_T */}					
@@ -481,7 +493,7 @@ export default function Statistics() {
 					<th>DIFF Q</th>
 				</tr>
 			</thead>
-		  	<tbody>
+			<tbody>
 			
 {/* HEADERS */}
 			{affectation.map((affectationItem) => {
@@ -541,8 +553,8 @@ export default function Statistics() {
 												<input
 													type="text"
 													style={{ width: '45px' }}
-													value={previous_Values_QT[affectationItem.name] ? previous_Values_QT[affectationItem.name].prevQt : 0}
-													onChange={(e) => handle_PrevQt_Change(affectationItem.name, e.target.value)}
+													value={previous_Values_QT[affectationItem.name] ? previous_Values_QT[affectationItem.name].prevQT : 0}
+													onChange={(e) => handle_prevQT_Change(affectationItem.name, e.target.value)}
 												/>
 											</td>
 													 */}
@@ -551,7 +563,7 @@ export default function Statistics() {
 												<input
 													type="text"
 													style={{ width: '80px' }}
-													value={previous_Values_TO[affectationItem.name] ? previous_Values_TO[affectationItem.name].previous_Tons : 0}
+													value={previous_Values_TO[affectationItem.name] ? previous_Values_TO[affectationItem.name].previous_TONS : 0}
 													onChange={(e) => handle_PrevTo_Change(affectationItem.name, e.target.value)}
 												/>
 											</td>
@@ -561,15 +573,15 @@ export default function Statistics() {
 {/* 											<td>
 												{statistics[affectationItem.name]?.count ?? 0 
 												+ 
-												(previous_Values_QT[affectationItem.name]?.prevQt ? parseFloat(previous_Values_QT[affectationItem.name].prevQt) : 0)}
+												(previous_Values_QT[affectationItem.name]?.prevQT ? parseFloat(previous_Values_QT[affectationItem.name].prevQT) : 0)}
 											</td>
  */}													
 {/* TTL_T */}											
 {/* 											<td>
 												{(
 													(statistics[affectationItem.name]?.weight ?? 0) +
-													(previous_Values_TO[affectationItem.name]?.previous_Tons
-													? parseFloat(previous_Values_TO[affectationItem.name].previous_Tons)
+													(previous_Values_TO[affectationItem.name]?.previous_TONS
+													? parseFloat(previous_Values_TO[affectationItem.name].previous_TONS)
 													: 0)
 												).toLocaleString("en-US", { minimumFractionDigits: 3, maximumFractionDigits: 3 })}
 											</td> */}
@@ -579,8 +591,8 @@ export default function Statistics() {
 												{(
 													(
 														(statistics[affectationItem.name]?.weight ?? 0) +
-														(previous_Values_TO[affectationItem.name]?.previous_Tons
-														? parseFloat(previous_Values_TO[affectationItem.name].previous_Tons)
+														(previous_Values_TO[affectationItem.name]?.previous_TONS
+														? parseFloat(previous_Values_TO[affectationItem.name].previous_TONS)
 														: 0)
 													)
 													// .toLocaleString("en-US", { minimumFractionDigits: 3, maximumFractionDigits: 3 })
@@ -588,7 +600,7 @@ export default function Statistics() {
 													(
 													(statistics[affectationItem.name]?.count ?? 0 
 														+ 
-													(previous_Values_QT[affectationItem.name]?.prevQt ? parseFloat(previous_Values_QT[affectationItem.name].prevQt) : 0))
+													(previous_Values_QT[affectationItem.name]?.prevQT ? parseFloat(previous_Values_QT[affectationItem.name].prevQT) : 0))
 													)
 												).toLocaleString("en-US", { minimumFractionDigits: 3, maximumFractionDigits: 3 })}
 											</td>
@@ -613,7 +625,7 @@ export default function Statistics() {
 														(parseFloat(maxi_Values[affectationItem.name]?.maxi_To ?? 0) - 
 															(
 																(parseFloat(statistics[affectationItem.name]?.weight) || 0) +
-																(parseFloat(previous_Values_TO[affectationItem.name]?.previous_Tons) || 0)
+																(parseFloat(previous_Values_TO[affectationItem.name]?.previous_TONS) || 0)
 															)
 														) < 0 ? 'red-text' : 'blue-text'
 												)
@@ -624,7 +636,7 @@ export default function Statistics() {
 													parseFloat(maxi_Values[affectationItem.name]?.maxi_To ?? 0) - 
 													(
 													(parseFloat(statistics[affectationItem.name]?.weight) || 0) +
-													(parseFloat(previous_Values_TO[affectationItem.name]?.previous_Tons) || 0)
+													(parseFloat(previous_Values_TO[affectationItem.name]?.previous_TONS) || 0)
 													)
 												).toLocaleString("en-US", { minimumFractionDigits: 3, maximumFractionDigits: 3 })
 											}
@@ -637,8 +649,8 @@ export default function Statistics() {
 													try {
 													const maxiTo = parseFloat(maxi_Values[affectationItem.name]?.maxi_To) || 0;
 													const statsWeight = parseFloat(statistics[affectationItem.name]?.weight) || 0;
-													const prevTO = parseFloat(previous_Values_TO[affectationItem.name]?.previous_Tons) || 0;
-													const prevQT = parseFloat(previous_Values_QT[affectationItem.name]?.prevQt) || 0;
+													const prevTO = parseFloat(previous_Values_TO[affectationItem.name]?.previous_TONS) || 0;
+													const prevQT = parseFloat(previous_Values_QT[affectationItem.name]?.prevQT) || 0;
 
 													const result = (maxiTo - statsWeight - prevTO) / (
 														(statsWeight + prevTO) /
@@ -655,8 +667,8 @@ export default function Statistics() {
 													try {
 													const maxiTo = parseFloat(maxi_Values[affectationItem.name]?.maxi_To) || 0;
 													const statsWeight = parseFloat(statistics[affectationItem.name]?.weight) || 0;
-													const prevTO = parseFloat(previous_Values_TO[affectationItem.name]?.previous_Tons) || 0;
-													const prevQT = parseFloat(previous_Values_QT[affectationItem.name]?.prevQt) || 0;
+													const prevTO = parseFloat(previous_Values_TO[affectationItem.name]?.previous_TONS) || 0;
+													const prevQT = parseFloat(previous_Values_QT[affectationItem.name]?.prevQT) || 0;
 
 													const result = (maxiTo - statsWeight - prevTO) / (
 														(statsWeight + prevTO) /
