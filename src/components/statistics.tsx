@@ -28,11 +28,8 @@ export default function Statistics() {
 	const data = useSelector<RootState, Data[]>((state) => state.data.data);
 	const selectedColors = useSelector<RootState, { [key: string]: string }>((state) => state.data.pickerColors);
 	
-	//fred deprecated
-	// const [Extended_Tally_Value, set_Extended_Tally_Value] = useState(false);
 	const [Extended_Tally_Value, set_Extended_Tally_Value] = React.useState(false);
 
-	
 	const handle_Extended_Tally = () => {
 		set_Extended_Tally_Value((prevValue) => {
 			console.log("handle_Extended_Tally :", prevValue);
@@ -41,41 +38,19 @@ export default function Statistics() {
 		};
 	
 
-	// const [Extented_Tally, set_Extented_Tally] = useState<{ [key: string]: boolean }>({});
-	/* const updated_Extended_Tally: { [key: string]: boolean } = {}; // Remplacez le type selon votre besoin
-	
-	// const handle_Extended_Tally = (k: string, event: React.MouseEvent<HTMLButtonElement>) => {
-	const handle_Extended_Tally = (k: string, event: React.MouseEvent<HTMLButtonElement>) => {
-
-		// Créez une copie de l'état actuel des cases à cocher
-		const updated_Extended_Tally = { ...Extented_Tally };
-		
-	  
-		// Vérifiez si la destination k est déjà dans l'état des cases à cocher
-		if (updated_Extended_Tally[k] !== undefined) {
-		  // Si oui, basculez simplement la valeur (true devient false, false devient true)
-		  updated_Extended_Tally[k] = !updated_Extended_Tally[k];
-		} else {
-		  // Si la destination n'est pas dans l'état, ajoutez-la et définissez-la comme cochée (true)
-		  updated_Extended_Tally[k] = true;
-		}
-		// Mettez à jour l'état des cases à cocher avec la nouvelle valeur
-		set_Extented_Tally(updated_Extended_Tally);
-	} */; 
-
 	const [checkbox_Hold_State, set_checkbox_Hold_State] = useState<{ [key: string]: boolean }>({});
 	
 	const handleCheckboxChange = (k: string) => {
 		// Créez une copie de l'état actuel des cases à cocher
 		const updatedCheckboxState = { ...checkbox_Hold_State };
-	  
+	
 		// Vérifiez si la destination k est déjà dans l'état des cases à cocher
 		if (updatedCheckboxState[k] !== undefined) {
 		  // Si oui, basculez simplement la valeur (true devient false, false devient true)
-		  updatedCheckboxState[k] = !updatedCheckboxState[k];
+			updatedCheckboxState[k] = !updatedCheckboxState[k];
 		} else {
 		  // Si la destination n'est pas dans l'état, ajoutez-la et définissez-la comme cochée (true)
-		  updatedCheckboxState[k] = true;
+			updatedCheckboxState[k] = true;
 		}
 		// Mettez à jour l'état des cases à cocher avec la nouvelle valeur
 		set_checkbox_Hold_State(updatedCheckboxState);
@@ -155,7 +130,6 @@ export default function Statistics() {
 		}
 	});
 
-	// Cette fonction sera exécutée au démarrage du composant
 	useEffect(() => {
 		// Parcourez le tableau affectation et envoyez chaque état "visibleState" dans Redux
 		affectation.forEach((item) => {
@@ -163,8 +137,6 @@ export default function Statistics() {
 		dispatch(updateAffectationVisibility(item.name, item.visibleState));
 		});
 	}, [dispatch]); // Assurez-vous de lister dispatch comme dépendance pour éviter les avertissements
-
-	// const keys = Object.keys(statistics).sort();
 	
 	return (
 		<div>
@@ -189,21 +161,6 @@ export default function Statistics() {
 					<Button variant="info" onClick={handle_Extended_Tally}>
 						E
 					</Button>
-					{/* <Button variant="warning" onClick={handleStabiloClick}>S</Button> */}
-					{/* <Button variant="info" onClick={(e) => handle_Extended_Tally}>E</Button> */}
-					
-					{/* <Button variant={updated_Extended_Tally[k] ? "info" : "secondary"} onClick={(e) => handle_Extended_Tally("votre_cle", e)}>E</Button> */}
-					{/* {Object.keys(updated_Extended_Tally).map((key) => ( */}
-					{/* <Button variant={updated_Extended_Tally[key] ? "info" : "secondary"} onClick={(e) => handle_Extended_Tally("votre_cle", e)}>E</Button> */}
-					{/* ))} */}
-
-
-
-					{/* <th></th> */}
-					{/* <th> PU  </th>
-					<th>MAX</th>
-					<th>-</th>
-					<th>Q</th> */}
 				</tr>
 			</thead>
 			<tbody>
@@ -266,10 +223,8 @@ export default function Statistics() {
 													type="text"
 													style={{ width: '45px' }}
 													value={
-														// statistics[affectationItem.name]?.count ?? 0
 														previous_Values_QT[affectationItem.name] ? 
 															previous_Values_QT[affectationItem.name].prevQT 
-															// previous_Values_QT[affectationItem.name].previous_QT
 															: 
 															0
 													}
@@ -293,11 +248,6 @@ export default function Statistics() {
 											</td>
 
 {/* TTL_Q */}
-											{/* <td>
-												{statistics[affectationItem.name]?.count ?? 0 
-												+ 
-												(previous_Values_QT[affectationItem.name]?.prevQT ? parseFloat(previous_Values_QT[affectationItem.name].prevQT) : 0)}
-											</td> */}
 											<td>
 												{(
 													(statistics[affectationItem.name]?.count ?? 0) +
@@ -318,103 +268,6 @@ export default function Statistics() {
 												).toLocaleString("en-US", { minimumFractionDigits: 3, maximumFractionDigits: 3 })}
 											</td>
 
-{/* PU */}
-{/* 											<td>
-												{(
-													(
-														(statistics[affectationItem.name]?.weight ?? 0) +
-														(previous_Values_TO[affectationItem.name]?.previous_TONS
-														? parseFloat(previous_Values_TO[affectationItem.name].previous_TONS)
-														: 0)
-													)
-													// .toLocaleString("en-US", { minimumFractionDigits: 3, maximumFractionDigits: 3 })
-													/
-													(
-													(statistics[affectationItem.name]?.count ?? 0 
-														+ 
-													(previous_Values_QT[affectationItem.name]?.prevQT ? parseFloat(previous_Values_QT[affectationItem.name].prevQT) : 0))
-													)
-												).toLocaleString("en-US", { minimumFractionDigits: 3, maximumFractionDigits: 3 })}
-											</td>
-
- */}											
-{/* MAXI_TO */}
-{/* 											<td>
-												<input
-													type="text"
-													style={{ width: '80px' }}
-													value={maxi_Values[affectationItem.name] ? maxi_Values[affectationItem.name].maxi_To : 0} // Utilisez prevValues[affectationItem.name].prevTo pour la valeur 
-													onChange={(e) => handlemaxi_ToChange(affectationItem.name, e.target.value)}
-												/>
-											</td>
-
- */}
- {/* DIFF_T */}
-
-{/* 
-											<td className={
-												(
-														(parseFloat(maxi_Values[affectationItem.name]?.maxi_To ?? 0) - 
-															(
-																(parseFloat(statistics[affectationItem.name]?.weight) || 0) +
-																(parseFloat(previous_Values_TO[affectationItem.name]?.previous_TONS) || 0)
-															)
-														) < 0 ? 'red-text' : 'blue-text'
-												)
-											}
-												>
-											{
-												(
-													parseFloat(maxi_Values[affectationItem.name]?.maxi_To ?? 0) - 
-													(
-													(parseFloat(statistics[affectationItem.name]?.weight) || 0) +
-													(parseFloat(previous_Values_TO[affectationItem.name]?.previous_TONS) || 0)
-													)
-												).toLocaleString("en-US", { minimumFractionDigits: 3, maximumFractionDigits: 3 })
-											}
-											</td>
- */}
-
-{/* DIFF_Q */}
-{/* 											<td className={
-												(() => {
-													try {
-													const maxiTo = parseFloat(maxi_Values[affectationItem.name]?.maxi_To) || 0;
-													const statsWeight = parseFloat(statistics[affectationItem.name]?.weight) || 0;
-													const prevTO = parseFloat(previous_Values_TO[affectationItem.name]?.previous_TONS) || 0;
-													const prevQT = parseFloat(previous_Values_QT[affectationItem.name]?.prevQT) || 0;
-
-													const result = (maxiTo - statsWeight - prevTO) / (
-														(statsWeight + prevTO) /
-														(statistics[affectationItem.name]?.count + prevQT)
-													);
-
-													return Math.floor(isNaN(result) ? 0 : result) < 0 ? 'red-text' : 'blue-text';
-													} catch (error) {
-													return 'red-text';
-													}
-												})()
-												}>
-												{(() => {
-													try {
-													const maxiTo = parseFloat(maxi_Values[affectationItem.name]?.maxi_To) || 0;
-													const statsWeight = parseFloat(statistics[affectationItem.name]?.weight) || 0;
-													const prevTO = parseFloat(previous_Values_TO[affectationItem.name]?.previous_TONS) || 0;
-													const prevQT = parseFloat(previous_Values_QT[affectationItem.name]?.prevQT) || 0;
-
-													const result = (maxiTo - statsWeight - prevTO) / (
-														(statsWeight + prevTO) /
-														(statistics[affectationItem.name]?.count + prevQT)
-													);
-
-													return isNaN(result) ? 0 : Math.floor(result).toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 0 });
-													} catch (error) {
-													return '0';
-													}
-												})()}
-											</td>
-
- */}
  {/* retour de condition stock */}		
 										</>
 									)
@@ -448,29 +301,6 @@ export default function Statistics() {
 				<td>{(totalCalesWeight + totalPreviousCalesWeight).toLocaleString("en-US")}</td>
 				
 				</tr><tr>
-					
-{/* PU */}
-				{/* <td>{((totalCalesWeight + totalPreviousCalesWeight)/(totalCalesCount + totalPreviousCalesCount)).toLocaleString("en-US")}</td> */}
-{/* MAXI */}
-				{/* <td>{(totalMaxiCalesWeight).toLocaleString("en-US")}</td> */}
-{/* DIFFTO */}
-				{/* <td className={totalMaxiCalesWeight - (totalCalesWeight + totalPreviousCalesWeight) < 0 ? 'red-text' : ''}>
-					{(
-						totalMaxiCalesWeight - (totalCalesWeight + totalPreviousCalesWeight)
-					).toLocaleString("en-US")}
-				</td> */}
-
-{/* LET_QT*/}
-				{/* <td className={Math.floor(
-						(totalMaxiCalesWeight - (totalCalesWeight + totalPreviousCalesWeight)) /
-						((totalCalesWeight + totalPreviousCalesWeight) / (totalCalesCount + totalPreviousCalesCount))
-					) < 0 ? 'red-text' : ''}>
-					{Math.floor(
-						(totalMaxiCalesWeight - (totalCalesWeight + totalPreviousCalesWeight)) /
-						((totalCalesWeight + totalPreviousCalesWeight) / (totalCalesCount + totalPreviousCalesCount))
-					).toLocaleString("en-US")}
-				</td> */}
-
 				</tr>
 			</tbody>
 		</Table>
@@ -518,25 +348,8 @@ export default function Statistics() {
 							
 {/* CHECKBOX */}
 						<td></td>
-{/* 							<td>
-								<input
-								type="checkbox" 
-								checked={checkbox_Hold_State[affectationItem.name]} 
-								// checked={affectationItem.visibleState[k]} 
-								onChange={() => handleCheckboxChange(affectationItem.name)}
-								/>
-							</td>
- */}
-{/* DAY_Q */}
-{/* 							<td>
-								{statistics[affectationItem.name] ? statistics[affectationItem.name].count : 0}
-							</td>
- */}
-{/* DAY_T */}
-							{/* <td>
-								{statistics[affectationItem.name] ? parseFloat(statistics[affectationItem.name].weight).toLocaleString("en-US", {minimumFractionDigits: 3, maximumFractionDigits: 3,}) : "0.000"}
-							</td> */}
 
+{/* DAY_T */}
 								{/* si dest est stock passe 7 colonnes */}
 								{affectationItem.name === 'stock' ? ( 
 									<>
@@ -548,44 +361,6 @@ export default function Statistics() {
 									(
 										<> 					
 											{/* sinon affiche toute les colonnes */}
-{/* PREV_Q */}
-{/* 											<td>
-												<input
-													type="text"
-													style={{ width: '45px' }}
-													value={previous_Values_QT[affectationItem.name] ? previous_Values_QT[affectationItem.name].prevQT : 0}
-													onChange={(e) => handle_prevQT_Change(affectationItem.name, e.target.value)}
-												/>
-											</td>
-													 */}
-{/* PREV_T */}
-{/* 											<td>
-												<input
-													type="text"
-													style={{ width: '80px' }}
-													value={previous_Values_TO[affectationItem.name] ? previous_Values_TO[affectationItem.name].previous_TONS : 0}
-													onChange={(e) => handle_PrevTo_Change(affectationItem.name, e.target.value)}
-												/>
-											</td>
-
- */}
- {/* TTL_Q */}
-{/* 											<td>
-												{statistics[affectationItem.name]?.count ?? 0 
-												+ 
-												(previous_Values_QT[affectationItem.name]?.prevQT ? parseFloat(previous_Values_QT[affectationItem.name].prevQT) : 0)}
-											</td>
- */}													
-{/* TTL_T */}											
-{/* 											<td>
-												{(
-													(statistics[affectationItem.name]?.weight ?? 0) +
-													(previous_Values_TO[affectationItem.name]?.previous_TONS
-													? parseFloat(previous_Values_TO[affectationItem.name].previous_TONS)
-													: 0)
-												).toLocaleString("en-US", { minimumFractionDigits: 3, maximumFractionDigits: 3 })}
-											</td> */}
-
 {/* PU */}
 											<td>
 												{(
@@ -618,8 +393,6 @@ export default function Statistics() {
 
 
  {/* DIFF_T */}
-
-
 											<td className={
 												(
 														(parseFloat(maxi_Values[affectationItem.name]?.maxi_To ?? 0) - 
@@ -698,46 +471,6 @@ export default function Statistics() {
 {/* PARTIE calcul */}
 
 				<tr>
-{/*ICI K */}
-				{/* <td>Totaux</td> */}
-{/* Q */}
-				{/* <td> </td>					 									
-				<td>{totalCalesCount}</td>										 */}
-{/* T */}
-				{/* <td>{totalCalesWeight.toLocaleString("en-US")}</td>				 */}
-{/*PREV_Q */}				
-				{/* <td>{totalPreviousCalesCount}</td>								 */}
-{/*PREV_T */}
-				{/* <td>{totalPreviousCalesWeight.toLocaleString("en-US")}</td> */}
-{/*TT_Q */}				
-				{/* <td>{totalCalesCount + totalPreviousCalesCount}</td>							 */}
-{/*TT_T */}					
-				{/* <td>{(totalCalesWeight + totalPreviousCalesWeight).toLocaleString("en-US")}</td> */}
-				
-				{/* </tr><tr> */}
-					
-{/* PU */}
-				{/* <td>{((totalCalesWeight + totalPreviousCalesWeight)/(totalCalesCount + totalPreviousCalesCount)).toLocaleString("en-US")}</td> */}
-{/* MAXI */}
-				{/* <td>{(totalMaxiCalesWeight).toLocaleString("en-US")}</td> */}
-{/* DIFFTO */}
-				{/* <td className={totalMaxiCalesWeight - (totalCalesWeight + totalPreviousCalesWeight) < 0 ? 'red-text' : ''}>
-					{(
-						totalMaxiCalesWeight - (totalCalesWeight + totalPreviousCalesWeight)
-					).toLocaleString("en-US")}
-				</td> */}
-
-{/* LET_QT*/}
-				{/* <td className={Math.floor(
-						(totalMaxiCalesWeight - (totalCalesWeight + totalPreviousCalesWeight)) /
-						((totalCalesWeight + totalPreviousCalesWeight) / (totalCalesCount + totalPreviousCalesCount))
-					) < 0 ? 'red-text' : ''}>
-					{Math.floor(
-						(totalMaxiCalesWeight - (totalCalesWeight + totalPreviousCalesWeight)) /
-						((totalCalesWeight + totalPreviousCalesWeight) / (totalCalesCount + totalPreviousCalesCount))
-					).toLocaleString("en-US")}
-				</td> */}
-
 				</tr>
 			</tbody>
 		</Table>
