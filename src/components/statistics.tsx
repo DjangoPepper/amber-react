@@ -281,10 +281,19 @@ export default function Statistics() {
 											</td>
 
 {/* TTL_Q */}
-											<td>
+											{/* <td>
 												{statistics[affectationItem.name]?.count ?? 0 
 												+ 
 												(previous_Values_QT[affectationItem.name]?.prevQt ? parseFloat(previous_Values_QT[affectationItem.name].prevQt) : 0)}
+											</td> */}
+											<td>
+												{(
+													(statistics[affectationItem.name]?.count ?? 0) +
+													(previous_Values_QT[affectationItem.name]?.prevQt
+													? parseFloat(previous_Values_QT[affectationItem.name].prevQt)
+													: 0)
+												)
+												}
 											</td>
 													
 {/* TTL_T */}											
