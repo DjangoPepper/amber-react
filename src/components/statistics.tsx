@@ -79,7 +79,8 @@ export default function Statistics() {
 	const handle_PrevTO_Change = (k: string, value: string) => {
 		set_previous_Values_TO((previous_Values_TO) => ({
 			...previous_Values_TO,
-			[k]: { prevTO: previous_Values_TO[k] ? previous_Values_TO[k].prevTO : '0', previous_TONS: value },
+			// [k]: { prevTO: previous_Values_TO[k] ? previous_Values_TO[k].prevTO : '0', previous_TONS: value },
+			[k]: { previous_TONS: value , prevTO: previous_Values_TO[k] ? previous_Values_TO[k].prevTO : '0' },
 		}));
 		let numericValue = parseFloat(value) || 0;
 		dispatch(DataAction.changePreviousTONS({ destination: k, value: numericValue }));
