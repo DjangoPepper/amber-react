@@ -41,22 +41,20 @@ export default function Statistics() {
 	const [checkbox_Hold_State, set_checkbox_Hold_State] = useState<{ [key: string]: boolean }>({});
 	
 	const handleCheckboxChange = (k: string) => {
-		let unckeckable_available = true;
-		//verif verif si prev_q & prev_t not null
-		//previous_Values_TO
-		if (previous_Values_TO[k] === undefined || previous_Values_TO[k].prevTO >= '0' ) { unckeckable_available = false; }
-		if (previous_Values_QT[k] === undefined || previous_Values_QT[k].prevQT >= '0' ) { unckeckable_available = false; }
-		
-		if (unckeckable_available === true) {
-			const updatedCheckboxState = { ...checkbox_Hold_State };
-			if (updatedCheckboxState[k] !== undefined) {
-					updatedCheckboxState[k] = !updatedCheckboxState[k];
-			} else {
-					updatedCheckboxState[k] = true;
-				}
-				set_checkbox_Hold_State(updatedCheckboxState);
-				};
-			};
+		// Créez une copie de l'état actuel des cases à cocher
+		const updatedCheckboxState = { ...checkbox_Hold_State };
+	
+		// Vérifiez si la destination k est déjà dans l'état des cases à cocher
+		if (updatedCheckboxState[k] !== undefined) {
+		  // Si oui, basculez simplement la valeur (true devient false, false devient true)
+			updatedCheckboxState[k] = !updatedCheckboxState[k];
+		} else {
+		  // Si la destination n'est pas dans l'état, ajoutez-la et définissez-la comme cochée (true)
+			updatedCheckboxState[k] = true;
+		}
+		// Mettez à jour l'état des cases à cocher avec la nouvelle valeur
+		set_checkbox_Hold_State(updatedCheckboxState);
+	};
 
 	//fred deprecated
 	
@@ -78,7 +76,7 @@ export default function Statistics() {
 		dispatch(DataAction.changePreviousQTT({ destination: k, value: numericValue }));
 	};
 
-	const handle_PrevTo_Change = (k: string, value: string) => {
+	const handle_PrevTO_Change = (k: string, value: string) => {
 		set_previous_Values_TO((previous_Values_TO) => ({
 			...previous_Values_TO,
 			[k]: { prevTO: previous_Values_TO[k] ? previous_Values_TO[k].prevTO : '0', previous_TONS: value },
@@ -133,10 +131,12 @@ export default function Statistics() {
 	});
 
 	useEffect(() => {
+		// Parcourez le tableau affectation et envoyez chaque état "visibleState" dans Redux
 		affectation.forEach((item) => {
+		// Utilisez votre action ou fonction pour mettre à jour l'état dans Redux
 		dispatch(updateAffectationVisibility(item.name, item.visibleState));
 		});
-	}, [dispatch]);
+	}, [dispatch]); // Assurez-vous de lister dispatch comme dépendance pour éviter les avertissements
 	
 	return (
 		<div>
@@ -152,6 +152,12 @@ export default function Statistics() {
 					<th>PREV_T</th>
 					<th>TT_Q</th>
 					<th>TT_T</th>
+					{/* <Button
+						variant={Extended_Tally_Value ? "info" : "secondary"}
+						onClick={handle_Extended_Tally}
+					>
+						E
+					</Button> */}
 					<Button variant="info" onClick={handle_Extended_Tally}>
 						E
 					</Button>
@@ -162,7 +168,7 @@ export default function Statistics() {
 {/* HEADERS */}
 			{affectation.map((affectationItem) => {
 
-				const statistics_array = statistics[affectationItem.name] || {};
+				const statistics_array = statistics[affectationItem.name] || {}; // Utilisez un objet vide par défaut
 				let chsafin = checkbox_Hold_State[affectationItem.name] || false;
 				if (
 					chsafin || 
@@ -185,6 +191,7 @@ export default function Statistics() {
 								<input
 								type="checkbox" 
 								checked={checkbox_Hold_State[affectationItem.name]} 
+								// checked={affectationItem.visibleState[k]} 
 								onChange={() => handleCheckboxChange(affectationItem.name)}
 								/>
 							</td>
@@ -236,7 +243,7 @@ export default function Statistics() {
 															: 
 															0
 													}
-													onChange={(e) => handle_PrevTo_Change(affectationItem.name, e.target.value)}
+													onChange={(e) => handle_PrevTO_Change(affectationItem.name, e.target.value)}
 												/>
 											</td>
 
@@ -277,7 +284,7 @@ export default function Statistics() {
 {/* PARTIE calcul */}
 
 				<tr>
-{/* K */}
+{/*ICI K */}
 				<td>Totaux</td>
 {/* Q */}
 				<td> </td>					 									
