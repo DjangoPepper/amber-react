@@ -22,8 +22,8 @@ export default function Statistics() {
 	let totalstockWeight = 0;
 	
 	const dispatch = useDispatch();	
-	const [previous_Value_TO, set_previous_Value_TO] = useState<{ [key: string]: { prevTO: string; previous_TONS: string } }>({});
-	const [previous_Value_QT, set_previous_Value_QT] = useState<{ [key: string]: { prevQT: string; previous_QT: string } }>({});
+	const [previous_Value_TO, set_previous_Value_TO] = useState<{ [key: string]: { prevTO: string; prevt0_VALUE: string } }>({});
+	const [previous_Value_QT, set_previous_Value_QT] = useState<{ [key: string]: { prevQT_Value: string; prevQT: string } }>({});
 	const [maxi_Values, set_maxi_Values] = useState<{ [key: string]: { maxi_To: string } }>({});
 	const data = useSelector<RootState, Data[]>((state) => state.data.data);
 	const selectedColors = useSelector<RootState, { [key: string]: string }>((state) => state.data.pickerColors);
@@ -67,10 +67,10 @@ export default function Statistics() {
 		dispatch(DataAction.changeMaxiTONS({ destination: k, value: numericValue }));
 	};
 
-	const handle_prevQT_Change = (k: string, value: string) => {
+	const handle_prevQT_Value_Change = (k: string, value: string) => {
 		set_previous_Value_QT((previous_Value_QT) => ({
 			...previous_Value_QT,
-			[k]: { prevQT: value, previous_QT: previous_Value_QT[k] ? previous_Value_QT[k].previous_QT : '0' },
+			[k]: { prevQT_Value: value, prevQT: previous_Value_QT[k] ? previous_Value_QT[k].prevQT : '0' },
 		}));
 		let numericValue = parseFloat(value) || 0;
 		dispatch(DataAction.changePreviousQTT({ destination: k, value: numericValue }));
@@ -79,8 +79,8 @@ export default function Statistics() {
 	const handle_PrevTO_Change = (k: string, value: string) => {
 		set_previous_Value_TO((previous_Value_TO) => ({
 			...previous_Value_TO,
-			// [k]: { prevTO: previous_Value_TO[k] ? previous_Value_TO[k].prevTO : '0', previous_TONS: value },
-			[k]: { previous_TONS: value,  prevTO: previous_Value_TO[k] ? previous_Value_TO[k].prevTO : '0'},
+			// [k]: { prevTO: previous_Value_TO[k] ? previous_Value_TO[k].prevTO : '0', prevt0_VALUE: value },
+			[k]: { prevt0_VALUE: value,  prevTO: previous_Value_TO[k] ? previous_Value_TO[k].prevTO : '0'},
 		}));
 		let numericValue = parseFloat(value) || 0;
 		dispatch(DataAction.changePreviousTONS({ destination: k, value: numericValue }));
@@ -91,11 +91,11 @@ export default function Statistics() {
 	}, 0);
 	
 	const totalPreviousCalesCount = Object.keys(previous_Value_QT).reduce((total, k) => {
-		return total + (previous_Value_QT[k] ? parseFloat(previous_Value_QT[k].prevQT) : 0);
+		return total + (previous_Value_QT[k] ? parseFloat(previous_Value_QT[k].prevQT_Value) : 0);
 	}, 0);
 	
 	const totalPreviousCalesWeight = Object.keys(previous_Value_TO).reduce((total, k) => {
-		return total + (previous_Value_TO[k]?.previous_TONS ? parseFloat(previous_Value_TO[k].previous_TONS) : 0);
+		return total + (previous_Value_TO[k]?.prevt0_VALUE ? parseFloat(previous_Value_TO[k].prevt0_VALUE) : 0);
 	}, 0);
 
 	const statistics = data.reduce<any>((p, row) => {
@@ -225,11 +225,11 @@ export default function Statistics() {
 													style={{ width: '45px' }}
 													value={
 														previous_Value_QT[affectationItem.name] ? 
-															previous_Value_QT[affectationItem.name].prevQT 
+															previous_Value_QT[affectationItem.name].prevQT_Value 
 															: 
 															0
 													}
-													onChange={(e) => handle_prevQT_Change(affectationItem.name, e.target.value)}
+													onChange={(e) => handle_prevQT_Value_Change(affectationItem.name, e.target.value)}
 												/>
 											</td>
 													
@@ -240,7 +240,7 @@ export default function Statistics() {
 													style={{ width: '80px' }}
 													value={
 														previous_Value_TO[affectationItem.name] ? 
-															previous_Value_TO[affectationItem.name].previous_TONS 
+															previous_Value_TO[affectationItem.name].prevt0_VALUE 
 															: 
 															0
 													}
@@ -252,8 +252,8 @@ export default function Statistics() {
 											<td>
 												{(
 													(statistics[affectationItem.name]?.count ?? 0) +
-													(previous_Value_QT[affectationItem.name]?.prevQT
-													? parseFloat(previous_Value_QT[affectationItem.name].prevQT)
+													(previous_Value_QT[affectationItem.name]?.prevQT_Value
+													? parseFloat(previous_Value_QT[affectationItem.name].prevQT_Value)
 													: 0)
 												)
 												}
@@ -263,8 +263,8 @@ export default function Statistics() {
 											<td>
 												{(
 													(statistics[affectationItem.name]?.weight ?? 0) +
-													(previous_Value_TO[affectationItem.name]?.previous_TONS
-													? parseFloat(previous_Value_TO[affectationItem.name].previous_TONS)
+													(previous_Value_TO[affectationItem.name]?.prevt0_VALUE
+													? parseFloat(previous_Value_TO[affectationItem.name].prevt0_VALUE)
 													: 0)
 												).toLocaleString("en-US", { minimumFractionDigits: 3, maximumFractionDigits: 3 })}
 											</td>
@@ -367,8 +367,8 @@ export default function Statistics() {
 												{(
 													(
 														(statistics[affectationItem.name]?.weight ?? 0) +
-														(previous_Value_TO[affectationItem.name]?.previous_TONS
-														? parseFloat(previous_Value_TO[affectationItem.name].previous_TONS)
+														(previous_Value_TO[affectationItem.name]?.prevt0_VALUE
+														? parseFloat(previous_Value_TO[affectationItem.name].prevt0_VALUE)
 														: 0)
 													)
 													// .toLocaleString("en-US", { minimumFractionDigits: 3, maximumFractionDigits: 3 })
@@ -376,7 +376,7 @@ export default function Statistics() {
 													(
 													(statistics[affectationItem.name]?.count ?? 0 
 														+ 
-													(previous_Value_QT[affectationItem.name]?.prevQT ? parseFloat(previous_Value_QT[affectationItem.name].prevQT) : 0))
+													(previous_Value_QT[affectationItem.name]?.prevQT_Value ? parseFloat(previous_Value_QT[affectationItem.name].prevQT_Value) : 0))
 													)
 												).toLocaleString("en-US", { minimumFractionDigits: 3, maximumFractionDigits: 3 })}
 											</td>
@@ -399,7 +399,7 @@ export default function Statistics() {
 														(parseFloat(maxi_Values[affectationItem.name]?.maxi_To ?? 0) - 
 															(
 																(parseFloat(statistics[affectationItem.name]?.weight) || 0) +
-																(parseFloat(previous_Value_TO[affectationItem.name]?.previous_TONS) || 0)
+																(parseFloat(previous_Value_TO[affectationItem.name]?.prevt0_VALUE) || 0)
 															)
 														) < 0 ? 'red-text' : 'blue-text'
 												)
@@ -410,7 +410,7 @@ export default function Statistics() {
 													parseFloat(maxi_Values[affectationItem.name]?.maxi_To ?? 0) - 
 													(
 													(parseFloat(statistics[affectationItem.name]?.weight) || 0) +
-													(parseFloat(previous_Value_TO[affectationItem.name]?.previous_TONS) || 0)
+													(parseFloat(previous_Value_TO[affectationItem.name]?.prevt0_VALUE) || 0)
 													)
 												).toLocaleString("en-US", { minimumFractionDigits: 3, maximumFractionDigits: 3 })
 											}
@@ -423,12 +423,12 @@ export default function Statistics() {
 													try {
 													const maxiTo = parseFloat(maxi_Values[affectationItem.name]?.maxi_To) || 0;
 													const statsWeight = parseFloat(statistics[affectationItem.name]?.weight) || 0;
-													const prevTO = parseFloat(previous_Value_TO[affectationItem.name]?.previous_TONS) || 0;
-													const prevQT = parseFloat(previous_Value_QT[affectationItem.name]?.prevQT) || 0;
+													const prevTO = parseFloat(previous_Value_TO[affectationItem.name]?.prevt0_VALUE) || 0;
+													const prevQT_Value = parseFloat(previous_Value_QT[affectationItem.name]?.prevQT_Value) || 0;
 
 													const result = (maxiTo - statsWeight - prevTO) / (
 														(statsWeight + prevTO) /
-														(statistics[affectationItem.name]?.count + prevQT)
+														(statistics[affectationItem.name]?.count + prevQT_Value)
 													);
 
 													return Math.floor(isNaN(result) ? 0 : result) < 0 ? 'red-text' : 'blue-text';
@@ -441,12 +441,12 @@ export default function Statistics() {
 													try {
 													const maxiTo = parseFloat(maxi_Values[affectationItem.name]?.maxi_To) || 0;
 													const statsWeight = parseFloat(statistics[affectationItem.name]?.weight) || 0;
-													const prevTO = parseFloat(previous_Value_TO[affectationItem.name]?.previous_TONS) || 0;
-													const prevQT = parseFloat(previous_Value_QT[affectationItem.name]?.prevQT) || 0;
+													const prevTO = parseFloat(previous_Value_TO[affectationItem.name]?.prevt0_VALUE) || 0;
+													const prevQT_Value = parseFloat(previous_Value_QT[affectationItem.name]?.prevQT_Value) || 0;
 
 													const result = (maxiTo - statsWeight - prevTO) / (
 														(statsWeight + prevTO) /
-														(statistics[affectationItem.name]?.count + prevQT)
+														(statistics[affectationItem.name]?.count + prevQT_Value)
 													);
 
 													return isNaN(result) ? 0 : Math.floor(result).toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 0 });
