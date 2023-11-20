@@ -1,6 +1,6 @@
 // import React from "react";
 import { connect } from 'react-redux';
-// import { updateAffectationVisibility } from '../stores/data/destinationActions'
+// import { updateAffectationVisibility } from '../stores/dataS/destinationActions'
 import Statistics from '../components/statistics';
 
 interface IHeader {

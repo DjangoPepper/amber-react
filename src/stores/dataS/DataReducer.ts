@@ -2,10 +2,10 @@ import { AnyAction } from "redux";
 import DataAction from "./DataAction";
 import {Reducer} from "@reduxjs/toolkit";
 import { affectation, colors } from "../../utils/destination";
-import { createReducer } from "@reduxjs/toolkit";
+// import { createReducer } from "@reduxjs/toolkit";
 // import { UPDATE_CHECKBOX_STATE } from "./checkboxActions";
 
-export type Data = {
+export type stepe_Data = {
     rank: number
     reference: string
     weight: number
@@ -20,45 +20,47 @@ export type Data = {
 //   }
 
 interface DataState {
-    data: Data[];
+    data: stepe_Data[];
     selectedCale: string;
     selectedPrepa: string;
-    loaded: boolean;
-    pickerColors: { [key: string]: string };
+    loaded_catalog: boolean;
     saved_catalog: boolean;
-    previous_QTT: number;
-    previous_TONS: number;
-    maxi_TONS: number;
-    maxi_values: { [key: string]: number };
-    diff_TONS: number;
-    let_QTT: number;
-    let_TONS: number;
+
+    pickerColors: { [key: string]: string };
+    
+    previous_QTT: { [key: string]: number };
+    previous_TONS: { [key: string]: number };
+    maxi_TONS: { [key: string]: number };
+    diff_TONS: { [key: string]: number };
+    let_QTT: { [key: string]: number };
+    let_TONS: { [key: string]: number };
+    
     checkboxHoldState: { [key: string]: boolean };
     
 }
 
-interface Statistics {
-    [destination: string]: {
-        count: number;
-        weight: number;
-    //   SinglecheckboxSate: boolean;
-    };
-    }
+// interface Statistics {
+//     [destination: string]: {
+//         count: number;
+//         weight: number;
+//     //   SinglecheckboxSate: boolean;
+//     };
+//     }
 
 const initialState: DataState = {
     data: [],
     selectedCale: "stock",
     selectedPrepa: "_",
-    loaded: false,
+    loaded_catalog: false,
     saved_catalog: true,
     pickerColors: colors,
-    previous_QTT: 0,
-    previous_TONS: 0, 
-    maxi_TONS: 0,
-    maxi_values: {},
-    diff_TONS: 0,
-    let_QTT: 0,
-    let_TONS: 0,
+    previous_QTT: {},
+    previous_TONS: {}, 
+    maxi_TONS: {},
+    // maxi_values: {},
+    diff_TONS: {},
+    let_QTT: {},
+    let_TONS: {},
     checkboxHoldState: {},
 };
 
@@ -70,49 +72,46 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
                     ...state,
                     checkboxHoldState: action.payload,
                 };
-
             case DataAction.CHANGE_DIFF_TONS:
                 return {
                     ...state,
-                    maxi_TONS: action.payload,
-            }
+                    diff_TONS: action.payload,
+                };
             case DataAction.CHANGE_LET_QTT:
                 return {
                     ...state,
-                    maxi_TONS: action.payload,
-            }
+                    let_QTT: action.payload,
+                };
             case DataAction.CHANGE_LET_TONS:
                 return {
                     ...state,
-                    maxi_TONS: action.payload,
-            }
-
+                    let_TONS: action.payload,
+                };
             case DataAction.CHANGE_MAXI_TONS:
                 return {
                     ...state,
                     maxi_TONS: action.payload,
-            }
+                };
             case DataAction.CHANGE_PREVIOUS_QTT:
                 return {
                 ...state,
                 previous_QTT: action.payload,
-            }
-
+                };
             case DataAction.CHANGE_PREVIOUS_TONS:
                 return {
                     ...state,
                     previous_TONS: action.payload,
-            }
-
+                };
             //fred
             case DataAction.IMPORT_DATA:
                 return {
                     ...state,
                     data: action.payload,
-                    loaded: true,
+                    loaded_catalog: true,
                     saved_catalog: false,
                 };
-            case DataAction.CHANGE_CALE:
+            
+                case DataAction.CHANGE_CALE:
                 return {
                     ...state,
                     selectedCale: action.payload,
@@ -123,21 +122,11 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
                     selectedCale: action.payload,
                 }
             case DataAction.CHANGE_COULEUR:
-                
-                // state.selectedCale = action.payload;
-                // return state;
-                // const oldstate = {...state};
-                // state.data.push('')
-                // console.log(oldstate === state );
-                // console.log(oldstate.data === state.data);
-
-                // return state
                 return {
                     ...state,
                     selectedCale: action.payload,
                 }
-            case DataAction.CHANGE_PICKCOLORS:
-                
+            case DataAction.CHANGE_PICKCOLORS:                
                 return {
                     ...state,
                     pickerColors: action.payload,
@@ -165,11 +154,10 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
                 return {
                     ...state,
                     selectedPrepa: action.payload
-
                 }
             case DataAction.SAVE_CATALOG:
                 if(state.saved_catalog) return state;
-                console.log("saving...");
+                console.log("saving catalog...");
                 window.localStorage.setItem("data", JSON.stringify(state.data));
                 return {
                     ...state,
@@ -179,13 +167,13 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
                 return {
                     ...state,
                     data: action.payload,
-                    loaded: true,
+                    loaded_catalog: true,
                     saved_catalog: true,
                 }
             case DataAction.CLEAR:
                 return {
                     ...state,
-                    loaded: false,
+                    loaded_catalog: false,
                 }
             default:
                 return state;

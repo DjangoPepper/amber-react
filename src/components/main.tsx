@@ -4,7 +4,7 @@ import {Col, Container, Row} from "react-bootstrap";
 import {read, utils} from "xlsx";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../stores/rootStore";
-import {Data} from "../stores/dataS/DataReducer";
+import {stepe_Data} from "../stores/dataS/DataReducer";
 import DataAction from "../stores/dataS/DataAction";
 import DataTable from "./data-table";
 import Statistics from "./statistics";
@@ -13,7 +13,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 
 
-function CleanExcelSheet(oSheet: any): Data {
+function CleanExcelSheet(oSheet: any): stepe_Data {
 	toast.info('organizing current sheet', { position: toast.POSITION.TOP_RIGHT })// la feuille Bobines existe
 			
 			// effacement des cellules fusionnées
@@ -195,7 +195,7 @@ function fillUndefinedNumberCells(sheet: any) {
         }
     }
 }
-  
+
 function reconstructRefWithoutEmptyRows(newsheet: any) {
     const range = utils.decode_range(newsheet['!ref']);
     let newRef = '';
@@ -292,7 +292,7 @@ function removeAccents(str: string) {
     return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 }
 
-function cleanData(values: any): Data {
+function cleanData(values: any): stepe_Data {
 	const toUpperCaseKeysValues: any = {};
 	for (const key in values) {
 		const upperCaseKey = key.toUpperCase();
@@ -316,7 +316,7 @@ function cleanData(values: any): Data {
 
 function Main() {
 	const dispatch = useDispatch();
-	const loaded = useSelector<RootState, boolean>(state => state.data.loaded);
+	const loaded_catalog = useSelector<RootState, boolean>(state => state.data.loaded_catalog);
 	
 	const onDrop = useCallback((acceptedFiles: any) => {
 		
@@ -374,7 +374,7 @@ function Main() {
 		// dispatch(DataAction.importData(utils.sheet_to_json(selectedSheet).map(cleanData)));
 			// // dispatch(DataAction.moveRow(row.original.reference)); //je change la detination de ref cale1,cale2, etc..
 		dispatch(DataAction.changeOriginalpos("stock"));
-		toast.success('Data imported', { position: toast.POSITION.TOP_RIGHT })
+		// toast.success('catalog stepe_Data imported', { position: toast.POSITION.TOP_RIGHT })
 	};
 	reader.readAsBinaryString(file);
 	}, []);
@@ -382,7 +382,7 @@ function Main() {
 
 	return (
 		<Container className="p-2">
-			{loaded ? <Row>
+			{loaded_catalog ? <Row>
 				<Col>
 					<DataTable />
 				</Col>

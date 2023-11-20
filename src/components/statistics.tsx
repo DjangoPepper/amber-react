@@ -1,7 +1,7 @@
 import { useSelector, useDispatch} from "react-redux";
 import { RootState } from "../stores/rootStore";
 import DataAction from "../stores/dataS/DataAction";
-import { Data } from "../stores/dataS/DataReducer";
+import { stepe_Data } from "../stores/dataS/DataReducer";
 import { Table } from "react-bootstrap";
 import React, { useState, useEffect } from 'react';
 import { affectation} from "../utils/destination"
@@ -25,7 +25,7 @@ export default function Statistics() {
 	const [previous_Value_TO, set_previous_Value_TO] = useState<{ [key: string]: { prevTO: string; prevTO_VALUE: string } }>({});
 	const [previous_Value_QT, set_previous_Value_QT] = useState<{ [key: string]: { prevQT_Value: string; prevQT: string } }>({});
 	const [maxi_Values, set_maxi_Values] = useState<{ [key: string]: { maxi_To: string } }>({});
-	const data = useSelector<RootState, Data[]>((state) => state.data.data);
+	const data = useSelector<RootState, stepe_Data[]>((state) => state.data.data);
 	const selectedColors = useSelector<RootState, { [key: string]: string }>((state) => state.data.pickerColors);
 	const [Extended_Tally_Value, set_Extended_Tally_Value] = React.useState(false);
 

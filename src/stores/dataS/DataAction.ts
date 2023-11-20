@@ -25,7 +25,28 @@ export default class DataAction {
 	public static CHANGE_LET_QTT = "DataAction.CHANGE_LET_QTT";
 	public static CHANGE_LET_TONS = "DataAction.CHANGE_LET_TONS";
 	
-	// export const UPDATE_CHECKBOX_STATE = createAction<{ [key: string]: boolean }>('UPDATE_CHECKBOX_STATE');
+
+
+	public static LOAD_PREVQTT = "DataAction.LOAD_PREVQTT";
+	public static load_PreviousQTT(qtt: { destination: string; value: number }): AnyAction {
+		return { type: DataAction.LOAD_PREVQTT, payload: qtt };
+	}
+	
+
+
+	public static LOAD_PREVTONS = "DataAction.LOAD_PREVTONS";
+	public static load_PreviousTONS(tons: { destination: string; value: number }): AnyAction {
+		return { type: DataAction.LOAD_PREVTONS, payload: tons };
+	}
+
+	
+	public static LOAD_MAXIS = "DataAction.LOAD_MAXIS";
+	public static load_maxis(tons: { destination: string; value: number }): AnyAction {
+		return { type: DataAction.LOAD_MAXIS, payload: tons };
+	}
+
+
+	
 	public static UPDATE_CHECKBOX_STATE = "DataAction.UPDATE_CHECKBOX_STATE";
 	public static update_CHECKBOX_STATE(newcheckboxstate: { key: string; value: boolean }): AnyAction {
 		return { type: DataAction.UPDATE_CHECKBOX_STATE, payload: newcheckboxstate };

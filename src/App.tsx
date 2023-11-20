@@ -7,7 +7,7 @@ import {store} from "./stores/rootStore";
 import { useLeavePageConfirm } from "./components/use-leave";
 import DataAction from "./stores/dataS/DataAction";
 
-let backupInterval = 99 * 1000; //30 * 1000 ms = 30s
+let backupInterval = 60 * 1000; //30 * 1000 ms = 30s
 
 function init() {
     const data = window.localStorage.getItem("data");
@@ -16,6 +16,9 @@ function init() {
     }
     setInterval(() => {
         store.dispatch(DataAction.save_catalog());
+        // store.dispatch(DataAction.save_PreviousQTT());
+        // store.dispatch(DataAction.save_PreviousTONS());
+        // store.dispatch(DataAction.save_maxis());
     }, backupInterval);
 }
 
