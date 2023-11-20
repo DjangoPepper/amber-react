@@ -15,7 +15,7 @@ function init() {
         store.dispatch(DataAction.load_catalog(data));
     }
     setInterval(() => {
-        store.dispatch(DataAction.save());
+        store.dispatch(DataAction.save_catalog());
     }, backupInterval);
 }
 

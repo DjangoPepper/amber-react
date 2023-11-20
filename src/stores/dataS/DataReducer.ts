@@ -25,7 +25,7 @@ interface DataState {
     selectedPrepa: string;
     loaded: boolean;
     pickerColors: { [key: string]: string };
-    saved: boolean;
+    saved_catalog: boolean;
     previous_QTT: number;
     previous_TONS: number;
     maxi_TONS: number;
@@ -50,7 +50,7 @@ const initialState: DataState = {
     selectedCale: "stock",
     selectedPrepa: "_",
     loaded: false,
-    saved: true,
+    saved_catalog: true,
     pickerColors: colors,
     previous_QTT: 0,
     previous_TONS: 0, 
@@ -110,7 +110,7 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
                     ...state,
                     data: action.payload,
                     loaded: true,
-                    saved: false,
+                    saved_catalog: false,
                 };
             case DataAction.CHANGE_CALE:
                 return {
@@ -148,7 +148,7 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
                 return {
                     ...state,
                     data: [...state.data.filter(r => r.reference !== action.payload), {...d, destination: state.selectedCale}],
-                    saved: false,
+                    saved_catalog: false,
                 }
             case DataAction.UPDATE_ROW:
                 const currentRow = state.data.find(r => r.reference === action.payload.reference);
@@ -159,7 +159,7 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
                         ...state.data.filter(r => r.reference !== action.payload.reference),
                         {...currentRow, [action.payload.columnId]: action.payload.value}
                     ],
-                    saved: false,
+                    saved_catalog: false,
                 }
             case DataAction.CHANGE_PREPA:
                 return {
@@ -167,20 +167,20 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
                     selectedPrepa: action.payload
 
                 }
-            case DataAction.SAVE:
-                if(state.saved) return state;
+            case DataAction.SAVE_CATALOG:
+                if(state.saved_catalog) return state;
                 console.log("saving...");
                 window.localStorage.setItem("data", JSON.stringify(state.data));
                 return {
                     ...state,
-                    saved: false
+                    saved_catalog: false
                 }
             case DataAction.LOAD_CATALOG:
                 return {
                     ...state,
                     data: action.payload,
                     loaded: true,
-                    saved: true,
+                    saved_catalog: true,
                 }
             case DataAction.CLEAR:
                 return {
