@@ -8,7 +8,7 @@ export default class DataAction {
 	public static MOVE_ROW = "DataAction.MOVE_ROW";
 	public static UPDATE_ROW = "DataAction.UPDATE_ROW";
 	public static SAVE = "DataAction.SAVE";
-	public static LOAD = "DataAction.LOAD";
+	public static LOAD_CATALOG = "DataAction.LOAD_CATALOG";
 	public static CLEAR = "DataAction.CLEAR";
 	public static REMOVE = "DataAction.REMOVE";
 
@@ -92,8 +92,8 @@ export default class DataAction {
 		return { type: DataAction.SAVE };
 	}
 
-	public static load(data: string): AnyAction {
-		return { type: DataAction.LOAD, payload: JSON.parse(data) };
+	public static load_catalog(data: string): AnyAction {
+		return { type: DataAction.LOAD_CATALOG, payload: JSON.parse(data) };
 	}
 
 	public static clear(): AnyAction {

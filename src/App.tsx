@@ -12,7 +12,7 @@ let backupInterval = 99 * 1000; //30 * 1000 ms = 30s
 function init() {
     const data = window.localStorage.getItem("data");
     if(data) {
-        store.dispatch(DataAction.load(data));
+        store.dispatch(DataAction.load_catalog(data));
     }
     setInterval(() => {
         store.dispatch(DataAction.save());

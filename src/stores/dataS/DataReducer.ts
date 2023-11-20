@@ -175,7 +175,7 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
                     ...state,
                     saved: false
                 }
-            case DataAction.LOAD:
+            case DataAction.LOAD_CATALOG:
                 return {
                     ...state,
                     data: action.payload,
