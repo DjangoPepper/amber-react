@@ -1,7 +1,7 @@
 import { useSelector, useDispatch} from "react-redux";
 import { RootState } from "../stores/rootStore";
-import DataAction from "../stores/data/DataAction";
-import { Data } from "../stores/data/DataReducer";
+import DataAction from "../stores/dataS/DataAction";
+import { Data } from "../stores/dataS/DataReducer";
 import { Table } from "react-bootstrap";
 import React, { useState, useEffect } from 'react';
 import { affectation} from "../utils/destination"
@@ -54,10 +54,7 @@ export default function Statistics() {
 		}
 		// Mettez à jour l'état des cases à cocher avec la nouvelle valeur
 		set_checkbox_Hold_State(updatedCheckboxState);
-		// dispatch(updateCheckboxState(checkbox_Hold_State));
 		dispatch(DataAction.update_CHECKBOX_STATE({ key: k, value: updatedCheckboxState[k] }));
-		// dispatch(
-			// changeCheckbox({ destination: k, value: updatedCheckboxState[k] }));
 		};
 
 	const checkboxHoldStateFromRedux = useSelector<RootState, { [key: string]: boolean }>(
@@ -88,7 +85,7 @@ export default function Statistics() {
 		set_previous_Value_TO((previous_Value_TO) => ({
 			...previous_Value_TO,
 			// [k]: { prevTO: previous_Value_TO[k] ? previous_Value_TO[k].prevTO : '0', prevTO_VALUE: value },
-			[k]: { prevTO_VALUE: value,  prevTO: previous_Value_TO[k] ? previous_Value_TO[k].prevTO : '0'},
+			[k]: { prevTO_VALUE: value,  prevTO: previous_Value_TO[k] ? previous_Value_TO[k].prevTO : '0' },
 		}));
 		let numericValue = parseFloat(value) || 0;
 		dispatch(DataAction.changePreviousTONS({ destination: k, value: numericValue }));
@@ -175,12 +172,6 @@ export default function Statistics() {
 					<th>PREV_T</th>
 					<th>TT_Q</th>
 					<th>TT_T</th>
-					{/* <Button
-						variant={Extended_Tally_Value ? "info" : "secondary"}
-						onClick={handle_Extended_Tally}
-					>
-						E
-					</Button> */}
 					<Button variant="info" onClick={handle_Extended_Tally}>
 						E
 					</Button>

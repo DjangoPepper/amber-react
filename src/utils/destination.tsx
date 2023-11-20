@@ -1,6 +1,6 @@
 // import React from "react";
 import { connect } from 'react-redux';
-import { updateAffectationVisibility } from '../stores/data/destinationActions'
+// import { updateAffectationVisibility } from '../stores/data/destinationActions'
 import Statistics from '../components/statistics';
 
 interface IHeader {
@@ -44,11 +44,11 @@ const mapStateToProps = (state: { destination: { affectations: any; }; }) => {
   };
 };
 
-const mapDispatchToProps = (dispatch: (arg0: { type: string; payload: { affectationName: any; visibility: any; }; }) => any) => {
-  return {
-    updateVisibility: (affectationName: any, visibility: any) =>
-      dispatch(updateAffectationVisibility(affectationName, visibility)),
-  };
-};
+// const mapDispatchToProps = (dispatch: (arg0: { type: string; payload: { affectationName: any; visibility: any; }; }) => any) => {
+//   return {
+//     updateVisibility: (affectationName: any, visibility: any) =>
+//       dispatch(updateAffectationVisibility(affectationName, visibility)),
+//   };
+// };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Statistics);
+// export default connect(mapStateToProps, mapDispatchToProps)(Statistics);

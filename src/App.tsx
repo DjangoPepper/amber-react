@@ -5,7 +5,7 @@ import Header from "./components/header";
 import Main from "./components/main";
 import {store} from "./stores/rootStore";
 import { useLeavePageConfirm } from "./components/use-leave";
-import DataAction from "./stores/data/DataAction";
+import DataAction from "./stores/dataS/DataAction";
 
 let backupInterval = 99 * 1000; //30 * 1000 ms = 30s
 

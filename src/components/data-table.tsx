@@ -1,5 +1,4 @@
 import React from "react";
-
 import { SketchPicker, ColorResult } from "react-color";
 import { useState } from 'react';
 import {
@@ -19,9 +18,9 @@ import {utils, writeFile } from "xlsx";
 import {Button, Modal, Form, Table as TableRS} from "react-bootstrap";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../stores/rootStore";
-import {Data} from "../stores/data/DataReducer";
+import {Data} from "../stores/dataS/DataReducer";
 import DebouncedInput from "./debounceInput";
-import DataAction from "../stores/data/DataAction";
+import DataAction from "../stores/dataS/DataAction";
 import {colors, affectation, HEADER} from "../utils/destination";
 import Filter, {fuzzyFilter} from "./filter";
 import './index-tanstack.css'
@@ -35,19 +34,19 @@ import * as path from 'path'
 const monthNames = [
     'jan', 'fev', 'mar', 'avr', 'mai', 'juin',
     'juil', 'aou', 'sep', 'oct', 'nov', 'dec'
-  ];
+    ];
 
 function backupCurrentDateTime(): string {
-  const now = new Date();
-  const day = String(now.getDate()).padStart(2, '0');
-  const month = monthNames[now.getMonth()];  
+    const now = new Date();
+    const day = String(now.getDate()).padStart(2, '0');
+    const month = monthNames[now.getMonth()];  
 
-  //const month = String(now.getMonth() + 1).padStart(2, '0');
-  //const year = String(now.getFullYear());
-  const hour = String(now.getHours()).padStart(2, '0');
-  const minute = String(now.getMinutes()).padStart(2, '0');
+    //const month = String(now.getMonth() + 1).padStart(2, '0');
+    //const year = String(now.getFullYear());
+    const hour = String(now.getHours()).padStart(2, '0');
+    const minute = String(now.getMinutes()).padStart(2, '0');
 
-  return `Stepe ${month}${day}_${hour}${minute}.xlsx`;
+    return `Stepe ${month}${day}_${hour}${minute}.xlsx`;
 }
 
 declare module '@tanstack/react-table' {
