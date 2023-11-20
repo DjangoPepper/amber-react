@@ -1,5 +1,5 @@
 import {read, utils} from "xlsx";
-import {Data} from "../stores/data/DataReducer";
+import {Data} from "../stores/dataS/DataReducer";
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import "./fonctionsAdd";
