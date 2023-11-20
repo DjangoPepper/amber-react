@@ -27,14 +27,13 @@ export default function Statistics() {
 	const [maxi_Values, set_maxi_Values] = useState<{ [key: string]: { maxi_To: string } }>({});
 	const data = useSelector<RootState, Data[]>((state) => state.data.data);
 	const selectedColors = useSelector<RootState, { [key: string]: string }>((state) => state.data.pickerColors);
-	
 	const [Extended_Tally_Value, set_Extended_Tally_Value] = React.useState(false);
 
 	const handle_Extended_Tally = () => {
-		set_Extended_Tally_Value((prevValue) => {
-			console.log("handle_Extended_Tally :", prevValue);
-			return !prevValue;
-		});
+			set_Extended_Tally_Value((prevValue) => {
+				console.log("handle_Extended_Tally :", prevValue);
+				return !prevValue;
+			});
 		};
 	
 
@@ -59,7 +58,11 @@ export default function Statistics() {
 		dispatch(DataAction.update_CHECKBOX_STATE({ key: k, value: updatedCheckboxState[k] }));
 		// dispatch(
 			// changeCheckbox({ destination: k, value: updatedCheckboxState[k] }));
-	};
+		};
+
+	const checkboxHoldStateFromRedux = useSelector<RootState, { [key: string]: boolean }>(
+		(state) => state.data.checkboxHoldState
+		);
 
 	//fred deprecated
 	
@@ -70,7 +73,7 @@ export default function Statistics() {
 		}));
 		const numericValue = parseFloat(value);
 		dispatch(DataAction.changeMaxiTONS({ destination: k, value: numericValue }));
-	};
+		};
 
 	const handle_prevQT_Value_Change = (k: string, value: string) => {
 		set_previous_Value_QT((previous_Value_QT) => ({
@@ -79,7 +82,7 @@ export default function Statistics() {
 		}));
 		let numericValue = parseFloat(value) || 0;
 		dispatch(DataAction.changePreviousQTT({ destination: k, value: numericValue }));
-	};
+		};
 
 	const handle_PrevTO_Change = (k: string, value: string) => {
 		set_previous_Value_TO((previous_Value_TO) => ({
@@ -89,19 +92,19 @@ export default function Statistics() {
 		}));
 		let numericValue = parseFloat(value) || 0;
 		dispatch(DataAction.changePreviousTONS({ destination: k, value: numericValue }));
-	};
+		};
 	
 	const totalMaxiCalesWeight = Object.keys(maxi_Values).reduce((total, k) => {
 		return total + (maxi_Values[k] ? parseFloat(maxi_Values[k].maxi_To) : 0);
-	}, 0);
+		}, 0);
 	
 	const totalPreviousCalesCount = Object.keys(previous_Value_QT).reduce((total, k) => {
 		return total + (previous_Value_QT[k] ? parseFloat(previous_Value_QT[k].prevQT_Value) : 0);
-	}, 0);
+		}, 0);
 	
 	const totalPreviousCalesWeight = Object.keys(previous_Value_TO).reduce((total, k) => {
 		return total + (previous_Value_TO[k]?.prevTO_VALUE ? parseFloat(previous_Value_TO[k].prevTO_VALUE) : 0);
-	}, 0);
+		}, 0);
 
 	const statistics = data.reduce<any>((p, row) => {
 		if (!p[row.destination]) {
@@ -110,40 +113,54 @@ export default function Statistics() {
 		p[row.destination].count += 1;
 		p[row.destination].weight += parseFloat((row.weight).toFixed(3));
 		return p;
-	}, {});
+		}, {});
 
+	
 	Object.values(statistics).forEach((destinationStats: any ) => {    
-		totalCount += destinationStats.count;
-		totalWeight += destinationStats.weight;
-		totalCalesCount = totalCount ;
-		totalCalesWeight = totalWeight;
-
-
-		if (statistics.stock) {
-			totalstockCount = statistics.stock.count;
-			totalstockWeight = statistics.stock.weight;	
-			totalstockWeight = parseFloat(totalstockWeight.toFixed(3))
-			totalCalesCount  = totalCount   - totalstockCount;
-			totalCalesWeight = totalWeight  - totalstockWeight;
-			totalCalesWeight = parseFloat(totalCalesWeight.toFixed(3));
-			
-		}
-		else {
-			totalstockCount = 0;
-			totalstockWeight = 0;	
-			totalCalesCount  = totalCount;
+			totalCount += destinationStats.count;
+			totalWeight += destinationStats.weight;
+			totalCalesCount = totalCount ;
 			totalCalesWeight = totalWeight;
-		}
-	});
 
+
+			if (statistics.stock) {
+				totalstockCount = statistics.stock.count;
+				totalstockWeight = statistics.stock.weight;	
+				totalstockWeight = parseFloat(totalstockWeight.toFixed(3))
+				totalCalesCount  = totalCount   - totalstockCount;
+				totalCalesWeight = totalWeight  - totalstockWeight;
+				totalCalesWeight = parseFloat(totalCalesWeight.toFixed(3));
+				
+			}
+			else {
+				totalstockCount = 0;
+				totalstockWeight = 0;	
+				totalCalesCount  = totalCount;
+				totalCalesWeight = totalWeight;
+			}
+		});
+
+	
 	// useEffect(() => {
-	// 	// Parcourez le tableau affectation et envoyez chaque état "visibleState" dans Redux
-	// 	// affectation.forEach((item) => {
-	// 	// // Utilisez votre action ou fonction pour mettre à jour l'état dans Redux
-	// 	// dispatch(updateAffectationVisibility(item.name, item.visibleState));
+	// // Parcoure le tableau affectation et envoyez chaque état "visibleState" dans Redux
+	// 	affectation.forEach((item) => {
+	// // Utilise  action  pour mettre à jour l'état dans Redux
+	// // dispatch(updateAffectationVisibility(item.name, item.visibleState));
+	// dispatch(DataAction.update_CHECKBOX_STATE({ key: item.name, value: item.visibleState }));
+	// 	});
+	// }, [affectation, dispatch]); // Assurez-vous de lister dispatch comme dépendance pour éviter les avertissements
+		
+	
+	// updateAffectationVisibility(item.name, item.visibleState));
+
 	// 	// });
 	// }, [dispatch]); // Assurez-vous de lister dispatch comme dépendance pour éviter les avertissements
 	
+	// useEffect(() => {
+	// 	set_checkbox_Hold_State(checkboxHoldStateFromRedux);
+	// 	}, [checkboxHoldStateFromRedux]);
+	
+
 	return (
 		<div>
 		<Table>
