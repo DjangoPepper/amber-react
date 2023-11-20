@@ -25,10 +25,11 @@ export default class DataAction {
 	public static CHANGE_LET_QTT = "DataAction.CHANGE_LET_QTT";
 	public static CHANGE_LET_TONS = "DataAction.CHANGE_LET_TONS";
 	
-	//
-
-	//
-
+	// export const UPDATE_CHECKBOX_STATE = createAction<{ [key: string]: boolean }>('UPDATE_CHECKBOX_STATE');
+	public static UPDATE_CHECKBOX_STATE = "DataAction.UPDATE_CHECKBOX_STATE";
+	public static update_CHECKBOX_STATE(newcheckboxstate: { key: string; value: boolean }): AnyAction {
+		return { type: DataAction.UPDATE_CHECKBOX_STATE, payload: newcheckboxstate };
+	}
 	public static changeLetTONS(lettons: { destination: string; value: number }): AnyAction {
 		return { type: DataAction.CHANGE_LET_TONS, payload: lettons };
 	}

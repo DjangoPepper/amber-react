@@ -2,6 +2,8 @@ import { AnyAction } from "redux";
 import DataAction from "./DataAction";
 import {Reducer} from "@reduxjs/toolkit";
 import { affectation, colors } from "../../utils/destination";
+import { createReducer } from "@reduxjs/toolkit";
+// import { UPDATE_CHECKBOX_STATE } from "./checkboxActions";
 
 export type Data = {
     rank: number
@@ -13,7 +15,7 @@ export type Data = {
 }
 
 // interface AppState {
-//     visibleStates: boolean[];
+//     visible_state: boolean[];
 //     // Autres propriétés de l'état
 //   }
 
@@ -27,22 +29,22 @@ interface DataState {
     previous_QTT: number;
     previous_TONS: number;
     maxi_TONS: number;
+    maxi_values: { [key: string]: number };
     diff_TONS: number;
     let_QTT: number;
     let_TONS: number;
-    // visibleStates: boolean;
-    visibleStates: boolean[];
+    checkboxHoldState: { [key: string]: boolean };
     
 }
 
 interface Statistics {
     [destination: string]: {
-      count: number;
-      weight: number;
+        count: number;
+        weight: number;
     //   SinglecheckboxSate: boolean;
     };
-  }
-  
+    }
+
 const initialState: DataState = {
     data: [],
     selectedCale: "stock",
@@ -53,25 +55,22 @@ const initialState: DataState = {
     previous_QTT: 0,
     previous_TONS: 0, 
     maxi_TONS: 0,
+    maxi_values: {},
     diff_TONS: 0,
     let_QTT: 0,
     let_TONS: 0,
-    // visibleStates: false,
-    visibleStates: affectation.map(item => item.visibleState),
+    checkboxHoldState: {},
 };
 
 export const dataReducer: Reducer<DataState> = (state = initialState, action: AnyAction): DataState => {
         switch (action.type) {
             //fred
-            
-            // case DataAction.TOGGLE_VISIBLE_STATE:
-            //     const updatedVisibleStates = [...state.visibleStates];
-            //     updatedVisibleStates[action.itemIndex] = action.isVisible;
-            //     return {
-            //         ...state,
-            //         visibleStates: updatedVisibleStates,
-            //     }
-            
+            case DataAction.UPDATE_CHECKBOX_STATE:
+                return {
+                    ...state,
+                    checkboxHoldState: action.payload,
+                };
+
             case DataAction.CHANGE_DIFF_TONS:
                 return {
                     ...state,

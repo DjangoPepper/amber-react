@@ -5,7 +5,7 @@ import { Data } from "../stores/data/DataReducer";
 import { Table } from "react-bootstrap";
 import React, { useState, useEffect } from 'react';
 import { affectation} from "../utils/destination"
-import { updateAffectationVisibility } from '../stores/data/destinationActions';
+// import { updateAffectationVisibility } from '../stores/data/destinationActions';
 import Button from 'react-bootstrap/Button';
 
 
@@ -23,7 +23,7 @@ export default function Statistics() {
 	
 	const dispatch = useDispatch();	
 	const [previous_Value_TO, set_previous_Value_TO] = useState<{ [key: string]: { prevTO: string; prevTO_VALUE: string } }>({});
-	const [previous_Value_QT, set_previous_Value_QT] = useState<{ [key: string]: { prevQT_VALUE: string; prevQT: string } }>({});
+	const [previous_Value_QT, set_previous_Value_QT] = useState<{ [key: string]: { prevQT_Value: string; prevQT: string } }>({});
 	const [maxi_Values, set_maxi_Values] = useState<{ [key: string]: { maxi_To: string } }>({});
 	const data = useSelector<RootState, Data[]>((state) => state.data.data);
 	const selectedColors = useSelector<RootState, { [key: string]: string }>((state) => state.data.pickerColors);
@@ -41,6 +41,7 @@ export default function Statistics() {
 	const [checkbox_Hold_State, set_checkbox_Hold_State] = useState<{ [key: string]: boolean }>({});
 	
 	const handleCheckboxChange = (k: string) => {
+
 		// Créez une copie de l'état actuel des cases à cocher
 		const updatedCheckboxState = { ...checkbox_Hold_State };
 	
@@ -54,6 +55,10 @@ export default function Statistics() {
 		}
 		// Mettez à jour l'état des cases à cocher avec la nouvelle valeur
 		set_checkbox_Hold_State(updatedCheckboxState);
+		// dispatch(updateCheckboxState(checkbox_Hold_State));
+		dispatch(DataAction.update_CHECKBOX_STATE({ key: k, value: updatedCheckboxState[k] }));
+		// dispatch(
+			// changeCheckbox({ destination: k, value: updatedCheckboxState[k] }));
 	};
 
 	//fred deprecated
@@ -67,10 +72,10 @@ export default function Statistics() {
 		dispatch(DataAction.changeMaxiTONS({ destination: k, value: numericValue }));
 	};
 
-	const handle_prevQT_VALUE_Change = (k: string, value: string) => {
+	const handle_prevQT_Value_Change = (k: string, value: string) => {
 		set_previous_Value_QT((previous_Value_QT) => ({
 			...previous_Value_QT,
-			[k]: { prevQT_VALUE: value, prevQT: previous_Value_QT[k] ? previous_Value_QT[k].prevQT : '0' },
+			[k]: { prevQT_Value: value, prevQT: previous_Value_QT[k] ? previous_Value_QT[k].prevQT : '0' },
 		}));
 		let numericValue = parseFloat(value) || 0;
 		dispatch(DataAction.changePreviousQTT({ destination: k, value: numericValue }));
@@ -91,7 +96,7 @@ export default function Statistics() {
 	}, 0);
 	
 	const totalPreviousCalesCount = Object.keys(previous_Value_QT).reduce((total, k) => {
-		return total + (previous_Value_QT[k] ? parseFloat(previous_Value_QT[k].prevQT_VALUE) : 0);
+		return total + (previous_Value_QT[k] ? parseFloat(previous_Value_QT[k].prevQT_Value) : 0);
 	}, 0);
 	
 	const totalPreviousCalesWeight = Object.keys(previous_Value_TO).reduce((total, k) => {
@@ -131,13 +136,13 @@ export default function Statistics() {
 		}
 	});
 
-	useEffect(() => {
-		// Parcourez le tableau affectation et envoyez chaque état "visibleState" dans Redux
-		affectation.forEach((item) => {
-		// Utilisez votre action ou fonction pour mettre à jour l'état dans Redux
-		dispatch(updateAffectationVisibility(item.name, item.visibleState));
-		});
-	}, [dispatch]); // Assurez-vous de lister dispatch comme dépendance pour éviter les avertissements
+	// useEffect(() => {
+	// 	// Parcourez le tableau affectation et envoyez chaque état "visibleState" dans Redux
+	// 	// affectation.forEach((item) => {
+	// 	// // Utilisez votre action ou fonction pour mettre à jour l'état dans Redux
+	// 	// dispatch(updateAffectationVisibility(item.name, item.visibleState));
+	// 	// });
+	// }, [dispatch]); // Assurez-vous de lister dispatch comme dépendance pour éviter les avertissements
 	
 	return (
 		<div>
@@ -179,7 +184,7 @@ export default function Statistics() {
 						statistics_array.count > 0
 					)
 				) {
-					console.log("visible : ", affectationItem.name)
+					// console.log("visible : ", affectationItem.name)
 					
 					return (
 						<tr key={affectationItem.name}>
@@ -225,11 +230,11 @@ export default function Statistics() {
 													style={{ width: '45px' }}
 													value={
 														previous_Value_QT[affectationItem.name] ? 
-															previous_Value_QT[affectationItem.name].prevQT_VALUE 
+															previous_Value_QT[affectationItem.name].prevQT_Value 
 															: 
 															0
 													}
-													onChange={(e) => handle_prevQT_VALUE_Change(affectationItem.name, e.target.value)}
+													onChange={(e) => handle_prevQT_Value_Change(affectationItem.name, e.target.value)}
 												/>
 											</td>
 													
@@ -252,8 +257,8 @@ export default function Statistics() {
 											<td>
 												{(
 													(statistics[affectationItem.name]?.count ?? 0) +
-													(previous_Value_QT[affectationItem.name]?.prevQT_VALUE
-													? parseFloat(previous_Value_QT[affectationItem.name].prevQT_VALUE)
+													(previous_Value_QT[affectationItem.name]?.prevQT_Value
+													? parseFloat(previous_Value_QT[affectationItem.name].prevQT_Value)
 													: 0)
 												)
 												}
@@ -339,7 +344,7 @@ export default function Statistics() {
 						statistics_array.count > 0
 					)
 				) {
-					console.log("visible : ", affectationItem.name)
+					// console.log("visible : ", affectationItem.name)
 					
 					return (
 						<tr key={affectationItem.name}>
@@ -376,7 +381,7 @@ export default function Statistics() {
 													(
 													(statistics[affectationItem.name]?.count ?? 0 
 														+ 
-													(previous_Value_QT[affectationItem.name]?.prevQT_VALUE ? parseFloat(previous_Value_QT[affectationItem.name].prevQT_VALUE) : 0))
+													(previous_Value_QT[affectationItem.name]?.prevQT_Value ? parseFloat(previous_Value_QT[affectationItem.name].prevQT_Value) : 0))
 													)
 												).toLocaleString("en-US", { minimumFractionDigits: 3, maximumFractionDigits: 3 })}
 											</td>
@@ -424,11 +429,11 @@ export default function Statistics() {
 													const maxiTo = parseFloat(maxi_Values[affectationItem.name]?.maxi_To) || 0;
 													const statsWeight = parseFloat(statistics[affectationItem.name]?.weight) || 0;
 													const prevTO = parseFloat(previous_Value_TO[affectationItem.name]?.prevTO_VALUE) || 0;
-													const prevQT_VALUE = parseFloat(previous_Value_QT[affectationItem.name]?.prevQT_VALUE) || 0;
+													const prevQT_Value = parseFloat(previous_Value_QT[affectationItem.name]?.prevQT_Value) || 0;
 
 													const result = (maxiTo - statsWeight - prevTO) / (
 														(statsWeight + prevTO) /
-														(statistics[affectationItem.name]?.count + prevQT_VALUE)
+														(statistics[affectationItem.name]?.count + prevQT_Value)
 													);
 
 													return Math.floor(isNaN(result) ? 0 : result) < 0 ? 'red-text' : 'blue-text';
@@ -442,11 +447,11 @@ export default function Statistics() {
 													const maxiTo = parseFloat(maxi_Values[affectationItem.name]?.maxi_To) || 0;
 													const statsWeight = parseFloat(statistics[affectationItem.name]?.weight) || 0;
 													const prevTO = parseFloat(previous_Value_TO[affectationItem.name]?.prevTO_VALUE) || 0;
-													const prevQT_VALUE = parseFloat(previous_Value_QT[affectationItem.name]?.prevQT_VALUE) || 0;
+													const prevQT_Value = parseFloat(previous_Value_QT[affectationItem.name]?.prevQT_Value) || 0;
 
 													const result = (maxiTo - statsWeight - prevTO) / (
 														(statsWeight + prevTO) /
-														(statistics[affectationItem.name]?.count + prevQT_VALUE)
+														(statistics[affectationItem.name]?.count + prevQT_Value)
 													);
 
 													return isNaN(result) ? 0 : Math.floor(result).toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 0 });
