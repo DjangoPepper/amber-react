@@ -118,11 +118,11 @@ export default class DataAction {
 		return { type: DataAction.SAVE_CATALOG };
 	}
 
-	public static save_prev_qtt(): AnyAction {
+	public static save_previous_qtt(): AnyAction {
 		return { type: DataAction.SAVE_PREV_QTT };
 	}
 
-	public static save_prev_tons(): AnyAction {
+	public static save_previous_tons(): AnyAction {
 		return { type: DataAction.SAVE_PREV_TONS };
 	}
 

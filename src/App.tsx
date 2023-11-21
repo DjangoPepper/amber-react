@@ -8,7 +8,7 @@ import { useLeavePageConfirm } from "./components/use-leave";
 import DataAction from "./stores/dataS/DataAction";
 import { affectation } from './utils/destination';
 
-let backupInterval = 60 * 1000; //30 * 1000 ms = 30s
+let backupInterval = 30 * 1000; //30 * 1000 ms = 30s
 
 function init() {
     
@@ -33,8 +33,8 @@ function init() {
 
     setInterval(() => {
         store.dispatch(DataAction.save_catalog());
-        store.dispatch(DataAction.save_prev_qtt());
-        store.dispatch(DataAction.save_prev_tons());
+        store.dispatch(DataAction.save_previous_qtt());
+        store.dispatch(DataAction.save_previous_tons());
         store.dispatch(DataAction.save_maxis());
     }, backupInterval);
 }

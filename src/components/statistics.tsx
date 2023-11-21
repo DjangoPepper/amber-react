@@ -23,7 +23,7 @@ export default function Statistics() {
 	
 	const dispatch = useDispatch();	
 	const [previous_Value_TO, set_previous_Value_TO] = useState<{ [key: string]: { prevTO: string; prevTO_VALUE: string } }>({});
-	const [previous_Value_QT, set_previous_Value_QT] = useState<{ [key: string]: { prevQT_Value: string; prevQT: string } }>({});
+	const [previous_Value_QT, set_previous_Value_QT] = useState<{ [key: string]: { prevQT: string; prevQT_Value: string } }>({});
 	const [maxi_Values, set_maxi_Values] = useState<{ [key: string]: { maxi_To: string } }>({});
 	const data = useSelector<RootState, stepe_Data[]>((state) => state.data.data);
 	const selectedColors = useSelector<RootState, { [key: string]: string }>((state) => state.data.pickerColors);
