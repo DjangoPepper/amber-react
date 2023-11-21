@@ -142,9 +142,6 @@ export default function DataTable() {
     // const [ExtentedTally, setExtentedTally] = useState<string>('');
 
     const [newColor, setNewColor] = useState<string>('');
-    // const [textColor, setTextColor] = useState('black'); // État pour gérer la couleur du texte
-    // const [selectedColor, setSelectedColor] = useState('#fff'); // Couleur par défaut
-    // const [selectedColors, setSelectedColors] = useState<{ [key: string]: string }>(colors); // Couleur par défaut
     
     // Accédez à la valeur sélectionnée depuis l'état Redux
     const selectedCale = useSelector<RootState, string>((state) => state.data.selectedCale);
@@ -178,21 +175,21 @@ export default function DataTable() {
     const handleSaveChanges = () => {
         // Mettez à jour la couleur pour toutes les affectation identiques
         const updatedData = data.map((item) => {
-          if (item.destination === newSelectedCale) {
-            return { ...item, color: newColor };
-          }
-          return item;
+                if (item.destination === newSelectedCale) {
+                    return { ...item, color: newColor };
+                }
+            return item;
         });
     
         // Mettez à jour l'état des données avec les modifications
         // dispatch(DataAction.updateData(updatedData));
-       
+    
         dispatch(DataAction.changeCouleur([newSelectedCale]));
     
         // Fermez la fenêtre contextuelle
         // setShowModal(false);
         setnewSelectedCale("");
-      };
+        };
 
     const [sorting, setSorting] = React.useState<SortingState>([]);
     const [globalFilter, setGlobalFilter] = React.useState('')

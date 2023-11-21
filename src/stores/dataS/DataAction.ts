@@ -7,8 +7,17 @@ export default class DataAction {
 	public static CHANGE_PREPA = "DataAction.CHANGE_PREPA";
 	public static MOVE_ROW = "DataAction.MOVE_ROW";
 	public static UPDATE_ROW = "DataAction.UPDATE_ROW";
+	
 	public static SAVE_CATALOG = "DataAction.SAVE_CATALOG";
+	public static SAVE_PREV_QTT = "DataAction.SAVE_PREV_QTT";
+	public static SAVE_PREV_TONS = "DataAction.SAVE_PREV_TONS";
+	public static SAVE_MAXIS = "DataAction.SAVE_MAXIS";
+	
 	public static LOAD_CATALOG = "DataAction.LOAD_CATALOG";
+	public static LOAD_PREVIOUS_QTT = "DataAction.LOAD_PREVIOUS_QTT";
+	public static LOAD_PREVIOUS_TONS = "DataAction.LOAD_PREVIOUS_TONS";
+	public static LOAD_MAXIS = "DataAction.LOAD_MAXIS";
+	
 	public static CLEAR = "DataAction.CLEAR";
 	public static REMOVE = "DataAction.REMOVE";
 
@@ -27,25 +36,20 @@ export default class DataAction {
 	
 
 
-	public static LOAD_PREVQTT = "DataAction.LOAD_PREVQTT";
-	public static load_PreviousQTT(qtt: { destination: string; value: number }): AnyAction {
-		return { type: DataAction.LOAD_PREVQTT, payload: qtt };
+	public static LOAD_PREV_QTT = "DataAction.LOAD_PREV_QTT";
+	public static load_previous_qtt(qtt: { destination: string}): AnyAction {
+		return { type: DataAction.LOAD_PREV_QTT, payload: qtt };
+	}
+	
+	public static LOAD_PREV_TONS = "DataAction.LOAD_PREV_TONS";
+	public static load_previous_tons(tons: { destination: string}): AnyAction {
+		return { type: DataAction.LOAD_PREV_TONS, payload: tons };
 	}
 	
 
-
-	public static LOAD_PREVTONS = "DataAction.LOAD_PREVTONS";
-	public static load_PreviousTONS(tons: { destination: string; value: number }): AnyAction {
-		return { type: DataAction.LOAD_PREVTONS, payload: tons };
+	public static load_maxis(maxis: { destination: string }): AnyAction {
+		return { type: DataAction.LOAD_MAXIS, payload: maxis };
 	}
-
-	
-	public static LOAD_MAXIS = "DataAction.LOAD_MAXIS";
-	public static load_maxis(tons: { destination: string; value: number }): AnyAction {
-		return { type: DataAction.LOAD_MAXIS, payload: tons };
-	}
-
-
 	
 	public static UPDATE_CHECKBOX_STATE = "DataAction.UPDATE_CHECKBOX_STATE";
 	public static update_CHECKBOX_STATE(newcheckboxstate: { key: string; value: boolean }): AnyAction {
@@ -111,6 +115,18 @@ export default class DataAction {
 
 	public static save_catalog(): AnyAction {
 		return { type: DataAction.SAVE_CATALOG };
+	}
+
+	public static save_prev_qtt(): AnyAction {
+		return { type: DataAction.SAVE_PREV_QTT };
+	}
+
+	public static save_prev_tons(): AnyAction {
+		return { type: DataAction.SAVE_PREV_TONS };
+	}
+
+	public static save_maxis(): AnyAction {
+		return { type: DataAction.SAVE_MAXIS };
 	}
 
 	public static load_catalog(data: string): AnyAction {

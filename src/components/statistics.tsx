@@ -79,6 +79,7 @@ export default function Statistics() {
 		}));
 		let numericValue = parseFloat(value) || 0;
 		dispatch(DataAction.changePreviousQTT({ destination: k, value: numericValue }));
+		
 		};
 
 	const handle_PrevTO_Change = (k: string, value: string) => {
@@ -91,9 +92,9 @@ export default function Statistics() {
 		dispatch(DataAction.changePreviousTONS({ destination: k, value: numericValue }));
 		};
 	
-	const totalMaxiCalesWeight = Object.keys(maxi_Values).reduce((total, k) => {
-		return total + (maxi_Values[k] ? parseFloat(maxi_Values[k].maxi_To) : 0);
-		}, 0);
+	// const totalMaxiCalesWeight = Object.keys(maxi_Values).reduce((total, k) => {
+	// 	return total + (maxi_Values[k] ? parseFloat(maxi_Values[k].maxi_To) : 0);
+	// 	}, 0);
 	
 	const totalPreviousCalesCount = Object.keys(previous_Value_QT).reduce((total, k) => {
 		return total + (previous_Value_QT[k] ? parseFloat(previous_Value_QT[k].prevQT_Value) : 0);
@@ -182,7 +183,7 @@ export default function Statistics() {
 {/* HEADERS */}
 			{affectation.map((affectationItem) => {
 
-				const statistics_array = statistics[affectationItem.name] || {}; // Utilisez un objet vide par défaut
+				const statistics_array = statistics[affectationItem.name] || {}; // Utilise un objet vide par défaut
 				let chsafin = checkbox_Hold_State[affectationItem.name] || false;
 				if (
 					chsafin || 

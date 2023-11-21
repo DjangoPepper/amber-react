@@ -5,6 +5,13 @@ import { affectation, colors } from "../../utils/destination";
 // import { createReducer } from "@reduxjs/toolkit";
 // import { UPDATE_CHECKBOX_STATE } from "./checkboxActions";
 
+export type tally_Data = {
+    tally_prevqtt : { [key: string]: number };
+    tally_prevtons : { [key: string]: number };
+    tally_maxis : { [key: string]: number };
+
+}
+
 export type stepe_Data = {
     rank: number
     reference: string
@@ -36,7 +43,12 @@ interface DataState {
     let_TONS: { [key: string]: number };
     
     checkboxHoldState: { [key: string]: boolean };
-    
+    loaded_previous_QTT: boolean;
+    loaded_previous_TONS: boolean;
+    loaded_maxi_TONS: boolean;
+    saved_previous_QTT: boolean;
+    saved_previous_TONS: boolean;
+    saved_maxi_TONS: boolean;
 }
 
 // interface Statistics {
@@ -62,6 +74,12 @@ const initialState: DataState = {
     let_QTT: {},
     let_TONS: {},
     checkboxHoldState: {},
+    loaded_maxi_TONS: false,
+    loaded_previous_QTT: false,
+    loaded_previous_TONS: false,
+    saved_maxi_TONS: true,
+    saved_previous_QTT: true,
+    saved_previous_TONS: true,
 };
 
 export const dataReducer: Reducer<DataState> = (state = initialState, action: AnyAction): DataState => {
@@ -111,11 +129,11 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
                     saved_catalog: false,
                 };
             
-                case DataAction.CHANGE_CALE:
+            case DataAction.CHANGE_CALE:
                 return {
-                    ...state,
-                    selectedCale: action.payload,
-                }
+                ...state,
+                selectedCale: action.payload,
+                };
             case DataAction.CHANGE_ORIGINAL_POS:
                 return {
                     ...state,
@@ -163,12 +181,55 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
                     ...state,
                     saved_catalog: false
                 }
+            case DataAction.SAVE_PREV_QTT:
+                if(state.saved_previous_QTT) return state;
+                window.localStorage.setItem("previous_QTT", JSON.stringify(state.previous_QTT));
+                return {
+                    ...state,
+                    saved_previous_QTT: false
+                }
+            case DataAction.SAVE_PREV_TONS:
+                if(state.saved_previous_TONS) return state;
+                window.localStorage.setItem("previous_TONS", JSON.stringify(state.previous_TONS));
+                return {
+                    ...state,
+                    saved_previous_TONS: false
+                }
+            case DataAction.SAVE_MAXIS:
+                if(state.saved_maxi_TONS) return state;
+                window.localStorage.setItem("maxi_TONS", JSON.stringify(state.maxi_TONS));
+                return {
+                    ...state,
+                    saved_maxi_TONS: false
+                }
+
             case DataAction.LOAD_CATALOG:
                 return {
                     ...state,
                     data: action.payload,
                     loaded_catalog: true,
                     saved_catalog: true,
+                }
+            case DataAction.LOAD_PREV_QTT:
+                return {
+                    ...state,
+                    previous_QTT: action.payload,
+                    loaded_previous_QTT: true,
+                    saved_previous_QTT: true,
+                }
+            case DataAction.LOAD_PREV_TONS:
+                return {
+                    ...state,
+                    previous_TONS: action.payload,
+                    loaded_previous_TONS: true,
+                    saved_previous_TONS: true,
+                }
+            case DataAction.LOAD_MAXIS:
+                return {
+                    ...state,
+                    maxi_TONS: action.payload,
+                    loaded_maxi_TONS: true,
+                    saved_maxi_TONS: true,
                 }
             case DataAction.CLEAR:
                 return {
