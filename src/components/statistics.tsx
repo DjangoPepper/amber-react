@@ -10,7 +10,7 @@ import { affectation} from "../utils/destination";
 
 import Button from 'react-bootstrap/Button';
 // import {firstRender} from '../App';	
-
+import { toast, ToastContainer } from 'react-toastify';
 
 export default function Statistics() {
 
@@ -65,7 +65,7 @@ export default function Statistics() {
 			...maxi_Value_TO,
 			[k]: { maxi_To: value },
 		}));
-		const numericValue = parseFloat(value);
+		const numericValue = parseFloat(value) || 0;
 		dispatch(DataAction.changeMaxiTONS({ destination: k, value: numericValue }));
 		};
 
@@ -101,6 +101,8 @@ export default function Statistics() {
 	// 	}, 0);
 	
 	const FromRedux_maxisTo = useSelector<RootState, { [key: string]: string }>((state) => state.data.HOLD_maxi_TONS);
+	const FromRedux_previousQT = useSelector<RootState, { [key: string]: string }>((state) => state.data.HOLD_previous_QTT);
+	const FromRedux_previousTO = useSelector<RootState, { [key: string]: string }>((state) => state.data.HOLD_previous_TONS);
 
 	const totalPreviousCalesCount = Object.keys(previous_Value_QT).reduce((total, k) => {
 		return total + (previous_Value_QT[k] ? parseFloat(previous_Value_QT[k].prevQT_Value) : 0);
@@ -155,26 +157,46 @@ useEffect(() => {
 
 		if (k !== "stock") {
 			if (FromRedux_maxisTo[k] !== undefined) {
-				handlemaxi_ToChange(k, FromRedux_maxisTo[k]);
-			}
-			else {
-				handlemaxi_ToChange(k, "0");
-			}
-			if (previous_Value_TO[k] !== undefined) {
-				handle_PrevTO_VALUE_Change(k, previous_Value_TO[k].prevTO_VALUE);
-			}
-			else {
-				handle_PrevTO_VALUE_Change(k, "0");
-			}
-			if (previous_Value_QT[k] !== undefined) {
-				handle_prevQT_Value_Change(k, previous_Value_QT[k].prevQT_Value);
-			}
-			else {
-				handle_prevQT_Value_Change(k, "0");
-			}
+					handlemaxi_ToChange(k, FromRedux_maxisTo[k]);
+					// toast.info('Destination: ' ${k}', Valeur maxi: '${FromRedux_maxisTo[k]}', { position: toast.POSITION.BOTTOM_CENTER, autoClose: 5000 }); 
+					// toast.info('Destination: ' + k + ', Valeur maxi: + 'FromRedux_maxisTo[k]'), { position: toast.POSITION.BOTTOM_CENTER, autoClose: 500 });
+					// toast.info(`Destination: ${k}, Valeur maxi: ${FromRedux_maxisTo[k]}`, {
+						// position: toast.POSITION.BOTTOM_CENTER,
+						// autoClose: 5000,
+					// });
+					firstRender = false;
+				}
+				else {
+					handlemaxi_ToChange(k, "0");
+					// toast.info('Destination: ${k}, Valeur maxi: 0', { position: toast.POSITION.BOTTOM_CENTER, autoClose: 500 }); 
+					firstRender = false;
+				}
+			
+			if (FromRedux_previousTO[k] !== undefined) {
+					handle_PrevTO_VALUE_Change(k, FromRedux_previousTO[k]);
+					// handle_PrevTO_VALUE_Change(k, previous_Value_TO[k].prevTO_VALUE);
+					// handle_PrevTO_VALUE_Change(k, previous_Value_TO[k].prevTO_VALUE);
+					// toast.info('Destination: ${k}, Valeur previous Tons : ${previous_Value_TO[k].prevTO_VALUE}', { position: toast.POSITION.BOTTOM_CENTER, autoClose: 500 }); 
+					firstRender = false;
+				}
+				else {
+					handle_PrevTO_VALUE_Change(k, "0");
+					// toast.info('Destination: ${k}, Valeur Prev_TO: 0', { position: toast.POSITION.BOTTOM_CENTER, autoClose: 500 }); 
+					firstRender = false;
+				}
+			
+			if (FromRedux_previousQT[k] !== undefined) {
+				handle_prevQT_Value_Change(k, FromRedux_previousQT[k]);
+				// toast.info('Destination: ${k}, Valeur previous QT : ${previous_Value_QT[k].prevQT_VALUE}', { position: toast.POSITION.BOTTOM_CENTER, autoClose: 500 }); 
+				firstRender = false;
+				}
+				else {
+					handle_prevQT_Value_Change(k, "0");
+					// toast.info('Destination: ${k}, Valeur PrevQT: 0', { position: toast.POSITION.BOTTOM_CENTER, autoClose: 500 }); 
+					firstRender = false;
+				}
 		}
-	}
-	);
+	});
 
 	return () => {
 	firstRender = false;

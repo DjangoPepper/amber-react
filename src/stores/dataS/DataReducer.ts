@@ -35,8 +35,8 @@ interface DataState {
 
     pickerColors: { [key: string]: string };
     
-    HOLD_previous_QTT: { [key: string]: number };
-    HOLD_previous_TONS: { [key: string]: number };
+    HOLD_previous_QTT: { [key: string]: string };
+    HOLD_previous_TONS: { [key: string]: string };
     // HOLD_maxi_TONS: { [key: string]: number };
     HOLD_maxi_TONS: { [key: string]: string };
     diff_TONS: { [key: string]: number };
