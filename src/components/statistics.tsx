@@ -86,7 +86,7 @@ export default function Statistics() {
 		
 		};
 
-	const handle_PrevTO_Change = (k: string, value: string) => {
+	const handle_PrevTO_VALUE_Change = (k: string, value: string) => {
 		set_previous_Value_TO((previous_Value_TO) => ({
 			...previous_Value_TO,
 			// [k]: { prevTO: previous_Value_TO[k] ? previous_Value_TO[k].prevTO : '0', prevTO_VALUE: value },
@@ -262,7 +262,7 @@ export default function Statistics() {
 															: 
 															0
 													}
-													onChange={(e) => handle_PrevTO_Change(affectationItem.name, e.target.value)}
+													onChange={(e) => handle_PrevTO_VALUE_Change(affectationItem.name, e.target.value)}
 												/>
 											</td>
 
