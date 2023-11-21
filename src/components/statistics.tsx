@@ -24,7 +24,7 @@ export default function Statistics() {
 	let totalstockWeight = 0;
 	
 	const dispatch = useDispatch();	
-	const [previous_Value_TO, set_previous_Value_TO] = useState<{ [key: string]: { prevTO: string; prevTO_VALUE: string } }>({});
+	const [previous_Value_TO, set_previous_Value_TO] = useState<{ [key: string]: { prevTO_VALUE: string } }>({});
 	const [previous_Value_QT, set_previous_Value_QT] = useState<{ [key: string]: { prevQT_Value: string } }>({});
 	const [maxi_Value_TO, set_maxi_Values] = useState<{ [key: string]: { maxi_To: string } }>({});
 	
@@ -84,13 +84,9 @@ export default function Statistics() {
 	const handle_PrevTO_VALUE_Change = (k: string, value: string) => {
 		set_previous_Value_TO((previous_Value_TO) => ({
 			...previous_Value_TO,
-			// [k]: { prevTO: previous_Value_TO[k] ? previous_Value_TO[k].prevTO : '0', prevTO_VALUE: value },
 			[k]: { 
 					prevTO_VALUE: value,  
-					prevTO: previous_Value_TO[k] ? 
-						previous_Value_TO[k].prevTO 
-						: 
-						'0' },
+			},
 		}));
 		let numericValue = parseFloat(value) || 0;
 		dispatch(DataAction.changePreviousTONS({ destination: k, value: numericValue }));
