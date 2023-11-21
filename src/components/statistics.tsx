@@ -22,8 +22,10 @@ export default function Statistics() {
 	let totalstockWeight = 0;
 	
 	const dispatch = useDispatch();	
+	// const [previous_Value_TO, set_previous_Value_TO] = useState<{ [key: string]: { prevTO: string; prevTO_VALUE: string } }>({});
 	const [previous_Value_TO, set_previous_Value_TO] = useState<{ [key: string]: { prevTO: string; prevTO_VALUE: string } }>({});
-	const [previous_Value_QT, set_previous_Value_QT] = useState<{ [key: string]: { prevQT: string; prevQT_Value: string } }>({});
+	// const [previous_Value_QT, set_previous_Value_QT] = useState<{ [key: string]: { prevQT: string; prevQT_Value: string } }>({});
+	const [previous_Value_QT, set_previous_Value_QT] = useState<{ [key: string]: { prevQT_Value: string } }>({});
 	const [maxi_Values, set_maxi_Values] = useState<{ [key: string]: { maxi_To: string } }>({});
 	const data = useSelector<RootState, stepe_Data[]>((state) => state.data.data);
 	const selectedColors = useSelector<RootState, { [key: string]: string }>((state) => state.data.pickerColors);
@@ -54,7 +56,7 @@ export default function Statistics() {
 		}
 		// Mettez à jour l'état des cases à cocher avec la nouvelle valeur
 		set_checkbox_Hold_State(updatedCheckboxState);
-		dispatch(DataAction.update_CHECKBOX_STATE({ key: k, value: updatedCheckboxState[k] }));
+		dispatch(DataAction.change_CHECKBOX_STATE({ key: k, value: updatedCheckboxState[k] }));
 		};
 
 	const checkboxHoldStateFromRedux = useSelector<RootState, { [key: string]: boolean }>(
@@ -75,7 +77,9 @@ export default function Statistics() {
 	const handle_prevQT_Value_Change = (k: string, value: string) => {
 		set_previous_Value_QT((previous_Value_QT) => ({
 			...previous_Value_QT,
-			[k]: { prevQT_Value: value, prevQT: previous_Value_QT[k] ? previous_Value_QT[k].prevQT : '0' },
+			[k]: { 
+				prevQT_Value: value, 
+			},
 		}));
 		let numericValue = parseFloat(value) || 0;
 		dispatch(DataAction.changePreviousQTT({ destination: k, value: numericValue }));
@@ -144,7 +148,7 @@ export default function Statistics() {
 	// 	affectation.forEach((item) => {
 	// // Utilise  action  pour mettre à jour l'état dans Redux
 	// // dispatch(updateAffectationVisibility(item.name, item.visibleState));
-	// dispatch(DataAction.update_CHECKBOX_STATE({ key: item.name, value: item.visibleState }));
+	// dispatch(DataAction.change_CHECKBOX_STATE({ key: item.name, value: item.visibleState }));
 	// 	});
 	// }, [affectation, dispatch]); // Assurez-vous de lister dispatch comme dépendance pour éviter les avertissements
 		

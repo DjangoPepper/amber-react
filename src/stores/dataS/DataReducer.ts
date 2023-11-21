@@ -3,7 +3,7 @@ import DataAction from "./DataAction";
 import {Reducer} from "@reduxjs/toolkit";
 import { affectation, colors } from "../../utils/destination";
 // import { createReducer } from "@reduxjs/toolkit";
-// import { UPDATE_CHECKBOX_STATE } from "./checkboxActions";stores/dataS/DataAction.ts
+// import { CHANGE_CHECKBOX_STATE } from "./checkboxActions";stores/dataS/DataAction.ts
 
 export type tally_Data = {
     tally_prevqtt : { [key: string]: number };
@@ -119,7 +119,7 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
                 }
 
     
-            case DataAction.UPDATE_CHECKBOX_STATE:
+            case DataAction.CHANGE_CHECKBOX_STATE:
                 return {
                     ...state,
                     checkboxHoldState: action.payload,

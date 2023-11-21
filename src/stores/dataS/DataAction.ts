@@ -52,9 +52,9 @@ export default class DataAction {
 		return { type: DataAction.LOAD_MAXIS, payload: maxis };
 	}
 	
-	public static UPDATE_CHECKBOX_STATE = "DataAction.UPDATE_CHECKBOX_STATE";
-	public static update_CHECKBOX_STATE(newcheckboxstate: { key: string; value: boolean }): AnyAction {
-		return { type: DataAction.UPDATE_CHECKBOX_STATE, payload: newcheckboxstate };
+	public static CHANGE_CHECKBOX_STATE = "DataAction.CHANGE_CHECKBOX_STATE";
+	public static change_CHECKBOX_STATE(newcheckboxstate: { key: string; value: boolean }): AnyAction {
+		return { type: DataAction.CHANGE_CHECKBOX_STATE, payload: newcheckboxstate };
 	}
 	public static changeLetTONS(lettons: { destination: string; value: number }): AnyAction {
 		return { type: DataAction.CHANGE_LET_TONS, payload: lettons };
