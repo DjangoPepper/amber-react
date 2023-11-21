@@ -14,9 +14,9 @@ export default class DataAction {
 	public static SAVE_MAXIS = "DataAction.SAVE_MAXIS";
 	
 	public static LOAD_CATALOG = "DataAction.LOAD_CATALOG";
-	public static LOAD_PREVIOUS_QTT = "DataAction.LOAD_PREVIOUS_QTT";
-	public static LOAD_PREVIOUS_TONS = "DataAction.LOAD_PREVIOUS_TONS";
-	public static LOAD_MAXIS = "DataAction.LOAD_MAXIS";
+	// public static LOAD_PREVIOUS_QTT = "DataAction.LOAD_PREVIOUS_QTT";
+	// public static LOAD_PREVIOUS_TONS = "DataAction.LOAD_PREVIOUS_TONS";
+	// public static LOAD_MAXIS = "DataAction.LOAD_MAXIS";
 	
 	public static CLEAR = "DataAction.CLEAR";
 	public static REMOVE = "DataAction.REMOVE";
@@ -47,6 +47,7 @@ export default class DataAction {
 	}
 	
 
+	public static LOAD_MAXIS = "DataAction.LOAD_MAXIS";
 	public static load_maxis(maxis: { destination: string }): AnyAction {
 		return { type: DataAction.LOAD_MAXIS, payload: maxis };
 	}
