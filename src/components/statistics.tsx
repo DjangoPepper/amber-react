@@ -1,13 +1,15 @@
 import { useSelector, useDispatch} from "react-redux";
 import { RootState } from "../stores/rootStore";
 import DataAction from "../stores/dataS/DataAction";
+
 import { stepe_Data } from "../stores/dataS/DataReducer";
 import { Table } from "react-bootstrap";
 import React, { useState, useEffect } from 'react';
-import { affectation} from "../utils/destination"
+import { affectation} from "../utils/destination";
 // import { updateAffectationVisibility } from '../stores/data/destinationActions';
-import Button from 'react-bootstrap/Button';
 
+import Button from 'react-bootstrap/Button';
+// import {firstRender} from '../App';	
 
 
 export default function Statistics() {
@@ -22,12 +24,11 @@ export default function Statistics() {
 	let totalstockWeight = 0;
 	
 	const dispatch = useDispatch();	
-	// const [previous_Value_TO, set_previous_Value_TO] = useState<{ [key: string]: { prevTO: string; prevTO_VALUE: string } }>({});
 	const [previous_Value_TO, set_previous_Value_TO] = useState<{ [key: string]: { prevTO: string; prevTO_VALUE: string } }>({});
-	// const [previous_Value_QT, set_previous_Value_QT] = useState<{ [key: string]: { prevQT: string; prevQT_Value: string } }>({});
 	const [previous_Value_QT, set_previous_Value_QT] = useState<{ [key: string]: { prevQT_Value: string } }>({});
-	const [maxi_Values, set_maxi_Values] = useState<{ [key: string]: { maxi_To: string } }>({});
-	const data = useSelector<RootState, stepe_Data[]>((state) => state.data.data);
+	const [maxi_Value_TO, set_maxi_Values] = useState<{ [key: string]: { maxi_To: string } }>({});
+	
+	const catalog_data = useSelector<RootState, stepe_Data[]>((state) => state.data.data);
 	const selectedColors = useSelector<RootState, { [key: string]: string }>((state) => state.data.pickerColors);
 	const [Extended_Tally_Value, set_Extended_Tally_Value] = React.useState(false);
 
@@ -58,16 +59,10 @@ export default function Statistics() {
 		set_checkbox_Hold_State(updatedCheckboxState);
 		dispatch(DataAction.change_CHECKBOX_STATE({ key: k, value: updatedCheckboxState[k] }));
 		};
-
-	const checkboxHoldStateFromRedux = useSelector<RootState, { [key: string]: boolean }>(
-		(state) => state.data.checkboxHoldState
-		);
-
-	//fred deprecated
-	
+		
 	const handlemaxi_ToChange = (k: string, value: string) => {
-		set_maxi_Values((maxi_Values: any) => ({
-			...maxi_Values,
+		set_maxi_Values((maxi_Value_TO: any) => ({
+			...maxi_Value_TO,
 			[k]: { maxi_To: value },
 		}));
 		const numericValue = parseFloat(value);
@@ -90,16 +85,23 @@ export default function Statistics() {
 		set_previous_Value_TO((previous_Value_TO) => ({
 			...previous_Value_TO,
 			// [k]: { prevTO: previous_Value_TO[k] ? previous_Value_TO[k].prevTO : '0', prevTO_VALUE: value },
-			[k]: { prevTO_VALUE: value,  prevTO: previous_Value_TO[k] ? previous_Value_TO[k].prevTO : '0' },
+			[k]: { 
+					prevTO_VALUE: value,  
+					prevTO: previous_Value_TO[k] ? 
+						previous_Value_TO[k].prevTO 
+						: 
+						'0' },
 		}));
 		let numericValue = parseFloat(value) || 0;
 		dispatch(DataAction.changePreviousTONS({ destination: k, value: numericValue }));
 		};
 	
-	// const totalMaxiCalesWeight = Object.keys(maxi_Values).reduce((total, k) => {
-	// 	return total + (maxi_Values[k] ? parseFloat(maxi_Values[k].maxi_To) : 0);
+	// const totalMaxiCalesWeight = Object.keys(maxi_Value_TO).reduce((total, k) => {
+	// 	return total + (maxi_Value_TO[k] ? parseFloat(maxi_Value_TO[k].maxi_To) : 0);
 	// 	}, 0);
 	
+	const FromRedux_maxisTo = useSelector<RootState, { [key: string]: string }>((state) => state.data.HOLD_maxi_TONS);
+
 	const totalPreviousCalesCount = Object.keys(previous_Value_QT).reduce((total, k) => {
 		return total + (previous_Value_QT[k] ? parseFloat(previous_Value_QT[k].prevQT_Value) : 0);
 		}, 0);
@@ -108,62 +110,81 @@ export default function Statistics() {
 		return total + (previous_Value_TO[k]?.prevTO_VALUE ? parseFloat(previous_Value_TO[k].prevTO_VALUE) : 0);
 		}, 0);
 
-	const statistics = data.reduce<any>((p, row) => {
+	
+	const statistics = catalog_data.reduce<any>((p, row) => {
 		if (!p[row.destination]) {
-		p[row.destination] = { count: 0, weight: 0  };
+			p[row.destination] = { count: 0, weight: 0  };
 		}
 		p[row.destination].count += 1;
 		p[row.destination].weight += parseFloat((row.weight).toFixed(3));
 		return p;
-		}, {});
+	}, {});
 
 	
-	Object.values(statistics).forEach((destinationStats: any ) => {    
-			totalCount += destinationStats.count;
-			totalWeight += destinationStats.weight;
-			totalCalesCount = totalCount ;
+Object.values(statistics).forEach((destinationStats: any ) => {    
+		totalCount += destinationStats.count;
+		totalWeight += destinationStats.weight;
+		totalCalesCount = totalCount ;
+		totalCalesWeight = totalWeight;
+
+
+		if (statistics.stock) {
+			totalstockCount = statistics.stock.count;
+			totalstockWeight = statistics.stock.weight;	
+			totalstockWeight = parseFloat(totalstockWeight.toFixed(3))
+			totalCalesCount  = totalCount   - totalstockCount;
+			totalCalesWeight = totalWeight  - totalstockWeight;
+			totalCalesWeight = parseFloat(totalCalesWeight.toFixed(3));
+			
+		}
+		else {
+			totalstockCount = 0;
+			totalstockWeight = 0;	
+			totalCalesCount  = totalCount;
 			totalCalesWeight = totalWeight;
+		}
+});
 
+// fred
 
-			if (statistics.stock) {
-				totalstockCount = statistics.stock.count;
-				totalstockWeight = statistics.stock.weight;	
-				totalstockWeight = parseFloat(totalstockWeight.toFixed(3))
-				totalCalesCount  = totalCount   - totalstockCount;
-				totalCalesWeight = totalWeight  - totalstockWeight;
-				totalCalesWeight = parseFloat(totalCalesWeight.toFixed(3));
-				
+useEffect(() => {
+	let firstRender = true;
+	
+	affectation.map((affectationItem) => {
+		const k = affectationItem.name;
+
+		if (k !== "stock") {
+			if (FromRedux_maxisTo[k] !== undefined) {
+				handlemaxi_ToChange(k, FromRedux_maxisTo[k]);
 			}
 			else {
-				totalstockCount = 0;
-				totalstockWeight = 0;	
-				totalCalesCount  = totalCount;
-				totalCalesWeight = totalWeight;
+				handlemaxi_ToChange(k, "0");
 			}
-		});
+			if (previous_Value_TO[k] !== undefined) {
+				handle_PrevTO_VALUE_Change(k, previous_Value_TO[k].prevTO_VALUE);
+			}
+			else {
+				handle_PrevTO_VALUE_Change(k, "0");
+			}
+			if (previous_Value_QT[k] !== undefined) {
+				handle_prevQT_Value_Change(k, previous_Value_QT[k].prevQT_Value);
+			}
+			else {
+				handle_prevQT_Value_Change(k, "0");
+			}
+		}
+	}
+	);
+
+	return () => {
+	firstRender = false;
+	};
+	}, []); //
+
+
 
 	
-	// useEffect(() => {
-	// // Parcoure le tableau affectation et envoyez chaque état "visibleState" dans Redux
-	// 	affectation.forEach((item) => {
-	// // Utilise  action  pour mettre à jour l'état dans Redux
-	// // dispatch(updateAffectationVisibility(item.name, item.visibleState));
-	// dispatch(DataAction.change_CHECKBOX_STATE({ key: item.name, value: item.visibleState }));
-	// 	});
-	// }, [affectation, dispatch]); // Assurez-vous de lister dispatch comme dépendance pour éviter les avertissements
-		
-	
-	// updateAffectationVisibility(item.name, item.visibleState));
-
-	// 	// });
-	// }, [dispatch]); // Assurez-vous de lister dispatch comme dépendance pour éviter les avertissements
-	
-	// useEffect(() => {
-	// 	set_checkbox_Hold_State(checkboxHoldStateFromRedux);
-	// 	}, [checkboxHoldStateFromRedux]);
-	
-
-	return (
+		return (
 		<div>
 		<Table>
 			{/* ... En-tête de table ... */}		
@@ -405,7 +426,7 @@ export default function Statistics() {
 												<input
 													type="text"
 													style={{ width: '80px' }}
-													value={maxi_Values[affectationItem.name] ? maxi_Values[affectationItem.name].maxi_To : 0} // Utilisez prevValues[affectationItem.name].prevTo pour la valeur 
+													value={maxi_Value_TO[affectationItem.name] ? maxi_Value_TO[affectationItem.name].maxi_To : 0} // Utilisez prevValues[affectationItem.name].prevTo pour la valeur 
 													onChange={(e) => handlemaxi_ToChange(affectationItem.name, e.target.value)}
 												/>
 											</td>
@@ -414,7 +435,7 @@ export default function Statistics() {
  {/* DIFF_T */}
 											<td className={
 												(
-														(parseFloat(maxi_Values[affectationItem.name]?.maxi_To ?? 0) - 
+														(parseFloat(maxi_Value_TO[affectationItem.name]?.maxi_To ?? 0) - 
 															(
 																(parseFloat(statistics[affectationItem.name]?.weight) || 0) +
 																(parseFloat(previous_Value_TO[affectationItem.name]?.prevTO_VALUE) || 0)
@@ -425,7 +446,7 @@ export default function Statistics() {
 												>
 											{
 												(
-													parseFloat(maxi_Values[affectationItem.name]?.maxi_To ?? 0) - 
+													parseFloat(maxi_Value_TO[affectationItem.name]?.maxi_To ?? 0) - 
 													(
 													(parseFloat(statistics[affectationItem.name]?.weight) || 0) +
 													(parseFloat(previous_Value_TO[affectationItem.name]?.prevTO_VALUE) || 0)
@@ -439,7 +460,7 @@ export default function Statistics() {
 											<td className={
 												(() => {
 													try {
-													const maxiTo = parseFloat(maxi_Values[affectationItem.name]?.maxi_To) || 0;
+													const maxiTo = parseFloat(maxi_Value_TO[affectationItem.name]?.maxi_To) || 0;
 													const statsWeight = parseFloat(statistics[affectationItem.name]?.weight) || 0;
 													const prevTO = parseFloat(previous_Value_TO[affectationItem.name]?.prevTO_VALUE) || 0;
 													const prevQT_Value = parseFloat(previous_Value_QT[affectationItem.name]?.prevQT_Value) || 0;
@@ -457,7 +478,7 @@ export default function Statistics() {
 												}>
 												{(() => {
 													try {
-													const maxiTo = parseFloat(maxi_Values[affectationItem.name]?.maxi_To) || 0;
+													const maxiTo = parseFloat(maxi_Value_TO[affectationItem.name]?.maxi_To) || 0;
 													const statsWeight = parseFloat(statistics[affectationItem.name]?.weight) || 0;
 													const prevTO = parseFloat(previous_Value_TO[affectationItem.name]?.prevTO_VALUE) || 0;
 													const prevQT_Value = parseFloat(previous_Value_QT[affectationItem.name]?.prevQT_Value) || 0;

@@ -150,11 +150,6 @@ export default function DataTable() {
         dispatch(DataAction.changePickColors(colors));
     }
     
-    // const [ExtentedTally, setExtentedTally] = useState<string>('');
-    // const handleExtentedTally = () => { 
-    //     setExtentedTally(ExtentedTally);
-    // };
-
     const handleStabiloClick = () => { 
         setnewSelectedCale(selectedCale);
     };

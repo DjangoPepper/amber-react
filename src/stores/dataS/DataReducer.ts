@@ -37,7 +37,8 @@ interface DataState {
     
     HOLD_previous_QTT: { [key: string]: number };
     HOLD_previous_TONS: { [key: string]: number };
-    HOLD_maxi_TONS: { [key: string]: number };
+    // HOLD_maxi_TONS: { [key: string]: number };
+    HOLD_maxi_TONS: { [key: string]: string };
     diff_TONS: { [key: string]: number };
     let_QTT: { [key: string]: number };
     let_TONS: { [key: string]: number };
