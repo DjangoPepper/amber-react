@@ -69,7 +69,7 @@ export default function Statistics() {
 		dispatch(DataAction.changeMaxiTONS({ destination: k, value: numericValue }));
 		};
 
-	const handle_prevQT_Value_Change = (k: string, value: string) => {
+	const handle_prevQT_VALUE_Change = (k: string, value: string) => {
 		set_previous_Value_QT((previous_Value_QT) => ({
 			...previous_Value_QT,
 			[k]: { 
@@ -186,12 +186,12 @@ useEffect(() => {
 				}
 			
 			if (FromRedux_previousQT[k] !== undefined) {
-				handle_prevQT_Value_Change(k, FromRedux_previousQT[k]);
+				handle_prevQT_VALUE_Change(k, FromRedux_previousQT[k]);
 				// toast.info('Destination: ${k}, Valeur previous QT : ${previous_Value_QT[k].prevQT_VALUE}', { position: toast.POSITION.BOTTOM_CENTER, autoClose: 500 }); 
 				firstRender = false;
 				}
 				else {
-					handle_prevQT_Value_Change(k, "0");
+					handle_prevQT_VALUE_Change(k, "0");
 					// toast.info('Destination: ${k}, Valeur PrevQT: 0', { position: toast.POSITION.BOTTOM_CENTER, autoClose: 500 }); 
 					firstRender = false;
 				}
@@ -290,7 +290,7 @@ useEffect(() => {
 															: 
 															0
 													}
-													onChange={(e) => handle_prevQT_Value_Change(affectationItem.name, e.target.value)}
+													onChange={(e) => handle_prevQT_VALUE_Change(affectationItem.name, e.target.value)}
 												/>
 											</td>
 													
