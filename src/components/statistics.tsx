@@ -25,7 +25,7 @@ export default function Statistics() {
 	
 	const dispatch = useDispatch();	
 	const [previous_Value_TO, set_previous_Value_TO] = useState<{ [key: string]: { prevTO_VALUE: string } }>({});
-	const [previous_Value_QT, set_previous_Value_QT] = useState<{ [key: string]: { prevQT_Value: string } }>({});
+	const [previous_Value_QT, set_previous_Value_QT] = useState<{ [key: string]: { prevQT_VALUE: string } }>({});
 	const [maxi_Value_TO, set_maxi_Values] = useState<{ [key: string]: { maxi_To: string } }>({});
 	
 	const catalog_data = useSelector<RootState, stepe_Data[]>((state) => state.data.data);
@@ -73,7 +73,7 @@ export default function Statistics() {
 		set_previous_Value_QT((previous_Value_QT) => ({
 			...previous_Value_QT,
 			[k]: { 
-				prevQT_Value: value, 
+				prevQT_VALUE: value, 
 			},
 		}));
 		let numericValue = parseFloat(value) || 0;
@@ -101,7 +101,7 @@ export default function Statistics() {
 	const FromRedux_previousTO = useSelector<RootState, { [key: string]: string }>((state) => state.data.HOLD_previous_TONS);
 
 	const totalPreviousCalesCount = Object.keys(previous_Value_QT).reduce((total, k) => {
-		return total + (previous_Value_QT[k] ? parseFloat(previous_Value_QT[k].prevQT_Value) : 0);
+		return total + (previous_Value_QT[k] ? parseFloat(previous_Value_QT[k].prevQT_VALUE) : 0);
 		}, 0);
 	
 	const totalPreviousCalesWeight = Object.keys(previous_Value_TO).reduce((total, k) => {
@@ -282,7 +282,7 @@ useEffect(() => {
 													style={{ width: '45px' }}
 													value={
 														previous_Value_QT[affectationItem.name] ? 
-															previous_Value_QT[affectationItem.name].prevQT_Value 
+															previous_Value_QT[affectationItem.name].prevQT_VALUE 
 															: 
 															0
 													}
@@ -309,8 +309,8 @@ useEffect(() => {
 											<td>
 												{(
 													(statistics[affectationItem.name]?.count ?? 0) +
-													(previous_Value_QT[affectationItem.name]?.prevQT_Value
-													? parseFloat(previous_Value_QT[affectationItem.name].prevQT_Value)
+													(previous_Value_QT[affectationItem.name]?.prevQT_VALUE
+													? parseFloat(previous_Value_QT[affectationItem.name].prevQT_VALUE)
 													: 0)
 												)
 												}
@@ -433,7 +433,7 @@ useEffect(() => {
 													(
 													(statistics[affectationItem.name]?.count ?? 0 
 														+ 
-													(previous_Value_QT[affectationItem.name]?.prevQT_Value ? parseFloat(previous_Value_QT[affectationItem.name].prevQT_Value) : 0))
+													(previous_Value_QT[affectationItem.name]?.prevQT_VALUE ? parseFloat(previous_Value_QT[affectationItem.name].prevQT_VALUE) : 0))
 													)
 												).toLocaleString("en-US", { minimumFractionDigits: 3, maximumFractionDigits: 3 })}
 											</td>
@@ -481,11 +481,11 @@ useEffect(() => {
 													const maxiTo = parseFloat(maxi_Value_TO[affectationItem.name]?.maxi_To) || 0;
 													const statsWeight = parseFloat(statistics[affectationItem.name]?.weight) || 0;
 													const prevTO = parseFloat(previous_Value_TO[affectationItem.name]?.prevTO_VALUE) || 0;
-													const prevQT_Value = parseFloat(previous_Value_QT[affectationItem.name]?.prevQT_Value) || 0;
+													const prevQT_VALUE = parseFloat(previous_Value_QT[affectationItem.name]?.prevQT_VALUE) || 0;
 
 													const result = (maxiTo - statsWeight - prevTO) / (
 														(statsWeight + prevTO) /
-														(statistics[affectationItem.name]?.count + prevQT_Value)
+														(statistics[affectationItem.name]?.count + prevQT_VALUE)
 													);
 
 													return Math.floor(isNaN(result) ? 0 : result) < 0 ? 'red-text' : 'blue-text';
@@ -499,11 +499,11 @@ useEffect(() => {
 													const maxiTo = parseFloat(maxi_Value_TO[affectationItem.name]?.maxi_To) || 0;
 													const statsWeight = parseFloat(statistics[affectationItem.name]?.weight) || 0;
 													const prevTO = parseFloat(previous_Value_TO[affectationItem.name]?.prevTO_VALUE) || 0;
-													const prevQT_Value = parseFloat(previous_Value_QT[affectationItem.name]?.prevQT_Value) || 0;
+													const prevQT_VALUE = parseFloat(previous_Value_QT[affectationItem.name]?.prevQT_VALUE) || 0;
 
 													const result = (maxiTo - statsWeight - prevTO) / (
 														(statsWeight + prevTO) /
-														(statistics[affectationItem.name]?.count + prevQT_Value)
+														(statistics[affectationItem.name]?.count + prevQT_VALUE)
 													);
 
 													return isNaN(result) ? 0 : Math.floor(result).toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 0 });
