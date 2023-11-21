@@ -7,6 +7,8 @@ import {store} from "./stores/rootStore";
 import { useLeavePageConfirm } from "./components/use-leave";
 import DataAction from "./stores/dataS/DataAction";
 import { affectation } from './utils/destination';
+import { toast, ToastContainer } from 'react-toastify';
+
 
 let backupInterval = 30 * 1000; //30 * 1000 ms = 30s
 
@@ -20,13 +22,8 @@ function init() {
       const k = affectationItem.name;
       if (k === "stock") {
       } else {
-          // const numericValue = parseFloat(k) || 0;
-          // const statistics_array = statistics[affectationItem.name] || {}; //
-          // store.dispatch(DataAction.load_previous_qtt({ destination: k, value: numericValue }));
           store.dispatch(DataAction.load_previous_qtt({ destination: k }));
-          // store.dispatch(DataAction.load_previous_tons({ destination: k, value: numericValue }));
           store.dispatch(DataAction.load_previous_tons({ destination: k }));
-          // store.dispatch(DataAction.load_maxis({ destination: k, value: numericValue }));
           store.dispatch(DataAction.load_maxis({ destination: k }));
         }
     });
@@ -36,6 +33,7 @@ function init() {
         store.dispatch(DataAction.save_previous_qtt());
         store.dispatch(DataAction.save_previous_tons());
         store.dispatch(DataAction.save_maxis());
+        // toast.info('bck', { position: toast.POSITION.TOP_RIGHT, autoClose: backupInterval })
     }, backupInterval);
 }
 

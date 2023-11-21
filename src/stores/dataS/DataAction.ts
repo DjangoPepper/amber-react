@@ -9,8 +9,8 @@ export default class DataAction {
 	public static UPDATE_ROW = "DataAction.UPDATE_ROW";
 	
 	public static SAVE_CATALOG = "DataAction.SAVE_CATALOG";
-	public static SAVE_PREV_QTT = "DataAction.SAVE_PREV_QTT";
-	public static SAVE_PREV_TONS = "DataAction.SAVE_PREV_TONS";
+	public static SAVE_PREVIOUS_QTT = "DataAction.SAVE_PREVIOUS_QTT";
+	public static SAVE_PREVIOUS_TONS = "DataAction.SAVE_PREVIOUS_TONS";
 	public static SAVE_MAXIS = "DataAction.SAVE_MAXIS";
 	
 	public static LOAD_CATALOG = "DataAction.LOAD_CATALOG";
@@ -119,11 +119,11 @@ export default class DataAction {
 	}
 
 	public static save_previous_qtt(): AnyAction {
-		return { type: DataAction.SAVE_PREV_QTT };
+		return { type: DataAction.SAVE_PREVIOUS_QTT };
 	}
 
 	public static save_previous_tons(): AnyAction {
-		return { type: DataAction.SAVE_PREV_TONS };
+		return { type: DataAction.SAVE_PREVIOUS_TONS };
 	}
 
 	public static save_maxis(): AnyAction {
