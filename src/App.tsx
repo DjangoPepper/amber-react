@@ -37,10 +37,10 @@ function init() {
 		
 
 		setInterval(() => {
-				store.dispatch(DataAction.save_catalog());
-				store.dispatch(DataAction.save_previous_qtt());
-				store.dispatch(DataAction.save_previous_tons());
-				store.dispatch(DataAction.save_maxis());
+				// store.dispatch(DataAction.save_catalog());
+				// store.dispatch(DataAction.save_previous_qtt());
+				// store.dispatch(DataAction.save_previous_tons());
+				// store.dispatch(DataAction.save_maxis());
 				// toast.info('bck', { position: toast.POSITION.TOP_RIGHT, autoClose: backupInterval })
 				toast.info('bck', { position: toast.POSITION.TOP_RIGHT, autoClose: 500 })
 		}, backupInterval);

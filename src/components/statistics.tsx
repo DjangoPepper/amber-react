@@ -22,7 +22,8 @@ export default function Statistics() {
 
 	let totalstockCount = 0;
 	let totalstockWeight = 0;
-	
+	let firstRender = true;
+
 	const dispatch = useDispatch();	
 	const [previous_Value_TO, set_previous_Value_TO] = useState<{ [key: string]: { prevTO_VALUE: string } }>({});
 	const [previous_Value_QT, set_previous_Value_QT] = useState<{ [key: string]: { prevQT_VALUE: string } }>({});
@@ -40,8 +41,7 @@ export default function Statistics() {
 		};
 	
 
-	const [checkbox_Hold_State, set_checkbox_Hold_State] = useState<{ [key: string]: boolean }>({});
-	
+	const [checkbox_Hold_State, set_checkbox_Hold_State] = useState<{ [key: string]: boolean }>({});	
 	const handleCheckboxChange = (k: string) => {
 
 		// Créez une copie de l'état actuel des cases à cocher
@@ -92,10 +92,9 @@ export default function Statistics() {
 		dispatch(DataAction.changePreviousTONS({ destination: k, value: numericValue }));
 		};
 	
-	// const totalMaxiCalesWeight = Object.keys(maxi_Value_TO).reduce((total, k) => {
-	// 	return total + (maxi_Value_TO[k] ? parseFloat(maxi_Value_TO[k].maxi_To) : 0);
-	// 	}, 0);
 	
+	
+
 	const FromRedux_maxisTo = useSelector<RootState, { [key: string]: string }>((state) => state.data.HOLD_maxi_TONS);
 	const FromRedux_previousQT = useSelector<RootState, { [key: string]: string }>((state) => state.data.HOLD_previous_QTT);
 	const FromRedux_previousTO = useSelector<RootState, { [key: string]: string }>((state) => state.data.HOLD_previous_TONS);
@@ -107,8 +106,39 @@ export default function Statistics() {
 	const totalPreviousCalesWeight = Object.keys(previous_Value_TO).reduce((total, k) => {
 		return total + (previous_Value_TO[k]?.prevTO_VALUE ? parseFloat(previous_Value_TO[k].prevTO_VALUE) : 0);
 		}, 0);
+///
+	function init_tally() {
+		if (firstRender == true) {
+		affectation.forEach((affectationItem) => {
+		const k = affectationItem.name;
 
-	
+		if (k !== "stock") {
+				if (FromRedux_maxisTo[k] !== undefined) {
+				handlemaxi_ToChange(k, FromRedux_maxisTo[k]);
+				firstRender = false;
+				} else {
+				handlemaxi_ToChange(k, "0");
+				firstRender = false;
+				}
+
+				if (FromRedux_previousTO[k] !== undefined) {
+				handle_PrevTO_VALUE_Change(k, FromRedux_previousTO[k]);
+				firstRender = false;
+				} else {
+				handle_PrevTO_VALUE_Change(k, "0");
+				firstRender = false;
+				}
+
+				if (FromRedux_previousQT[k] !== undefined) {
+				handle_prevQT_VALUE_Change(k, FromRedux_previousQT[k]);
+				firstRender = false;
+				} else {
+				handle_prevQT_VALUE_Change(k, "0");
+				firstRender = false;
+				}
+			}});};
+		}
+///	
 	const statistics = catalog_data.reduce<any>((p, row) => {
 		if (!p[row.destination]) {
 			p[row.destination] = { count: 0, weight: 0  };
@@ -116,24 +146,23 @@ export default function Statistics() {
 		p[row.destination].count += 1;
 		p[row.destination].weight += parseFloat((row.weight).toFixed(3));
 		return p;
-	}, {});
+		}, {});
 
 	
-Object.values(statistics).forEach((destinationStats: any ) => {    
+//
+	Object.values(statistics).forEach((destinationStats: any ) => {    
 		totalCount += destinationStats.count;
 		totalWeight += destinationStats.weight;
 		totalCalesCount = totalCount ;
 		totalCalesWeight = totalWeight;
-
-
-		if (statistics.stock) {
+//
+	if (statistics.stock) {
 			totalstockCount = statistics.stock.count;
 			totalstockWeight = statistics.stock.weight;	
 			totalstockWeight = parseFloat(totalstockWeight.toFixed(3))
 			totalCalesCount  = totalCount   - totalstockCount;
 			totalCalesWeight = totalWeight  - totalstockWeight;
 			totalCalesWeight = parseFloat(totalCalesWeight.toFixed(3));
-			
 		}
 		else {
 			totalstockCount = 0;
@@ -141,66 +170,9 @@ Object.values(statistics).forEach((destinationStats: any ) => {
 			totalCalesCount  = totalCount;
 			totalCalesWeight = totalWeight;
 		}
-});
+		});
 
-// fred
-
-useEffect(() => {
-	let firstRender = true;
-	
-	affectation.map((affectationItem) => {
-		const k = affectationItem.name;
-
-		if (k !== "stock") {
-			if (FromRedux_maxisTo[k] !== undefined) {
-					handlemaxi_ToChange(k, FromRedux_maxisTo[k]);
-					// toast.info('Destination: ' ${k}', Valeur maxi: '${FromRedux_maxisTo[k]}', { position: toast.POSITION.BOTTOM_CENTER, autoClose: 5000 }); 
-					// toast.info('Destination: ' + k + ', Valeur maxi: + 'FromRedux_maxisTo[k]'), { position: toast.POSITION.BOTTOM_CENTER, autoClose: 500 });
-					// toast.info(`Destination: ${k}, Valeur maxi: ${FromRedux_maxisTo[k]}`, {
-						// position: toast.POSITION.BOTTOM_CENTER,
-						// autoClose: 5000,
-					// });
-					firstRender = false;
-				}
-				else {
-					handlemaxi_ToChange(k, "0");
-					// toast.info('Destination: ${k}, Valeur maxi: 0', { position: toast.POSITION.BOTTOM_CENTER, autoClose: 500 }); 
-					firstRender = false;
-				}
-			
-			if (FromRedux_previousTO[k] !== undefined) {
-					handle_PrevTO_VALUE_Change(k, FromRedux_previousTO[k]);
-					// handle_PrevTO_VALUE_Change(k, previous_Value_TO[k].prevTO_VALUE);
-					// handle_PrevTO_VALUE_Change(k, previous_Value_TO[k].prevTO_VALUE);
-					// toast.info('Destination: ${k}, Valeur previous Tons : ${previous_Value_TO[k].prevTO_VALUE}', { position: toast.POSITION.BOTTOM_CENTER, autoClose: 500 }); 
-					firstRender = false;
-				}
-				else {
-					handle_PrevTO_VALUE_Change(k, "0");
-					// toast.info('Destination: ${k}, Valeur Prev_TO: 0', { position: toast.POSITION.BOTTOM_CENTER, autoClose: 500 }); 
-					firstRender = false;
-				}
-			
-			if (FromRedux_previousQT[k] !== undefined) {
-				handle_prevQT_VALUE_Change(k, FromRedux_previousQT[k]);
-				// toast.info('Destination: ${k}, Valeur previous QT : ${previous_Value_QT[k].prevQT_VALUE}', { position: toast.POSITION.BOTTOM_CENTER, autoClose: 500 }); 
-				firstRender = false;
-				}
-				else {
-					handle_prevQT_VALUE_Change(k, "0");
-					// toast.info('Destination: ${k}, Valeur PrevQT: 0', { position: toast.POSITION.BOTTOM_CENTER, autoClose: 500 }); 
-					firstRender = false;
-				}
-		}
-	});
-
-	return () => {
-	firstRender = false;
-	};
-	}, []); //
-
-
-
+// 
 	
 		return (
 		<div>
@@ -208,23 +180,23 @@ useEffect(() => {
 			{/* ... En-tête de table ... */}		
 			<thead>
 				<tr>
-					<th>DesT</th>
-					<th>K</th> {/* Nouvelle colonne avec des cases à cocher */}
-					<th> DAY_Q </th>
-					<th> DAY_T </th>
-					<th>PREV_Q</th>
-					<th>PREV_T</th>
-					<th>TT_Q</th>
-					<th>TT_T</th>
-					<Button variant="info" onClick={handle_Extended_Tally}>
-						E
-					</Button>
+					<th style={{ textAlign: 'left' }}>DesT</th>
+					<th style={{ textAlign: 'center' }}>K</th>
+					<th style={{ textAlign: 'center' }}>DAY_Q</th>
+					<th style={{ textAlign: 'center' }}>DAY_T</th>
+					<th style={{ textAlign: 'center', backgroundColor: 'gray' }}>PREV_Q</th>
+					<th style={{ textAlign: 'center', backgroundColor: 'gray' }}>PREV_T</th>
+					<th style={{ textAlign: 'center' }}>TT_Q</th>
+					<th style={{ textAlign: 'center' }}>TT_T</th>
+					<th style={{ textAlign: 'center' }}>
+					<Button variant="info" onClick={handle_Extended_Tally}>E</Button>
+					</th>
 				</tr>
 			</thead>
 			<tbody>
 			
-{/* HEADERS */}
-			{affectation.map((affectationItem) => {
+{/* HEADERS */}				
+							{affectation.map((affectationItem) => {
 
 				const statistics_array = statistics[affectationItem.name] || {}; // Utilise un objet vide par défaut
 				let chsafin = checkbox_Hold_State[affectationItem.name] || false;
@@ -242,25 +214,29 @@ useEffect(() => {
 						<tr key={affectationItem.name}>
 							
 {/* DEST */}
-							<td style={{ backgroundColor: selectedColors[affectationItem.name] }}>{affectationItem.name}</td>
+							<td style={{ backgroundColor: selectedColors[affectationItem.name], textAlign: 'left' }}>{affectationItem.name}</td>
 							
 {/* CHECKBOX */}
 							<td>
+							{ affectationItem.name !== 'stock' ? ( 
 								<input
 								type="checkbox" 
 								checked={checkbox_Hold_State[affectationItem.name]} 
 								// checked={affectationItem.visibleState[k]} 
 								onChange={() => handleCheckboxChange(affectationItem.name)}
 								/>
+							):null}							
 							</td>
 
-{/* DAY_Q */}
-							<td>
-								{statistics[affectationItem.name] ? statistics[affectationItem.name].count : 0}
-							</td>
+{/* DAY_Q */}				
+							{/* <tr> */}
+								<td style={{ textAlign: 'center'}}>
+									{statistics[affectationItem.name] ? statistics[affectationItem.name].count : 0}
+								</td>
+							{/* </tr> */}
 
 {/* DAY_T */}
-							<td>
+							<td style={{ textAlign: 'center'}}>
 								{statistics[affectationItem.name] ? parseFloat(statistics[affectationItem.name].weight).toLocaleString("en-US", {minimumFractionDigits: 3, maximumFractionDigits: 3,}) : "0.000"}
 							</td>
 
@@ -276,7 +252,7 @@ useEffect(() => {
 										<> 					
 											{/* sinon affiche toute les colonnes */}
 {/* PREV_Q */}
-											<td>
+											<td style={{ textAlign: 'center',backgroundColor: 'gray' }}>		
 												<input
 													type="text"
 													style={{ width: '45px' }}
@@ -291,7 +267,8 @@ useEffect(() => {
 											</td>
 													
 {/* PREV_T */}
-											<td>
+											{/* <td style={{ backgroundColor: 'gray' }}>	 */}
+											<td style={{ textAlign: 'center',backgroundColor: 'gray' }}>			
 												<input
 													type="text"
 													style={{ width: '80px' }}
@@ -306,7 +283,7 @@ useEffect(() => {
 											</td>
 
 {/* TTL_Q */}
-											<td>
+											<td style={{ textAlign: 'center'}}>
 												{(
 													(statistics[affectationItem.name]?.count ?? 0) +
 													(previous_Value_QT[affectationItem.name]?.prevQT_VALUE
@@ -315,9 +292,11 @@ useEffect(() => {
 												)
 												}
 											</td>
+											
+
 													
 {/* TTL_T */}											
-											<td>
+											<td style={{ textAlign: 'center'}}>
 												{(
 													(statistics[affectationItem.name]?.weight ?? 0) +
 													(previous_Value_TO[affectationItem.name]?.prevTO_VALUE
@@ -339,24 +318,26 @@ useEffect(() => {
 			})}
 
 
-{/* PARTIE calcul */}
-
+				{/* PARTIE calcul */}
 				<tr>
-{/*ICI K */}
-				<td>Totaux</td>
-{/* Q */}
-				<td> </td>					 									
-				<td>{isNaN(totalCalesCount) ? 0 : totalCalesCount}</td>										
-{/* T */}
-				<td>{isNaN(totalCalesWeight) ? 0 : totalCalesWeight.toLocaleString("en-US")}</td>				
-{/*PREV_Q */}				
-				<td>{isNaN(totalPreviousCalesCount) ? 0 : totalPreviousCalesCount}</td>								
-{/*PREV_T */}
-				<td>{isNaN(totalPreviousCalesWeight) ? 0 : totalPreviousCalesWeight.toLocaleString("en-US")}</td>
-{/*TT_Q */}				
-				<td>{totalCalesCount + totalPreviousCalesCount}</td>							
-{/*TT_T */}					
-				<td>{(totalCalesWeight + totalPreviousCalesWeight).toLocaleString("en-US")}</td>
+				{/* K */}
+				<td style={{ textAlign: 'left'}}>Totaux</td>
+				{/* Q */}
+				<td style={{ textAlign: 'center'}}> </td>					 									
+				<td style={{ textAlign: 'center'}}>{isNaN(totalCalesCount) ? 0 : totalCalesCount}</td>										
+				{/* T */}
+				<td style={{ textAlign: 'center'}}>{isNaN(totalCalesWeight) ? 0 : totalCalesWeight.toLocaleString("en-US")}</td>				
+
+				{/*PREV_Q */}
+				<td style={{ textAlign: 'center',backgroundColor: 'gray' }}>{isNaN(totalPreviousCalesCount) ? 0 : totalPreviousCalesCount}</td>
+				{/*PREV_T */}
+				<td style={{ textAlign: 'center',backgroundColor: 'gray' }}>{isNaN(totalPreviousCalesWeight) ? 0 : totalPreviousCalesWeight.toLocaleString("en-US")}</td>
+
+
+				{/*TT_Q */}				
+				<td style={{ textAlign: 'center'}}>{totalCalesCount + totalPreviousCalesCount}</td>							
+				{/*TT_T */}					
+				<td style={{ textAlign: 'center'}}>{(totalCalesWeight + totalPreviousCalesWeight).toLocaleString("en-US")}</td>
 				
 				</tr><tr>
 				</tr>
@@ -373,12 +354,12 @@ useEffect(() => {
 			{/* ... En-tête de table ... */}		
 			<thead>
 				<tr>
-					<th> DesT </th>
-					<th></th>
-					<th> PU  </th>
-					<th> MAX </th>
-					<th>DIFF T</th>
-					<th>DIFF Q</th>
+					<th>DesT</th>
+					<th> </th>
+					<th style={{ textAlign: 'center'}}> PU  </th>
+					<th style={{ textAlign: 'center'}}> MAX </th>
+					<th style={{ textAlign: 'center'}}>DIFF T</th>
+					<th style={{ textAlign: 'center'}}>DIFF Q</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -420,7 +401,7 @@ useEffect(() => {
 										<> 					
 											{/* sinon affiche toute les colonnes */}
 {/* PU */}
-											<td>
+											<td style={{ textAlign: 'center'}}>
 												{(
 													(
 														(statistics[affectationItem.name]?.weight ?? 0) +
@@ -440,7 +421,7 @@ useEffect(() => {
 
 											
 {/* MAXI_TO */}
-											<td>
+											<td style={{ textAlign: 'center'}}>
 												<input
 													type="text"
 													style={{ width: '80px' }}
@@ -451,7 +432,8 @@ useEffect(() => {
 
 
  {/* DIFF_T */}
-											<td className={
+											<td style={{ textAlign: 'center'}} 
+												className={
 												(
 														(parseFloat(maxi_Value_TO[affectationItem.name]?.maxi_To ?? 0) - 
 															(
@@ -475,7 +457,8 @@ useEffect(() => {
 
 
 {/* DIFF_Q */}
-											<td className={
+											<td style={{ textAlign: 'center'}}
+												className={
 												(() => {
 													try {
 													const maxiTo = parseFloat(maxi_Value_TO[affectationItem.name]?.maxi_To) || 0;
