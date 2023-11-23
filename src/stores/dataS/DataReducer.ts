@@ -2,6 +2,7 @@ import { AnyAction } from "redux";
 import DataAction from "./DataAction";
 import {Reducer} from "@reduxjs/toolkit";
 import { affectation, colors } from "../../utils/destination";
+import { updateTaggedTemplate } from "typescript";
 // import { createReducer } from "@reduxjs/toolkit";
 // import { CHANGE_CHECKBOX_STATE } from "./checkboxActions";stores/dataS/DataAction.ts
 
@@ -27,29 +28,25 @@ export type stepe_Data = {
 //   }
 
 interface DataState {
-    data: stepe_Data[];
+    Interfaced_data_state: stepe_Data[];
     selectedCale: string;
     selectedPrepa: string;
     loaded_catalog: boolean;
     saved_catalog: boolean;
-
     pickerColors: { [key: string]: string };
     
     HOLD_previous_QTT: { [key: string]: string };
     HOLD_previous_TONS: { [key: string]: string };
-    // HOLD_maxi_TONS: { [key: string]: number };
     HOLD_maxi_TONS: { [key: string]: string };
-    diff_TONS: { [key: string]: number };
-    let_QTT: { [key: string]: number };
-    let_TONS: { [key: string]: number };
     
     checkboxHoldState: { [key: string]: boolean };
-    loaded_previous_QTT: boolean;
-    loaded_previous_TONS: boolean;
+    // loaded_previous_QTT: boolean;
+    // loaded_previous_TONS: boolean;
     loaded_maxi_TONS: boolean;
-    saved_HOLD_previous_QTT: boolean;
-    saved_HOLD_previous_TONS: boolean;
+    // saved_HOLD_previous_QTT: boolean;
+    // saved_HOLD_previous_TONS: boolean;
     saved_HOLD_maxi_TONS: boolean;
+    tableauDeDonnees: { [destination: string]: string }[];
 }
 
 // interface Statistics {
@@ -61,7 +58,7 @@ interface DataState {
 //     }
 
 const initialState: DataState = {
-    data: [],
+    Interfaced_data_state: [],
     selectedCale: "stock",
     selectedPrepa: "_",
     loaded_catalog: false,
@@ -71,16 +68,17 @@ const initialState: DataState = {
     HOLD_previous_TONS: {}, 
     HOLD_maxi_TONS: {},
     // maxi_values: {},
-    diff_TONS: {},
-    let_QTT: {},
-    let_TONS: {},
+    // diff_TONS: {},
+    // let_QTT: {},
+    // let_TONS: {},
     checkboxHoldState: {},
     loaded_maxi_TONS: false,
-    loaded_previous_QTT: false,
-    loaded_previous_TONS: false,
+    // loaded_previous_QTT: false,
+    // loaded_previous_TONS: false,
     saved_HOLD_maxi_TONS: true,
-    saved_HOLD_previous_QTT: true,
-    saved_HOLD_previous_TONS: true,
+    // saved_HOLD_previous_QTT: true,
+    // saved_HOLD_previous_TONS: true,
+    tableauDeDonnees: [],
 };
 
 export const dataReducer: Reducer<DataState> = (state = initialState, action: AnyAction): DataState => {
@@ -89,26 +87,26 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
             case DataAction.IMPORT_DATA:
                 return {
                     ...state,
-                    data: action.payload,
+                    Interfaced_data_state: action.payload,
                     loaded_catalog: true,
                     saved_catalog: false,
                 };
             
             case DataAction.MOVE_ROW:
-                const d = state.data.find(r => r.reference === action.payload);
+                const d = state.Interfaced_data_state.find(r => r.reference === action.payload);
                 if(!d) return state;
                 return {
                     ...state,
-                    data: [...state.data.filter(r => r.reference !== action.payload), {...d, destination: state.selectedCale}],
+                    Interfaced_data_state: [...state.Interfaced_data_state.filter(r => r.reference !== action.payload), {...d, destination: state.selectedCale}],
                     saved_catalog: false,
                 }
             case DataAction.UPDATE_ROW:
-                const currentRow = state.data.find(r => r.reference === action.payload.reference);
+                const currentRow = state.Interfaced_data_state.find(r => r.reference === action.payload.reference);
                 if(!currentRow) return state;
                 return {
                     ...state,
-                    data: [
-                        ...state.data.filter(r => r.reference !== action.payload.reference),
+                    Interfaced_data_state: [
+                        ...state.Interfaced_data_state.filter(r => r.reference !== action.payload.reference),
                         {...currentRow, [action.payload.columnId]: action.payload.value}
                     ],
                     saved_catalog: false,
@@ -125,21 +123,21 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
                     ...state,
                     checkboxHoldState: action.payload,
                 };
-            case DataAction.CHANGE_DIFF_TONS:
-                return {
-                    ...state,
-                    diff_TONS: action.payload,
-                };
-            case DataAction.CHANGE_LET_QTT:
-                return {
-                    ...state,
-                    let_QTT: action.payload,
-                };
-            case DataAction.CHANGE_LET_TONS:
-                return {
-                    ...state,
-                    let_TONS: action.payload,
-                };
+            // case DataAction.CHANGE_DIFF_TONS:
+            //     return {
+            //         ...state,
+            //         diff_TONS: action.payload,
+            //     };
+            // case DataAction.CHANGE_LET_QTT:
+            //     return {
+            //         ...state,
+            //         let_QTT: action.payload,
+            //     };
+            // case DataAction.CHANGE_LET_TONS:
+            //     return {
+            //         ...state,
+            //         let_TONS: action.payload,
+            //     };
             case DataAction.CHANGE_MAXI_TONS:
                 return {
                     ...state,
@@ -178,40 +176,40 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
             case DataAction.SAVE_CATALOG:
                 if(state.saved_catalog) return state;
                 console.log("saving catalog...");
-                window.localStorage.setItem("data", JSON.stringify(state.data));
+                window.localStorage.setItem("data", JSON.stringify(state.Interfaced_data_state));
                 return {
                     ...state,
                     saved_catalog: false
                 }
             
-            case DataAction.SAVE_PREVIOUS_QTT:
-                if(state.saved_HOLD_previous_QTT) return state;
-                window.localStorage.setItem("previous_QTT", JSON.stringify(state.HOLD_previous_QTT));
-                return {
-                    ...state,
-                    saved_HOLD_previous_QTT: true
-                }
-            case DataAction.SAVE_PREVIOUS_TONS:
-                if(state.saved_HOLD_previous_TONS) return state;
-                // window.localStorage.setItem("previous_TONS", JSON.stringify(state.previous_TONS));
-                window.localStorage.setItem("previous_TONS", JSON.stringify(state.HOLD_previous_TONS));
-                return {
-                    ...state,
-                    saved_HOLD_previous_TONS: true
-                }
+            // case DataAction.SAVE_PREVIOUS_QTT:
+            //     if(state.saved_HOLD_previous_QTT) return state;
+            //     window.localStorage.setItem("previous_QTT", JSON.stringify(state.HOLD_previous_QTT));
+            //     return {
+            //         ...state,
+            //         saved_HOLD_previous_QTT: true
+            //     }
+            // case DataAction.SAVE_PREVIOUS_TONS:
+            //     if(state.saved_HOLD_previous_TONS) return state;
+            //     // window.localStorage.setItem("previous_TONS", JSON.stringify(state.previous_TONS));
+            //     window.localStorage.setItem("previous_TONS", JSON.stringify(state.HOLD_previous_TONS));
+            //     return {
+            //         ...state,
+            //         saved_HOLD_previous_TONS: true
+            //     }
             case DataAction.SAVE_MAXIS:
                 if(state.saved_HOLD_maxi_TONS) return state;
                 window.localStorage.setItem("maxi_TONS", JSON.stringify(state.HOLD_maxi_TONS));
                 return {
                     ...state,
-                    saved_HOLD_maxi_TONS: true
+                    saved_HOLD_maxi_TONS: false
                 }
 
 
             case DataAction.LOAD_CATALOG:
                 return {
                     ...state,
-                    data: action.payload,
+                    Interfaced_data_state: action.payload,
                     loaded_catalog: true,
                     saved_catalog: true,
                 }
@@ -219,28 +217,50 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
                 return {
                     ...state,
                     HOLD_previous_QTT: action.payload,
-                    loaded_previous_QTT: true,
-                    saved_HOLD_previous_QTT: true,
+                    // loaded_previous_QTT: true,
+                    // saved_HOLD_previous_QTT: true,
                 }
             case DataAction.LOAD_PREV_TONS:
                 return {
                     ...state,
                     HOLD_previous_TONS: action.payload,
-                    loaded_previous_TONS: true,
-                    saved_HOLD_previous_TONS: true,
+                    // loaded_previous_TONS: true,
+                    // saved_HOLD_previous_TONS: true,
                 }
             case DataAction.LOAD_MAXIS:
                 return {
                     ...state,
                     HOLD_maxi_TONS: action.payload,
-                    loaded_maxi_TONS: true,
-                    saved_HOLD_maxi_TONS: true,
+                    // loaded_maxi_TONS: true,
+                    // saved_HOLD_maxi_TONS: true,
                 }
             case DataAction.CLEAR:
                 return {
                     ...state,
                     loaded_catalog: false,
                 }
+            //
+            //
+            //
+            case DataAction.ADD_DONNEES:
+                return {
+                    ...state,
+                    Interfaced_data_state: {
+                        ...state.Interfaced_data_state,
+                        [action.payload.destination]: action.payload.value
+                    }
+                }
+                case DataAction.UPDATE_DONNEES:
+                    const { index, data } = action.payload;
+                    const updatedTableau = [...state.tableauDeDonnees];
+                    updatedTableau[index] = data;
+                    return {
+                        ...state,
+                        tableauDeDonnees: updatedTableau,
+                    };
+            //
+            //
+            //
             default:
                 return state;
         }

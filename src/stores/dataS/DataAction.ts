@@ -9,14 +9,15 @@ export default class DataAction {
 	public static UPDATE_ROW = "DataAction.UPDATE_ROW";
 	
 	public static SAVE_CATALOG = "DataAction.SAVE_CATALOG";
-	public static SAVE_PREVIOUS_QTT = "DataAction.SAVE_PREVIOUS_QTT";
-	public static SAVE_PREVIOUS_TONS = "DataAction.SAVE_PREVIOUS_TONS";
+	// public static SAVE_PREVIOUS_QTT = "DataAction.SAVE_PREVIOUS_QTT";
+	// public static SAVE_PREVIOUS_TONS = "DataAction.SAVE_PREVIOUS_TONS";
 	public static SAVE_MAXIS = "DataAction.SAVE_MAXIS";
 	
 	public static LOAD_CATALOG = "DataAction.LOAD_CATALOG";
 	// public static LOAD_PREVIOUS_QTT = "DataAction.LOAD_PREVIOUS_QTT";
 	// public static LOAD_PREVIOUS_TONS = "DataAction.LOAD_PREVIOUS_TONS";
-	// public static LOAD_MAXIS = "DataAction.LOAD_MAXIS";
+	public static LOAD_MAXIS = "DataAction.LOAD_MAXIS";
+	
 	
 	public static CLEAR = "DataAction.CLEAR";
 	public static REMOVE = "DataAction.REMOVE";
@@ -30,12 +31,36 @@ export default class DataAction {
 	public static CHANGE_PREVIOUS_TONS = "DataAction.CHANGE_PREVIOUS_TONS";
 	public static CHANGE_MAXI_TONS = "DataAction.CHANGE_MAXI_TONS";
 
-	public static CHANGE_DIFF_TONS = "DataAction.CHANGE_DIFF_TONS";
-	public static CHANGE_LET_QTT = "DataAction.CHANGE_LET_QTT";
-	public static CHANGE_LET_TONS = "DataAction.CHANGE_LET_TONS";
-	
+	// public static CHANGE_DIFF_TONS = "DataAction.CHANGE_DIFF_TONS";
+	// public static CHANGE_LET_QTT = "DataAction.CHANGE_LET_QTT";
+	// public static CHANGE_LET_TONS = "DataAction.CHANGE_LET_TONS";
 
+	//
+	//export const addData = (data: { [key: string]: string }): AnyAction => ({
+	// 	type: ADD_DATA,
+	// 	payload: data,
+	// });
+	//
+	//
+	public static ADD_DONNEES = "DataAction.ADD_DONNEES";
+	public static add_donnees(nouvelles_donnees: { [destination: string]: string}): AnyAction {
+		return { type: DataAction.ADD_DONNEES, payload: nouvelles_donnees };
+	};
+	//
+	//
+	//
+	public static UPDATE_DONNEES = "DataAction.UPDATE_DONNEES";
+	public static update_donnees(index: number, maj_donnees: { [destination: string]: string}): AnyAction {
+		return { type: DataAction.UPDATE_DONNEES, payload: {index, maj_donnees }};
+	}
 
+	// export const updateData = (index: number, data: { [key: string]: string }): AnyAction => ({
+	// 	type: UPDATE_DATA,
+	// 	payload: { index, data },
+	// });
+	//
+	//
+	//
 	public static LOAD_PREV_QTT = "DataAction.LOAD_PREV_QTT";
 	public static load_previous_qtt(qtt: { destination: string}): AnyAction {
 		return { type: DataAction.LOAD_PREV_QTT, payload: qtt };
@@ -47,25 +72,30 @@ export default class DataAction {
 	}
 	
 
-	public static LOAD_MAXIS = "DataAction.LOAD_MAXIS";
-	public static load_maxis(maxis: { destination: string }): AnyAction {
-		return { type: DataAction.LOAD_MAXIS, payload: maxis };
+	public static load_maxis(maxi: { destination: string }): AnyAction {
+		return { type: DataAction.LOAD_MAXIS, payload: maxi };
 	}
 	
+	
+	public static LOAD_CHECKBOX_STATE = "DataAction.LOAD_CHECKBOX_STATE";
+	public static load_checkbox_state(checkboxstate: { destination: boolean }): AnyAction {
+		return { type: DataAction.LOAD_MAXIS, payload: checkboxstate };
+	}
+
 	public static CHANGE_CHECKBOX_STATE = "DataAction.CHANGE_CHECKBOX_STATE";
 	public static change_CHECKBOX_STATE(newcheckboxstate: { key: string; value: boolean }): AnyAction {
 		return { type: DataAction.CHANGE_CHECKBOX_STATE, payload: newcheckboxstate };
 	}
-	public static changeLetTONS(lettons: { destination: string; value: number }): AnyAction {
-		return { type: DataAction.CHANGE_LET_TONS, payload: lettons };
-	}
-	public static changeLetQTT(letqtt: { destination: string; value: number }): AnyAction {
-		return { type: DataAction.CHANGE_LET_QTT, payload: letqtt };
-	}
+	// public static changeLetTONS(lettons: { destination: string; value: number }): AnyAction {
+	// 	return { type: DataAction.CHANGE_LET_TONS, payload: lettons };
+	// }
+	// public static changeLetQTT(letqtt: { destination: string; value: number }): AnyAction {
+	// 	return { type: DataAction.CHANGE_LET_QTT, payload: letqtt };
+	// }
 
-	public static changeDiffTONS(diff: { destination: string; value: number }): AnyAction {
-		return { type: DataAction.CHANGE_DIFF_TONS, payload: diff };
-	}
+	// public static changeDiffTONS(diff: { destination: string; value: number }): AnyAction {
+	// 	return { type: DataAction.CHANGE_DIFF_TONS, payload: diff };
+	// }
 
 	public static changeMaxiTONS(maxi: { destination: string; value: number }): AnyAction {
 		return { type: DataAction.CHANGE_MAXI_TONS, payload: maxi };
@@ -118,13 +148,13 @@ export default class DataAction {
 		return { type: DataAction.SAVE_CATALOG };
 	}
 
-	public static save_previous_qtt(): AnyAction {
-		return { type: DataAction.SAVE_PREVIOUS_QTT };
-	}
+	// public static save_previous_qtt(): AnyAction {
+	// 	return { type: DataAction.SAVE_PREVIOUS_QTT };
+	// }
 
-	public static save_previous_tons(): AnyAction {
-		return { type: DataAction.SAVE_PREVIOUS_TONS };
-	}
+	// public static save_previous_tons(): AnyAction {
+	// 	return { type: DataAction.SAVE_PREVIOUS_TONS };
+	// }
 
 	public static save_maxis(): AnyAction {
 		return { type: DataAction.SAVE_MAXIS };

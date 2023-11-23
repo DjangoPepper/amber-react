@@ -20,17 +20,17 @@ export const HEADER: IHeader[] = [
 ]
 
 export const affectation = [
-    {name: "stock", color: "#ffffff", index:0,  visibleState:true},
-    {name: "H1",    color: "#00c87a", index:1,  visibleState:false},
-    {name: "H2",    color: "#f447d1", index:2,  visibleState:false},
-    {name: "H3",    color: "#3cbefc", index:3,  visibleState:false},
-    {name: "H4",    color: "#ff9b2c", index:4,  visibleState:false},
-    {name: "H5",    color: "#800080", index:5,  visibleState:false},
-    {name: "H6",    color: "#80ff00", index:6,  visibleState:false},
-    {name: "H7",    color: "#f03c28", index:7,  visibleState:false},
-    {name: "H8",    color: "#006ee6", index:8,  visibleState:false},
-    {name: "H9",    color: "#fdff5b", index:9,  visibleState:false},
-    {name: "H10",   color: "#008000", index:10, visibleState:false},
+    {name: "stock", color: "#ffffff", index:0,  visibleState:true,  previous_quantite: 0, previous_tonnes: 0, maxis_tonnes: 0},
+    {name: "H1",    color: "#00c87a", index:1,  visibleState:false, previous_quantite: 0, previous_tonnes: 0, maxis_tonnes: 0},
+    {name: "H2",    color: "#f447d1", index:2,  visibleState:false, previous_quantite: 0, previous_tonnes: 0, maxis_tonnes: 0},
+    {name: "H3",    color: "#3cbefc", index:3,  visibleState:false, previous_quantite: 0, previous_tonnes: 0, maxis_tonnes: 0},
+    {name: "H4",    color: "#ff9b2c", index:4,  visibleState:false, previous_quantite: 0, previous_tonnes: 0, maxis_tonnes: 0},
+    {name: "H5",    color: "#800080", index:5,  visibleState:false, previous_quantite: 0, previous_tonnes: 0, maxis_tonnes: 0},
+    {name: "H6",    color: "#80ff00", index:6,  visibleState:false, previous_quantite: 0, previous_tonnes: 0, maxis_tonnes: 0},
+    {name: "H7",    color: "#f03c28", index:7,  visibleState:false, previous_quantite: 0, previous_tonnes: 0, maxis_tonnes: 0},
+    {name: "H8",    color: "#006ee6", index:8,  visibleState:false, previous_quantite: 0, previous_tonnes: 0, maxis_tonnes: 0},
+    {name: "H9",    color: "#fdff5b", index:9,  visibleState:false, previous_quantite: 0, previous_tonnes: 0, maxis_tonnes: 0},
+    {name: "H10",   color: "#008000", index:10, visibleState:false, previous_quantite: 0, previous_tonnes: 0, maxis_tonnes: 0},
 ]
 
 export const colors = affectation.reduce<{[key: string]: string}>((obj, d) => {
@@ -43,12 +43,3 @@ const mapStateToProps = (state: { destination: { affectations: any; }; }) => {
     affectations: state.destination.affectations,
   };
 };
-
-// const mapDispatchToProps = (dispatch: (arg0: { type: string; payload: { affectationName: any; visibility: any; }; }) => any) => {
-//   return {
-//     updateVisibility: (affectationName: any, visibility: any) =>
-//       dispatch(updateAffectationVisibility(affectationName, visibility)),
-//   };
-// };
-
-// export default connect(mapStateToProps, mapDispatchToProps)(Statistics);

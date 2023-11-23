@@ -11,8 +11,8 @@ import { affectation } from './utils/destination';
 import { toast, ToastContainer } from 'react-toastify';
 
 
-let backupInterval = 30 * 1000; //30 * 1000 ms = 30s
-let firstRender = false;
+let backupInterval = 90 * 1000; //30 * 1000 ms = 30s
+// let firstRender = false;
 
 function init() {
 		
@@ -21,28 +21,20 @@ function init() {
 		if(Init_data_catalog) {
 				store.dispatch(DataAction.load_catalog(Init_data_catalog));
 		}
-		
-		// affectation.map((affectationItem) => {
-		// 	const k = affectationItem.name;
-		// 	if (k === "stock") {
-		// 	} else {
-		// 		// set_checkbox_Hold_State(updatedCheckboxState);
-		// 		// dispatch(DataAction.change_CHECKBOX_STATE({ key: k, value: updatedCheckboxState[k] }));					
-		// 			// store.dispatch(DataAction.load_previous_qtt({ destination: k }));
-		// 			// store.dispatch(DataAction.load_previous_tons({ destination: k }));
-		// 			// store.dispatch(DataAction.load_maxis({ destination: k }));
-		// 		}
-		// });
-		firstRender = true;
-		
-
 		setInterval(() => {
-				// store.dispatch(DataAction.save_catalog());
-				// store.dispatch(DataAction.save_previous_qtt());
-				// store.dispatch(DataAction.save_previous_tons());
-				// store.dispatch(DataAction.save_maxis());
-				// toast.info('bck', { position: toast.POSITION.TOP_RIGHT, autoClose: backupInterval })
-				toast.info('bck', { position: toast.POSITION.TOP_RIGHT, autoClose: 500 })
+				store.dispatch(DataAction.save_catalog());
+				
+				affectation.map((affectationItem) => {
+					const k = affectationItem.name;
+					if (k === "stock") {
+					} else {
+					// store.dispatch(DataAction.change_CHECKBOX_STATE({ key: k, value: false }));
+					// store.dispatch(DataAction.changePreviousQTT({ destination: k, value: 0 }));
+					// store.dispatch(DataAction.changePreviousTONS({ destination: k, value: 0 }));
+					// store.dispatch(DataAction.changeMaxiTONS({ destination: k, value: 1000 }));
+					}
+				});
+			// toast.info('AutoSave', { position: toast.POSITION.TOP_RIGHT, autoClose: 500 })
 		}, backupInterval);
 }
 

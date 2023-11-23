@@ -22,14 +22,14 @@ export default function Statistics() {
 
 	let totalstockCount = 0;
 	let totalstockWeight = 0;
-	let firstRender = true;
+
 
 	const dispatch = useDispatch();	
 	const [previous_Value_TO, set_previous_Value_TO] = useState<{ [key: string]: { prevTO_VALUE: string } }>({});
 	const [previous_Value_QT, set_previous_Value_QT] = useState<{ [key: string]: { prevQT_VALUE: string } }>({});
 	const [maxi_Value_TO, set_maxi_Values] = useState<{ [key: string]: { maxi_To: string } }>({});
 	
-	const catalog_data = useSelector<RootState, stepe_Data[]>((state) => state.data.data);
+	const catalog_data = useSelector<RootState, stepe_Data[]>((state) => state.data.Interfaced_data_state);
 	const selectedColors = useSelector<RootState, { [key: string]: string }>((state) => state.data.pickerColors);
 	const [Extended_Tally_Value, set_Extended_Tally_Value] = React.useState(false);
 
@@ -42,7 +42,7 @@ export default function Statistics() {
 	
 
 	const [checkbox_Hold_State, set_checkbox_Hold_State] = useState<{ [key: string]: boolean }>({});	
-	const handleCheckboxChange = (k: string) => {
+	const handle_CheckboxChange = (k: string) => {
 
 		// Créez une copie de l'état actuel des cases à cocher
 		const updatedCheckboxState = { ...checkbox_Hold_State };
@@ -60,7 +60,8 @@ export default function Statistics() {
 		dispatch(DataAction.change_CHECKBOX_STATE({ key: k, value: updatedCheckboxState[k] }));
 		};
 		
-	const handlemaxi_ToChange = (k: string, value: string) => {
+	const handle_maxi_ToChange = (k: string, value: string) => {
+		// handle_maxi_ToChange(affectationItem.name, e.target.value)}
 		set_maxi_Values((maxi_Value_TO: any) => ({
 			...maxi_Value_TO,
 			[k]: { maxi_To: value },
@@ -78,7 +79,6 @@ export default function Statistics() {
 		}));
 		let numericValue = parseFloat(value) || 0;
 		dispatch(DataAction.changePreviousQTT({ destination: k, value: numericValue }));
-		
 		};
 
 	const handle_PrevTO_VALUE_Change = (k: string, value: string) => {
@@ -91,14 +91,12 @@ export default function Statistics() {
 		let numericValue = parseFloat(value) || 0;
 		dispatch(DataAction.changePreviousTONS({ destination: k, value: numericValue }));
 		};
+		
 	
 	
-	
-
-	const FromRedux_maxisTo = useSelector<RootState, { [key: string]: string }>((state) => state.data.HOLD_maxi_TONS);
+	const FromRedux_maxisTo = useSelector<RootState, {[key: string]: string }>((state) => state.data.HOLD_maxi_TONS);
 	const FromRedux_previousQT = useSelector<RootState, { [key: string]: string }>((state) => state.data.HOLD_previous_QTT);
 	const FromRedux_previousTO = useSelector<RootState, { [key: string]: string }>((state) => state.data.HOLD_previous_TONS);
-
 	const totalPreviousCalesCount = Object.keys(previous_Value_QT).reduce((total, k) => {
 		return total + (previous_Value_QT[k] ? parseFloat(previous_Value_QT[k].prevQT_VALUE) : 0);
 		}, 0);
@@ -106,39 +104,65 @@ export default function Statistics() {
 	const totalPreviousCalesWeight = Object.keys(previous_Value_TO).reduce((total, k) => {
 		return total + (previous_Value_TO[k]?.prevTO_VALUE ? parseFloat(previous_Value_TO[k].prevTO_VALUE) : 0);
 		}, 0);
-///
+
+
+	///
+	const tableauDeDonnees = useSelector<RootState, { [key: string]: string }[]>(
+        (state) => state.data.tableauDeDonnees
+    );
+	const handle_AddDDonnees = () => {
+        dispatch(DataAction.add_donnees({ key: "exampleKey", value: "exampleValue" }));
+		// dispatch(DataAction.change_CHECKBOX_STATE({ key: k, value: updatedCheckboxState[k] }));
+    };
+
+    const handle_UpdateDonnees = (index: number) => {
+        dispatch(DataAction.update_donnees(index, { key: "updatedKey", value: "updatedValue" }));
+    };
+
+	///
+	let firstRender = true;
 	function init_tally() {
-		if (firstRender == true) {
+		// if (firstRender === true) {
 		affectation.forEach((affectationItem) => {
 		const k = affectationItem.name;
 
 		if (k !== "stock") {
 				if (FromRedux_maxisTo[k] !== undefined) {
-				handlemaxi_ToChange(k, FromRedux_maxisTo[k]);
-				firstRender = false;
+				handle_maxi_ToChange(k, FromRedux_maxisTo[k]);
+				// firstRender = false;
 				} else {
-				handlemaxi_ToChange(k, "0");
-				firstRender = false;
+				handle_maxi_ToChange(k, "0");
+				// firstRender = false;
 				}
 
 				if (FromRedux_previousTO[k] !== undefined) {
 				handle_PrevTO_VALUE_Change(k, FromRedux_previousTO[k]);
-				firstRender = false;
+				// firstRender = false;
 				} else {
 				handle_PrevTO_VALUE_Change(k, "0");
-				firstRender = false;
+				// firstRender = false;
 				}
 
 				if (FromRedux_previousQT[k] !== undefined) {
 				handle_prevQT_VALUE_Change(k, FromRedux_previousQT[k]);
-				firstRender = false;
+				// firstRender = false;
 				} else {
 				handle_prevQT_VALUE_Change(k, "0");
-				firstRender = false;
+				// firstRender = false;
 				}
-			}});};
+			}
+		});
+		// };
+		firstRender = false;
 		}
 ///	
+useEffect(() => {
+	if (firstRender) {
+		init_tally();
+		toast.error('init Tally', { position: toast.POSITION.TOP_LEFT, autoClose: 500 });
+	}
+	}, [firstRender]);
+
 	const statistics = catalog_data.reduce<any>((p, row) => {
 		if (!p[row.destination]) {
 			p[row.destination] = { count: 0, weight: 0  };
@@ -158,9 +182,11 @@ export default function Statistics() {
 //
 	if (statistics.stock) {
 			totalstockCount = statistics.stock.count;
-			totalstockWeight = statistics.stock.weight;	
+			totalstockWeight = statistics.stock.weight;
+
 			totalstockWeight = parseFloat(totalstockWeight.toFixed(3))
 			totalCalesCount  = totalCount   - totalstockCount;
+			
 			totalCalesWeight = totalWeight  - totalstockWeight;
 			totalCalesWeight = parseFloat(totalCalesWeight.toFixed(3));
 		}
@@ -223,7 +249,7 @@ export default function Statistics() {
 								type="checkbox" 
 								checked={checkbox_Hold_State[affectationItem.name]} 
 								// checked={affectationItem.visibleState[k]} 
-								onChange={() => handleCheckboxChange(affectationItem.name)}
+								onChange={() => handle_CheckboxChange(affectationItem.name)}
 								/>
 							):null}							
 							</td>
@@ -313,7 +339,7 @@ export default function Statistics() {
 						</tr>
 											);
 				}
-				console.log("Invisible : ", affectationItem.name)
+				// console.log("Invisible : ", affectationItem.name)
 				return null;
 			})}
 
@@ -389,7 +415,7 @@ export default function Statistics() {
 						<td></td>
 
 {/* DAY_T */}
-								{/* si dest est stock passe 7 colonnes */}
+			{/* si dest est stock passe 7 colonnes */}
 								{affectationItem.name === 'stock' ? ( 
 									<>
 										<td colSpan={3}></td> 
@@ -399,34 +425,37 @@ export default function Statistics() {
 									: 									
 									(
 										<> 					
-											{/* sinon affiche toute les colonnes */}
+			{/* sinon affiche toute les colonnes */}
 {/* PU */}
 											<td style={{ textAlign: 'center'}}>
-												{(
+												{
 													(
-														(statistics[affectationItem.name]?.weight ?? 0) +
-														(previous_Value_TO[affectationItem.name]?.prevTO_VALUE
-														? parseFloat(previous_Value_TO[affectationItem.name].prevTO_VALUE)
-														: 0)
-													)
-													// .toLocaleString("en-US", { minimumFractionDigits: 3, maximumFractionDigits: 3 })
-													/
-													(
-													(statistics[affectationItem.name]?.count ?? 0 
-														+ 
-													(previous_Value_QT[affectationItem.name]?.prevQT_VALUE ? parseFloat(previous_Value_QT[affectationItem.name].prevQT_VALUE) : 0))
-													)
-												).toLocaleString("en-US", { minimumFractionDigits: 3, maximumFractionDigits: 3 })}
+														(
+															(statistics[affectationItem.name]?.weight ??  0) 
+															+
+															(previous_Value_TO[affectationItem.name]?.prevTO_VALUE ?
+																parseFloat(previous_Value_TO[affectationItem.name].prevTO_VALUE) : 0)
+														)
+														/
+														(
+															(statistics[affectationItem.name]?.count ?? 0) 
+															+ 
+															(previous_Value_QT[affectationItem.name]?.prevQT_VALUE ?
+																parseFloat(previous_Value_QT[affectationItem.name].prevQT_VALUE) : 0)
+														)
+														// (totalCalesCount + totalPreviousCalesCount) / (totalCalesWeight + totalPreviousCalesWeight) 
+													).toLocaleString("en-US", { minimumFractionDigits: 3, maximumFractionDigits: 3 })
+												}
 											</td>
 
 											
-{/* MAXI_TO */}
+{/* MAXI_TONS */}
 											<td style={{ textAlign: 'center'}}>
 												<input
 													type="text"
 													style={{ width: '80px' }}
 													value={maxi_Value_TO[affectationItem.name] ? maxi_Value_TO[affectationItem.name].maxi_To : 0} // Utilisez prevValues[affectationItem.name].prevTo pour la valeur 
-													onChange={(e) => handlemaxi_ToChange(affectationItem.name, e.target.value)}
+													onChange={(e) => handle_maxi_ToChange(affectationItem.name, e.target.value)}
 												/>
 											</td>
 
@@ -504,7 +533,7 @@ export default function Statistics() {
 						</tr>
 					);
 				}
-				console.log("Invisible : ", affectationItem.name)
+				// console.log("Invisible : ", affectationItem.name)
 				return null;
 			})}
 
