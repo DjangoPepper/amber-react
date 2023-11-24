@@ -207,16 +207,21 @@ useEffect(() => {
 			<thead>
 				<tr>
 					<th style={{ textAlign: 'left' }}>DesT</th>
-					<th style={{ textAlign: 'center' }}>K</th>
+					{/* <th style={{ textAlign: 'center' }}>K</th> */}
+					<th style={{ textAlign: 'center' }}>
+					<Button variant="info" onClick={handle_Extended_Tally}>T</Button>
+					</th>
 					<th style={{ textAlign: 'center' }}>DAY_Q</th>
 					<th style={{ textAlign: 'center' }}>DAY_T</th>
-					<th style={{ textAlign: 'center', backgroundColor: 'gray' }}>PREV_Q</th>
-					<th style={{ textAlign: 'center', backgroundColor: 'gray' }}>PREV_T</th>
+					{Extended_Tally_Value && (
+					<>
+						<th style={{ textAlign: 'center', backgroundColor: 'gray' }}>PREV_Q</th>
+						<th style={{ textAlign: 'center', backgroundColor: 'gray' }}>PREV_T</th>
+					
+					</>
+					)}
 					<th style={{ textAlign: 'center' }}>TT_Q</th>
 					<th style={{ textAlign: 'center' }}>TT_T</th>
-					<th style={{ textAlign: 'center' }}>
-					<Button variant="info" onClick={handle_Extended_Tally}>E</Button>
-					</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -240,10 +245,11 @@ useEffect(() => {
 						<tr key={affectationItem.name}>
 							
 {/* DEST */}
-							<td style={{ backgroundColor: selectedColors[affectationItem.name], textAlign: 'left' }}>{affectationItem.name}</td>
+							<td style={{ backgroundColor: selectedColors[affectationItem.name], textAlign: 'left' }}>{affectationItem.name}
+							{/* </td> */}
 							
-{/* CHECKBOX */}
-							<td>
+{/* CHECKBOX */} <>  </>
+							{/* <td> */}
 							{ affectationItem.name !== 'stock' ? ( 
 								<input
 								type="checkbox" 
@@ -253,6 +259,7 @@ useEffect(() => {
 								/>
 							):null}							
 							</td>
+							<td> <> </></td>
 
 {/* DAY_Q */}				
 							{/* <tr> */}
@@ -277,7 +284,10 @@ useEffect(() => {
 									(
 										<> 					
 											{/* sinon affiche toute les colonnes */}
+
 {/* PREV_Q */}
+{Extended_Tally_Value && (
+					<>
 											<td style={{ textAlign: 'center',backgroundColor: 'gray' }}>		
 												<input
 													type="text"
@@ -291,6 +301,7 @@ useEffect(() => {
 													onChange={(e) => handle_prevQT_VALUE_Change(affectationItem.name, e.target.value)}
 												/>
 											</td>
+
 													
 {/* PREV_T */}
 											{/* <td style={{ backgroundColor: 'gray' }}>	 */}
@@ -307,7 +318,8 @@ useEffect(() => {
 													onChange={(e) => handle_PrevTO_VALUE_Change(affectationItem.name, e.target.value)}
 												/>
 											</td>
-
+											</>
+				)}
 {/* TTL_Q */}
 											<td style={{ textAlign: 'center'}}>
 												{(
@@ -347,24 +359,25 @@ useEffect(() => {
 				{/* PARTIE calcul */}
 				<tr>
 				{/* K */}
-				<td style={{ textAlign: 'left'}}>Totaux</td>
+				<td style={{ textAlign: 'left'}}>Total</td>
 				{/* Q */}
 				<td style={{ textAlign: 'center'}}> </td>					 									
 				<td style={{ textAlign: 'center'}}>{isNaN(totalCalesCount) ? 0 : totalCalesCount}</td>										
 				{/* T */}
 				<td style={{ textAlign: 'center'}}>{isNaN(totalCalesWeight) ? 0 : totalCalesWeight.toLocaleString("en-US")}</td>				
+				{Extended_Tally_Value && (
+					<>
+						{/*PREV_Q */}
+						<td style={{ textAlign: 'center',backgroundColor: 'gray' }}>{isNaN(totalPreviousCalesCount) ? 0 : totalPreviousCalesCount}</td>
+						{/*PREV_T */}
+						<td style={{ textAlign: 'center',backgroundColor: 'gray' }}>{isNaN(totalPreviousCalesWeight) ? 0 : totalPreviousCalesWeight.toLocaleString("en-US")}</td>
+					</>
+				)}
+				{/* TT_Q */}
+				<td style={{ textAlign: 'center' }}>{totalCalesCount + totalPreviousCalesCount}</td>
+				{/* TT_T */}
+				<td style={{ textAlign: 'center' }}>{(totalCalesWeight + totalPreviousCalesWeight).toLocaleString("en-US")}</td>
 
-				{/*PREV_Q */}
-				<td style={{ textAlign: 'center',backgroundColor: 'gray' }}>{isNaN(totalPreviousCalesCount) ? 0 : totalPreviousCalesCount}</td>
-				{/*PREV_T */}
-				<td style={{ textAlign: 'center',backgroundColor: 'gray' }}>{isNaN(totalPreviousCalesWeight) ? 0 : totalPreviousCalesWeight.toLocaleString("en-US")}</td>
-
-
-				{/*TT_Q */}				
-				<td style={{ textAlign: 'center'}}>{totalCalesCount + totalPreviousCalesCount}</td>							
-				{/*TT_T */}					
-				<td style={{ textAlign: 'center'}}>{(totalCalesWeight + totalPreviousCalesWeight).toLocaleString("en-US")}</td>
-				
 				</tr><tr>
 				</tr>
 			</tbody>
