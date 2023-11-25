@@ -387,7 +387,7 @@ function Main() {
 					<DataTable />
 				</Col>
 				<Col>
-					<Statistics />
+					<Statistics updateFirstRender={(value: boolean) => { /* Mettez votre logique ici */ }} />
 				</Col>
 			</Row> :
 			<Row>

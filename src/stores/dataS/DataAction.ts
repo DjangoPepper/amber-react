@@ -86,16 +86,6 @@ export default class DataAction {
 	public static change_CHECKBOX_STATE(newcheckboxstate: { key: string; value: boolean }): AnyAction {
 		return { type: DataAction.CHANGE_CHECKBOX_STATE, payload: newcheckboxstate };
 	}
-	// public static changeLetTONS(lettons: { destination: string; value: number }): AnyAction {
-	// 	return { type: DataAction.CHANGE_LET_TONS, payload: lettons };
-	// }
-	// public static changeLetQTT(letqtt: { destination: string; value: number }): AnyAction {
-	// 	return { type: DataAction.CHANGE_LET_QTT, payload: letqtt };
-	// }
-
-	// public static changeDiffTONS(diff: { destination: string; value: number }): AnyAction {
-	// 	return { type: DataAction.CHANGE_DIFF_TONS, payload: diff };
-	// }
 
 	public static changeMaxiTONS(maxi: { destination: string; value: number }): AnyAction {
 		return { type: DataAction.CHANGE_MAXI_TONS, payload: maxi };
