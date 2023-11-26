@@ -39,7 +39,7 @@ interface DataState {
     HOLD_previous_TONS: { [key: string]: string };
     HOLD_maxi_TONS: { [key: string]: string };
     
-    Hold_checkbox_checkched: { [key: string]: boolean };
+    Hold_checkbox_state: { [key: string]: boolean };
     // loaded_previous_QTT: boolean;
     // loaded_previous_TONS: boolean;
     loaded_maxi_TONS: boolean;
@@ -71,7 +71,7 @@ const initialState: DataState = {
     // diff_TONS: {},
     // let_QTT: {},
     // let_TONS: {},
-    Hold_checkbox_checkched: {},
+    Hold_checkbox_state: {},
     loaded_maxi_TONS: false,
     // loaded_previous_QTT: false,
     // loaded_previous_TONS: false,
@@ -121,7 +121,7 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
             case DataAction.CHANGE_CHECKBOX_STATE:
                 return {
                     ...state,
-                    Hold_checkbox_checkched: action.payload,
+                    Hold_checkbox_state: action.payload,
                 };
             // case DataAction.CHANGE_DIFF_TONS:
             //     return {
