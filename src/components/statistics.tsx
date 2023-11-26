@@ -35,7 +35,7 @@ export default function Statistics() {
 	const selectedColors = useSelector<RootState, { [key: string]: string }>((state) => state.data.pickerColors);
 
 
-	const handle_checkBOX_Toggle = (k: string) => {
+	const Toggle_checkbox_boolean = (k: string) => {
 
 		// Créez une copie de l'état actuel des cases à cocher
 		const updatedCheckboxState = { ...checkbox_Hold_State };
@@ -50,25 +50,18 @@ export default function Statistics() {
 		}
 		// Mettez à jour l'état des cases à cocher avec la nouvelle valeur
 		set_checkbox_Hold_State(updatedCheckboxState);
-		dispatch(DataAction.change_CHECKBOX_STATE({ key: k, value: updatedCheckboxState[k] }));
+		// dispatch(DataAction.change_checkbox_state ( true ));
+		dispatch(DataAction.change_checkbox_state({ [k]: updatedCheckboxState[k] }));
 		};
 	const handle_checkBOX_Change = (k: string, value: boolean) => {
 		set_checkbox_Hold_State((checkbox_Hold_State) => ({
 			...checkbox_Hold_State,
 			[k]: value,
 		}));
-		dispatch
-		};
-		// const handle_PrevTO_VALUE_Change = (k: string, value: string) => {
-		// set_checkbox_Hold_State((previous_Value_TO) => ({
-		// 	...previous_Value_TO,
-		// 	[k]: { 
-		// 			prevTO_VALUE: value,  
-		// 	},
-		// }));
-		// let numericValue = parseFloat(value) || 0;
-		// dispatch(DataAction.changePreviousTONS({ destination: k, value: numericValue }));
-		// };
+		dispatch(DataAction.change_checkbox_state({ [k]: value }));
+		}
+
+		
 	const handle_maxiTO_VALUE_Change = (k: string, value: string) => {
 		set_previous_Value_TO((previous_Value_TO) => ({
 			...previous_Value_TO,
@@ -122,17 +115,17 @@ export default function Statistics() {
 	
 		//
 //
-
 	const catalog_data = useSelector<RootState, stepe_Data[]>((state) => state.data.Interfaced_data_state);
-	
+//	
 	const FromRedux_checkbox_Hold_State = useSelector<RootState, { [key: string]: boolean }>(
-	(state) => state.data.Hold_checkbox_state
+		(state) => state.data.HOLD_checkbox_state
 	);
 
 
 	const FromRedux_maxisTo = useSelector<RootState, {[key: string]: string }>((state) => state.data.HOLD_maxi_TONS);
 	const FromRedux_previousQT = useSelector<RootState, { [key: string]: string }>((state) => state.data.HOLD_previous_QTT);
 	const FromRedux_previousTO = useSelector<RootState, { [key: string]: string }>((state) => state.data.HOLD_previous_TONS);
+//
 	const totalPreviousCalesCount = Object.keys(previous_Value_QT).reduce((total, k) => {
 		return total + (previous_Value_QT[k] ? parseFloat(previous_Value_QT[k].prevQT_VALUE) : 0);
 		}, 0);
@@ -147,7 +140,7 @@ export default function Statistics() {
 	const handle_AddDDonnees = () => {
         dispatch(DataAction.add_donnees({ key: "exampleKey", value: "exampleValue" }));
 		// dispatch(DataAction.change_CHECKBOX_STATE({ key: k, value: updatedCheckboxState[k] }));
-    };
+		};	
     const handle_UpdateDonnees = (index: number) => {
         dispatch(DataAction.update_donnees(index, { key: "updatedKey", value: "updatedValue" }));
     };
@@ -155,48 +148,21 @@ export default function Statistics() {
 	///
 	let firstRender = true;
 	function init_tally() {
-		// if (firstRender === true) {
 		affectation.forEach((affectationItem) => {
-		const k = affectationItem.name;
+			const k = affectationItem.name;
 
-		if (k !== "stock") {
-				if (FromRedux_checkbox_Hold_State[k] !== undefined) {
-				handle_checkBOX_Toggle(k);
-				// // firstRender = false;
-				} else {
-				// handle_checkBOX_Toggle(k, false);
-				// firstRender = false;
+			if (k !== "stock") {
+				FromRedux_checkbox_Hold_State[k] ? 
+					handle_checkBOX_Change(k, true) 
+					: 
+					handle_checkBOX_Change(k, false);
 				}
-				if (FromRedux_maxisTo[k] !== undefined) {
-				handle_maxiTO_Change(k, FromRedux_maxisTo[k]);
-				// firstRender = false;
-				} else {
-				handle_maxiTO_Change(k, "0");
-				// firstRender = false;
-				}
-
-				if (FromRedux_previousTO[k] !== undefined) {
-				handle_PrevTO_VALUE_Change(k, FromRedux_previousTO[k]);
-				// firstRender = false;
-				} else {
-				handle_PrevTO_VALUE_Change(k, "0");
-				// firstRender = false;
-				}
-
-				if (FromRedux_previousQT[k] !== undefined) {
-				handle_prevQT_VALUE_Change(k, FromRedux_previousQT[k]);
-				// firstRender = false;
-				} else {
-				handle_prevQT_VALUE_Change(k, "0");
-				// firstRender = false;
-				}
-			}
 		});
-		// };
 		firstRender = false;
-		}
-///	
-useEffect(() => {
+	};
+
+
+	useEffect(() => {
 	if (firstRender) {
 		init_tally();
 		toast.error('init Tally', { position: toast.POSITION.TOP_LEFT, autoClose: 500 });
@@ -295,7 +261,7 @@ useEffect(() => {
 								type="checkbox" 
 								checked={checkbox_Hold_State[affectationItem.name]} 
 								// checked={affectationItem.visibleState[k]} 
-								onChange={() => handle_checkBOX_Toggle(affectationItem.name)}
+								onChange={() => Toggle_checkbox_boolean(affectationItem.name)}
 								/>
 							):null}							
 							</td>
