@@ -20,16 +20,19 @@ interface DataState {
     saved_catalog: boolean;
     pickerColors: { [key: string]: string };
     
+    HOLD_checkbox_state: { [destination: string]: boolean };
     HOLD_previous_QTT: { [key: string]: string };
+    // HOLD_previous_QTT: { [destination: string]: boolean };
     HOLD_previous_TONS: { [key: string]: string };
+    
     HOLD_maxi_TONS: { [key: string]: string };
     
     // HOLD_checkbox_state: {[key: string]: boolean}[];
     // HOLD_checkbox_state: { [key: string]: boolean };
-    HOLD_checkbox_state: { [destination: string]: boolean };
+    
     // loaded_previous_QTT: boolean;
     // loaded_previous_TONS: boolean;
-    loaded_maxi_TONS: boolean;
+    // loaded_maxi_TONS: boolean;
     // saved_HOLD_previous_QTT: boolean;
     // saved_HOLD_previous_TONS: boolean;
     saved_HOLD_maxi_TONS: boolean;
@@ -43,22 +46,20 @@ const initialState: DataState = {
     loaded_catalog: false,
     saved_catalog: true,
     pickerColors: colors,
+    
+    HOLD_checkbox_state: {},
     HOLD_previous_QTT: {},
     HOLD_previous_TONS: {}, 
     HOLD_maxi_TONS: {},
-    // maxi_values: {},
-    // diff_TONS: {},
-    // let_QTT: {},
-    // let_TONS: {},
-    HOLD_checkbox_state: {},
-    // HOLD_checkbox_state: [],
-    // HOLD_checkbox_state: { [key: string]: boolean };    
-    loaded_maxi_TONS: false,
+
+    // loaded_checkbox_state: false,
     // loaded_previous_QTT: false,
     // loaded_previous_TONS: false,
-    saved_HOLD_maxi_TONS: true,
+    // loaded_maxi_TONS: false,
+    // saved_HOLD_checkbox_state: false,
     // saved_HOLD_previous_QTT: true,
     // saved_HOLD_previous_TONS: true,
+    saved_HOLD_maxi_TONS: true,
     tableauDeDonnees: [],
 };
 

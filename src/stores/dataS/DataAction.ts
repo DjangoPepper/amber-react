@@ -69,10 +69,7 @@ export default class DataAction {
 	// public static change_CHECKBOX_STATE(index: string, maj_donnees: { [destination: string]: string}): AnyAction {
 	// 	return { type: DataAction.UPDATE_DONNEES, payload: {index, maj_donnees }};
 	// }
-	public static changeMaxiTONS(maxi: { destination: string; value: number }): AnyAction {
-		return { type: DataAction.CHANGE_MAXI_TONS, payload: maxi };
-	}
-
+	// public static changePreviousQTT(qtt: { destination: string; value: number }): AnyAction {
 	public static changePreviousQTT(qtt: { destination: string; value: number }): AnyAction {
 		return { type: DataAction.CHANGE_PREVIOUS_QTT, payload: qtt };
 	}
@@ -80,6 +77,11 @@ export default class DataAction {
 	public static changePreviousTONS(tons: { destination: string; value: number }): AnyAction {
 		return { type: DataAction.CHANGE_PREVIOUS_TONS, payload: tons };
 	}
+//////
+	public static changeMaxiTONS(maxi: { destination: string; value: number }): AnyAction {
+		return { type: DataAction.CHANGE_MAXI_TONS, payload: maxi };
+	}
+/////
 
 	public static deleteRow(rank: string): AnyAction {
 		return { type: DataAction.DELETE_ROW, payload: rank };
