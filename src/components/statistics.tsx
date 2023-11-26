@@ -121,7 +121,6 @@ export default function Statistics() {
 		(state) => state.data.HOLD_checkbox_state
 	);
 
-
 	const FromRedux_maxisTo = useSelector<RootState, {[key: string]: string }>((state) => state.data.HOLD_maxi_TONS);
 	const FromRedux_previousQT = useSelector<RootState, { [key: string]: string }>((state) => state.data.HOLD_previous_QTT);
 	const FromRedux_previousTO = useSelector<RootState, { [key: string]: string }>((state) => state.data.HOLD_previous_TONS);
@@ -149,13 +148,12 @@ export default function Statistics() {
 	let firstRender = true;
 	function init_tally() {
 		affectation.forEach((affectationItem) => {
-			const k = affectationItem.name;
-
+			const k = affectationItem.name as string;
 			if (k !== "stock") {
 				FromRedux_checkbox_Hold_State[k] ? 
-					handle_checkBOX_Change(k, true) 
-					: 
-					handle_checkBOX_Change(k, false);
+				handle_checkBOX_Change(k as string, true) 
+				: 
+				handle_checkBOX_Change(k as string, false);
 				}
 		});
 		firstRender = false;

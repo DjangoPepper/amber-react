@@ -2,16 +2,6 @@ import { AnyAction } from "redux";
 import DataAction from "./DataAction";
 import {Reducer} from "@reduxjs/toolkit";
 import { affectation, colors } from "../../utils/destination";
-import { updateTaggedTemplate } from "typescript";
-// import { createReducer } from "@reduxjs/toolkit";
-// import { CHANGE_CHECKBOX_STATE } from "./checkboxActions";stores/dataS/DataAction.ts
-
-export type tally_Data = {
-    tally_prevqtt : { [key: string]: number };
-    tally_prevtons : { [key: string]: number };
-    tally_maxis : { [key: string]: number };
-
-}
 
 export type stepe_Data = {
     rank: number
@@ -21,11 +11,6 @@ export type stepe_Data = {
     position: string
     prepa: string
 }
-
-// interface AppState {
-//     visible_state: boolean[];
-//     // Autres propriétés de l'état
-//   }
 
 interface DataState {
     Interfaced_data_state: stepe_Data[];
@@ -39,7 +24,9 @@ interface DataState {
     HOLD_previous_TONS: { [key: string]: string };
     HOLD_maxi_TONS: { [key: string]: string };
     
+    // HOLD_checkbox_state: {[key: string]: boolean}[];
     HOLD_checkbox_state: { [key: string]: boolean };
+
     // loaded_previous_QTT: boolean;
     // loaded_previous_TONS: boolean;
     loaded_maxi_TONS: boolean;
@@ -71,7 +58,10 @@ const initialState: DataState = {
     // diff_TONS: {},
     // let_QTT: {},
     // let_TONS: {},
+    // HOLD_checkbox_state: [],
     HOLD_checkbox_state: {},
+    // HOLD_checkbox_state: { [key: string]: boolean };
+    
     loaded_maxi_TONS: false,
     // loaded_previous_QTT: false,
     // loaded_previous_TONS: false,
@@ -118,26 +108,17 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
                 }
 
     
+            // case DataAction.CHANGE_CHECKBOX_STATE:
+            //     return {
+            //         ...state,
+            //         HOLD_checkbox_state: action.payload,
+            //     };
             case DataAction.CHANGE_CHECKBOX_STATE:
                 return {
                     ...state,
                     HOLD_checkbox_state: action.payload,
                 };
-            // case DataAction.CHANGE_DIFF_TONS:
-            //     return {
-            //         ...state,
-            //         diff_TONS: action.payload,
-            //     };
-            // case DataAction.CHANGE_LET_QTT:
-            //     return {
-            //         ...state,
-            //         let_QTT: action.payload,
-            //     };
-            // case DataAction.CHANGE_LET_TONS:
-            //     return {
-            //         ...state,
-            //         let_TONS: action.payload,
-            //     };
+
             case DataAction.CHANGE_MAXI_TONS:
                 return {
                     ...state,
@@ -182,21 +163,6 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
                     saved_catalog: false
                 }
             
-            // case DataAction.SAVE_PREVIOUS_QTT:
-            //     if(state.saved_HOLD_previous_QTT) return state;
-            //     window.localStorage.setItem("previous_QTT", JSON.stringify(state.HOLD_previous_QTT));
-            //     return {
-            //         ...state,
-            //         saved_HOLD_previous_QTT: true
-            //     }
-            // case DataAction.SAVE_PREVIOUS_TONS:
-            //     if(state.saved_HOLD_previous_TONS) return state;
-            //     // window.localStorage.setItem("previous_TONS", JSON.stringify(state.previous_TONS));
-            //     window.localStorage.setItem("previous_TONS", JSON.stringify(state.HOLD_previous_TONS));
-            //     return {
-            //         ...state,
-            //         saved_HOLD_previous_TONS: true
-            //     }
             case DataAction.SAVE_MAXIS:
                 if(state.saved_HOLD_maxi_TONS) return state;
                 window.localStorage.setItem("maxi_TONS", JSON.stringify(state.HOLD_maxi_TONS));
