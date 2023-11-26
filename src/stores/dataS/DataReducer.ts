@@ -25,8 +25,8 @@ interface DataState {
     HOLD_maxi_TONS: { [key: string]: string };
     
     // HOLD_checkbox_state: {[key: string]: boolean}[];
-    HOLD_checkbox_state: { [key: string]: boolean };
-
+    // HOLD_checkbox_state: { [key: string]: boolean };
+    HOLD_checkbox_state: { [destination: string]: boolean };
     // loaded_previous_QTT: boolean;
     // loaded_previous_TONS: boolean;
     loaded_maxi_TONS: boolean;
@@ -35,14 +35,6 @@ interface DataState {
     saved_HOLD_maxi_TONS: boolean;
     tableauDeDonnees: { [destination: string]: string }[];
 }
-
-// interface Statistics {
-//     [destination: string]: {
-//         count: number;
-//         weight: number;
-//     //   SinglecheckboxSate: boolean;
-//     };
-//     }
 
 const initialState: DataState = {
     Interfaced_data_state: [],
@@ -58,10 +50,9 @@ const initialState: DataState = {
     // diff_TONS: {},
     // let_QTT: {},
     // let_TONS: {},
-    // HOLD_checkbox_state: [],
     HOLD_checkbox_state: {},
-    // HOLD_checkbox_state: { [key: string]: boolean };
-    
+    // HOLD_checkbox_state: [],
+    // HOLD_checkbox_state: { [key: string]: boolean };    
     loaded_maxi_TONS: false,
     // loaded_previous_QTT: false,
     // loaded_previous_TONS: false,
@@ -73,7 +64,6 @@ const initialState: DataState = {
 
 export const dataReducer: Reducer<DataState> = (state = initialState, action: AnyAction): DataState => {
         switch (action.type) {
-            //fred
             case DataAction.IMPORT_DATA:
                 return {
                     ...state,
@@ -113,11 +103,22 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
             //         ...state,
             //         HOLD_checkbox_state: action.payload,
             //     };
+            // case DataAction.CHANGE_CHECKBOX_STATE:
+            //     return {
+            //         ...state,
+            //         HOLD_checkbox_state: action.payload,
+            //     };
+            
+            //
             case DataAction.CHANGE_CHECKBOX_STATE:
                 return {
-                    ...state,
-                    HOLD_checkbox_state: action.payload,
-                };
+                ...state,
+                HOLD_checkbox_state: {
+                    ...state.HOLD_checkbox_state,
+                    ...action.payload,
+                },
+            };
+            //
 
             case DataAction.CHANGE_MAXI_TONS:
                 return {
