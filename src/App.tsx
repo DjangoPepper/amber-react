@@ -35,7 +35,8 @@ function init() {
 					}
 				});
 			// toast.info('AutoSave', { position: toast.POSITION.TOP_RIGHT, autoClose: 500 })
-		}, backupInterval);
+		}, 
+		backupInterval);
 }
 
 init();
