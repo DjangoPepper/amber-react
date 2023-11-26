@@ -34,7 +34,6 @@ export default function Statistics() {
 
 	const selectedColors = useSelector<RootState, { [key: string]: string }>((state) => state.data.pickerColors);
 
-
 	const Toggle_checkbox_boolean = (k: string) => {
 
 		// Créez une copie de l'état actuel des cases à cocher
@@ -53,13 +52,7 @@ export default function Statistics() {
 		// dispatch(DataAction.change_checkbox_state ( true ));
 		dispatch(DataAction.change_checkbox_state({ [k]: updatedCheckboxState[k] }));
 		};
-	// const handle_checkBOX_Change = (k: string, value: boolean) => {
-	// 	set_checkbox_Hold_State((checkbox_Hold_State) => ({
-	// 		...checkbox_Hold_State,
-	// 		[k]: value,
-	// 	}));
-	// 	dispatch(DataAction.change_checkbox_state({ [k]: value }));
-	// 	}
+	
 	const handle_checkBOX_Change = (destination: string, value: boolean) => {
 		dispatch(DataAction.change_checkbox_state({ [destination]: value }));
 		};
@@ -120,18 +113,11 @@ export default function Statistics() {
 //
 	const catalog_data = useSelector<RootState, stepe_Data[]>((state) => state.data.Interfaced_data_state);
 //	
-	// const FromRedux_checkbox_Hold_State = useSelector<RootState, { [key: string]: boolean }>(
-	// 	(state) => state.data.HOLD_checkbox_state
-	// );
+
 	const FromRedux_checkbox_Hold_State = useSelector<RootState, {[key: string]: boolean}>((state) => state.data.HOLD_checkbox_state);
 	const FromRedux_previousQT 			= useSelector<RootState, {[key: string]: string }>((state) => state.data.HOLD_previous_QTT);
 	const FromRedux_previousTO			= useSelector<RootState, {[key: string]: string }>((state) => state.data.HOLD_previous_TONS);
 	const FromRedux_maxiTO				= useSelector<RootState, {[key: string]: string }>((state) => state.data.HOLD_maxi_TONS);
-
-	// const FromRedux_maxiQT = useSelector<RootState, {[key: string]: string }>((state) => state.data.HOLD_maxi_QTT);
-	// const FromRedux_maxisTo = useSelector<RootState, {[key: string]: string }>((state) => state.data.HOLD_maxi_TONS);
-	// const FromRedux_previousQT = useSelector<RootState, { [key: string]: string }>((state) => state.data.HOLD_previous_QTT);
-	// const FromRedux_previousTO = useSelector<RootState, { [key: string]: string }>((state) => state.data.HOLD_previous_TONS);
 
 	const totalPreviousCalesCount = Object.keys(previous_Value_QT).reduce((total, k) => {
 		return total + (previous_Value_QT[k] ? parseFloat(previous_Value_QT[k].prevQT_VALUE) : 0);
@@ -158,8 +144,10 @@ export default function Statistics() {
 		affectation.forEach((affectationItem) => {
 			const k = affectationItem.name as string;
 			if (k !== "stock") {
-					FromRedux_checkbox_Hold_State[k] ?handle_checkBOX_Change(k as string, true) : handle_checkBOX_Change(k as string, false);
-
+				FromRedux_checkbox_Hold_State[k] ? 
+				handle_checkBOX_Change(k as string, FromRedux_checkbox_Hold_State[k]) 
+				: 
+				handle_checkBOX_Change(k as string, false);
 				}
 		});
 		firstRender = false;
