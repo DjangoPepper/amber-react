@@ -1,5 +1,5 @@
 import {AnyAction} from "redux";
-import { affectation } from "../../utils/destination";
+// import { affectation } from "../../utils/destination";
 
 export default class DataAction {
 	public static IMPORT_DATA = "DataAction.IMPORT_DATA";
@@ -118,11 +118,11 @@ export default class DataAction {
 		return { type: DataAction.SAVE_PREV_TONS };
 	}
 
-	public static save_maxi(): AnyAction {
+	public static save_maxi_tons(): AnyAction {
 		return { type: DataAction.SAVE_MAXI_TONS };
 	}
 
-	public static loaded_catalog_status(data: string): AnyAction {
+	public static loaded_catalog(data: string): AnyAction {
 		return { type: DataAction.LOAD_CATALOG, payload: JSON.parse(data) };
 	}
 	
@@ -131,10 +131,13 @@ export default class DataAction {
 	}
 	
 	public static load_previous_qtt(loaded_data: string): AnyAction {
+		return { type: DataAction.LOAD_PREV_QTT, payload: JSON.parse(loaded_data) };
+	}
+	public static load_previous_tons(loaded_data: string): AnyAction {
 		return { type: DataAction.LOAD_PREV_TONS, payload: JSON.parse(loaded_data) };
 	}
 
-	public static load_maxis_tons(loaded_data: string): AnyAction {
+	public static load_maxi_tons(loaded_data: string): AnyAction {
 		return { type: DataAction.LOAD_MAXI_TONS , payload: JSON.parse(loaded_data) };
 	}
 	

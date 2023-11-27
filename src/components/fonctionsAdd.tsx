@@ -11,7 +11,7 @@ export function CleanExcelSheet(oSheet: any): stepe_Data {
 	// Recuperation du range de la feuille
 	let rangeInfo = PowerRanger(oSheet)
 	
-	toast.info('organizing current sheet', { position: toast.POSITION.TOP_RIGHT })// la feuille Bobines existe
+	toast.info('Nettoyage de la feuille excel', { position: toast.POSITION.TOP_RIGHT, autoClose: 1000 })// la feuille Bobines existe
 
 	// effacement des fusions
 	deleteExcelMergesInfos(oSheet);

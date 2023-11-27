@@ -99,6 +99,7 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
                     selectedPrepa: action.payload
                 }
             case DataAction.CHANGE_CHECKBOX_STATE:
+                // state.saved_HOLD_checkbox_state_status = false;
                 return {
                     ...state,
                     HOLD_checkbox_state: {
@@ -106,6 +107,8 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
                         ...action.payload,
                     },
                 };
+                
+
 
             case DataAction.CHANGE_PREVIOUS_QTT:
                 return {
@@ -164,46 +167,47 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
                     saved_catalog_status: false
                 }
             case DataAction.SAVE_CHECKBOX_STATE:
-                if(state.saved_HOLD_checkbox_state_status) return state;
+                // if(state.saved_HOLD_checkbox_state_status) return state;
                 window.localStorage.setItem("data", JSON.stringify(state.HOLD_checkbox_state));
+                state.saved_HOLD_checkbox_state_status = true;
                 return {
                     ...state,
                     saved_HOLD_checkbox_state_status: false
-                }
+                };
             case DataAction.SAVE_PREV_QTT:
-                if(state.saved_HOLD_previous_QTT_status) return state;
+                // if(state.saved_HOLD_previous_QTT_status) return state;
                 window.localStorage.setItem("data", JSON.stringify(state.HOLD_previous_QTT));
                 return {
                     ...state,
                     saved_HOLD_previous_QTT_status: false
-                }
+                };
             case DataAction.SAVE_PREV_TONS:
-                if(state.saved_HOLD_previous_TONS_status) return state;
+                // if(state.saved_HOLD_previous_TONS_status) return state;
                 window.localStorage.setItem("data", JSON.stringify(state.HOLD_previous_TONS));
                 return {
                     ...state,
                     saved_HOLD_previous_TONS_status: false
-                }
+                };
             case DataAction.SAVE_MAXI_TONS:
-                if(state.saved_HOLD_maxi_TONS_status) return state;
+                // if(state.saved_HOLD_maxi_TONS_status) return state;
                 window.localStorage.setItem("data", JSON.stringify(state.HOLD_maxi_TONS));
                 return {
                     ...state,
                     saved_HOLD_maxi_TONS_status: false
-                }
+                };
 
-                case DataAction.LOAD_CATALOG:
+            case DataAction.LOAD_CATALOG:
                 return {
                     ...state,
                     catalog_data_state: action.payload,
                     loaded_catalog_status: true,
                     saved_catalog_status: true,
                 }
-                case DataAction.LOAD_CHECKBOX_STATE:
-                    return {
-                        ...state,
-                        HOLD_checkbox_state: action.payload,
-                    };
+            case DataAction.LOAD_CHECKBOX_STATE:
+                return {
+                    ...state,
+                    HOLD_checkbox_state: action.payload,
+                };
                 case DataAction.LOAD_PREV_QTT:
                     return {
                         ...state,
