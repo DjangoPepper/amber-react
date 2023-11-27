@@ -51,24 +51,24 @@ export default class DataAction {
 	public static load_checkbox_state(checkboxstate: { [destination: string]: boolean }): AnyAction {
 		return { type: DataAction.LOAD_PREV_QTT, payload: checkboxstate };
 	}
-	public static load_previous_qtt(qtt: { destination: string}): AnyAction {
-		return { type: DataAction.LOAD_PREV_QTT, payload: qtt };
+	public static load_previous_qtt(newqtt: { [destination: string]: string }): AnyAction {
+		return { type: DataAction.LOAD_PREV_QTT, payload: newqtt };
 	}
 	
-	public static load_previous_tons(tons: { destination: string}): AnyAction {
-		return { type: DataAction.LOAD_PREV_TONS, payload: tons };
+	public static load_previous_tons(newtons: { [destination: string]: number }): AnyAction {
+		return { type: DataAction.LOAD_PREV_TONS, payload: newtons };
 	}
 	
-	public static load_maxis(maxi: { destination: string }): AnyAction {
-		return { type: DataAction.LOAD_MAXIS, payload: maxi };
+	public static load_maxis(newmaxi: { [destination: string]: number }): AnyAction {
+		return { type: DataAction.LOAD_MAXIS, payload: newmaxi };
 	}
 	
 	public static change_checkbox_state(changecheckboxstate: { [destination: string]: boolean }): AnyAction {
 		return { type: DataAction.CHANGE_CHECKBOX_STATE, payload: changecheckboxstate };
 	}
 
-	public static changePreviousQTT(qtt: { destination: string; value: number }): AnyAction {
-		return { type: DataAction.CHANGE_PREVIOUS_QTT, payload: qtt };
+	public static changePreviousQTT(changedqtt: { [destination: string]: string }): AnyAction {
+		return { type: DataAction.CHANGE_PREVIOUS_QTT, payload: changedqtt };
 	}
 	
 	public static changePreviousTONS(tons: { destination: string; value: number }): AnyAction {

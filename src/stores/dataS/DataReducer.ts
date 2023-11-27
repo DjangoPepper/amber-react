@@ -21,7 +21,7 @@ interface DataState {
     pickerColors: { [key: string]: string };
     
     HOLD_checkbox_state: { [destination: string]: boolean };
-    HOLD_previous_QTT: { [key: string]: string };
+    HOLD_previous_QTT:   { [destinbation: string]: string };
     HOLD_previous_TONS: { [key: string]: string };
     HOLD_maxi_TONS:     { [key: string]: string };
     
@@ -92,20 +92,6 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
                     ...state,
                     selectedPrepa: action.payload
                 }
-
-    
-            // case DataAction.CHANGE_CHECKBOX_STATE:
-            //     return {
-            //         ...state,
-            //         HOLD_checkbox_state: action.payload,
-            //     };
-            // case DataAction.CHANGE_CHECKBOX_STATE:
-            //     return {
-            //         ...state,
-            //         HOLD_checkbox_state: action.payload,
-            //     };
-            
-            //
             case DataAction.CHANGE_CHECKBOX_STATE:
                 return {
                 ...state,
@@ -113,14 +99,8 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
                     ...state.HOLD_checkbox_state,
                     ...action.payload,
                 },
-            };
-            //
-
-            case DataAction.CHANGE_MAXI_TONS:
-                return {
-                    ...state,
-                    HOLD_maxi_TONS: action.payload,
                 };
+
             case DataAction.CHANGE_PREVIOUS_QTT:
                 return {
                 ...state,
@@ -135,6 +115,11 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
                 return {
                 ...state,
                 selectedCale: action.payload,
+                };
+            case DataAction.CHANGE_MAXI_TONS:
+                return {
+                    ...state,
+                    HOLD_maxi_TONS: action.payload,
                 };
             case DataAction.CHANGE_ORIGINAL_POS:
                 return {
@@ -168,28 +153,30 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
                     saved_HOLD_maxi_TONS: false
                 }
 
-
-            case DataAction.LOAD_CATALOG:
+                case DataAction.LOAD_CATALOG:
                 return {
                     ...state,
                     Interfaced_data_state: action.payload,
                     loaded_catalog: true,
                     saved_catalog: true,
                 }
-            case DataAction.LOAD_PREV_QTT:
-                return {
-                    ...state,
-                    HOLD_previous_QTT: action.payload,
-                    // loaded_previous_QTT: true,
-                    // saved_HOLD_previous_QTT: true,
-                }
+                case DataAction.LOAD_CHECKBOX_STATE:
+                    return {
+                        ...state,
+                        HOLD_checkbox_state: action.payload,
+                    };
+                case DataAction.LOAD_PREV_QTT:
+                    return {
+                        ...state,
+                        HOLD_previous_QTT: action.payload,
+                    };
             case DataAction.LOAD_PREV_TONS:
                 return {
                     ...state,
                     HOLD_previous_TONS: action.payload,
                     // loaded_previous_TONS: true,
                     // saved_HOLD_previous_TONS: true,
-                }
+                };
             case DataAction.LOAD_MAXIS:
                 return {
                     ...state,
