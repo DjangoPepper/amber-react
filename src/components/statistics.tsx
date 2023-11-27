@@ -98,7 +98,7 @@ export default function Statistics() {
 
 		const catalog_data = useSelector<RootState, stepe_Data[]>((state) => state.data.catalog_data_state);
 
-	// const FromRedux_checkbox_Hold_State = useSelector<RootState, {[key: string]: boolean}>((state) => state.data.HOLD_checkbox_state);
+	const FromRedux_checkbox_Hold_State = useSelector<RootState, {[key: string]: boolean}>((state) => state.data.HOLD_checkbox_state);
 	// const FromRedux_previousQT 			= useSelector<RootState, {[key: string]: string }>((state) => state.data.HOLD_previous_QTT);
 	// const FromRedux_previousTO			= useSelector<RootState, {[key: string]: string }>((state) => state.data.HOLD_previous_TONS);
 	// const FromRedux_maxiTO				= useSelector<RootState, {[key: string]: string }>((state) => state.data.HOLD_maxi_TONS);
@@ -128,10 +128,10 @@ export default function Statistics() {
 		affectation.forEach((affectationItem) => {
 			const k = affectationItem.name as string;
 			if (k !== "stock") {
-				// FromRedux_checkbox_Hold_State[k] ? 
-				// handle_checkBOX_Change(k as string, FromRedux_checkbox_Hold_State[k]) 
-				// : 
-				// handle_checkBOX_Change(k as string, false);
+				FromRedux_checkbox_Hold_State[k] ? 
+				handle_checkBOX_Change(k as string, FromRedux_checkbox_Hold_State[k]) 
+				: 
+				handle_checkBOX_Change(k as string, false);
 				}
 		});
 		firstRender = false;
