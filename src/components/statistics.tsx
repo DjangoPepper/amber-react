@@ -10,7 +10,7 @@ import { affectation} from "../utils/destination";
 
 import Button from 'react-bootstrap/Button';
 // import {firstRender} from '../App';	
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 
 export default function Statistics() {
 
@@ -120,9 +120,9 @@ export default function Statistics() {
 //	
 
 	const FromRedux_checkbox_Hold_State = useSelector<RootState, {[key: string]: boolean}>((state) => state.data.HOLD_checkbox_state);
-	const FromRedux_previousQT 			= useSelector<RootState, {[key: string]: string }>((state) => state.data.HOLD_previous_QTT);
-	const FromRedux_previousTO			= useSelector<RootState, {[key: string]: string }>((state) => state.data.HOLD_previous_TONS);
-	const FromRedux_maxiTO				= useSelector<RootState, {[key: string]: string }>((state) => state.data.HOLD_maxi_TONS);
+	// const FromRedux_previousQT 			= useSelector<RootState, {[key: string]: string }>((state) => state.data.HOLD_previous_QTT);
+	// const FromRedux_previousTO			= useSelector<RootState, {[key: string]: string }>((state) => state.data.HOLD_previous_TONS);
+	// const FromRedux_maxiTO				= useSelector<RootState, {[key: string]: string }>((state) => state.data.HOLD_maxi_TONS);
 
 	const totalPreviousCalesCount = Object.keys(previous_Value_QT).reduce((total, k) => {
 		return total + (previous_Value_QT[k] ? parseFloat(previous_Value_QT[k].prevQT_VALUE) : 0);
@@ -132,16 +132,16 @@ export default function Statistics() {
 		return total + (previous_Value_TO[k]?.prevTO_VALUE ? parseFloat(previous_Value_TO[k].prevTO_VALUE) : 0);
 		}, 0);
 		///
-	const tableauDeDonnees = useSelector<RootState, { [key: string]: string }[]>(
-		(state) => state.data.tableauDeDonnees
-		);
-	const handle_AddDDonnees = () => {
-        dispatch(DataAction.add_donnees({ key: "exampleKey", value: "exampleValue" }));
-		// dispatch(DataAction.change_CHECKBOX_STATE({ key: k, value: updatedCheckboxState[k] }));
-		};	
-    const handle_UpdateDonnees = (index: number) => {
-        dispatch(DataAction.update_donnees(index, { key: "updatedKey", value: "updatedValue" }));
-    };
+	// const tableauDeDonnees = useSelector<RootState, { [key: string]: string }[]>(
+	// 	(state) => state.data.tableauDeDonnees
+	// 	);
+	// const handle_AddDDonnees = () => {
+    //     dispatch(DataAction.add_donnees({ key: "exampleKey", value: "exampleValue" }));
+	// 	// dispatch(DataAction.change_CHECKBOX_STATE({ key: k, value: updatedCheckboxState[k] }));
+	// 	};	
+    // const handle_UpdateDonnees = (index: number) => {
+    //     dispatch(DataAction.update_donnees(index, { key: "updatedKey", value: "updatedValue" }));
+    // };
 
 	///
 	let firstRender = true;
