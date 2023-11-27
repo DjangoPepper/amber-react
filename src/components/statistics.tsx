@@ -135,7 +135,7 @@ const handle_checkBOX_Change = (destination: string, value: boolean) => {
 
 	useEffect(() => {
 	if (firstRender) {
-		// init_tally();
+		init_tally();
 		toast.error('init Tally', { position: toast.POSITION.TOP_LEFT, autoClose: 500 });
 	}
 	}, [firstRender]);
