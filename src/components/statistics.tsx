@@ -119,26 +119,26 @@ const handle_checkBOX_Change = (destination: string, value: boolean) => {
 		return total + (previous_Value_TO[k]?.prevTO_VALUE ? parseFloat(previous_Value_TO[k].prevTO_VALUE) : 0);
 		}, 0);
 
-	// ///
-	// let firstRender = true;
-	// function init_tally() {
-	// 	affectation.forEach((affectationItem) => {
-	// 		const k = affectationItem.name as string;
-	// 		if (k !== "stock") {
+	///
+	let firstRender = true;
+	function init_tally() {
+		affectation.forEach((affectationItem) => {
+			const k = affectationItem.name as string;
+			if (k !== "stock") {
 
 				
-	// 			}
-	// 	});
-	// 	firstRender = false;
-	// };
+				}
+		});
+		firstRender = false;
+	};
 
 
-	// useEffect(() => {
-	// if (firstRender) {
-	// 	// init_tally();
-	// 	toast.error('init Tally', { position: toast.POSITION.TOP_LEFT, autoClose: 500 });
-	// }
-	// }, [firstRender]);
+	useEffect(() => {
+	if (firstRender) {
+		// init_tally();
+		toast.error('init Tally', { position: toast.POSITION.TOP_LEFT, autoClose: 500 });
+	}
+	}, [firstRender]);
 
 	const statistics = catalog_data.reduce<any>((p, row) => {
 		if (!p[row.destination]) {
