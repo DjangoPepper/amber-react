@@ -23,7 +23,7 @@ function init() {
 		
 		if(Init_data_catalog) {
 				store.dispatch(DataAction.loaded_catalog(Init_data_catalog));
-				store.dispatch(DataAction.load_checkbox_state(Init_data_catalog));
+				// store.dispatch(DataAction.load_checkbox_state(Init_data_catalog));
 				// store.dispatch(DataAction.load_previous_qtt(Init_data_catalog));
 				// store.dispatch(DataAction.load_previous_tons(Init_data_catalog));
 				// store.dispatch(DataAction.load_maxi_tons(Init_data_catalog));
@@ -33,8 +33,8 @@ function init() {
 				store.dispatch(DataAction.save_catalog());
 				store.dispatch(DataAction.save_checkbox_state());
 				store.dispatch(DataAction.save_previous_qtt());
-				// store.dispatch(DataAction.save_previous_tons());
-				// store.dispatch(DataAction.save_maxi_tons());
+				store.dispatch(DataAction.save_previous_tons());
+				store.dispatch(DataAction.save_maxi_tons());
 
 				toast.warning('AutoSave', { position: toast.POSITION.BOTTOM_LEFT, autoClose: 500 })
 		}, 

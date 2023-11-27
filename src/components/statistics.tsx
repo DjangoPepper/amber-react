@@ -197,12 +197,12 @@ const handle_checkbox_VALUE_Change = (destination: string, value: string) => {
 					<th style={{ textAlign: 'center' }}>
 					<Button variant="info" onClick={handle_Extended_Tally}>T</Button>
 					</th>
-					<th style={{ textAlign: 'center' }}>DAY_Q</th>
-					<th style={{ textAlign: 'center' }}>DAY_T</th>
+					<th style={{ textAlign: 'center' }}>Units</th>
+					<th style={{ textAlign: 'center' }}>Kilos</th>
 					{Extended_Tally_Value && (
 					<>
-						<th style={{ textAlign: 'center', backgroundColor: 'gray' }}>PREV_Q</th>
-						<th style={{ textAlign: 'center', backgroundColor: 'gray' }}>PREV_T</th>
+						<th style={{ textAlign: 'center', backgroundColor: 'gray' }}>P Units</th>
+						<th style={{ textAlign: 'center', backgroundColor: 'gray' }}>P Kilos</th>
 					
 					</>
 					)}
@@ -344,7 +344,7 @@ const handle_checkbox_VALUE_Change = (destination: string, value: string) => {
 
 				{/* PARTIE calcul */}
 				<tr>
-				{/* K */}
+				{/* T */}
 				<td style={{ textAlign: 'left'}}>Total</td>
 				{/* Q */}
 				<td style={{ textAlign: 'center'}}> </td>					 									
@@ -363,17 +363,6 @@ const handle_checkbox_VALUE_Change = (destination: string, value: string) => {
 				<td style={{ textAlign: 'center' }}>{totalCalesCount + totalPreviousCalesCount}</td>
 				{/* TT_T */}
 				<td style={{ textAlign: 'center' }}>{(totalCalesWeight + totalPreviousCalesWeight).toLocaleString("en-US")}</td>
-
-				{/*PREV_Q */}
-				{/* <td style={{ textAlign: 'center',backgroundColor: 'gray' }}>{isNaN(totalPreviousCalesCount) ? 0 : totalPreviousCalesCount}</td> */}
-				{/*PREV_T */}
-				{/* <td style={{ textAlign: 'center',backgroundColor: 'gray' }}>{isNaN(totalPreviousCalesWeight) ? 0 : totalPreviousCalesWeight.toLocaleString("en-US")}</td> */}
-
-
-				{/*TT_Q */}				
-				{/* <td style={{ textAlign: 'center'}}>{(isNaN(totalCalesCount) ? 0 : totalCalesCount) + (isNaN(totalPreviousCalesCount) ? 0 : totalPreviousCalesCount)}</td>							 */}
-				{/*TT_T */}					
-				{/* <td style={{ textAlign: 'center'}}>{(isNaN(totalCalesWeight) ? 0 : totalCalesWeight) + (isNaN(totalPreviousCalesWeight) ? 0 : + totalPreviousCalesWeight).toLocaleString("en-US")}</td> */}
 				
 				</tr><tr>
 				</tr>

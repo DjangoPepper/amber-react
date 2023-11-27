@@ -114,8 +114,8 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
                     ...state,
                     HOLD_previous_QTT: {
                         ...state.HOLD_previous_QTT,
-                        // [action.payload.destination]: action.payload.value
-                        ...action.payload,
+                        [action.payload.destination]: action.payload.value
+                        // ...action.payload,
                     },
                 };
             case DataAction.CHANGE_PREVIOUS_TONS:
@@ -123,21 +123,17 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
                     ...state,
                     HOLD_previous_TONS: {
                         ...state.HOLD_previous_TONS,
-                        // ...action.payload,
-                        [action.payload.destination]: action.payload.value
+                        // [action.payload.destination]: action.payload.value
+                        ...action.payload,
                     },
                 };
             case DataAction.CHANGE_MAXI_TONS:
-                // return {
-                //     ...state,
-                //     HOLD_maxi_TONS: action.payload,
-                // };
                 return {
                     ...state,
                     HOLD_maxi_TONS: {
                         ...state.HOLD_maxi_TONS,
-                        // ...action.payload,
-                        [action.payload.destination]: action.payload.value
+                        // [action.payload.destination]: action.payload.value
+                        ...action.payload,
                     },
                 };
             case DataAction.CHANGE_CALE:
@@ -171,7 +167,7 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
                 }
             case DataAction.SAVE_CHECKBOX_STATE:
                 // if(state.saved_HOLD_checkbox_state_status) return state;
-                window.localStorage.setItem("data", JSON.stringify(state.HOLD_checkbox_state));
+                window.localStorage.setItem("local_checkbox", JSON.stringify(state.HOLD_checkbox_state));
                 state.saved_HOLD_checkbox_state_status = true;
                 return {
                     ...state,
@@ -179,21 +175,22 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
                 };
             case DataAction.SAVE_PREV_QTT:
                 // if(state.saved_HOLD_previous_QTT_status) return state;
-                window.localStorage.setItem("data", JSON.stringify(state.HOLD_previous_QTT));
+                state.saved_HOLD_previous_QTT_status = true;
+                window.localStorage.setItem("local_punit", JSON.stringify(state.HOLD_previous_QTT));
                 return {
                     ...state,
                     saved_HOLD_previous_QTT_status: false
                 };
             case DataAction.SAVE_PREV_TONS:
                 // if(state.saved_HOLD_previous_TONS_status) return state;
-                window.localStorage.setItem("data", JSON.stringify(state.HOLD_previous_TONS));
+                window.localStorage.setItem("local_pkilos", JSON.stringify(state.HOLD_previous_TONS));
                 return {
                     ...state,
                     saved_HOLD_previous_TONS_status: false
                 };
             case DataAction.SAVE_MAXI_TONS:
                 // if(state.saved_HOLD_maxi_TONS_status) return state;
-                window.localStorage.setItem("data", JSON.stringify(state.HOLD_maxi_TONS));
+                window.localStorage.setItem("local_maxi", JSON.stringify(state.HOLD_maxi_TONS));
                 return {
                     ...state,
                     saved_HOLD_maxi_TONS_status: false
