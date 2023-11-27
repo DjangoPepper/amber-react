@@ -23,10 +23,10 @@ function init() {
 		
 		if(Init_data_catalog) {
 				store.dispatch(DataAction.loaded_catalog(Init_data_catalog));
-				store.dispatch(DataAction.load_checkbox_state(Init_data_catalog));
-				store.dispatch(DataAction.load_previous_qtt(Init_data_catalog));
-				store.dispatch(DataAction.load_previous_tons(Init_data_catalog));
-				store.dispatch(DataAction.load_maxi_tons(Init_data_catalog));
+				// store.dispatch(DataAction.load_checkbox_state(Init_data_catalog));
+				// store.dispatch(DataAction.load_previous_qtt(Init_data_catalog));
+				// store.dispatch(DataAction.load_previous_tons(Init_data_catalog));
+				// store.dispatch(DataAction.load_maxi_tons(Init_data_catalog));
 		}
 		
 		setInterval(() => {
