@@ -373,6 +373,17 @@ export default function Statistics() {
 				{/* TT_T */}
 				<td style={{ textAlign: 'center' }}>{(totalCalesWeight + totalPreviousCalesWeight).toLocaleString("en-US")}</td>
 
+				{/*PREV_Q */}
+				<td style={{ textAlign: 'center',backgroundColor: 'gray' }}>{isNaN(totalPreviousCalesCount) ? 0 : totalPreviousCalesCount}</td>
+				{/*PREV_T */}
+				<td style={{ textAlign: 'center',backgroundColor: 'gray' }}>{isNaN(totalPreviousCalesWeight) ? 0 : totalPreviousCalesWeight.toLocaleString("en-US")}</td>
+
+
+				{/*TT_Q */}				
+				<td style={{ textAlign: 'center'}}>{(isNaN(totalCalesCount) ? 0 : totalCalesCount) + (isNaN(totalPreviousCalesCount) ? 0 : totalPreviousCalesCount)}</td>							
+				{/*TT_T */}					
+				<td style={{ textAlign: 'center'}}>{(isNaN(totalCalesWeight) ? 0 : totalCalesWeight) + (isNaN(totalPreviousCalesWeight) ? 0 : + totalPreviousCalesWeight).toLocaleString("en-US")}</td>
+				
 				</tr><tr>
 				</tr>
 			</tbody>
