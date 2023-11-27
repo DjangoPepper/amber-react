@@ -160,15 +160,15 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
                 }
 //
             case DataAction.SAVE_CATALOG:
-                if(state.saved_catalog) return state;
+                // if(state.saved_catalog) return state;
                 console.log("saving catalog...");
                 window.localStorage.setItem("data", JSON.stringify(state.catalog_data_state));
                 return {
                     ...state,
                     saved_catalog: false
                 }
-            case DataAction.SAVE_MAXIS:
-                if(state.saved_HOLD_maxi_TONS) return state;
+            case DataAction.SAVE_MAXI_TONS:
+                // if(state.saved_HOLD_maxi_TONS) return state;
                 window.localStorage.setItem("maxi_TONS", JSON.stringify(state.HOLD_maxi_TONS));
                 return {
                     ...state,
@@ -176,12 +176,12 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
                 }
 //
             case DataAction.LOAD_CATALOG:
-            return {
-                ...state,
-                catalog_data_state: action.payload,
-                loaded_catalog: true,
-                saved_catalog: true,
-            }
+                return {
+                    ...state,
+                    catalog_data_state: action.payload,
+                    loaded_catalog: true,
+                    saved_catalog: true,
+                }
             case DataAction.LOAD_CHECKBOX_STATE:
                 return {
                     ...state,
@@ -199,7 +199,7 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
                     // loaded_previous_TONS: true,
                     // saved_HOLD_previous_TONS: true,
                 };
-            case DataAction.LOAD_MAXIS:
+            case DataAction.LOAD_MAXI_TONS:
                 return {
                     ...state,
                     HOLD_maxi_TONS: action.payload,

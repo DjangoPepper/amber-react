@@ -10,7 +10,7 @@ import DataAction from "./stores/dataS/DataAction";
 import { toast } from 'react-toastify';
 
 
-let backupInterval = 30 * 1000; //30 * 1000 ms = 30s
+let backupInterval = 60 * 1000; //30 * 1000 ms = 30s
 // let firstRender = false;
 
 function init() {

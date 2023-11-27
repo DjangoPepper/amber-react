@@ -21,15 +21,13 @@ import {RootState} from "../stores/rootStore";
 import {stepe_Data} from "../stores/dataS/DataReducer";
 import DebouncedInput from "./debounceInput";
 import DataAction from "../stores/dataS/DataAction";
-import {colors, affectation, HEADER} from "../utils/destination";
+import {affectation, HEADER} from "../utils/destination";
 import Filter, {fuzzyFilter} from "./filter";
 import './index-tanstack.css'
 
 
 //FRED ****************************************************************
 import SpaceatPos from "./SpaceatPos";
-import * as fs from 'fs'
-import * as path from 'path'
 
 const monthNames = [
     'jan', 'fev', 'mar', 'avr', 'mai', 'juin',
