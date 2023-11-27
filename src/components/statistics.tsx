@@ -57,17 +57,6 @@ export default function Statistics() {
 		dispatch(DataAction.change_checkbox_state({ [destination]: value }));
 		};
 
-
-	const handle_maxiTO_VALUE_Change = (k: string, value: string) => {
-		set_previous_Value_TO((previous_Value_TO) => ({
-			...previous_Value_TO,
-			[k]: { 
-					prevTO_VALUE: value,  
-			},
-		}));
-		let numericValue = parseFloat(value) || 0;
-		dispatch(DataAction.changePreviousTONS({ destination: k, value: numericValue }));
-		};		
 		const handle_maxiTO_Change = (k: string, value: string) => {
 			// handle_maxiTO_Change(affectationItem.name, e.target.value)}
 			set_maxi_Values((maxi_Value_TO: any) => ({
@@ -94,15 +83,15 @@ export default function Statistics() {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////	
-	const handle_PrevTO_VALUE_Change = (k: string, value: string) => {
+	const handle_PrevTO_VALUE_Change = (destination: string, value: string) => {
 		set_previous_Value_TO((previous_Value_TO) => ({
 			...previous_Value_TO,
-			[k]: { 
+			[destination]: { 
 					prevTO_VALUE: value,  
 			},
 		}));
-		let numericValue = parseFloat(value) || 0;
-		dispatch(DataAction.changePreviousTONS({ destination: k, value: numericValue }));
+		// let numericValue = parseFloat(value) || 0;
+		dispatch(DataAction.changePreviousTONS({ destination: destination, value: value }));
 		};
 
 		const handle_Extended_Tally = () => {

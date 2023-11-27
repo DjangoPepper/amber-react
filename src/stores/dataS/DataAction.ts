@@ -71,7 +71,7 @@ export default class DataAction {
 		return { type: DataAction.CHANGE_PREVIOUS_QTT, payload: changedqtt };
 	}
 	
-	public static changePreviousTONS(tons: { destination: string; value: number }): AnyAction {
+	public static changePreviousTONS(tons: { destination: string; value: string }): AnyAction {
 		return { type: DataAction.CHANGE_PREVIOUS_TONS, payload: tons };
 	}
 //////

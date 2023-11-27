@@ -22,7 +22,7 @@ interface DataState {
     
     HOLD_checkbox_state: { [destination: string]: boolean };
     HOLD_previous_QTT:   { [destinbation: string]: string };
-    HOLD_previous_TONS: { [key: string]: string };
+    HOLD_previous_TONS: { [destinbation: string]: string };
     HOLD_maxi_TONS:     { [key: string]: string };
     
     // loaded_previous_QTT: boolean;
@@ -100,12 +100,6 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
                         ...action.payload,
                     },
                 };
-
-/*             case DataAction.CHANGE_PREVIOUS_QTT:
-                return {
-                ...state,
-                HOLD_previous_QTT: action.payload,
-                }; */
             case DataAction.CHANGE_PREVIOUS_QTT:
                 return {
                     ...state,
@@ -118,9 +112,13 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
             case DataAction.CHANGE_PREVIOUS_TONS:
                 return {
                     ...state,
-                    HOLD_previous_TONS: action.payload,
+                    HOLD_previous_TONS: {
+                        ...state.HOLD_previous_TONS,
+                        // ...action.payload,
+                        [action.payload.destination]: action.payload.value
+                    },
                 };
-                        case DataAction.CHANGE_CALE:
+            case DataAction.CHANGE_CALE:
                 return {
                 ...state,
                 selectedCale: action.payload,
