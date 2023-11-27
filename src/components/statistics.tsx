@@ -28,9 +28,10 @@ export default function Statistics() {
 	const [Extended_Tally_Value, set_Extended_Tally_Value] = React.useState(false);
 
 	const [checkbox_Hold_State, set_checkbox_Hold_State] = useState<{ [key: string]: boolean }>({});	
-	const [maxi_Value_TO, set_maxi_Values] = useState<{ [key: string]: { maxi_To: string } }>({});
+	
 	const [previous_Value_QT, set_previous_Value_QT] = useState<{ [key: string]: { prevQT_VALUE: string } }>({});
 	const [previous_Value_TO, set_previous_Value_TO] = useState<{ [key: string]: { prevTO_VALUE: string } }>({});
+	const [maxi_Value_TO, set_maxi_Values] 			 = useState<{ [key: string]: { maxi_To: string      } }>({});
 
 	const selectedColors = useSelector<RootState, { [key: string]: string }>((state) => state.data.pickerColors);
 
@@ -57,16 +58,6 @@ export default function Statistics() {
 		dispatch(DataAction.change_checkbox_state({ [destination]: value }));
 		};
 
-		const handle_maxiTO_Change = (k: string, value: string) => {
-			// handle_maxiTO_Change(affectationItem.name, e.target.value)}
-			set_maxi_Values((maxi_Value_TO: any) => ({
-				...maxi_Value_TO,
-				[k]: { maxi_To: value },
-			}));
-			const numericValue = parseFloat(value) || 0;
-			dispatch(DataAction.changeMaxiTONS({ destination: k, value: numericValue }));
-			};
-	
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -80,19 +71,32 @@ export default function Statistics() {
 			// let numericValue = parseFloat(value) || 0;
 			dispatch(DataAction.changePreviousQTT({ destination: destination, value: value }));
 		};
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+		const handle_PrevTO_VALUE_Change = (destination: string, value: string) => {
+			set_previous_Value_TO((previous_Value_TO) => ({
+				...previous_Value_TO,
+				[destination]: { 
+					prevTO_VALUE: value,  
+				},
+			}));
+			// let numericValue = parseFloat(value) || 0;
+			dispatch(DataAction.changePreviousTONS({ destination: destination, value: value }));
+			};
+	
+
+		const handle_maxiTO_Change = (destination: string, value: string) => {
+			// handle_maxiTO_Change(affectationItem.name, e.target.value)}
+			set_maxi_Values((maxi_Value_TO: any) => ({
+				...maxi_Value_TO,
+				[destination]: { maxi_To: value },
+			}));
+			// const numericValue = parseFloat(value) || 0;
+			dispatch(DataAction.changeMaxiTONS({ destination: destination, value}));
+			};
+		
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////	
-	const handle_PrevTO_VALUE_Change = (destination: string, value: string) => {
-		set_previous_Value_TO((previous_Value_TO) => ({
-			...previous_Value_TO,
-			[destination]: { 
-					prevTO_VALUE: value,  
-			},
-		}));
-		// let numericValue = parseFloat(value) || 0;
-		dispatch(DataAction.changePreviousTONS({ destination: destination, value: value }));
-		};
 
 		const handle_Extended_Tally = () => {
 			set_Extended_Tally_Value((prevValue) => {
@@ -101,17 +105,15 @@ export default function Statistics() {
 			});
 		};
 	
-
-	
-		//
+//
 //
 	const catalog_data = useSelector<RootState, stepe_Data[]>((state) => state.data.catalog_data_state);
 //	
 
-	const FromRedux_checkbox_Hold_State = useSelector<RootState, {[key: string]: boolean}>((state) => state.data.HOLD_checkbox_state);
-	const FromRedux_previousQT 			= useSelector<RootState, {[key: string]: string }>((state) => state.data.HOLD_previous_QTT);
-	const FromRedux_previousTO			= useSelector<RootState, {[key: string]: string }>((state) => state.data.HOLD_previous_TONS);
-	const FromRedux_maxiTO				= useSelector<RootState, {[key: string]: string }>((state) => state.data.HOLD_maxi_TONS);
+	// const FromRedux_checkbox_Hold_State = useSelector<RootState, {[key: string]: boolean}>((state) => state.data.HOLD_checkbox_state);
+	// const FromRedux_previousQT 			= useSelector<RootState, {[key: string]: string }>((state) => state.data.HOLD_previous_QTT);
+	// const FromRedux_previousTO			= useSelector<RootState, {[key: string]: string }>((state) => state.data.HOLD_previous_TONS);
+	// const FromRedux_maxiTO				= useSelector<RootState, {[key: string]: string }>((state) => state.data.HOLD_maxi_TONS);
 
 	const totalPreviousCalesCount = Object.keys(previous_Value_QT).reduce((total, k) => {
 		return total + (previous_Value_QT[k] ? parseFloat(previous_Value_QT[k].prevQT_VALUE) : 0);
@@ -120,14 +122,14 @@ export default function Statistics() {
 	const totalPreviousCalesWeight = Object.keys(previous_Value_TO).reduce((total, k) => {
 		return total + (previous_Value_TO[k]?.prevTO_VALUE ? parseFloat(previous_Value_TO[k].prevTO_VALUE) : 0);
 		}, 0);
-		///
-	const tableauDeDonnees = useSelector<RootState, { [key: string]: string }[]>(
-		(state) => state.data.tableauDeDonnees
-		);
-	const handle_AddDDonnees = () => {
-        dispatch(DataAction.add_donnees({ key: "exampleKey", value: "exampleValue" }));
-		// dispatch(DataAction.change_CHECKBOX_STATE({ key: k, value: updatedCheckboxState[k] }));
-		};	
+	///
+	// const tableauDeDonnees = useSelector<RootState, { [key: string]: string }[]>(
+	// 	(state) => state.data.tableauDeDonnees
+	// 	);
+	// const handle_AddDDonnees = () => {
+    //     dispatch(DataAction.add_donnees({ key: "exampleKey", value: "exampleValue" }));
+	// 	// dispatch(DataAction.change_CHECKBOX_STATE({ key: k, value: updatedCheckboxState[k] }));
+	// 	};	
     const handle_UpdateDonnees = (index: number) => {
         dispatch(DataAction.update_donnees(index, { key: "updatedKey", value: "updatedValue" }));
     };
@@ -138,10 +140,11 @@ export default function Statistics() {
 		affectation.forEach((affectationItem) => {
 			const k = affectationItem.name as string;
 			if (k !== "stock") {
-				FromRedux_checkbox_Hold_State[k] ? 
-				handle_checkBOX_Change(k as string, FromRedux_checkbox_Hold_State[k]) 
-				: 
-				handle_checkBOX_Change(k as string, false);
+				// FromRedux_checkbox_Hold_State[k] ? 
+				// handle_checkBOX_Change(k as string, FromRedux_checkbox_Hold_State[k]) 
+				// : 
+				// handle_checkBOX_Change(k as string, false);
+				
 				}
 		});
 		firstRender = false;
@@ -370,6 +373,17 @@ export default function Statistics() {
 				{/* TT_T */}
 				<td style={{ textAlign: 'center' }}>{(totalCalesWeight + totalPreviousCalesWeight).toLocaleString("en-US")}</td>
 
+				{/*PREV_Q */}
+				<td style={{ textAlign: 'center',backgroundColor: 'gray' }}>{isNaN(totalPreviousCalesCount) ? 0 : totalPreviousCalesCount}</td>
+				{/*PREV_T */}
+				<td style={{ textAlign: 'center',backgroundColor: 'gray' }}>{isNaN(totalPreviousCalesWeight) ? 0 : totalPreviousCalesWeight.toLocaleString("en-US")}</td>
+
+
+				{/*TT_Q */}				
+				<td style={{ textAlign: 'center'}}>{(isNaN(totalCalesCount) ? 0 : totalCalesCount) + (isNaN(totalPreviousCalesCount) ? 0 : totalPreviousCalesCount)}</td>							
+				{/*TT_T */}					
+				<td style={{ textAlign: 'center'}}>{(isNaN(totalCalesWeight) ? 0 : totalCalesWeight) + (isNaN(totalPreviousCalesWeight) ? 0 : + totalPreviousCalesWeight).toLocaleString("en-US")}</td>
+				
 				</tr><tr>
 				</tr>
 			</tbody>

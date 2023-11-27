@@ -316,7 +316,7 @@ function cleanData(values: any): stepe_Data {
 
 function Main() {
 	const dispatch = useDispatch();
-	const loaded_catalog = useSelector<RootState, boolean>(state => state.data.loaded_catalog);
+	const loaded_catalog = useSelector<RootState, boolean>(state => state.data.loaded_catalog_status);
 	
 	const onDrop = useCallback((acceptedFiles: any) => {
 		
@@ -337,7 +337,7 @@ function Main() {
 
 		if (workbook.Sheets['winwin']){																// la feuille simplifiée existe
 				Sheet = workbook.Sheets['winwin'];
-				toast.info('SIMPLIFIED sheet', { position: toast.POSITION.TOP_RIGHT, autoClose: 5000 })
+				toast.info('LECTURE FEUILLE WiNWiN', { position: toast.POSITION.TOP_RIGHT, autoClose: 5000 })
 				// toast('🦄 Wow so easy!', {
 				// 	position: "top-right",
 				// 	autoClose: 5000,
@@ -362,7 +362,7 @@ function Main() {
 			// Sheet = workbook.Sheets[workbook.SheetNames[0]];
 			Sheet = CleanExcelSheet(workbook.Sheets[workbook.SheetNames[0]]);
 			// toast.error("Defined sheet doesn't exist", { position: toast.POSITION.TOP_RIGHT })
-			toast.info('first sheet default imported !', { position: toast.POSITION.TOP_RIGHT, autoClose: 1000 })
+			toast.info('Import 1ere Feuille !', { position: toast.POSITION.TOP_RIGHT, autoClose: 1000 })
 							
 		}
 		
