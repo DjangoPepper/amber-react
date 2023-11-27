@@ -99,24 +99,23 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
                     selectedPrepa: action.payload
                 }
             case DataAction.CHANGE_CHECKBOX_STATE:
-                // state.saved_HOLD_checkbox_state_status = false;
                 return {
                     ...state,
                     HOLD_checkbox_state: {
                         ...state.HOLD_checkbox_state,
                         ...action.payload,
+                        // [action.payload.destination]: action.payload.value
                     },
                 };
                 
-
 
             case DataAction.CHANGE_PREVIOUS_QTT:
                 return {
                     ...state,
                     HOLD_previous_QTT: {
                         ...state.HOLD_previous_QTT,
-                        // ...action.payload,
-                        [action.payload.destination]: action.payload.value
+                        // [action.payload.destination]: action.payload.value
+                        ...action.payload,
                     },
                 };
             case DataAction.CHANGE_PREVIOUS_TONS:

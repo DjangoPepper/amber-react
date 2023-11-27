@@ -58,30 +58,43 @@ export default function Statistics() {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		const handle_prevQT_VALUE_Change = (destination: string, value: string) => {
-			set_previous_Value_QT((previous_Value_QT) => ({
-				...previous_Value_QT,
-				[destination]: { 
-					prevQT_VALUE: value, 
-				},
-			}));
-			// let numericValue = parseFloat(value) || 0;
-			dispatch(DataAction.changePreviousQTT({ destination: destination, value: value }));
+const handle_checkbox_VALUE_Change = (destination: string, value: string) => {
+	set_checkbox_Hold_State((checkbox_Hold_State) => ({
+		...checkbox_Hold_State,
+		// [destination]: { 
+		// 	// checkbox_Hold_State: value, 
+		// },
+	}));
+
+	
+	// let numericValue = parseFloat(value) || 0;
+	dispatch(DataAction.changePreviousQTT({ destination: destination, value: value }));
+	};
+	
+	const handle_prevQT_VALUE_Change = (destination: string, value: string) => {
+		set_previous_Value_QT((previous_Value_QT) => ({
+			...previous_Value_QT,
+			[destination]: { 
+				prevQT_VALUE: value, 
+			},
+		}));
+		// let numericValue = parseFloat(value) || 0;
+		dispatch(DataAction.changePreviousQTT({ destination: destination, value: value }));
 		};
 
-		const handle_PrevTO_VALUE_Change = (destination: string, value: string) => {
-			set_previous_Value_TO((previous_Value_TO) => ({
-				...previous_Value_TO,
-				[destination]: { 
-					prevTO_VALUE: value,  
-				},
-			}));
-			// let numericValue = parseFloat(value) || 0;
-			dispatch(DataAction.changePreviousTONS({ destination: destination, value: value }));
-			};
-	
+	const handle_PrevTO_VALUE_Change = (destination: string, value: string) => {
+		set_previous_Value_TO((previous_Value_TO) => ({
+			...previous_Value_TO,
+			[destination]: { 
+				prevTO_VALUE: value,  
+			},
+		}));
+		// let numericValue = parseFloat(value) || 0;
+		dispatch(DataAction.changePreviousTONS({ destination: destination, value: value }));
+		};
 
-		const handle_maxiTO_Change = (destination: string, value: string) => {
+
+	const handle_maxiTO_Change = (destination: string, value: string) => {
 			// handle_maxiTO_Change(affectationItem.name, e.target.value)}
 			set_maxi_Values((maxi_Value_TO: any) => ({
 				...maxi_Value_TO,
@@ -89,9 +102,9 @@ export default function Statistics() {
 			}));
 			// const numericValue = parseFloat(value) || 0;
 			dispatch(DataAction.changeMaxiTONS({ destination: destination, value}));
-			};
+				};
 		
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////	
 
@@ -115,26 +128,26 @@ export default function Statistics() {
 		return total + (previous_Value_TO[k]?.prevTO_VALUE ? parseFloat(previous_Value_TO[k].prevTO_VALUE) : 0);
 		}, 0);
 
-	///
-	let firstRender = true;
-	function init_tally() {
-		affectation.forEach((affectationItem) => {
-			const k = affectationItem.name as string;
-			if (k !== "stock") {
+	// ///
+	// let firstRender = true;
+	// function init_tally() {
+	// 	affectation.forEach((affectationItem) => {
+	// 		const k = affectationItem.name as string;
+	// 		if (k !== "stock") {
 
 				
-				}
-		});
-		firstRender = false;
-	};
+	// 			}
+	// 	});
+	// 	firstRender = false;
+	// };
 
 
-	useEffect(() => {
-	if (firstRender) {
-		// init_tally();
-		toast.error('init Tally', { position: toast.POSITION.TOP_LEFT, autoClose: 500 });
-	}
-	}, [firstRender]);
+	// useEffect(() => {
+	// if (firstRender) {
+	// 	// init_tally();
+	// 	toast.error('init Tally', { position: toast.POSITION.TOP_LEFT, autoClose: 500 });
+	// }
+	// }, [firstRender]);
 
 	const statistics = catalog_data.reduce<any>((p, row) => {
 		if (!p[row.destination]) {
@@ -352,15 +365,15 @@ export default function Statistics() {
 				<td style={{ textAlign: 'center' }}>{(totalCalesWeight + totalPreviousCalesWeight).toLocaleString("en-US")}</td>
 
 				{/*PREV_Q */}
-				<td style={{ textAlign: 'center',backgroundColor: 'gray' }}>{isNaN(totalPreviousCalesCount) ? 0 : totalPreviousCalesCount}</td>
+				{/* <td style={{ textAlign: 'center',backgroundColor: 'gray' }}>{isNaN(totalPreviousCalesCount) ? 0 : totalPreviousCalesCount}</td> */}
 				{/*PREV_T */}
-				<td style={{ textAlign: 'center',backgroundColor: 'gray' }}>{isNaN(totalPreviousCalesWeight) ? 0 : totalPreviousCalesWeight.toLocaleString("en-US")}</td>
+				{/* <td style={{ textAlign: 'center',backgroundColor: 'gray' }}>{isNaN(totalPreviousCalesWeight) ? 0 : totalPreviousCalesWeight.toLocaleString("en-US")}</td> */}
 
 
 				{/*TT_Q */}				
-				<td style={{ textAlign: 'center'}}>{(isNaN(totalCalesCount) ? 0 : totalCalesCount) + (isNaN(totalPreviousCalesCount) ? 0 : totalPreviousCalesCount)}</td>							
+				{/* <td style={{ textAlign: 'center'}}>{(isNaN(totalCalesCount) ? 0 : totalCalesCount) + (isNaN(totalPreviousCalesCount) ? 0 : totalPreviousCalesCount)}</td>							 */}
 				{/*TT_T */}					
-				<td style={{ textAlign: 'center'}}>{(isNaN(totalCalesWeight) ? 0 : totalCalesWeight) + (isNaN(totalPreviousCalesWeight) ? 0 : + totalPreviousCalesWeight).toLocaleString("en-US")}</td>
+				{/* <td style={{ textAlign: 'center'}}>{(isNaN(totalCalesWeight) ? 0 : totalCalesWeight) + (isNaN(totalPreviousCalesWeight) ? 0 : + totalPreviousCalesWeight).toLocaleString("en-US")}</td> */}
 				
 				</tr><tr>
 				</tr>

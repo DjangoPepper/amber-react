@@ -14,7 +14,7 @@ import DataAction from "./stores/dataS/DataAction";
 import { toast } from 'react-toastify';
 
 
-let backupInterval = 90 * 1000; //30 * 1000 ms = 30s
+let backupInterval = 30 * 1000; //30 * 1000 ms = 30s
 // let firstRender = false;
 
 function init() {
@@ -32,7 +32,7 @@ function init() {
 		setInterval(() => {
 				store.dispatch(DataAction.save_catalog());
 				store.dispatch(DataAction.save_checkbox_state());
-				// store.dispatch(DataAction.save_previous_qtt());
+				store.dispatch(DataAction.save_previous_qtt());
 				// store.dispatch(DataAction.save_previous_tons());
 				// store.dispatch(DataAction.save_maxi_tons());
 
