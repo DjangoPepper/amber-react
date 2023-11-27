@@ -20,21 +20,23 @@ function init() {
 		
 		if(Init_data_catalog) {
 				store.dispatch(DataAction.load_catalog(Init_data_catalog));
+				store.dispatch(DataAction.load_previous_qtt(Init_data_catalog));
+				
 		}
 		setInterval(() => {
 				store.dispatch(DataAction.save_catalog());
+				store.dispatch(DataAction.save_previous_qtt());
+
 				
 				affectation.map((affectationItem) => {
 					const k = affectationItem.name;
 					if (k === "stock") {
 					} else {
-					// store.dispatch(DataAction.change_CHECKBOX_STATE({ key: k, value: false }));
-					// store.dispatch(DataAction.changePreviousQTT({ destination: k, value: 0 }));
-					// store.dispatch(DataAction.changePreviousTONS({ destination: k, value: 0 }));
-					// store.dispatch(DataAction.changeMaxiTONS({ destination: k, value: 1000 }));
+						// store.dispatch(DataAction.change_checkbox_state({ [k]: false }));
+						// store.dispatch(DataAction.load_checkbox_state)
 					}
 				});
-			// toast.info('AutoSave', { position: toast.POSITION.TOP_RIGHT, autoClose: 500 })
+			toast.info('AutoSave', { position: toast.POSITION.TOP_RIGHT, autoClose: 500 })
 		}, 
 		backupInterval);
 }

@@ -123,13 +123,13 @@ export default function Statistics() {
 		return total + (previous_Value_TO[k]?.prevTO_VALUE ? parseFloat(previous_Value_TO[k].prevTO_VALUE) : 0);
 		}, 0);
 		///
-	const tableauDeDonnees = useSelector<RootState, { [key: string]: string }[]>(
-		(state) => state.data.tableauDeDonnees
-		);
-	const handle_AddDDonnees = () => {
-        dispatch(DataAction.add_donnees({ key: "exampleKey", value: "exampleValue" }));
-		// dispatch(DataAction.change_CHECKBOX_STATE({ key: k, value: updatedCheckboxState[k] }));
-		};	
+	// const tableauDeDonnees = useSelector<RootState, { [key: string]: string }[]>(
+	// 	(state) => state.data.tableauDeDonnees
+	// 	);
+	// const handle_AddDDonnees = () => {
+    //     dispatch(DataAction.add_donnees({ key: "exampleKey", value: "exampleValue" }));
+	// 	// dispatch(DataAction.change_CHECKBOX_STATE({ key: k, value: updatedCheckboxState[k] }));
+	// 	};	
     const handle_UpdateDonnees = (index: number) => {
         dispatch(DataAction.update_donnees(index, { key: "updatedKey", value: "updatedValue" }));
     };

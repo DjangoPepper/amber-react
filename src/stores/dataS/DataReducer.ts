@@ -1,7 +1,7 @@
 import { AnyAction } from "redux";
 import DataAction from "./DataAction";
 import {Reducer} from "@reduxjs/toolkit";
-import { affectation, colors } from "../../utils/destination";
+import { colors } from "../../utils/destination";
 
 export type stepe_Data = {
     rank: number
@@ -25,13 +25,17 @@ interface DataState {
     HOLD_previous_TONS: { [destinbation: string]: string };
     HOLD_maxi_TONS:     { [destinbation: string]: string };
     
-    // loaded_previous_QTT: boolean;
-    // loaded_previous_TONS: boolean;
-    // loaded_maxi_TONS: boolean;
-    // saved_HOLD_previous_QTT: boolean;
-    // saved_HOLD_previous_TONS: boolean;
-    saved_HOLD_maxi_TONS: boolean;
-    tableauDeDonnees: { [destination: string]: string }[];
+    loaded_HOLD_checkbox_state_status: boolean;
+    loaded_HOLD_previous_QTT_status: boolean;
+    loaded_HOLD_previous_TONS_status: boolean;
+    loaded_HOLD_maxi_TONS_status: boolean;
+    
+    saved_HOLD_checkbox_state_status: boolean;
+    saved_HOLD_previous_QTT_status: boolean;
+    saved_HOLD_previous_TONS_status: boolean;
+    saved_HOLD_maxi_TONS_status: boolean;
+
+    // tableauDeDonnees: { [destination: string]: string }[];
 }
 
 const initialState: DataState = {
@@ -47,15 +51,17 @@ const initialState: DataState = {
     HOLD_previous_TONS: {}, 
     HOLD_maxi_TONS: {},
 
-    // loaded_checkbox_state: false,
-    // loaded_previous_QTT: false,
-    // loaded_previous_TONS: false,
-    // loaded_maxi_TONS: false,
-    // saved_HOLD_checkbox_state: false,
-    // saved_HOLD_previous_QTT: true,
-    // saved_HOLD_previous_TONS: true,
-    saved_HOLD_maxi_TONS: true,
-    tableauDeDonnees: [],
+    loaded_HOLD_checkbox_state_status: false,
+    loaded_HOLD_previous_QTT_status: false,
+    loaded_HOLD_previous_TONS_status: false,
+    loaded_HOLD_maxi_TONS_status: false,
+
+    saved_HOLD_checkbox_state_status: false,
+    saved_HOLD_previous_QTT_status: false,
+    saved_HOLD_previous_TONS_status: false,
+    saved_HOLD_maxi_TONS_status: false,
+
+    // tableauDeDonnees: [],
 };
 
 export const dataReducer: Reducer<DataState> = (state = initialState, action: AnyAction): DataState => {
@@ -128,13 +134,6 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
                         [action.payload.destination]: action.payload.value
                     },
                 };
-
-            /* case DataAction.CHANGE_MAXI_TONS:
-                return {
-                    ...state.HOLD_maxi_TONS,
-                    // HOLD_maxi_TONS: action.payload,
-                    [action.payload.destination]: action.payload.value
-                }; */
             case DataAction.CHANGE_CALE:
                 return {
                     ...state,
@@ -158,19 +157,20 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
                 }
             case DataAction.SAVE_CATALOG:
                 if(state.saved_catalog) return state;
-                console.log("saving catalog...");
+                // console.log("saving catalog...");
                 window.localStorage.setItem("data", JSON.stringify(state.catalog_data_state));
                 return {
                     ...state,
                     saved_catalog: false
                 }
             
-            case DataAction.SAVE_MAXIS:
-                if(state.saved_HOLD_maxi_TONS) return state;
+            case DataAction.SAVE_MAXI_TONS:
+                if(state.saved_HOLD_maxi_TONS_status) return state;
                 window.localStorage.setItem("maxi_TONS", JSON.stringify(state.HOLD_maxi_TONS));
                 return {
                     ...state,
-                    saved_HOLD_maxi_TONS: false
+                    saved_HOLD_maxi_TONS_status: false,
+                    loaded_HOLD_maxi_TONS_status: false
                 }
 
                 case DataAction.LOAD_CATALOG:
@@ -197,7 +197,7 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
                     // loaded_previous_TONS: true,
                     // saved_HOLD_previous_TONS: true,
                 };
-            case DataAction.LOAD_MAXIS:
+            case DataAction.LOAD_MAXI_TONS:
                 return {
                     ...state,
                     HOLD_maxi_TONS: action.payload,
@@ -209,28 +209,28 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
                     ...state,
                     loaded_catalog: false,
                 }
-            //
-            //
-            //
-            case DataAction.ADD_DONNEES:
-                return {
-                    ...state,
-                    catalog_data_state: {
-                        ...state.catalog_data_state,
-                        [action.payload.destination]: action.payload.value
-                    }
-                }
-                case DataAction.UPDATE_DONNEES:
-                    const { index, data } = action.payload;
-                    const updatedTableau = [...state.tableauDeDonnees];
-                    updatedTableau[index] = data;
-                    return {
-                        ...state,
-                        tableauDeDonnees: updatedTableau,
-                    };
-            //
-            //
-            //
+        //
+        //
+        //
+        //     case DataAction.ADD_DONNEES:
+        //         return {
+        //             ...state,
+        //             catalog_data_state: {
+        //                 ...state.catalog_data_state,
+        //                 [action.payload.destination]: action.payload.value
+        //             }
+        //         }
+        //     case DataAction.UPDATE_DONNEES:
+        //         const { index, data } = action.payload;
+        //         const updatedTableau = [...state.tableauDeDonnees];
+        //         updatedTableau[index] = data;
+        //         return {
+        //             ...state,
+        //             tableauDeDonnees: updatedTableau,
+        //         };
+        //     //
+        //     //
+        //     //
             default:
                 return state;
         }
