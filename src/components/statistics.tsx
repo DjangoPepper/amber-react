@@ -58,17 +58,8 @@ export default function Statistics() {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-const handle_checkbox_VALUE_Change = (destination: string, value: string) => {
-	set_checkbox_Hold_State((checkbox_Hold_State) => ({
-		...checkbox_Hold_State,
-		// [destination]: { 
-		// 	// checkbox_Hold_State: value, 
-		// },
-	}));
-
-	
-	// let numericValue = parseFloat(value) || 0;
-	dispatch(DataAction.changePreviousQTT({ destination: destination, value: value }));
+const handle_checkBOX_Change = (destination: string, value: boolean) => {
+	dispatch(DataAction.change_checkbox_state({ [destination]: value }));
 	};
 	
 	const handle_prevQT_VALUE_Change = (destination: string, value: string) => {
