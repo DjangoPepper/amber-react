@@ -28,9 +28,10 @@ export default function Statistics() {
 	const [Extended_Tally_Value, set_Extended_Tally_Value] = React.useState(false);
 
 	const [checkbox_Hold_State, set_checkbox_Hold_State] = useState<{ [key: string]: boolean }>({});	
-	const [maxi_Value_TO, set_maxi_Values] = useState<{ [key: string]: { maxi_To: string } }>({});
+	
 	const [previous_Value_QT, set_previous_Value_QT] = useState<{ [key: string]: { prevQT_VALUE: string } }>({});
 	const [previous_Value_TO, set_previous_Value_TO] = useState<{ [key: string]: { prevTO_VALUE: string } }>({});
+	const [maxi_Value_TO, set_maxi_Values] 			 = useState<{ [key: string]: { maxi_To: string      } }>({});
 
 	const selectedColors = useSelector<RootState, { [key: string]: string }>((state) => state.data.pickerColors);
 
@@ -57,27 +58,6 @@ export default function Statistics() {
 		dispatch(DataAction.change_checkbox_state({ [destination]: value }));
 		};
 
-
-	const handle_maxiTO_VALUE_Change = (k: string, value: string) => {
-		set_previous_Value_TO((previous_Value_TO) => ({
-			...previous_Value_TO,
-			[k]: { 
-					prevTO_VALUE: value,  
-			},
-		}));
-		let numericValue = parseFloat(value) || 0;
-		dispatch(DataAction.changePreviousTONS({ destination: k, value: numericValue }));
-		};		
-		const handle_maxiTO_Change = (k: string, value: string) => {
-			// handle_maxiTO_Change(affectationItem.name, e.target.value)}
-			set_maxi_Values((maxi_Value_TO: any) => ({
-				...maxi_Value_TO,
-				[k]: { maxi_To: value },
-			}));
-			const numericValue = parseFloat(value) || 0;
-			dispatch(DataAction.changeMaxiTONS({ destination: k, value: numericValue }));
-			};
-	
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -91,19 +71,32 @@ export default function Statistics() {
 			// let numericValue = parseFloat(value) || 0;
 			dispatch(DataAction.changePreviousQTT({ destination: destination, value: value }));
 		};
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+		const handle_PrevTO_VALUE_Change = (destination: string, value: string) => {
+			set_previous_Value_TO((previous_Value_TO) => ({
+				...previous_Value_TO,
+				[destination]: { 
+					prevTO_VALUE: value,  
+				},
+			}));
+			// let numericValue = parseFloat(value) || 0;
+			dispatch(DataAction.changePreviousTONS({ destination: destination, value: value }));
+			};
+	
+
+		const handle_maxiTO_Change = (destination: string, value: string) => {
+			// handle_maxiTO_Change(affectationItem.name, e.target.value)}
+			set_maxi_Values((maxi_Value_TO: any) => ({
+				...maxi_Value_TO,
+				[destination]: { maxi_To: value },
+			}));
+			// const numericValue = parseFloat(value) || 0;
+			dispatch(DataAction.changeMaxiTONS({ destination: destination, value}));
+			};
+		
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////	
-	const handle_PrevTO_VALUE_Change = (k: string, value: string) => {
-		set_previous_Value_TO((previous_Value_TO) => ({
-			...previous_Value_TO,
-			[k]: { 
-					prevTO_VALUE: value,  
-			},
-		}));
-		let numericValue = parseFloat(value) || 0;
-		dispatch(DataAction.changePreviousTONS({ destination: k, value: numericValue }));
-		};
 
 		const handle_Extended_Tally = () => {
 			set_Extended_Tally_Value((prevValue) => {
@@ -112,9 +105,7 @@ export default function Statistics() {
 			});
 		};
 	
-
-	
-		//
+//
 //
 	const catalog_data = useSelector<RootState, stepe_Data[]>((state) => state.data.catalog_data_state);
 //	

@@ -71,12 +71,12 @@ export default class DataAction {
 		return { type: DataAction.CHANGE_PREVIOUS_QTT, payload: changedqtt };
 	}
 	
-	public static changePreviousTONS(tons: { destination: string; value: number }): AnyAction {
-		return { type: DataAction.CHANGE_PREVIOUS_TONS, payload: tons };
+	public static changePreviousTONS(changetons: { [destination: string]: string }): AnyAction {
+		return { type: DataAction.CHANGE_PREVIOUS_TONS, payload: changetons };
 	}
 //////
-	public static changeMaxiTONS(maxi: { destination: string; value: number }): AnyAction {
-		return { type: DataAction.CHANGE_MAXI_TONS, payload: maxi };
+	public static changeMaxiTONS(changemaxi: { [destination: string]: string }): AnyAction {
+		return { type: DataAction.CHANGE_MAXI_TONS, payload: changemaxi };
 	}
 /////
 
