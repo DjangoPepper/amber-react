@@ -1,7 +1,8 @@
 import { AnyAction } from "redux";
 import DataAction from "./DataAction";
 import {Reducer} from "@reduxjs/toolkit";
-import { affectation, colors } from "../../utils/destination";
+// import { affectation, colors } from "../../utils/destination";
+import { colors } from "../../utils/destination";
 
 export type stepe_Data = {
     rank: number
@@ -124,9 +125,17 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
                 selectedCale: action.payload,
                 };
             case DataAction.CHANGE_MAXI_TONS:
+                // return {
+                //     ...state,
+                //     HOLD_maxi_TONS: action.payload,
+                // };
                 return {
                     ...state,
-                    HOLD_maxi_TONS: action.payload,
+                    HOLD_maxi_TONS: {
+                        ...state.HOLD_maxi_TONS,
+                        // ...action.payload,
+                        [action.payload.destination]: action.payload.value
+                    },
                 };
             case DataAction.CHANGE_ORIGINAL_POS:
                 return {
