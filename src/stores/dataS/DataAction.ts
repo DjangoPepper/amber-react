@@ -122,7 +122,7 @@ export default class DataAction {
 		return { type: DataAction.SAVE_MAXI_TONS };
 	}
 
-	public static load_catalog(data: string): AnyAction {
+	public static loaded_catalog_status(data: string): AnyAction {
 		return { type: DataAction.LOAD_CATALOG, payload: JSON.parse(data) };
 	}
 	

@@ -16,14 +16,14 @@ interface DataState {
     catalog_data_state: stepe_Data[];
     selectedCale: string;
     selectedPrepa: string;
-    loaded_catalog: boolean;
-    saved_catalog: boolean;
+    loaded_catalog_status: boolean;
+    saved_catalog_status: boolean;
     pickerColors: { [key: string]: string };
     
-    HOLD_checkbox_state: { [destination: string]: boolean };
+    HOLD_checkbox_state: { [destination:  string]: boolean };
     HOLD_previous_QTT:   { [destinbation: string]: string };
-    HOLD_previous_TONS: { [destinbation: string]: string };
-    HOLD_maxi_TONS:     { [destinbation: string]: string };
+    HOLD_previous_TONS:  { [destinbation: string]: string };
+    HOLD_maxi_TONS:      { [destinbation: string]: string };
     
     loaded_HOLD_checkbox_state_status: boolean;
     loaded_HOLD_previous_QTT_status: boolean;
@@ -42,8 +42,8 @@ const initialState: DataState = {
     catalog_data_state: [],
     selectedCale: "stock",
     selectedPrepa: "_",
-    loaded_catalog: false,
-    saved_catalog: true,
+    loaded_catalog_status: false,
+    saved_catalog_status: true,
     pickerColors: colors,
     
     HOLD_checkbox_state: {},
@@ -70,8 +70,8 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
                 return {
                     ...state,
                     catalog_data_state: action.payload,
-                    loaded_catalog: true,
-                    saved_catalog: false,
+                    loaded_catalog_status: true,
+                    saved_catalog_status: false,
                 };
             
             case DataAction.MOVE_ROW:
@@ -80,7 +80,7 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
                 return {
                     ...state,
                     catalog_data_state: [...state.catalog_data_state.filter(r => r.reference !== action.payload), {...d, destination: state.selectedCale}],
-                    saved_catalog: false,
+                    saved_catalog_status: false,
                 }
             case DataAction.UPDATE_ROW:
                 const currentRow = state.catalog_data_state.find(r => r.reference === action.payload.reference);
@@ -91,7 +91,7 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
                         ...state.catalog_data_state.filter(r => r.reference !== action.payload.reference),
                         {...currentRow, [action.payload.columnId]: action.payload.value}
                     ],
-                    saved_catalog: false,
+                    saved_catalog_status: false,
                 }
             case DataAction.CHANGE_PREPA:
                 return {
@@ -156,29 +156,48 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
                     pickerColors: action.payload,
                 }
             case DataAction.SAVE_CATALOG:
-                if(state.saved_catalog) return state;
+                if(state.saved_catalog_status) return state;
                 // console.log("saving catalog...");
                 window.localStorage.setItem("data", JSON.stringify(state.catalog_data_state));
                 return {
                     ...state,
-                    saved_catalog: false
+                    saved_catalog_status: false
                 }
-            
-            case DataAction.SAVE_MAXI_TONS:
-                if(state.saved_HOLD_maxi_TONS_status) return state;
-                window.localStorage.setItem("maxi_TONS", JSON.stringify(state.HOLD_maxi_TONS));
+            case DataAction.SAVE_CHECKBOX_STATE:
+                if(state.saved_HOLD_checkbox_state_status) return state;
+                window.localStorage.setItem("data", JSON.stringify(state.HOLD_checkbox_state));
                 return {
                     ...state,
-                    saved_HOLD_maxi_TONS_status: false,
-                    loaded_HOLD_maxi_TONS_status: false
+                    saved_HOLD_checkbox_state_status: false
+                }
+            case DataAction.SAVE_PREV_QTT:
+                if(state.saved_HOLD_previous_QTT_status) return state;
+                window.localStorage.setItem("data", JSON.stringify(state.HOLD_previous_QTT));
+                return {
+                    ...state,
+                    saved_HOLD_previous_QTT_status: false
+                }
+            case DataAction.SAVE_PREV_TONS:
+                if(state.saved_HOLD_previous_TONS_status) return state;
+                window.localStorage.setItem("data", JSON.stringify(state.HOLD_previous_TONS));
+                return {
+                    ...state,
+                    saved_HOLD_previous_TONS_status: false
+                }
+            case DataAction.SAVE_MAXI_TONS:
+                if(state.saved_HOLD_maxi_TONS_status) return state;
+                window.localStorage.setItem("data", JSON.stringify(state.HOLD_maxi_TONS));
+                return {
+                    ...state,
+                    saved_HOLD_maxi_TONS_status: false
                 }
 
                 case DataAction.LOAD_CATALOG:
                 return {
                     ...state,
                     catalog_data_state: action.payload,
-                    loaded_catalog: true,
-                    saved_catalog: true,
+                    loaded_catalog_status: true,
+                    saved_catalog_status: true,
                 }
                 case DataAction.LOAD_CHECKBOX_STATE:
                     return {
@@ -207,7 +226,7 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
             case DataAction.CLEAR:
                 return {
                     ...state,
-                    loaded_catalog: false,
+                    loaded_catalog_status: false,
                 }
         //
         //

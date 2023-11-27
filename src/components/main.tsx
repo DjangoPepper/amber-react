@@ -316,7 +316,7 @@ function cleanData(values: any): stepe_Data {
 
 function Main() {
 	const dispatch = useDispatch();
-	const loaded_catalog = useSelector<RootState, boolean>(state => state.data.loaded_catalog);
+	const loaded_catalog = useSelector<RootState, boolean>(state => state.data.loaded_catalog_status);
 	
 	const onDrop = useCallback((acceptedFiles: any) => {
 		
