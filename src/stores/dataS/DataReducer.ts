@@ -123,7 +123,7 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
                 return {
                     ...state,
                     HOLD_previous_TONS: {
-                        ...state.HOLD_previous_QTT,
+                        ...state.HOLD_previous_TONS,
                         // ...action.payload,
                         [action.payload.destination]: action.payload.value
                     },
