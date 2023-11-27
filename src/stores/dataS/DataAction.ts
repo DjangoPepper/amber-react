@@ -43,14 +43,6 @@ export default class DataAction {
 ////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////
 
-	public static add_donnees(nouvelles_donnees: { [destination: string]: string}): AnyAction {
-		return { type: DataAction.ADD_DONNEES, payload: nouvelles_donnees };
-	};
-	
-	public static update_donnees(index: number, maj_donnees: { [destination: string]: string}): AnyAction {
-		return { type: DataAction.UPDATE_DONNEES, payload: {index, maj_donnees }};
-	}
-
 	public static change_checkbox_state(changecheckboxstate: { [destination: string]: boolean }): AnyAction {
 		return { type: DataAction.CHANGE_CHECKBOX_STATE, payload: changecheckboxstate };
 	}
@@ -127,19 +119,19 @@ export default class DataAction {
 		return { type: DataAction.LOAD_CATALOG, payload: JSON.parse(data) };
 	}
 	
-	public static load_checkbox_state(loaded_data: string): AnyAction {
-		return { type: DataAction.LOAD_PREV_QTT, payload: JSON.parse(loaded_data) };
+	public static load_checkbox_state(data: string): AnyAction {
+		return { type: DataAction.LOAD_PREV_QTT, payload: JSON.parse(data) };
 	}
 	
-	public static load_previous_qtt(loaded_data: string): AnyAction {
-		return { type: DataAction.LOAD_PREV_QTT, payload: JSON.parse(loaded_data) };
+	public static load_previous_qtt(data: string): AnyAction {
+		return { type: DataAction.LOAD_PREV_QTT, payload: JSON.parse(data) };
 	}
-	public static load_previous_tons(loaded_data: string): AnyAction {
-		return { type: DataAction.LOAD_PREV_TONS, payload: JSON.parse(loaded_data) };
+	public static load_previous_tons(data: string): AnyAction {
+		return { type: DataAction.LOAD_PREV_TONS, payload: JSON.parse(data) };
 	}
 
-	public static load_maxi_tons(loaded_data: string): AnyAction {
-		return { type: DataAction.LOAD_MAXI_TONS , payload: JSON.parse(loaded_data) };
+	public static load_maxi_tons(data: string): AnyAction {
+		return { type: DataAction.LOAD_MAXI_TONS , payload: JSON.parse(data) };
 	}
 	
 	public static clear(): AnyAction {

@@ -221,15 +221,11 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
                 return {
                     ...state,
                     HOLD_previous_TONS: action.payload,
-                    // loaded_previous_TONS: true,
-                    // saved_HOLD_previous_TONS: true,
                 };
             case DataAction.LOAD_MAXI_TONS:
                 return {
                     ...state,
                     HOLD_maxi_TONS: action.payload,
-                    // loaded_maxi_TONS: true,
-                    // saved_HOLD_maxi_TONS: true,
                 }
             case DataAction.CLEAR:
                 return {
