@@ -25,6 +25,7 @@ export default class DataAction {
 	public static LOAD_CHECKBOX_STATE = "DataAction.LOAD_CHECKBOX_STATE";
 	public static LOAD_PREV_QTT = "DataAction.LOAD_PREV_QTT";
 	public static LOAD_PREV_TONS = "DataAction.LOAD_PREV_TONS";
+	public static LOAD_MAXI_TONS = "DataAction.LOAD_MAXI_TONS";
 
 	public static CHANGE_CHECKBOX_STATE = "DataAction.CHANGE_CHECKBOX_STATE";
 	public static CHANGE_PREVIOUS_QTT = "DataAction.CHANGE_PREVIOUS_QTT";
@@ -47,6 +48,9 @@ export default class DataAction {
 		return { type: DataAction.UPDATE_DONNEES, payload: {index, maj_donnees }};
 	}
 
+	public static load_checkbox_state(checkboxstate: { [destination: string]: boolean }): AnyAction {
+		return { type: DataAction.LOAD_PREV_QTT, payload: checkboxstate };
+	}
 	public static load_previous_qtt(qtt: { destination: string}): AnyAction {
 		return { type: DataAction.LOAD_PREV_QTT, payload: qtt };
 	}
@@ -59,17 +63,10 @@ export default class DataAction {
 		return { type: DataAction.LOAD_MAXIS, payload: maxi };
 	}
 	
-	public static load_checkbox_state(loadcheckboxstate: { [destination: string]: boolean }): AnyAction {
-		return { type: DataAction.LOAD_MAXIS, payload: loadcheckboxstate };
-	}
-	
 	public static change_checkbox_state(changecheckboxstate: { [destination: string]: boolean }): AnyAction {
 		return { type: DataAction.CHANGE_CHECKBOX_STATE, payload: changecheckboxstate };
 	}
-	// public static change_CHECKBOX_STATE(index: string, maj_donnees: { [destination: string]: string}): AnyAction {
-	// 	return { type: DataAction.UPDATE_DONNEES, payload: {index, maj_donnees }};
-	// }
-	// public static changePreviousQTT(qtt: { destination: string; value: number }): AnyAction {
+
 	public static changePreviousQTT(qtt: { destination: string; value: number }): AnyAction {
 		return { type: DataAction.CHANGE_PREVIOUS_QTT, payload: qtt };
 	}

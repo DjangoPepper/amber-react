@@ -22,13 +22,8 @@ interface DataState {
     
     HOLD_checkbox_state: { [destination: string]: boolean };
     HOLD_previous_QTT: { [key: string]: string };
-    // HOLD_previous_QTT: { [destination: string]: boolean };
     HOLD_previous_TONS: { [key: string]: string };
-    
-    HOLD_maxi_TONS: { [key: string]: string };
-    
-    // HOLD_checkbox_state: {[key: string]: boolean}[];
-    // HOLD_checkbox_state: { [key: string]: boolean };
+    HOLD_maxi_TONS:     { [key: string]: string };
     
     // loaded_previous_QTT: boolean;
     // loaded_previous_TONS: boolean;
