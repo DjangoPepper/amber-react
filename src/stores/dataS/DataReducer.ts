@@ -13,7 +13,7 @@ export type stepe_Data = {
 }
 
 interface DataState {
-    Interfaced_data_state: stepe_Data[];
+    catalog_data_state: stepe_Data[];
     selectedCale: string;
     selectedPrepa: string;
     loaded_catalog: boolean;
@@ -35,7 +35,7 @@ interface DataState {
 }
 
 const initialState: DataState = {
-    Interfaced_data_state: [],
+    catalog_data_state: [],
     selectedCale: "stock",
     selectedPrepa: "_",
     loaded_catalog: false,
@@ -63,26 +63,26 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
             case DataAction.IMPORT_DATA:
                 return {
                     ...state,
-                    Interfaced_data_state: action.payload,
+                    catalog_data_state: action.payload,
                     loaded_catalog: true,
                     saved_catalog: false,
                 };
             
             case DataAction.MOVE_ROW:
-                const d = state.Interfaced_data_state.find(r => r.reference === action.payload);
+                const d = state.catalog_data_state.find(r => r.reference === action.payload);
                 if(!d) return state;
                 return {
                     ...state,
-                    Interfaced_data_state: [...state.Interfaced_data_state.filter(r => r.reference !== action.payload), {...d, destination: state.selectedCale}],
+                    catalog_data_state: [...state.catalog_data_state.filter(r => r.reference !== action.payload), {...d, destination: state.selectedCale}],
                     saved_catalog: false,
                 }
             case DataAction.UPDATE_ROW:
-                const currentRow = state.Interfaced_data_state.find(r => r.reference === action.payload.reference);
+                const currentRow = state.catalog_data_state.find(r => r.reference === action.payload.reference);
                 if(!currentRow) return state;
                 return {
                     ...state,
-                    Interfaced_data_state: [
-                        ...state.Interfaced_data_state.filter(r => r.reference !== action.payload.reference),
+                    catalog_data_state: [
+                        ...state.catalog_data_state.filter(r => r.reference !== action.payload.reference),
                         {...currentRow, [action.payload.columnId]: action.payload.value}
                     ],
                     saved_catalog: false,
@@ -94,17 +94,26 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
                 }
             case DataAction.CHANGE_CHECKBOX_STATE:
                 return {
-                ...state,
-                HOLD_checkbox_state: {
-                    ...state.HOLD_checkbox_state,
-                    ...action.payload,
-                },
+                    ...state,
+                    HOLD_checkbox_state: {
+                        ...state.HOLD_checkbox_state,
+                        ...action.payload,
+                    },
                 };
 
-            case DataAction.CHANGE_PREVIOUS_QTT:
+/*             case DataAction.CHANGE_PREVIOUS_QTT:
                 return {
                 ...state,
                 HOLD_previous_QTT: action.payload,
+                }; */
+            case DataAction.CHANGE_PREVIOUS_QTT:
+                return {
+                    ...state,
+                    HOLD_previous_QTT: {
+                        ...state.HOLD_previous_QTT,
+                        // ...action.payload,
+                        [action.payload.destination]: action.payload.value
+                    },
                 };
             case DataAction.CHANGE_PREVIOUS_TONS:
                 return {
@@ -139,7 +148,7 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
             case DataAction.SAVE_CATALOG:
                 if(state.saved_catalog) return state;
                 console.log("saving catalog...");
-                window.localStorage.setItem("data", JSON.stringify(state.Interfaced_data_state));
+                window.localStorage.setItem("data", JSON.stringify(state.catalog_data_state));
                 return {
                     ...state,
                     saved_catalog: false
@@ -156,7 +165,7 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
                 case DataAction.LOAD_CATALOG:
                 return {
                     ...state,
-                    Interfaced_data_state: action.payload,
+                    catalog_data_state: action.payload,
                     loaded_catalog: true,
                     saved_catalog: true,
                 }
@@ -195,8 +204,8 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
             case DataAction.ADD_DONNEES:
                 return {
                     ...state,
-                    Interfaced_data_state: {
-                        ...state.Interfaced_data_state,
+                    catalog_data_state: {
+                        ...state.catalog_data_state,
                         [action.payload.destination]: action.payload.value
                     }
                 }

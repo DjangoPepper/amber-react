@@ -189,7 +189,7 @@ export default function DataTable() {
     const [sorting, setSorting] = React.useState<SortingState>([]);
     const [globalFilter, setGlobalFilter] = React.useState('')
     const cale = useSelector<RootState, string>(state => state.data.selectedCale);
-    const data = useSelector<RootState, stepe_Data[]>(state => state.data.Interfaced_data_state);
+    const data = useSelector<RootState, stepe_Data[]>(state => state.data.catalog_data_state);
     const columns = useColumns();
     
     const table = useReactTable({

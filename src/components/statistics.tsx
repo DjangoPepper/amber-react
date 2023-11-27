@@ -116,7 +116,7 @@ export default function Statistics() {
 	
 		//
 //
-	const catalog_data = useSelector<RootState, stepe_Data[]>((state) => state.data.Interfaced_data_state);
+	const catalog_data = useSelector<RootState, stepe_Data[]>((state) => state.data.catalog_data_state);
 //	
 
 	const FromRedux_checkbox_Hold_State = useSelector<RootState, {[key: string]: boolean}>((state) => state.data.HOLD_checkbox_state);
