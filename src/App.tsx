@@ -15,7 +15,8 @@ let backupInterval = 60 * 1000; //30 * 1000 ms = 30s
 
 function init() {
 		
-	const Init_data_catalog = window.localStorage.getItem("data");
+	// const Init_data_catalog = window.localStorage.getItem("data");
+	const Init_data_catalog = window.localStorage.getItem("CATALOG_data_storage");
 		
 		if(Init_data_catalog) {
 				store.dispatch(DataAction.load_catalog(Init_data_catalog));

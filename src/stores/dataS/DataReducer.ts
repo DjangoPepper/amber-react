@@ -161,7 +161,7 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
 //
             case DataAction.SAVE_CATALOG:
                 // if(state.saved_catalog) return state;
-                console.log("saving catalog...");
+                // console.log("saving catalog...");
                 window.localStorage.setItem("CATALOG_data_storage", JSON.stringify(state.catalog_data_state));
                 return {
                     ...state,
