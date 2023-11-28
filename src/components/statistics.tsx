@@ -128,9 +128,9 @@ export default function Statistics() {
 		affectation.forEach((affectationItem) => {
 			const k = affectationItem.name as string;
 			if (k !== "stock") {
-				FromRedux_checkbox_Hold_State[k] ? 
-				handle_checkBOX_Change(k as string, FromRedux_checkbox_Hold_State[k]) 
-				: 
+				// FromRedux_checkbox_Hold_State[k] ? 
+				// handle_checkBOX_Change(k as string, FromRedux_checkbox_Hold_State[k]) 
+				// : 
 				handle_checkBOX_Change(k as string, false);
 				}
 		});

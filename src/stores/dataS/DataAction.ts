@@ -124,7 +124,14 @@ export default class DataAction {
 		return { type: DataAction.SAVE_CHECKBOX_STATE };
 	}
 
-	public static save_maxis(): AnyAction {
+	public static save_previous_qtt(): AnyAction {
+		return { type: DataAction.SAVE_PREV_QTT };
+	}
+
+	public static save_previous_tons(): AnyAction {
+		return { type: DataAction.SAVE_PREV_TONS };
+	}
+	public static save_maxi_tons(): AnyAction {
 		return { type: DataAction.SAVE_MAXI_TONS };
 	}
 

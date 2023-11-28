@@ -22,7 +22,12 @@ function init() {
 		}
 		setInterval(() => {
 				store.dispatch(DataAction.save_catalog());
-				
+				store.dispatch(DataAction.save_checkbox_state());
+				store.dispatch(DataAction.save_previous_qtt());
+				store.dispatch(DataAction.save_previous_tons());
+				store.dispatch(DataAction.save_maxi_tons());
+
+
 				// affectation.map((affectationItem) => {
 				// 	const k = affectationItem.name;
 				// 	if (k === "stock") {
@@ -33,7 +38,7 @@ function init() {
 				// 	// store.dispatch(DataAction.changeMaxiTONS({ destination: k, value: 1000 }));
 				// 	}
 				// });
-			// toast.info('AutoSave', { position: toast.POSITION.TOP_RIGHT, autoClose: 500 })
+			toast.info('AutoSave', { position: toast.POSITION.TOP_RIGHT, autoClose: 500 })
 		}, 
 		backupInterval);
 }
