@@ -26,32 +26,45 @@ function init() {
 		if(Init_data_catalog) {
 				store.dispatch(DataAction.load_catalog(Init_data_catalog));
 			}
+/* 
+		// if(Init_data_CHECKBOX_STATE) {
+		// 		store.dispatch(DataAction.load_checkbox_state(JSON.parse(Init_data_CHECKBOX_STATE)));
+		// 		// store.dispatch(DataAction.change_checkbox_state());
+		// }
+*/
+		if (Init_data_STRING_CHECKBOX_STATE) {
+			const parsedStringCheckboxState = JSON.parse(Init_data_STRING_CHECKBOX_STATE);
+			//
+			store.dispatch(DataAction.change_checkbox_state(parsedStringCheckboxState));
+		}
 
 		if(Init_data_CHECKBOX_STATE) {
-				store.dispatch(DataAction.load_checkbox_state(JSON.parse(Init_data_CHECKBOX_STATE)));
-		}
-		if(Init_data_STRING_CHECKBOX_STATE) {
-				store.dispatch(DataAction.load_checkbox_state(JSON.parse(Init_data_STRING_CHECKBOX_STATE)));
+				const parsedCheckboxState = JSON.parse(Init_data_CHECKBOX_STATE);
+				// store.dispatch(DataAction.load_checkbox_state(JSON.parse(Init_data_CHECKBOX_STATE)));
+				store.dispatch(DataAction.change_checkbox_state(JSON.parse(Init_data_CHECKBOX_STATE)));
 		}
 		if(Init_data_PREV_QTT) {
-				store.dispatch(DataAction.load_previous_qtt(JSON.parse(Init_data_PREV_QTT)));
+				const parsedPrev_QTT = JSON.parse(Init_data_PREV_QTT);
+				// store.dispatch(DataAction.load_previous_qtt(JSON.parse(Init_data_PREV_QTT)));
+				store.dispatch(DataAction.changePreviousQTT(JSON.parse(parsedPrev_QTT)));
 		}
 		if(Init_data_PREV_TONS) {
-				store.dispatch(DataAction.load_previous_tons(JSON.parse(Init_data_PREV_TONS)));
+			const parsedPrev_TONS = JSON.parse(Init_data_PREV_TONS);
+				// store.dispatch(DataAction.load_previous_tons(JSON.parse(Init_data_PREV_TONS)));
+			store.dispatch(DataAction.changePreviousTONS(JSON.parse(parsedPrev_TONS)));
 		}
 		if(Init_data_MAXI) {
-				store.dispatch(DataAction.load_maxi_tons(JSON.parse(Init_data_MAXI)));
+			const parsedMaxi = JSON.parse(Init_data_MAXI); 
+				// store.dispatch(DataAction.load_maxi_tons(JSON.parse(Init_data_MAXI)));
+			store.dispatch(DataAction.changeMaxiTONS(JSON.parse(parsedMaxi)));
 		} 
 		// else {
-		// 		// store.dispatch(DataAction.load_checkbox_state(Init_data_CHECKBOX_STATE));
-		// 		// store.dispatch(DataAction.load_previous_qtt(Init_data_PREV_QTT));
-		// 		// store.dispatch(DataAction.load_previous_tons(Init_data_PREV_TONS));
 		// 		// store.dispatch(DataAction.load_maxi_tons(Init_data_MAXI));	
 
 		// }
 		setInterval(() => {
 				store.dispatch(DataAction.save_catalog());
-				store.dispatch(DataAction.save_checkbox_state()); //avec checkbox fait planter le navigateur
+				store.dispatch(DataAction.save_checkbox_state()); //avec checkbox fait planter le navigateur ?
 				store.dispatch(DataAction.save_string_checkbox_state()); 
 
 				store.dispatch(DataAction.save_previous_qtt());
