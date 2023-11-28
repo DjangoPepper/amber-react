@@ -1,9 +1,9 @@
 import {read, utils} from "xlsx";
 import {stepe_Data} from "../stores/dataS/DataReducer";
-import { toast, ToastContainer } from 'react-toastify';
+import { toast} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import "./fonctionsAdd";
-import { parse } from "path";
+// import { parse } from "path";
 
 
 export function CleanExcelSheet(oSheet: any): stepe_Data {
@@ -11,7 +11,7 @@ export function CleanExcelSheet(oSheet: any): stepe_Data {
 	// Recuperation du range de la feuille
 	let rangeInfo = PowerRanger(oSheet)
 	
-	toast.info('organizing current sheet', { position: toast.POSITION.TOP_RIGHT })// la feuille Bobines existe
+	toast.info('Simplification de feuille', { position: toast.POSITION.TOP_RIGHT, autoClose: 2000 })// la feuille Bobines existe
 
 	// effacement des fusions
 	deleteExcelMergesInfos(oSheet);

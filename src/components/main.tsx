@@ -14,7 +14,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 
 function CleanExcelSheet(oSheet: any): stepe_Data {
-	toast.info('organizing current sheet', { position: toast.POSITION.TOP_RIGHT })// la feuille Bobines existe
+	toast.info('Nettoyage de la feuille', { position: toast.POSITION.TOP_RIGHT, autoClose: 2000 })// la feuille Bobines existe
 			
 			// effacement des cellules fusionnées
 			deleteExcelMergesInfos(oSheet);
@@ -337,7 +337,7 @@ function Main() {
 
 		if (workbook.Sheets['winwin']){																// la feuille simplifiée existe
 				Sheet = workbook.Sheets['winwin'];
-				toast.info('SIMPLIFIED sheet', { position: toast.POSITION.TOP_RIGHT, autoClose: 5000 })
+				toast.info('feuille simplifié trouvée', { position: toast.POSITION.TOP_RIGHT, autoClose: 5000 })
 				// toast('🦄 Wow so easy!', {
 				// 	position: "top-right",
 				// 	autoClose: 5000,
@@ -352,17 +352,16 @@ function Main() {
 		} 
 		else if (workbook.Sheets['Bobines']){
 			Sheet = CleanExcelSheet(workbook.Sheets['Bobines']);
-			toast.info('Bobines sheet find', { position: toast.POSITION.TOP_RIGHT })
+			toast.info('Utilisation feuille Bobines', { position: toast.POSITION.TOP_RIGHT })
 		}
 		else if (workbook.Sheets['Brames']){
 			Sheet = CleanExcelSheet(workbook.Sheets['Brames']);
-			toast.info('Brames sheet find', { position: toast.POSITION.TOP_RIGHT })
+			toast.info('Utilisation feuille Brames', { position: toast.POSITION.TOP_RIGHT })
 		}
 		else {
 			// Sheet = workbook.Sheets[workbook.SheetNames[0]];
 			Sheet = CleanExcelSheet(workbook.Sheets[workbook.SheetNames[0]]);
-			// toast.error("Defined sheet doesn't exist", { position: toast.POSITION.TOP_RIGHT })
-			toast.info('first sheet default imported !', { position: toast.POSITION.TOP_RIGHT, autoClose: 1000 })
+			toast.info('Utilisation 1ere feuille par defaut', { position: toast.POSITION.TOP_RIGHT, autoClose: 1000 })
 							
 		}
 		
@@ -372,7 +371,7 @@ function Main() {
 		dispatch(DataAction.importData(utils.sheet_to_json(Sheet).map(cleanData)));
 		// dispatch(DataAction.importData(utils.sheet_to_json(sheet).map(cleanData)));
 		// dispatch(DataAction.importData(utils.sheet_to_json(selectedSheet).map(cleanData)));
-			// // dispatch(DataAction.moveRow(row.original.reference)); //je change la detination de ref cale1,cale2, etc..
+		// dispatch(DataAction.moveRow(row.original.reference)); //je change la detination de ref cale1,cale2, etc..
 		dispatch(DataAction.changeOriginalpos("stock"));
 		// toast.success('catalog stepe_Data imported', { position: toast.POSITION.TOP_RIGHT })
 	};

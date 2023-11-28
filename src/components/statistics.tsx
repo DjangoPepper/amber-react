@@ -27,11 +27,12 @@ export default function Statistics() {
 	const dispatch = useDispatch();	
 	const [Extended_Tally_Value, set_Extended_Tally_Value] = React.useState(false);
 
-	const [checkbox_Hold_State, set_checkbox_Hold_State] = useState<{ [key: string]: boolean }>({});	
-	const [maxi_Value_TO, set_maxi_Values] 				 = useState<{ [key: string]: { maxiTO_VALUE: string } }>({});
-	const [previous_Value_QT, set_previous_Value_QT] 	 = useState<{ [key: string]: { prevQT_VALUE: string } }>({});
-	const [previous_Value_TO, set_previous_Value_TO] 	 = useState<{ [key: string]: { prevTO_VALUE: string } }>({});
-
+	const [checkbox_Hold_State, set_checkbox_Hold_State] 				= useState<{ [key: string]: boolean }>({});	
+	const [string_checkbox_Hold_State, set_string_checkbox_Hold_State]	= useState<{ [key: string]: { chckBX_VALUE: string } }>({});
+	const [previous_Value_QT, set_previous_Value_QT]					= useState<{ [key: string]: { prevQT_VALUE: string } }>({});
+	const [previous_Value_TO, set_previous_Value_TO]					= useState<{ [key: string]: { prevTO_VALUE: string } }>({});
+	const [maxi_Value_TO, set_maxi_Values]								= useState<{ [key: string]: { maxiTO_VALUE: string } }>({});
+	
 	const selectedColors = useSelector<RootState, { [key: string]: string }>((state) => state.data.pickerColors);
 
 	const Toggle_checkbox_boolean = (k: string) => {
@@ -54,6 +55,17 @@ export default function Statistics() {
 		dispatch(DataAction.change_checkbox_state({ [k]: updatedCheckboxState[k] }));
 		};
 	
+		const handle_string_checkBOX_Change = (destination: string, value: string) => {
+			set_string_checkbox_Hold_State((string_checkbox_Hold_State) => ({
+				...string_checkbox_Hold_State,
+				[destination]: { 
+					chckBX_VALUE: value, 
+				},
+			}));
+			// let numericValue = parseFloat(value) || 0;
+			dispatch(DataAction.change_string_checkbox_state({ destination: destination, value: value }));
+		};
+
 	const handle_checkBOX_Change = (destination: string, value: boolean) => {
 		set_checkbox_Hold_State((checkbox_Hold_State) => ({
 			...checkbox_Hold_State,

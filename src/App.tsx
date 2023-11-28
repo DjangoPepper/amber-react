@@ -18,6 +18,7 @@ function init() {
 	// const Init_data_catalog = window.localStorage.getItem("data");
 	const Init_data_catalog = window.localStorage.getItem("CATALOG_data_storage");
 	const Init_data_CHECKBOX_STATE = window.localStorage.getItem("CHECKBOX_STATE_data_storage");
+	const Init_data_STRING_CHECKBOX_STATE = window.localStorage.getItem("STRING_CHECKBOX_STATE_data_storage");
 	const Init_data_PREV_QTT = window.localStorage.getItem("PREV_QTT_data_storage");
 	const Init_data_PREV_TONS = window.localStorage.getItem("PREV_TONS_data_storage");
 	const Init_data_MAXI = window.localStorage.getItem("MAXI_data_storage");
@@ -28,6 +29,9 @@ function init() {
 
 		if(Init_data_CHECKBOX_STATE) {
 				store.dispatch(DataAction.load_checkbox_state(JSON.parse(Init_data_CHECKBOX_STATE)));
+		}
+		if(Init_data_STRING_CHECKBOX_STATE) {
+				store.dispatch(DataAction.load_checkbox_state(JSON.parse(Init_data_STRING_CHECKBOX_STATE)));
 		}
 		if(Init_data_PREV_QTT) {
 				store.dispatch(DataAction.load_previous_qtt(JSON.parse(Init_data_PREV_QTT)));
@@ -47,7 +51,9 @@ function init() {
 		// }
 		setInterval(() => {
 				store.dispatch(DataAction.save_catalog());
-				// store.dispatch(DataAction.save_checkbox_state()); //savec checkbox fait planter le navigateur
+				store.dispatch(DataAction.save_checkbox_state()); //avec checkbox fait planter le navigateur
+				store.dispatch(DataAction.save_string_checkbox_state()); 
+
 				store.dispatch(DataAction.save_previous_qtt());
 				store.dispatch(DataAction.save_previous_tons());
 				store.dispatch(DataAction.save_maxi_tons());

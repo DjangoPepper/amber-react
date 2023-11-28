@@ -166,27 +166,27 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
                 return {
                     ...state,
                     saved_catalog: false
-                }
+                };
             case DataAction.SAVE_CHECKBOX_STATE:
                 // if(state.saved_HOLD_checkbox_state) return state;
                 window.localStorage.setItem("CHECKBOX_data_storage", JSON.stringify(state.HOLD_checkbox_state));
                 return {
                     ...state,
-                    // saved_HOLD_checkbox_state: false
-                }
+                    saved_HOLD_checkbox_state: false
+                };
             case DataAction.SAVE_PREV_QTT:
                 // if(state.saved_HOLD_previous_QTT) return state;
                 window.localStorage.setItem("PREV_QTT_data_storage", JSON.stringify(state.HOLD_previous_QTT));
                 return {
                     ...state,
-                    // saved_HOLD_previous_QTT: false
+                    saved_HOLD_previous_QTT: false
                 }
             case DataAction.SAVE_PREV_TONS:
                 // if(state.saved_HOLD_previous_TONS) return state;
                 window.localStorage.setItem("PREV_TONS_data_storage", JSON.stringify(state.HOLD_previous_TONS));
                 return {
                     ...state,
-                    // saved_HOLD_previous_TONS: false
+                    saved_HOLD_previous_TONS: false
                 }
             case DataAction.SAVE_MAXI_TONS:
                 // if(state.saved_HOLD_maxi_TONS) return state;
