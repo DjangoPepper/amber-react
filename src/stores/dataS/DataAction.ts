@@ -62,7 +62,7 @@ export default class DataAction {
 		return { type: DataAction.LOAD_PREV_TONS, payload: newtons };
 	}
 	
-	public static load_maxis(newmaxi: { [destination: string]: number }): AnyAction {
+	public static load_maxi_tons(newmaxi: { [destination: string]: number }): AnyAction {
 		return { type: DataAction.LOAD_MAXI_TONS, payload: newmaxi };
 	}
 	

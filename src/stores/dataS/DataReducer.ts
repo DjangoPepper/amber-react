@@ -201,31 +201,35 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
                     ...state,
                     catalog_data_state: action.payload,
                     loaded_catalog: true,
-                    saved_catalog: true,
+                    saved_catalog: false,
                 }
             case DataAction.LOAD_CHECKBOX_STATE:
                 return {
                     ...state,
                     HOLD_checkbox_state: action.payload,
+                    loaded_checkbox_state: true,
+                    saved_HOLD_checkbox_state: false,
                 };
             case DataAction.LOAD_PREV_QTT:
                 return {
                     ...state,
                     HOLD_previous_QTT: action.payload,
+                    loaded_previous_QTT: true,
+                    saved_HOLD_previous_QTT: false,
                 };
             case DataAction.LOAD_PREV_TONS:
                 return {
                     ...state,
                     HOLD_previous_TONS: action.payload,
-                    // loaded_previous_TONS: true,
-                    // saved_HOLD_previous_TONS: true,
+                    loaded_previous_TONS: true,
+                    saved_HOLD_previous_TONS: false,
                 };
             case DataAction.LOAD_MAXI_TONS:
                 return {
                     ...state,
                     HOLD_maxi_TONS: action.payload,
-                    // loaded_maxi_TONS: true,
-                    // saved_HOLD_maxi_TONS: true,
+                    loaded_maxi_TONS: true,
+                    saved_HOLD_maxi_TONS: false,
                 }
 //
 //
