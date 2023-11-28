@@ -19,10 +19,15 @@ function init() {
 		
 		if(Init_data_catalog) {
 				store.dispatch(DataAction.load_catalog(Init_data_catalog));
+				// store.dispatch(DataAction.load_checkbox_state());
+				// store.dispatch(DataAction.load_previous_qtt());
+				// store.dispatch(DataAction.load_previous_tons());
+				// store.dispatch(DataAction.load_maxi_tons());	
+
 		}
 		setInterval(() => {
 				store.dispatch(DataAction.save_catalog());
-				store.dispatch(DataAction.save_checkbox_state());
+				// store.dispatch(DataAction.save_checkbox_state()); //savec checkbox fait planter le navigateur
 				store.dispatch(DataAction.save_previous_qtt());
 				store.dispatch(DataAction.save_previous_tons());
 				store.dispatch(DataAction.save_maxi_tons());
@@ -38,7 +43,7 @@ function init() {
 				// 	// store.dispatch(DataAction.changeMaxiTONS({ destination: k, value: 1000 }));
 				// 	}
 				// });
-			toast.info('AutoSave', { position: toast.POSITION.TOP_RIGHT, autoClose: 500 })
+			toast.warning('AutoSave', { position: toast.POSITION.BOTTOM_LEFT, autoClose: 500 })
 		}, 
 		backupInterval);
 }
