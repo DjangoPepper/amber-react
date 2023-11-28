@@ -21,11 +21,10 @@ function init() {
 	const Init_data_PREV_QTT = window.localStorage.getItem("PREV_QTT_data_storage");
 	const Init_data_PREV_TONS = window.localStorage.getItem("PREV_TONS_data_storage");
 	const Init_data_MAXI = window.localStorage.getItem("MAXI_data_storage");
-	
-		
+
 		if(Init_data_catalog) {
 				store.dispatch(DataAction.load_catalog(Init_data_catalog));
-		}
+			}
 
 		if(Init_data_CHECKBOX_STATE) {
 				store.dispatch(DataAction.load_checkbox_state(JSON.parse(Init_data_CHECKBOX_STATE)));
