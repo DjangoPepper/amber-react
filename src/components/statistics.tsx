@@ -45,7 +45,8 @@ export default function Statistics() {
 			updatedCheckboxState[k] = !updatedCheckboxState[k];
 		} else {
 		  // Si la destination n'est pas dans l'état, ajoutez-la et définissez-la comme cochée (true)
-			updatedCheckboxState[k] = true;
+			// updatedCheckboxState[k] = true;
+			updatedCheckboxState[k] = false;
 		}
 		// Mettez à jour l'état des cases à cocher avec la nouvelle valeur
 		set_checkbox_Hold_State(updatedCheckboxState);
@@ -54,6 +55,10 @@ export default function Statistics() {
 		};
 	
 	const handle_checkBOX_Change = (destination: string, value: boolean) => {
+		set_checkbox_Hold_State((checkbox_Hold_State) => ({
+			...checkbox_Hold_State,
+			[destination]: value,
+		}));
 		dispatch(DataAction.change_checkbox_state({ [destination]: value }));
 		};
 
@@ -96,7 +101,7 @@ export default function Statistics() {
 		});
 	};
 
-		const catalog_data = useSelector<RootState, stepe_Data[]>((state) => state.data.catalog_data_state);
+	const catalog_data = useSelector<RootState, stepe_Data[]>((state) => state.data.catalog_data_state);
 
 	const FromRedux_checkbox_Hold_State = useSelector<RootState, {[key: string]: boolean}>((state) => state.data.HOLD_checkbox_state);
 	// const FromRedux_previousQT 			= useSelector<RootState, {[key: string]: string }>((state) => state.data.HOLD_previous_QTT);
@@ -131,7 +136,8 @@ export default function Statistics() {
 				// FromRedux_checkbox_Hold_State[k] ? 
 				// handle_checkBOX_Change(k as string, FromRedux_checkbox_Hold_State[k]) 
 				// : 
-				handle_checkBOX_Change(k as string, false);
+				// handle_checkBOX_Change(k, false);
+				Toggle_checkbox_boolean(k);
 				}
 		});
 		firstRender = false;
