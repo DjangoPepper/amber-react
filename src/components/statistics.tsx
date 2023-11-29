@@ -65,6 +65,7 @@ export default function Statistics() {
 			}));
 			// let numericValue = parseFloat(value) || 0;
 			dispatch(DataAction.change_string_checkbox_state({ destination: destination, value: value }));
+			dispatch(DataAction.save_string_checkbox_state());
 		};
 
 	const handle_checkBOX_Change = (destination: string, value: boolean) => {
@@ -73,20 +74,36 @@ export default function Statistics() {
 			[destination]: value,
 		}));
 		dispatch(DataAction.change_checkbox_state({ [destination]: value }));
+		dispatch(DataAction.save_checkbox_state());
 		};
 
 	const handle_prevQT_VALUE_Change = (destination: string, value: string) => {
-		set_previous_Value_QT((previous_Value_QT) => ({
-			...previous_Value_QT,
-			[destination]: { 
-				prevQT_VALUE: value, 
-			},
-		}));
+		if(value !== undefined && value !== null && value !== "") { 
+			// 
+			set_previous_Value_QT((previous_Value_QT) => ({
+				...previous_Value_QT,
+				[destination]: { 
+					prevQT_VALUE: value, 
+				},
+			}));
+			// 
+		}
+
 		// let numericValue = parseFloat(value) || 0;
 		dispatch(DataAction.changePreviousQTT({ destination: destination, value: value }));
 		dispatch(DataAction.save_previous_qtt())
 	};
 	const handle_PrevTO_VALUE_Change = (destination: string, value: string) => {
+		if(value !== undefined && value !== null && value !== "") { 
+			// 
+			set_previous_Value_TO((previous_Value_TO) => ({
+				...previous_Value_TO,
+				[destination]: { 
+					prevTO_VALUE: value, 
+				},
+			}));
+			// 
+		}
 		set_previous_Value_TO((previous_Value_TO) => ({
 			...previous_Value_TO,
 			[destination]: { 
@@ -98,7 +115,16 @@ export default function Statistics() {
 		dispatch(DataAction.save_previous_tons())
 	};
 	const handle_maxiTO_Change = (destination: string, value: string) => {
-		// handle_maxiTO_Change(affectationItem.name, e.target.value)}
+		if(value !== undefined && value !== null && value !== "") { 
+			// 
+			set_maxi_Values((maxi_Value_TO: any) => ({
+				...maxi_Value_TO,
+				[destination]: { 
+					maxiTO_VALUE: value, 
+				},
+			}));
+			// 
+		}
 		set_maxi_Values((maxi_Value_TO: any) => ({
 			...maxi_Value_TO,
 			[destination]: { 
@@ -149,11 +175,11 @@ export default function Statistics() {
 		affectation.forEach((affectationItem) => {
 			const k = affectationItem.name as string;
 			if (k !== "stock") {
-				// FromRedux_checkbox_Hold_State[k] ? 
-				// handle_checkBOX_Change(k as string, FromRedux_checkbox_Hold_State[k]) 
-				// : 
-				// handle_checkBOX_Change(k, false);
-				Toggle_checkbox_boolean(k);
+				FromRedux_checkbox_Hold_State[k] ? 
+				handle_checkBOX_Change(k as string, FromRedux_checkbox_Hold_State[k]) : handle_checkBOX_Change(k, false);
+				
+				// Toggle_checkbox_boolean(k);
+				// useSelector<RootState, {[key: string]: boolean}>((state) => state.data.HOLD_checkbox_state);
 				}
 		});
 		firstRender = false;
