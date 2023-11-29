@@ -53,6 +53,7 @@ export default function Statistics() {
 		set_checkbox_Hold_State(updatedCheckboxState);
 		// dispatch(DataAction.change_checkbox_state ( true ));
 		dispatch(DataAction.change_checkbox_state({ [k]: updatedCheckboxState[k] }));
+		dispatch(DataAction.save_checkbox_state())
 		};
 	
 		const handle_string_checkBOX_Change = (destination: string, value: string) => {
@@ -83,6 +84,7 @@ export default function Statistics() {
 		}));
 		// let numericValue = parseFloat(value) || 0;
 		dispatch(DataAction.changePreviousQTT({ destination: destination, value: value }));
+		dispatch(DataAction.save_previous_qtt())
 	};
 	const handle_PrevTO_VALUE_Change = (destination: string, value: string) => {
 		set_previous_Value_TO((previous_Value_TO) => ({
@@ -93,6 +95,7 @@ export default function Statistics() {
 		}));
 		// let numericValue = parseFloat(value) || 0;
 		dispatch(DataAction.changePreviousTONS({ destination: destination, value: value }));
+		dispatch(DataAction.save_previous_tons())
 	};
 	const handle_maxiTO_Change = (destination: string, value: string) => {
 		// handle_maxiTO_Change(affectationItem.name, e.target.value)}
@@ -105,6 +108,7 @@ export default function Statistics() {
 		// const numericValue = parseFloat(value) || 0;
 		// dispatch(DataAction.changeMaxiTONS({ destination: k, value: numericValue }));
 		dispatch(DataAction.changeMaxiTONS({ destination: destination, value: value }));
+		dispatch(DataAction.save_maxi_tons())
 		};
 	const handle_Extended_Tally = () => {
 		set_Extended_Tally_Value((prevValue) => {
