@@ -167,30 +167,95 @@ export default function Statistics() {
 	const FromRedux_maxiTO				= useSelector<RootState, {[key: string]: string }>((state) => state.data.HOLD_maxi_TONS);
 	// let firstRender = true;
 
-	function init_statistiques() {
-		
+	// /* function init_statistiques() {
+	// 	affectation.forEach((affectationItem) => {
+	// 		const k = affectationItem.name as string;
+	// 		if (k !== "stock") {
+	// 			console.log("foreach");
+	// 			const FromStorage(k): string = localStorage.getItem(MAXI_data_storage[k]::string);
+				
+	// 				// Mettre à jour le state avec les données déj
+				
+	// 				// const maxiData[k] = localStorage.getItem('maxi_data_storages');
+	// 				// const prevTonsData = localStorage.getItem('prev_tons_data_storage');
+				
+	// 				// // Mettre à jour le state avec les données récupérées
+	// 				// dispatch(DataAction.load_maxi_tons(JSON.parse(maxiData)));
+	// 				// dispatch(DataAction.load_prev_tons(JSON.parse(prevTonsData)));
+				
+	// 				// Autres actions à effectuer...
+				
+	// 				// Mettre à jour la page HTML si nécessaire
+	// 				handle_Initiate_Rendering(false);
+	// 			}
+	// 			} //end if stcok
+
+	// 	});
+	// 	// firstRender = false;
+	// 	// Toggle_Initiate_Rendering();
+	// 	// handle_Initiate_rendering(false);
+	// 	handle_Initiate_Rendering(false);
+
+	// }; */
+/* 	function nullinit_statistiques() {
 		affectation.forEach((affectationItem) => {
 			const k = affectationItem.name as string;
 			if (k !== "stock") {
 				console.log("foreach");
-				// FromRedux_checkbox_Hold_State[k] ? 
-				// handle_checkBOX_Change(k as string, FromRedux_checkbox_Hold_State[k]) : handle_checkBOX_Change(k, false);
-				// FromRedux_previousQT[k] ? 
-				// handle_prevQT_VALUE_Change(k as string, FromRedux_previousQT[k]) : handle_prevQT_VALUE_Change(k, "0");
-				// FromRedux_previousTO[k] ? 
-				// handle_PrevTO_VALUE_Change(k as string, FromRedux_previousTO[k]) : handle_PrevTO_VALUE_Change(k, "0");
-				// FromRedux_maxiTO[k] ? 
-				// handle_maxiTO_VALUE_Change(k as string, FromRedux_maxiTO[k]) : handle_maxiTO_VALUE_Change(k, "0");
-				} //end if stcok
-
+				const maxiData = JSON.parse(localStorage.getItem('MAXI_data_storage') || '{}');
+				// // Récupérer la valeur du localStorage
+				// const valueFromStorage: string | null = localStorage.getItem(MAXI_data_storage);
+	
+				// // Vérifier si la valeur existe
+				// if (valueFromStorage !== null) {
+				// 	console.log(`La valeur de ${k} est : ${valueFromStorage}`);
+					
+				// 	// Faites quelque chose avec la valeur récupérée, par exemple, l'affecter à une variable
+				// 	// const maVariable = valueFromStorage;
+				// } else {
+				// 	console.log(`Aucune valeur trouvée pour la clé ${MAXI_data_storage[k]}`);
+				// }
+				console.log(maxiData);
+			}
 		});
-		// firstRender = false;
-		// Toggle_Initiate_Rendering();
-		// handle_Initiate_rendering(false);
-		handle_Initiate_Rendering(false);
-
-	};
-
+	} */
+	function init_statistiques() {
+		affectation.forEach((affectationItem) => {
+			const k = affectationItem.name as string;
+			if (k !== "stock") {
+				console.log("foreach");
+	
+				// Récupérer la valeur JSON du localStorage
+				const jsonString: string | null = localStorage.getItem("MAXI_data_storage");
+	
+				// Vérifier si la valeur existe
+				if (jsonString !== null) {
+					try {
+						// Parser la chaîne JSON en un objet JavaScript
+						const storageObject: Record<string, string> = JSON.parse(jsonString);
+	
+						// Récupérer la valeur spécifique à la clé H1
+						const h1Value: string | undefined = storageObject[k];
+	
+						// Vérifier si la valeur H1 existe
+						if (k !== undefined) {
+							console.log(`La valeur de ${k} est : ${h1Value}`);
+							
+							// Faites quelque chose avec la valeur récupérée, par exemple, l'affecter à une variable
+							// const maVariable = h1Value;
+						} else {
+							console.log("La clé H1 n'a pas été trouvée dans l'objet du localStorage");
+						}
+					} catch (error) {
+						console.error("Erreur lors de la conversion de la chaîne JSON en objet JavaScript :", error);
+					}
+				} else {
+					console.log("Aucune valeur trouvée pour la clé MAXI_data_storage");
+				}
+			}
+		});
+	}
+	
 
 	useEffect(() => {
 	if (Initiate_Rendering) {
