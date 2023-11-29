@@ -1,15 +1,11 @@
 import { useSelector, useDispatch} from "react-redux";
 import { RootState } from "../stores/rootStore";
 import DataAction from "../stores/dataS/DataAction";
-
 import { stepe_Data } from "../stores/dataS/DataReducer";
 import { Table } from "react-bootstrap";
 import React, { useState, useEffect } from 'react';
 import { affectation} from "../utils/destination";
-// import { updateAffectationVisibility } from '../stores/data/destinationActions';
-
 import Button from 'react-bootstrap/Button';
-// import {firstRender} from '../App';	
 import { toast } from 'react-toastify';
 
 export default function Statistics() {
@@ -26,9 +22,11 @@ export default function Statistics() {
 
 	const dispatch = useDispatch();	
 	const [Extended_Tally_Value, set_Extended_Tally_Value] = React.useState(false);
+	const [Initiate_Rendering, set_Initiate_Rendering]     = React.useState(true);
+	
 
 	const [checkbox_Hold_State, set_checkbox_Hold_State] 				= useState<{ [key: string]: boolean }>({});	
-	const [string_checkbox_Hold_State, set_string_checkbox_Hold_State]	= useState<{ [key: string]: { chckBX_VALUE: string } }>({});
+	// const [string_checkbox_Hold_State, set_string_checkbox_Hold_State]	= useState<{ [key: string]: { chckBX_VALUE: string } }>({});
 	const [previous_Value_QT, set_previous_Value_QT]					= useState<{ [key: string]: { prevQT_VALUE: string } }>({});
 	const [previous_Value_TO, set_previous_Value_TO]					= useState<{ [key: string]: { prevTO_VALUE: string } }>({});
 	const [maxi_Value_TO, set_maxi_Values]								= useState<{ [key: string]: { maxiTO_VALUE: string } }>({});
@@ -55,19 +53,17 @@ export default function Statistics() {
 		dispatch(DataAction.change_checkbox_state({ [k]: updatedCheckboxState[k] }));
 		dispatch(DataAction.save_checkbox_state())
 		};
-	
-		const handle_string_checkBOX_Change = (destination: string, value: string) => {
-			set_string_checkbox_Hold_State((string_checkbox_Hold_State) => ({
-				...string_checkbox_Hold_State,
-				[destination]: { 
-					chckBX_VALUE: value, 
-				},
-			}));
-			// let numericValue = parseFloat(value) || 0;
-			dispatch(DataAction.change_string_checkbox_state({ destination: destination, value: value }));
-			dispatch(DataAction.save_string_checkbox_state());
-		};
-
+	// const handle_string_checkBOX_Change = (destination: string, value: string) => {
+	// 	set_string_checkbox_Hold_State((string_checkbox_Hold_State) => ({
+	// 		...string_checkbox_Hold_State,
+	// 		[destination]: { 
+	// 			chckBX_VALUE: value, 
+	// 		},
+	// 	}));
+	// 	// let numericValue = parseFloat(value) || 0;
+	// 	dispatch(DataAction.change_string_checkbox_state({ destination: destination, value: value }));
+	// 	dispatch(DataAction.save_string_checkbox_state());
+	// };
 	const handle_checkBOX_Change = (destination: string, value: boolean) => {
 		set_checkbox_Hold_State((checkbox_Hold_State) => ({
 			...checkbox_Hold_State,
@@ -114,7 +110,7 @@ export default function Statistics() {
 		dispatch(DataAction.changePreviousTONS({ destination: destination, value: value }));
 		dispatch(DataAction.save_previous_tons())
 	};
-	const handle_maxiTO_Change = (destination: string, value: string) => {
+	const handle_maxiTO_VALUE_Change = (destination: string, value: string) => {
 		if(value !== undefined && value !== null && value !== "") { 
 			// 
 			set_maxi_Values((maxi_Value_TO: any) => ({
@@ -136,19 +132,25 @@ export default function Statistics() {
 		dispatch(DataAction.changeMaxiTONS({ destination: destination, value: value }));
 		dispatch(DataAction.save_maxi_tons())
 		};
-	const handle_Extended_Tally = () => {
+	const Toggle_Extended_Tally = () => {
 		set_Extended_Tally_Value((prevValue) => {
-			console.log("handle_Extended_Tally :", prevValue);
 			return !prevValue;
 		});
 	};
+	const Toggle_Initiate_Rendering = () => {
+		set_Initiate_Rendering((prevValue) => {
+			return !prevValue;
+		});
+	};
+	const handle_Initiate_Rendering = (prevValue: boolean) => {
+		set_Initiate_Rendering(prevValue);
+		};
+	// };
+	// const handle_Initiate_rendering = (prevValue: boolean) => {
+	// 	set_Initiate_Rendering(prevValue);
+	// };
 
 	const catalog_data = useSelector<RootState, stepe_Data[]>((state) => state.data.catalog_data_state);
-
-	const FromRedux_checkbox_Hold_State = useSelector<RootState, {[key: string]: boolean}>((state) => state.data.HOLD_checkbox_state);
-	// const FromRedux_previousQT 			= useSelector<RootState, {[key: string]: string }>((state) => state.data.HOLD_previous_QTT);
-	// const FromRedux_previousTO			= useSelector<RootState, {[key: string]: string }>((state) => state.data.HOLD_previous_TONS);
-	// const FromRedux_maxiTO				= useSelector<RootState, {[key: string]: string }>((state) => state.data.HOLD_maxi_TONS);
 
 	const totalPreviousCalesCount = Object.keys(previous_Value_QT).reduce((total, k) => {
 		return total + (previous_Value_QT[k] ? parseFloat(previous_Value_QT[k].prevQT_VALUE) : 0);
@@ -157,41 +159,46 @@ export default function Statistics() {
 	const totalPreviousCalesWeight = Object.keys(previous_Value_TO).reduce((total, k) => {
 		return total + (previous_Value_TO[k]?.prevTO_VALUE ? parseFloat(previous_Value_TO[k].prevTO_VALUE) : 0);
 		}, 0);
-	///
-	// const tableauDeDonnees = useSelector<RootState, { [key: string]: string }[]>(
-	// 	(state) => state.data.tableauDeDonnees
-	// 	);
-	// const handle_AddDDonnees = () => {
-    //     dispatch(DataAction.add_donnees({ key: "exampleKey", value: "exampleValue" }));
-	// 	// dispatch(DataAction.change_CHECKBOX_STATE({ key: k, value: updatedCheckboxState[k] }));
-	// 	};	
-    // const handle_UpdateDonnees = (index: number) => {
-    //     dispatch(DataAction.update_donnees(index, { key: "updatedKey", value: "updatedValue" }));
-    // };
 
-	///
-	let firstRender = true;
-	function init_tally() {
+	
+	const FromRedux_checkbox_Hold_State = useSelector<RootState, {[key: string]: boolean}>((state) => state.data.HOLD_checkbox_state);
+	const FromRedux_previousQT 			= useSelector<RootState, {[key: string]: string }>((state) => state.data.HOLD_previous_QTT);
+	const FromRedux_previousTO			= useSelector<RootState, {[key: string]: string }>((state) => state.data.HOLD_previous_TONS);
+	const FromRedux_maxiTO				= useSelector<RootState, {[key: string]: string }>((state) => state.data.HOLD_maxi_TONS);
+	// let firstRender = true;
+
+	function init_statistiques() {
+		
 		affectation.forEach((affectationItem) => {
 			const k = affectationItem.name as string;
 			if (k !== "stock") {
-				FromRedux_checkbox_Hold_State[k] ? 
-				handle_checkBOX_Change(k as string, FromRedux_checkbox_Hold_State[k]) : handle_checkBOX_Change(k, false);
-				
-				// Toggle_checkbox_boolean(k);
-				// useSelector<RootState, {[key: string]: boolean}>((state) => state.data.HOLD_checkbox_state);
-				}
+				console.log("foreach");
+				// FromRedux_checkbox_Hold_State[k] ? 
+				// handle_checkBOX_Change(k as string, FromRedux_checkbox_Hold_State[k]) : handle_checkBOX_Change(k, false);
+				// FromRedux_previousQT[k] ? 
+				// handle_prevQT_VALUE_Change(k as string, FromRedux_previousQT[k]) : handle_prevQT_VALUE_Change(k, "0");
+				// FromRedux_previousTO[k] ? 
+				// handle_PrevTO_VALUE_Change(k as string, FromRedux_previousTO[k]) : handle_PrevTO_VALUE_Change(k, "0");
+				// FromRedux_maxiTO[k] ? 
+				// handle_maxiTO_VALUE_Change(k as string, FromRedux_maxiTO[k]) : handle_maxiTO_VALUE_Change(k, "0");
+				} //end if stcok
+
 		});
-		firstRender = false;
+		// firstRender = false;
+		// Toggle_Initiate_Rendering();
+		// handle_Initiate_rendering(false);
+		handle_Initiate_Rendering(false);
+
 	};
 
 
 	useEffect(() => {
-	if (firstRender) {
-		init_tally();
+	if (Initiate_Rendering) {
+		init_statistiques();
 		toast.error('init Tally', { position: toast.POSITION.TOP_LEFT, autoClose: 500 });
 	}
-	}, [firstRender]);
+	}
+	, [Initiate_Rendering]);
 
 	const statistics = catalog_data.reduce<any>((p, row) => {
 		if (!p[row.destination]) {
@@ -239,7 +246,7 @@ export default function Statistics() {
 					<th style={{ textAlign: 'left' }}>DesT</th>
 					{/* <th style={{ textAlign: 'center' }}>K</th> */}
 					<th style={{ textAlign: 'center' }}>
-					<Button variant="info" onClick={handle_Extended_Tally}>T</Button>
+					<Button variant="info" onClick={Toggle_Extended_Tally}>T</Button>
 					</th>
 					<th style={{ textAlign: 'center' }}>DAY_Q</th>
 					<th style={{ textAlign: 'center' }}>DAY_T</th>
@@ -498,7 +505,7 @@ export default function Statistics() {
 													type="text"
 													style={{ width: '80px' }}
 													value={maxi_Value_TO[affectationItem.name] ? maxi_Value_TO[affectationItem.name].maxiTO_VALUE : 0} // Utilisez prevValues[affectationItem.name].prevTo pour la valeur 
-													onChange={(e) => handle_maxiTO_Change(affectationItem.name, e.target.value)}
+													onChange={(e) => handle_maxiTO_VALUE_Change(affectationItem.name, e.target.value)}
 												/>
 											</td>
 
