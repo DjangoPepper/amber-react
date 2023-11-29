@@ -20,7 +20,7 @@ function init() {
 	// const Init_data_catalog = window.localStorage.getItem("data");
 	const Init_data_catalog = window.localStorage.getItem("CATALOG_data_storage");
 	const Init_data_CHECKBOX_STATE = window.localStorage.getItem("CHECKBOX_data_storage");
-	const Init_data_STRING_CHECKBOX_STATE = window.localStorage.getItem("STRING_CHECKBOX_data_storage");
+	// const Init_data_STRING_CHECKBOX_STATE = window.localStorage.getItem("STRING_CHECKBOX_data_storage");
 	const Init_data_PREV_QTT = window.localStorage.getItem("PREV_QTT_data_storage");
 	const Init_data_PREV_TONS = window.localStorage.getItem("PREV_TONS_data_storage");
 	const Init_data_MAXI = window.localStorage.getItem("MAXI_data_storage");
