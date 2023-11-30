@@ -26,17 +26,17 @@ interface DataState {
     HOLD_previous_TONS:  { [destinbation: string]: string };
     HOLD_maxi_TONS:      { [destinbation: string]: string };
     
-    loaded_checkbox_state: boolean,
-    loaded_previous_QTT: boolean;
-    loaded_previous_TONS: boolean;
-    loaded_maxi_TONS: boolean;
+    // loaded_checkbox_state: boolean,
+    // // loaded_previous_QTT: boolean;
+    // // loaded_previous_TONS: boolean;
+    // loaded_maxi_TONS: boolean;
     
-    saved_HOLD_checkbox_state: boolean;
-    saved_HOLD_previous_QTT: boolean;
-    saved_HOLD_previous_TONS: boolean;
-    saved_HOLD_maxi_TONS: boolean;
+    // // saved_HOLD_checkbox_state: boolean;
+    // // saved_HOLD_previous_QTT: boolean;
+    // // saved_HOLD_previous_TONS: boolean;
+    // // saved_HOLD_maxi_TONS: boolean;
 
-    tableauDeDonnees: { [destination: string]: string }[];
+    // tableauDeDonnees: { [destination: string]: string }[];
 }
 
 const initialState: DataState = {
@@ -52,17 +52,17 @@ const initialState: DataState = {
     HOLD_previous_TONS: {}, 
     HOLD_maxi_TONS: {},
 
-    loaded_checkbox_state: false,
-    loaded_previous_QTT: false,
-    loaded_previous_TONS: false,
-    loaded_maxi_TONS: false,
+    // loaded_checkbox_state: false,
+    // // loaded_previous_QTT: false,
+    // // loaded_previous_TONS: false,
+    // loaded_maxi_TONS: false,
     
-    saved_HOLD_checkbox_state: false,
-    saved_HOLD_previous_QTT: false,
-    saved_HOLD_previous_TONS: false,
-    saved_HOLD_maxi_TONS: false,
+    // saved_HOLD_checkbox_state: false,
+    // saved_HOLD_previous_QTT: false,
+    // saved_HOLD_previous_TONS: false,
+    // saved_HOLD_maxi_TONS: false,
     
-    tableauDeDonnees: [],
+    // tableauDeDonnees: [],
 };
 
 export const dataReducer: Reducer<DataState> = (state = initialState, action: AnyAction): DataState => {
@@ -172,21 +172,21 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
                 window.localStorage.setItem("CHECKBOX_data_storage", JSON.stringify(state.HOLD_checkbox_state));
                 return {
                     ...state,
-                    saved_HOLD_checkbox_state: false
+                    // saved_HOLD_checkbox_state: false
                 };
             case DataAction.SAVE_PREV_QTT:
                 // if(state.saved_HOLD_previous_QTT) return state;
                 window.localStorage.setItem("PREV_QTT_data_storage", JSON.stringify(state.HOLD_previous_QTT));
                 return {
                     ...state,
-                    saved_HOLD_previous_QTT: false
+                    // saved_HOLD_previous_QTT: false
                 }
             case DataAction.SAVE_PREV_TONS:
                 // if(state.saved_HOLD_previous_TONS) return state;
                 window.localStorage.setItem("PREV_TONS_data_storage", JSON.stringify(state.HOLD_previous_TONS));
                 return {
                     ...state,
-                    saved_HOLD_previous_TONS: false
+                    // saved_HOLD_previous_TONS: false
                 }
             case DataAction.SAVE_MAXI_TONS:
                 // if(state.saved_HOLD_maxi_TONS) return state;
@@ -207,29 +207,29 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
                 return {
                     ...state,
                     HOLD_checkbox_state: action.payload,
-                    loaded_checkbox_state: true,
-                    saved_HOLD_checkbox_state: false,
+                    // loaded_checkbox_state: true,
+                    // saved_HOLD_checkbox_state: false,
                 };
             case DataAction.LOAD_PREV_QTT:
                 return {
                     ...state,
                     HOLD_previous_QTT: action.payload,
-                    loaded_previous_QTT: true,
-                    saved_HOLD_previous_QTT: false,
+                    // loaded_previous_QTT: true,
+                    // saved_HOLD_previous_QTT: false,
                 };
             case DataAction.LOAD_PREV_TONS:
                 return {
                     ...state,
                     HOLD_previous_TONS: action.payload,
-                    loaded_previous_TONS: true,
-                    saved_HOLD_previous_TONS: false,
+                    // loaded_previous_TONS: true,
+                    // saved_HOLD_previous_TONS: false,
                 };
             case DataAction.LOAD_MAXI_TONS:
                 return {
                     ...state,
                     HOLD_maxi_TONS: action.payload,
-                    loaded_maxi_TONS: true,
-                    saved_HOLD_maxi_TONS: false,
+                    // loaded_maxi_TONS: true,
+                    // saved_HOLD_maxi_TONS: false,
                 }
 //
 //

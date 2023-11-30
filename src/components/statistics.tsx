@@ -51,7 +51,7 @@ export default function Statistics() {
 		set_checkbox_Hold_State(updatedCheckboxState);
 		// dispatch(DataAction.change_checkbox_state ( true ));
 		dispatch(DataAction.change_checkbox_state({ [k]: updatedCheckboxState[k] }));
-		dispatch(DataAction.save_checkbox_state())
+		// dispatch(DataAction.save_checkbox_state())
 		};
 	const handle_checkBOX_Change = (destination: string, value: boolean) => {
 		set_checkbox_Hold_State((checkbox_Hold_State) => ({
@@ -59,7 +59,7 @@ export default function Statistics() {
 			[destination]: value,
 		}));
 		dispatch(DataAction.change_checkbox_state({ [destination]: value }));
-		dispatch(DataAction.save_checkbox_state());
+		// dispatch(DataAction.save_checkbox_state());
 		};
 
 	const handle_prevQT_VALUE_Change = (destination: string, value: string) => {
@@ -76,7 +76,7 @@ export default function Statistics() {
 
 		// let numericValue = parseFloat(value) || 0;
 		dispatch(DataAction.changePreviousQTT({ destination: destination, value: value }));
-		dispatch(DataAction.save_previous_qtt())
+		// dispatch(DataAction.save_previous_qtt())
 	};
 	const handle_PrevTO_VALUE_Change = (destination: string, value: string) => {
 		if(value !== undefined && value !== null && value !== "") { 
@@ -97,7 +97,7 @@ export default function Statistics() {
 		}));
 		// let numericValue = parseFloat(value) || 0;
 		dispatch(DataAction.changePreviousTONS({ destination: destination, value: value }));
-		dispatch(DataAction.save_previous_tons())
+		// dispatch(DataAction.save_previous_tons())
 	};
 	const handle_maxiTO_VALUE_Change = (destination: string, value: string) => {
 		if(value !== undefined && value !== null && value !== "") { 
@@ -112,7 +112,7 @@ export default function Statistics() {
 		}
 
 		dispatch(DataAction.changeMaxiTONS({ destination: destination, value: value }));
-		dispatch(DataAction.save_maxi_tons())
+		// dispatch(DataAction.save_maxi_tons())
 		};
 	const Toggle_Extended_Tally = () => {
 		set_Extended_Tally_Value((prevValue) => {
@@ -145,7 +145,7 @@ export default function Statistics() {
 	const totalPreviousCalesWeight = Object.keys(previous_Value_TO).reduce((total, k) => {
 		return total + (previous_Value_TO[k]?.prevTO_VALUE ? parseFloat(previous_Value_TO[k].prevTO_VALUE) : 0);
 		}, 0);
-
+/*
 	function init_statistiques() {
 		affectation.forEach((affectationItem) => {
 			const k = affectationItem.name as string;
@@ -179,8 +179,43 @@ export default function Statistics() {
 							}
 						} else {
 							console.log("Aucune valeur trouvée pour la clé MAXI_data_storage");
-						}
-						
+						} */
+
+						function init_statistiques() {
+							affectation.forEach((affectationItem) => {
+							  const k = affectationItem.name as string;
+							  if (k !== "stock") {
+								// ... votre logique actuelle
+						  
+								// Récupérer la valeur JSON du localStorage MAXI
+								const jsonString_MAXI: string | null = localStorage.getItem("MAXI_data_storage");
+								// Vérifier si la valeur existe
+								if (jsonString_MAXI !== null) {
+								  try {
+									// Parser la chaîne JSON en un objet JavaScript
+									const storageObject_MAXI: Record<string, string> = JSON.parse(jsonString_MAXI);
+						  
+									// Récupérer la valeur spécifique à la clé Hx
+									const Value_MAXI: string | undefined = storageObject_MAXI[k];
+						  
+									// Vérifier si la valeur Hx existe
+									if (Value_MAXI !== undefined) {
+									  console.log(`La valeur MAXI de ${k} est : ${Value_MAXI}`);
+									  // Utiliser la fonction de mise à jour pour garantir la dernière valeur
+									  set_maxi_Values((prevMaxiValues) => ({
+										...prevMaxiValues,
+										[k]: { maxiTO_VALUE: Value_MAXI },
+									  }));
+									  toast.success('init ' + k + 'Tally MAXI', { position: toast.POSITION.BOTTOM_RIGHT, autoClose: 500 });
+									} else {
+									  console.log("La MAXI clé " + k + " n'a pas été trouvée dans l'objet du localStorage");
+									}
+								  } catch (error) {
+									console.error("Erreur lors de la conversion de la chaîne JSON en objet JavaScript :", error);
+								  }
+								} else {
+								  console.log("Aucune valeur trouvée pour la clé MAXI_data_storage");
+								}
 
 						// Récupérer la valeur JSON du localStorage PREV_TONS_data_storage
 						const jsonString_PREV_TONS: string | null = localStorage.getItem("PREV_TONS_data_storage");
