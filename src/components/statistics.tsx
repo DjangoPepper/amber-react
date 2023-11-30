@@ -53,17 +53,6 @@ export default function Statistics() {
 		dispatch(DataAction.change_checkbox_state({ [k]: updatedCheckboxState[k] }));
 		dispatch(DataAction.save_checkbox_state())
 		};
-	// const handle_string_checkBOX_Change = (destination: string, value: string) => {
-	// 	set_string_checkbox_Hold_State((string_checkbox_Hold_State) => ({
-	// 		...string_checkbox_Hold_State,
-	// 		[destination]: { 
-	// 			chckBX_VALUE: value, 
-	// 		},
-	// 	}));
-	// 	// let numericValue = parseFloat(value) || 0;
-	// 	dispatch(DataAction.change_string_checkbox_state({ destination: destination, value: value }));
-	// 	dispatch(DataAction.save_string_checkbox_state());
-	// };
 	const handle_checkBOX_Change = (destination: string, value: boolean) => {
 		set_checkbox_Hold_State((checkbox_Hold_State) => ({
 			...checkbox_Hold_State,
@@ -121,16 +110,7 @@ export default function Statistics() {
 			}));
 			// 
 		}
-/* 
-		// set_maxi_Values((maxi_Value_TO: any) => ({
-		// 	...maxi_Value_TO,
-		// 	[destination]: { 
-		// 		maxiTO_VALUE: value,
-		// 	},
-		// }));
-		// const numericValue = parseFloat(value) || 0;
-		// dispatch(DataAction.changeMaxiTONS({ destination: k, value: numericValue }));
-		 */
+
 		dispatch(DataAction.changeMaxiTONS({ destination: destination, value: value }));
 		dispatch(DataAction.save_maxi_tons())
 		};
@@ -139,14 +119,25 @@ export default function Statistics() {
 			return !prevValue;
 		});
 	 };
-	const Toggle_Initiate_Rendering = () => {
-		set_Initiate_Rendering((prevValue) => {
-			return !prevValue;
-		});
-	 };
-	const handle_Initiate_Rendering = (prevValue: boolean) => {
-		set_Initiate_Rendering(prevValue);
-		};
+
+	
+
+	/* const handle_Initiate_Rendering = (value: boolean) => {
+		if (value !== undefined && value !== null) { 
+			set_Initiate_Rendering(value);
+			return value;
+		}
+		}; */
+	const handle_Initiate_Rendering = (value: boolean) => {
+		if (value !== undefined && value !== null && value !== Initiate_Rendering) {
+			set_Initiate_Rendering(value);
+			return value;
+		}
+	};
+	const handle_false_Initiate_Rendering = () => {
+			set_Initiate_Rendering(false);
+		}
+
 	const catalog_data = useSelector<RootState, stepe_Data[]>((state) => state.data.catalog_data_state);
 	const totalPreviousCalesCount = Object.keys(previous_Value_QT).reduce((total, k) => {
 		return total + (previous_Value_QT[k] ? parseFloat(previous_Value_QT[k].prevQT_VALUE) : 0);
@@ -154,10 +145,6 @@ export default function Statistics() {
 	const totalPreviousCalesWeight = Object.keys(previous_Value_TO).reduce((total, k) => {
 		return total + (previous_Value_TO[k]?.prevTO_VALUE ? parseFloat(previous_Value_TO[k].prevTO_VALUE) : 0);
 		}, 0);
-
-
-	
-	// handle_Initiate_Rendering(true);
 
 	function init_statistiques() {
 		affectation.forEach((affectationItem) => {
@@ -178,11 +165,12 @@ export default function Statistics() {
 								// Vérifier si la valeur Hx existe
 								if (Value_MAXI !== undefined) {
 									console.log(`La valeur MAXI de ${k} est : ${Value_MAXI}`);
-									toast.success('init ' + k + 'Tally MAXI', { position: toast.POSITION.TOP_LEFT, autoClose: 500 });
 									// remplir page web et state
 									handle_maxiTO_VALUE_Change(k, Value_MAXI);
-									dispatch(DataAction.changeMaxiTONS({ [k]: Value_MAXI }));
-									dispatch(DataAction.save_maxi_tons())
+									// dispatch(DataAction.changeMaxiTONS({ [k]: Value_MAXI }));
+									// dispatch(DataAction.save_maxi_tons())
+									toast.success('init ' + k + 'Tally MAXI', { position: toast.POSITION.BOTTOM_RIGHT, autoClose: 500 });
+
 								} else {
 									console.log("La MAXI clé " + k + " n'a pas été trouvée dans l'objet du localStorage");									
 								}
@@ -210,10 +198,10 @@ export default function Statistics() {
 								if (Value_PREV_TONS !== undefined) {
 									console.log(`La PREV_TONS de ${k} est : ${Value_PREV_TONS}`);
 									handle_PrevTO_VALUE_Change(k, Value_PREV_TONS);
-									dispatch(DataAction.changePreviousTONS({ [k]: Value_PREV_TONS }));
-									dispatch(DataAction.save_previous_tons())
-									toast.success('init ' + k + 'Tally PREV_TONS', { position: toast.POSITION.TOP_LEFT, autoClose: 500 });									
-									// Faites quelque chose avec la valeur récupérée, par exemple, l'affecter à une variable
+									// dispatch(DataAction.changePreviousTONS({ [k]: Value_PREV_TONS }));
+									// dispatch(DataAction.save_previous_tons())
+									toast.success('init ' + k + 'Tally PREV_TONS', { position: toast.POSITION.BOTTOM_RIGHT, autoClose: 500 });									
+
 								} else {
 									console.log("La PREV_TONS " + k + " clé n'a pas été trouvée dans l'objet du localStorage");
 
@@ -241,11 +229,10 @@ export default function Statistics() {
 								if (Value_PREV_QTT !== undefined) {
 									console.log(`La PREV_QTT de ${k} est : ${Value_PREV_QTT}`);
 									handle_prevQT_VALUE_Change(k, Value_PREV_QTT);
-									dispatch(DataAction.changePreviousQTT({ [k]: Value_PREV_QTT }));
-									dispatch(DataAction.save_previous_qtt())
-									toast.success('init ' + k + 'Tally PREV_QTT', { position: toast.POSITION.TOP_LEFT, autoClose: 500 });									
-									
-									// Faites quelque chose avec la valeur récupérée, par exemple, l'affecter à une variable
+									// dispatch(DataAction.changePreviousQTT({ [k]: Value_PREV_QTT }));
+									// dispatch(DataAction.save_previous_qtt())
+
+									toast.success('init ' + k + 'Tally PREV_QTT', { position: toast.POSITION.BOTTOM_RIGHT, autoClose: 500 });									
 								} else {
 									console.log("La PREV_QTT " + k + " clé n'a pas été trouvée dans l'objet du localStorage");
 
@@ -273,15 +260,12 @@ export default function Statistics() {
 								if (Value_CHECKBOX !== undefined) {
 									console.log(`La CHECKBOX de ${k} est : ${Value_CHECKBOX}`);
 									handle_checkBOX_Change(k, Value_CHECKBOX);
-									dispatch(DataAction.change_checkbox_state({ [k]: Value_CHECKBOX }));
-									dispatch(DataAction.save_checkbox_state())
-									toast.success('init ' + k + 'Tally CHECKBOX', { position: toast.POSITION.TOP_LEFT, autoClose: 500 });									
+									// dispatch(DataAction.change_checkbox_state({ [k]: Value_CHECKBOX }));
+									// dispatch(DataAction.save_checkbox_state())
 
-									
-								// Faites quelque chose avec la valeur récupérée, par exemple, l'affecter à une variable
+									toast.success('init ' + k + 'Tally CHECKBOX', { position: toast.POSITION.BOTTOM_RIGHT, autoClose: 500 });									
 								} else {
 								console.log("La CHECKBOX " + k + " clé n'a pas été trouvée dans l'objet du localStorage");
-									// toast.success('init ' + k + 'Tally CHECKBOX', { position: toast.POSITION.TOP_LEFT, autoClose: 500 });
 								}
 							} catch (error) {
 								console.error("Erreur lors de la conversion de la chaîne JSON en objet JavaScript :", error);
@@ -291,17 +275,19 @@ export default function Statistics() {
 						}
 			}
 		});
+		// handle_false_Initiate_Rendering();
 		handle_Initiate_Rendering(false);
 	}
 	
+	
+	
 	useEffect(() => {
-		if (Initiate_Rendering === true) {
-			init_statistiques();
-			toast.error('init Tally Ended', { position: toast.POSITION.TOP_LEFT, autoClose: 500 });
-			handle_Initiate_Rendering(false);
-			}
-		}
-	, [Initiate_Rendering]);
+		// if (Initiate_Rendering === true) {
+				init_statistiques();
+				toast.error('init Tally Effect', { position: toast.POSITION.TOP_LEFT, autoClose: 3000 });
+				// handle_false_Initiate_Rendering();
+				// };
+		}, []);
 
 	const statistics = catalog_data.reduce<any>((p, row) => {
 		if (!p[row.destination]) {
@@ -312,7 +298,6 @@ export default function Statistics() {
 		return p;
 		}, {});
 
-	
 //
 	Object.values(statistics).forEach((destinationStats: any ) => {    
 		totalCount += destinationStats.count;
