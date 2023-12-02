@@ -26,7 +26,6 @@ export default function Statistics() {
 	
 
 	const [checkbox_Hold_State, set_checkbox_Hold_State] 				= useState<{ [key: string]: boolean }>({});	
-	// const [string_checkbox_Hold_State, set_string_checkbox_Hold_State]	= useState<{ [key: string]: { chckBX_VALUE: string } }>({});
 	const [previous_Value_QT, set_previous_Value_QT]					= useState<{ [key: string]: { prevQT_VALUE: string } }>({});
 	const [previous_Value_TO, set_previous_Value_TO]					= useState<{ [key: string]: { prevTO_VALUE: string } }>({});
 	const [maxi_Value_TO, set_maxi_Values]								= useState<{ [key: string]: { maxiTO_VALUE: string } }>({});
@@ -118,16 +117,7 @@ export default function Statistics() {
 		set_Extended_Tally_Value((prevValue) => {
 			return !prevValue;
 		});
-	 };
-
-	
-
-	/* const handle_Initiate_Rendering = (value: boolean) => {
-		if (value !== undefined && value !== null) { 
-			set_Initiate_Rendering(value);
-			return value;
-		}
-		}; */
+    };
 	const handle_Initiate_Rendering = (value: boolean) => {
 		if (value !== undefined && value !== null && value !== Initiate_Rendering) {
 			set_Initiate_Rendering(value);
@@ -153,7 +143,7 @@ export default function Statistics() {
         p[row.destination].weight += parseFloat((row.weight).toFixed(3));
         return p;
         }, {});
-                function init_statistiques() {
+                function TallyReport() {
                     affectation.forEach((affectationItem) => {
                         const k = affectationItem.name as string;
                         if (k !== "stock") {
@@ -244,416 +234,397 @@ export default function Statistics() {
                             } else {
                                 console.log("Aucune valeur trouvée pour la clé CHECKBOX");
                             }
-			}
-		});
+                        }
+                });
 		// handle_false_Initiate_Rendering();
 		handle_Initiate_Rendering(false);
 	}
-	
-	
-	
+		
 	useEffect(() => {
-		// if (Initiate_Rendering === true) {
-				init_statistiques();
+				TallyReport();
 				toast.error('init Tally Effect', { position: toast.POSITION.TOP_LEFT, autoClose: 3000 });
-				// handle_false_Initiate_Rendering();
-				// };
-		}, []);
+    }, []);
 	
 
-//
 	Object.values(statistics).forEach((destinationStats: any ) => {    
 		totalCount += destinationStats.count;
 		totalWeight += destinationStats.weight;
 		totalCalesCount = totalCount ;
 		totalCalesWeight = totalWeight;
-//
-	if (statistics.stock) {
-			totalstockCount = statistics.stock.count;
-			totalstockWeight = statistics.stock.weight;
 
-			totalstockWeight = parseFloat(totalstockWeight.toFixed(3))
-			totalCalesCount  = totalCount   - totalstockCount;
-			
-			totalCalesWeight = totalWeight  - totalstockWeight;
-			totalCalesWeight = parseFloat(totalCalesWeight.toFixed(3));
-		}
-		else {
-			totalstockCount = 0;
-			totalstockWeight = 0;	
-			totalCalesCount  = totalCount;
-			totalCalesWeight = totalWeight;
-		}
-		});
+        if (statistics.stock) {
+                totalstockCount = statistics.stock.count;
+                totalstockWeight = statistics.stock.weight;
 
-// 
-	
-		return (
-		<div>
-		<Table>
-			{/* ... En-tête de table ... */}		
-			<thead>
-				<tr>
-					<th style={{ textAlign: 'left' }}>DesT</th>
-					{/* <th style={{ textAlign: 'center' }}>K</th> */}
-					<th style={{ textAlign: 'center' }}>
-					<Button variant="info" onClick={Toggle_Extended_Tally}>T</Button>
-					</th>
-					<th style={{ textAlign: 'center' }}>DAY_Q</th>
-					<th style={{ textAlign: 'center' }}>DAY_T</th>
-					{Extended_Tally_Value && (
-					<>
-						<th style={{ textAlign: 'center', backgroundColor: 'gray' }}>PREV_Q</th>
-						<th style={{ textAlign: 'center', backgroundColor: 'gray' }}>PREV_T</th>
-					
-					</>
-					)}
-					<th style={{ textAlign: 'center' }}>TT_Q</th>
-					<th style={{ textAlign: 'center' }}>TT_T</th>
-				</tr>
-			</thead>
-			<tbody>
-			
-{/* HEADERS */}				
-							{affectation.map((affectationItem) => {
+                totalstockWeight = parseFloat(totalstockWeight.toFixed(3))
+                totalCalesCount  = totalCount   - totalstockCount;
+                
+                totalCalesWeight = totalWeight  - totalstockWeight;
+                totalCalesWeight = parseFloat(totalCalesWeight.toFixed(3));
+        } else {
+                totalstockCount = 0;
+                totalstockWeight = 0;	
+                totalCalesCount  = totalCount;
+                totalCalesWeight = totalWeight;
+        }
+    });
 
-				const statistics_array = statistics[affectationItem.name] || {}; // Utilise un objet vide par défaut
-				let chsafin = checkbox_Hold_State[affectationItem.name] || false;
-				if (
-					chsafin || 
-					(
-						statistics_array && 
-						!isNaN(statistics_array.count) && 
-						statistics_array.count > 0
-					)
-				) {
-					// console.log("visible : ", affectationItem.name)
-					
-					return (
-						<tr key={affectationItem.name}>
-							
-{/* DEST */}
-							<td style={{ backgroundColor: selectedColors[affectationItem.name], textAlign: 'left' }}>{affectationItem.name}
-							{/* </td> */}
-							
-{/* CHECKBOX */} <>  </>
-							{/* <td> */}
-							{ affectationItem.name !== 'stock' ? ( 
-								<input
-								type="checkbox" 
-								checked={checkbox_Hold_State[affectationItem.name]} 
-								// checked={affectationItem.visibleState[k]} 
-								onChange={() => Toggle_checkbox_boolean(affectationItem.name)}
-								/>
-							):null}							
-							</td>
-							<td> <> </></td>
+    // *******************************************************************************************************
+    // *******************************************************************************************************
+    // *******************************************************************************************************    
+    
+    return (
+    <div>
+        <Table>
+            {/* ... En-tête de table ... */}		
+            <thead>
+                <tr>
+                    <th style={{ textAlign: 'left' }}>DesT</th>
+                    {/* <th style={{ textAlign: 'center' }}>K</th> */}
+                    <th style={{ textAlign: 'center' }}>
+                    <Button variant="info" onClick={Toggle_Extended_Tally}>T</Button>
+                    </th>
+                    <th style={{ textAlign: 'center' }}>DAY_Q</th>
+                    <th style={{ textAlign: 'center' }}>DAY_T</th>
+                    {Extended_Tally_Value && (
+                    <>
+                        <th style={{ textAlign: 'center', backgroundColor: 'gray' }}>PREV_Q</th>
+                        <th style={{ textAlign: 'center', backgroundColor: 'gray' }}>PREV_T</th>
+                    
+                    </>
+                    )}
+                    <th style={{ textAlign: 'center' }}>TT_Q</th>
+                    <th style={{ textAlign: 'center' }}>TT_T</th>
+                </tr>
+            </thead>
+            <tbody>
+                {/* HEADERS */}				
+                {affectation.map((affectationItem) => {
 
-{/* DAY_Q */}				
-							{/* <tr> */}
-								<td style={{ textAlign: 'center'}}>
-									{statistics[affectationItem.name] ? statistics[affectationItem.name].count : 0}
-								</td>
-							{/* </tr> */}
+                const statistics_array = statistics[affectationItem.name] || {}; // Utilise un objet vide par défaut
+                let chsafin = checkbox_Hold_State[affectationItem.name] || false;
+                if (
+                chsafin || 
+                (
+                statistics_array && 
+                !isNaN(statistics_array.count) && 
+                statistics_array.count > 0
+                )
+                ) {
+                // console.log("visible : ", affectationItem.name)
 
-{/* DAY_T */}
-							<td style={{ textAlign: 'center'}}>
-								{statistics[affectationItem.name] ? parseFloat(statistics[affectationItem.name].weight).toLocaleString("en-US", {minimumFractionDigits: 3, maximumFractionDigits: 3,}) : "0.000"}
-							</td>
+                return (
+                <tr key={affectationItem.name}>
 
-								{/* si dest est stock passe x colonnes */}
-								{affectationItem.name === 'stock' ? ( 
-									<>
-										<td colSpan={5}></td> 
-										{/* <td> </td>  */}
-									</>
-									) 
-									: 									
-									(
-										<> 					
-											{/* sinon affiche toute les colonnes */}
+                {/* DEST */}
+                <td style={{ backgroundColor: selectedColors[affectationItem.name], textAlign: 'left' }}>{affectationItem.name}
+                {/* </td> */}
 
-{/* PREV_Q */}
-{Extended_Tally_Value && (
-					<>
-											<td style={{ textAlign: 'center',backgroundColor: 'gray' }}>		
-												<input
-													type="text"
-													style={{ width: '45px' }}
-													value={
-														previous_Value_QT[affectationItem.name] ? 
-															previous_Value_QT[affectationItem.name].prevQT_VALUE 
-															: 
-															0
-													}
-													onChange={(e) => handle_prevQT_VALUE_Change(affectationItem.name, e.target.value)}
-												/>
-											</td>
+                {/* CHECKBOX */} <>  </>
+                {/* <td> */}
+                { affectationItem.name !== 'stock' ? ( 
+                <input
+                type="checkbox" 
+                checked={checkbox_Hold_State[affectationItem.name]} 
+                // checked={affectationItem.visibleState[k]} 
+                onChange={() => Toggle_checkbox_boolean(affectationItem.name)}
+                />
+                ):null}							
+                </td>
+                <td> <> </></td>
 
-													
-{/* PREV_T */}
-											{/* <td style={{ backgroundColor: 'gray' }}>	 */}
-											<td style={{ textAlign: 'center',backgroundColor: 'gray' }}>			
-												<input
-													type="text"
-													style={{ width: '80px' }}
-													value={
-														previous_Value_TO[affectationItem.name] ? 
-															previous_Value_TO[affectationItem.name].prevTO_VALUE 
-															: 
-															0
-													}
-													onChange={(e) => handle_PrevTO_VALUE_Change(affectationItem.name, e.target.value)}
-												/>
-											</td>
-											</>
-				)}
-{/* TTL_Q */}
-											<td style={{ textAlign: 'center'}}>
-												{(
-													(statistics[affectationItem.name]?.count ?? 0) +
-													(previous_Value_QT[affectationItem.name]?.prevQT_VALUE
-													? parseFloat(previous_Value_QT[affectationItem.name].prevQT_VALUE)
-													: 0)
-												)
-												}
-											</td>
-											
+                {/* DAY_Q */}				
+                {/* <tr> */}
+                <td style={{ textAlign: 'center'}}>
+                {statistics[affectationItem.name] ? statistics[affectationItem.name].count : 0}
+                </td>
+                {/* </tr> */}
 
-													
-{/* TTL_T */}											
-											<td style={{ textAlign: 'center'}}>
-												{(
-													(statistics[affectationItem.name]?.weight ?? 0) +
-													(previous_Value_TO[affectationItem.name]?.prevTO_VALUE
-													? parseFloat(previous_Value_TO[affectationItem.name].prevTO_VALUE)
-													: 0)
-												).toLocaleString("en-US", { minimumFractionDigits: 3, maximumFractionDigits: 3 })}
-											</td>
+                {/* DAY_T */}
+                <td style={{ textAlign: 'center'}}>
+                {statistics[affectationItem.name] ? parseFloat(statistics[affectationItem.name].weight).toLocaleString("en-US", {minimumFractionDigits: 3, maximumFractionDigits: 3,}) : "0.000"}
+                </td>
 
- {/* retour de condition stock */}		
-										</>
-									)
-								} {/* end stock	  */}
-						
-						</tr>
-											);
-				}
-				// console.log("Invisible : ", affectationItem.name)
-				return null;
-			})}
+                {/* si dest est stock passe x colonnes */}
+                {affectationItem.name === 'stock' ? ( 
+                <>
+                <td colSpan={5}></td> 
+                {/* <td> </td>  */}
+                </>
+                ) 
+                : 									
+                (
+                <> 					
+                {/* sinon affiche toute les colonnes */}
+
+                {/* PREV_Q */}
+                {Extended_Tally_Value && (
+                <>
+                <td style={{ textAlign: 'center',backgroundColor: 'gray' }}>		
+                <input
+                type="text"
+                style={{ width: '45px' }}
+                value={
+                previous_Value_QT[affectationItem.name] ? 
+                    previous_Value_QT[affectationItem.name].prevQT_VALUE 
+                    : 
+                    0
+                }
+                onChange={(e) => handle_prevQT_VALUE_Change(affectationItem.name, e.target.value)}
+                />
+                </td>
 
 
-				{/* PARTIE calcul */}
-				<tr>
-				{/* K */}
-				<td style={{ textAlign: 'left'}}>Total</td>
-				{/* Q */}
-				<td style={{ textAlign: 'center'}}> </td>					 									
-				<td style={{ textAlign: 'center'}}>{isNaN(totalCalesCount) ? 0 : totalCalesCount}</td>										
-				{/* T */}
-				<td style={{ textAlign: 'center'}}>{isNaN(totalCalesWeight) ? 0 : totalCalesWeight.toLocaleString("en-US")}</td>				
-				{Extended_Tally_Value && (
-					<>
-						{/*PREV_Q */}
-						<td style={{ textAlign: 'center',backgroundColor: 'gray' }}>{isNaN(totalPreviousCalesCount) ? 0 : totalPreviousCalesCount}</td>
-						{/*PREV_T */}
-						<td style={{ textAlign: 'center',backgroundColor: 'gray' }}>{isNaN(totalPreviousCalesWeight) ? 0 : totalPreviousCalesWeight.toLocaleString("en-US")}</td>
-					</>
-				)}
-				{/* TT_Q */}
-				<td style={{ textAlign: 'center' }}>{totalCalesCount + totalPreviousCalesCount}</td>
-				{/* TT_T */}
-				<td style={{ textAlign: 'center' }}>{(totalCalesWeight + totalPreviousCalesWeight).toLocaleString("en-US")}</td>
-
-				</tr><tr>
-				</tr>
-			</tbody>
-		</Table>
-{/* *********************************************************************************************** */}
-{/* *********************************************************************************************** */}
-{/* *********************************************************************************************** */}
-{/* *********************************************************************************************** */}
-{/* *********************************************************************************************** */}
-{/* *********************************************************************************************** */}
-{Extended_Tally_Value && (
-<Table>
-			{/* ... En-tête de table ... */}		
-			<thead>
-				<tr>
-					<th>DesT</th>
-					<th> </th>
-					<th style={{ textAlign: 'center'}}> PU  </th>
-					<th style={{ textAlign: 'center'}}> MAX </th>
-					<th style={{ textAlign: 'center'}}>DIFF T</th>
-					<th style={{ textAlign: 'center'}}>DIFF Q</th>
-				</tr>
-			</thead>
-			<tbody>
-			
-{/* HEADERS */}
-			{affectation.map((affectationItem) => {
-
-				const statistics_array = statistics[affectationItem.name] || {}; // Utilisez un objet vide par défaut
-				let chsafin = checkbox_Hold_State[affectationItem.name] || false;
-				if (
-					chsafin || 
-					(
-						statistics_array && 
-						!isNaN(statistics_array.count) && 
-						statistics_array.count > 0
-					)
-				) {
-					// console.log("visible : ", affectationItem.name)
-					
-					return (
-						<tr key={affectationItem.name}>
-							
-{/* DEST */}
-							<td style={{ backgroundColor: selectedColors[affectationItem.name] }}>{affectationItem.name}</td>
-							
-{/* CHECKBOX */}
-						<td></td>
-
-{/* DAY_T */}
-			{/* si dest est stock passe 7 colonnes */}
-								{affectationItem.name === 'stock' ? ( 
-									<>
-										<td colSpan={3}></td> 
-										<td> </td> 
-									</>
-									) 
-									: 									
-									(
-										<> 					
-			{/* sinon affiche toute les colonnes */}
-{/* PU */}
-											<td style={{ textAlign: 'center'}}>
-												{
-													(
-														(
-															(statistics[affectationItem.name]?.weight ??  0) 
-															+
-															(previous_Value_TO[affectationItem.name]?.prevTO_VALUE ?
-																parseFloat(previous_Value_TO[affectationItem.name].prevTO_VALUE) : 0)
-														)
-														/
-														(
-															(statistics[affectationItem.name]?.count ?? 0) 
-															+ 
-															(previous_Value_QT[affectationItem.name]?.prevQT_VALUE ?
-																parseFloat(previous_Value_QT[affectationItem.name].prevQT_VALUE) : 0)
-														)
-														// (totalCalesCount + totalPreviousCalesCount) / (totalCalesWeight + totalPreviousCalesWeight) 
-													).toLocaleString("en-US", { minimumFractionDigits: 3, maximumFractionDigits: 3 })
-												}
-											</td>
-
-											
-{/* MAXI_TONS */}
-											<td style={{ textAlign: 'center'}}>
-												<input
-													type="text"
-													style={{ width: '80px' }}
-													value={maxi_Value_TO[affectationItem.name] ? maxi_Value_TO[affectationItem.name].maxiTO_VALUE : 0} // Utilisez prevValues[affectationItem.name].prevTo pour la valeur 
-													onChange={(e) => handle_maxiTO_VALUE_Change(affectationItem.name, e.target.value)}
-												/>
-											</td>
-
-
- {/* DIFF_T */}
-											<td style={{ textAlign: 'center'}} 
-												className={
-												(
-														(parseFloat(maxi_Value_TO[affectationItem.name]?.maxiTO_VALUE ?? 0) - 
-															(
-																(parseFloat(statistics[affectationItem.name]?.weight) || 0) +
-																(parseFloat(previous_Value_TO[affectationItem.name]?.prevTO_VALUE) || 0)
-															)
-														) < 0 ? 'red-text' : 'blue-text'
-												)
-											}
-												>
-											{
-												(
-													parseFloat(maxi_Value_TO[affectationItem.name]?.maxiTO_VALUE ?? 0) - 
-													(
-													(parseFloat(statistics[affectationItem.name]?.weight) || 0) +
-													(parseFloat(previous_Value_TO[affectationItem.name]?.prevTO_VALUE) || 0)
-													)
-												).toLocaleString("en-US", { minimumFractionDigits: 3, maximumFractionDigits: 3 })
-											}
-											</td>
-
-
-{/* DIFF_Q */}
-											<td style={{ textAlign: 'center'}}
-												className={
-												(() => {
-													try {
-													const maxiTo = parseFloat(maxi_Value_TO[affectationItem.name]?.maxiTO_VALUE) || 0;
-													const statsWeight = parseFloat(statistics[affectationItem.name]?.weight) || 0;
-													const prevTO = parseFloat(previous_Value_TO[affectationItem.name]?.prevTO_VALUE) || 0;
-													const prevQT_VALUE = parseFloat(previous_Value_QT[affectationItem.name]?.prevQT_VALUE) || 0;
-
-													const result = (maxiTo - statsWeight - prevTO) / (
-														(statsWeight + prevTO) /
-														(statistics[affectationItem.name]?.count + prevQT_VALUE)
-													);
-
-													return Math.floor(isNaN(result) ? 0 : result) < 0 ? 'red-text' : 'blue-text';
-													} catch (error) {
-													return 'red-text';
-													}
-												})()
-												}>
-												{(() => {
-													try {
-													const maxiTo = parseFloat(maxi_Value_TO[affectationItem.name]?.maxiTO_VALUE) || 0;
-													const statsWeight = parseFloat(statistics[affectationItem.name]?.weight) || 0;
-													const prevTO = parseFloat(previous_Value_TO[affectationItem.name]?.prevTO_VALUE) || 0;
-													const prevQT_VALUE = parseFloat(previous_Value_QT[affectationItem.name]?.prevQT_VALUE) || 0;
-
-													const result = (maxiTo - statsWeight - prevTO) / (
-														(statsWeight + prevTO) /
-														(statistics[affectationItem.name]?.count + prevQT_VALUE)
-													);
-
-													return isNaN(result) ? 0 : Math.floor(result).toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 0 });
-													} catch (error) {
-													return '0';
-													}
-												})()}
-											</td>
-
-
- {/* retour de condition stock */}		
-										</>
-									)
-								} {/* end stock	  */}
-						</tr>
-					);
-				}
-				// console.log("Invisible : ", affectationItem.name)
-				return null;
-			})}
-
-
-{/* PARTIE calcul */}
-
-				<tr>
-				</tr>
-			</tbody>
-		</Table>
-)}
-{/* *********************************************************************************************** */}
-{/* *********************************************************************************************** */}
+                {/* PREV_T */}
+                {/* <td style={{ backgroundColor: 'gray' }}>	 */}
+                <td style={{ textAlign: 'center',backgroundColor: 'gray' }}>			
+                <input
+                type="text"
+                style={{ width: '80px' }}
+                value={
+                previous_Value_TO[affectationItem.name] ? 
+                    previous_Value_TO[affectationItem.name].prevTO_VALUE 
+                    : 
+                    0
+                }
+                onChange={(e) => handle_PrevTO_VALUE_Change(affectationItem.name, e.target.value)}
+                />
+                </td>
+                </>
+                )}
+                {/* TTL_Q */}
+                <td style={{ textAlign: 'center'}}>
+                {(
+                (statistics[affectationItem.name]?.count ?? 0) +
+                (previous_Value_QT[affectationItem.name]?.prevQT_VALUE
+                ? parseFloat(previous_Value_QT[affectationItem.name].prevQT_VALUE)
+                : 0)
+                )
+                }
+                </td>
 
 
 
-		
-			</div>
-		);
-		}
+                {/* TTL_T */}											
+                <td style={{ textAlign: 'center'}}>
+                {(
+                (statistics[affectationItem.name]?.weight ?? 0) +
+                (previous_Value_TO[affectationItem.name]?.prevTO_VALUE
+                ? parseFloat(previous_Value_TO[affectationItem.name].prevTO_VALUE)
+                : 0)
+                ).toLocaleString("en-US", { minimumFractionDigits: 3, maximumFractionDigits: 3 })}
+                </td>
+
+                {/* retour de condition stock */}		
+                </>
+                )
+                } {/* end stock	  */}
+
+                </tr>
+                );
+                }
+                // console.log("Invisible : ", affectationItem.name)
+                return null;
+                })}
+
+
+                {/* PARTIE calcul */}
+                <tr>
+                {/* K */}
+                <td style={{ textAlign: 'left'}}>Total</td>
+                {/* Q */}
+                <td style={{ textAlign: 'center'}}> </td>					 									
+                <td style={{ textAlign: 'center'}}>{isNaN(totalCalesCount) ? 0 : totalCalesCount}</td>										
+                {/* T */}
+                <td style={{ textAlign: 'center'}}>{isNaN(totalCalesWeight) ? 0 : totalCalesWeight.toLocaleString("en-US")}</td>				
+                {Extended_Tally_Value && (
+                <>
+                {/*PREV_Q */}
+                <td style={{ textAlign: 'center',backgroundColor: 'gray' }}>{isNaN(totalPreviousCalesCount) ? 0 : totalPreviousCalesCount}</td>
+                {/*PREV_T */}
+                <td style={{ textAlign: 'center',backgroundColor: 'gray' }}>{isNaN(totalPreviousCalesWeight) ? 0 : totalPreviousCalesWeight.toLocaleString("en-US")}</td>
+                </>
+                )}
+                {/* TT_Q */}
+                <td style={{ textAlign: 'center' }}>{totalCalesCount + totalPreviousCalesCount}</td>
+                {/* TT_T */}
+                <td style={{ textAlign: 'center' }}>{(totalCalesWeight + totalPreviousCalesWeight).toLocaleString("en-US")}</td>
+
+                </tr><tr>
+                </tr>
+            </tbody>
+        </Table>
+        {Extended_Tally_Value && (
+            <Table>
+                {/* ... En-tête de table ... */}		
+                <thead>
+                    <tr>
+                        <th>DesT</th>
+                        <th> </th>
+                        <th style={{ textAlign: 'center'}}> PU  </th>
+                        <th style={{ textAlign: 'center'}}> MAX </th>
+                        <th style={{ textAlign: 'center'}}>DIFF T</th>
+                        <th style={{ textAlign: 'center'}}>DIFF Q</th>
+                    </tr>
+                </thead>
+                <tbody>			
+                    {/* HEADERS */}
+                                {affectation.map((affectationItem) => {
+
+                                    const statistics_array = statistics[affectationItem.name] || {}; // Utilisez un objet vide par défaut
+                                    let chsafin = checkbox_Hold_State[affectationItem.name] || false;
+                                    if (
+                                        chsafin || 
+                                        (
+                                            statistics_array && 
+                                            !isNaN(statistics_array.count) && 
+                                            statistics_array.count > 0
+                                        )
+                                    ) {
+                                        // console.log("visible : ", affectationItem.name)
+                                        
+                                        return (
+                                            <tr key={affectationItem.name}>
+                                                
+                    {/* DEST */}
+                                                <td style={{ backgroundColor: selectedColors[affectationItem.name] }}>{affectationItem.name}</td>
+                                                
+                    {/* CHECKBOX */}
+                                            <td></td>
+
+                    {/* DAY_T */}
+                                {/* si dest est stock passe 7 colonnes */}
+                                                    {affectationItem.name === 'stock' ? ( 
+                                                        <>
+                                                            <td colSpan={3}></td> 
+                                                            <td> </td> 
+                                                        </>
+                                                        ) 
+                                                        : 									
+                                                        (
+                                                            <> 					
+                                {/* sinon affiche toute les colonnes */}
+                    {/* PU */}
+                                                                <td style={{ textAlign: 'center'}}>
+                                                                    {
+                                                                        (
+                                                                            (
+                                                                                (statistics[affectationItem.name]?.weight ??  0) 
+                                                                                +
+                                                                                (previous_Value_TO[affectationItem.name]?.prevTO_VALUE ?
+                                                                                    parseFloat(previous_Value_TO[affectationItem.name].prevTO_VALUE) : 0)
+                                                                            )
+                                                                            /
+                                                                            (
+                                                                                (statistics[affectationItem.name]?.count ?? 0) 
+                                                                                + 
+                                                                                (previous_Value_QT[affectationItem.name]?.prevQT_VALUE ?
+                                                                                    parseFloat(previous_Value_QT[affectationItem.name].prevQT_VALUE) : 0)
+                                                                            )
+                                                                            // (totalCalesCount + totalPreviousCalesCount) / (totalCalesWeight + totalPreviousCalesWeight) 
+                                                                        ).toLocaleString("en-US", { minimumFractionDigits: 3, maximumFractionDigits: 3 })
+                                                                    }
+                                                                </td>
+
+                                                                
+                    {/* MAXI_TONS */}
+                                                                <td style={{ textAlign: 'center'}}>
+                                                                    <input
+                                                                        type="text"
+                                                                        style={{ width: '80px' }}
+                                                                        value={maxi_Value_TO[affectationItem.name] ? maxi_Value_TO[affectationItem.name].maxiTO_VALUE : 0} // Utilisez prevValues[affectationItem.name].prevTo pour la valeur 
+                                                                        onChange={(e) => handle_maxiTO_VALUE_Change(affectationItem.name, e.target.value)}
+                                                                    />
+                                                                </td>
+
+
+                    {/* DIFF_T */}
+                                                                <td style={{ textAlign: 'center'}} 
+                                                                    className={
+                                                                    (
+                                                                            (parseFloat(maxi_Value_TO[affectationItem.name]?.maxiTO_VALUE ?? 0) - 
+                                                                                (
+                                                                                    (parseFloat(statistics[affectationItem.name]?.weight) || 0) +
+                                                                                    (parseFloat(previous_Value_TO[affectationItem.name]?.prevTO_VALUE) || 0)
+                                                                                )
+                                                                            ) < 0 ? 'red-text' : 'blue-text'
+                                                                    )
+                                                                }
+                                                                    >
+                                                                {
+                                                                    (
+                                                                        parseFloat(maxi_Value_TO[affectationItem.name]?.maxiTO_VALUE ?? 0) - 
+                                                                        (
+                                                                        (parseFloat(statistics[affectationItem.name]?.weight) || 0) +
+                                                                        (parseFloat(previous_Value_TO[affectationItem.name]?.prevTO_VALUE) || 0)
+                                                                        )
+                                                                    ).toLocaleString("en-US", { minimumFractionDigits: 3, maximumFractionDigits: 3 })
+                                                                }
+                                                                </td>
+
+
+                    {/* DIFF_Q */}
+                                                                <td style={{ textAlign: 'center'}}
+                                                                    className={
+                                                                    (() => {
+                                                                        try {
+                                                                        const maxiTo = parseFloat(maxi_Value_TO[affectationItem.name]?.maxiTO_VALUE) || 0;
+                                                                        const statsWeight = parseFloat(statistics[affectationItem.name]?.weight) || 0;
+                                                                        const prevTO = parseFloat(previous_Value_TO[affectationItem.name]?.prevTO_VALUE) || 0;
+                                                                        const prevQT_VALUE = parseFloat(previous_Value_QT[affectationItem.name]?.prevQT_VALUE) || 0;
+
+                                                                        const result = (maxiTo - statsWeight - prevTO) / (
+                                                                            (statsWeight + prevTO) /
+                                                                            (statistics[affectationItem.name]?.count + prevQT_VALUE)
+                                                                        );
+
+                                                                        return Math.floor(isNaN(result) ? 0 : result) < 0 ? 'red-text' : 'blue-text';
+                                                                        } catch (error) {
+                                                                        return 'red-text';
+                                                                        }
+                                                                    })()
+                                                                    }>
+                                                                    {(() => {
+                                                                        try {
+                                                                        const maxiTo = parseFloat(maxi_Value_TO[affectationItem.name]?.maxiTO_VALUE) || 0;
+                                                                        const statsWeight = parseFloat(statistics[affectationItem.name]?.weight) || 0;
+                                                                        const prevTO = parseFloat(previous_Value_TO[affectationItem.name]?.prevTO_VALUE) || 0;
+                                                                        const prevQT_VALUE = parseFloat(previous_Value_QT[affectationItem.name]?.prevQT_VALUE) || 0;
+
+                                                                        const result = (maxiTo - statsWeight - prevTO) / (
+                                                                            (statsWeight + prevTO) /
+                                                                            (statistics[affectationItem.name]?.count + prevQT_VALUE)
+                                                                        );
+
+                                                                        return isNaN(result) ? 0 : Math.floor(result).toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+                                                                        } catch (error) {
+                                                                        return '0';
+                                                                        }
+                                                                    })()}
+                                                                </td>
+
+
+                    {/* retour de condition stock */}		
+                                                            </>
+                                                        )
+                                                    } {/* end stock	  */}
+                                            </tr>
+                                        );
+                                    }
+                                    // console.log("Invisible : ", affectationItem.name)
+                                    return null;
+                                })}
+
+
+                    {/* PARTIE calcul */}
+
+                    <tr>
+                    </tr>
+                </tbody>
+            </Table>
+        )}
+    </div>
+    );
+}
 
 
