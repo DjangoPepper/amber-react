@@ -100,12 +100,12 @@ export default function Statistics() {
 			}));
 			// 
 		}
-		set_previous_Value_TO((previous_Value_TO) => ({
+/* 		set_previous_Value_TO((previous_Value_TO) => ({
 			...previous_Value_TO,
 			[destination]: { 
 				prevTO_VALUE: value, 
 			},
-		}));
+		})); */
 		// let numericValue = parseFloat(value) || 0;
 		dispatch(DataAction.changePreviousTONS({ destination: destination, value: value }));
 		dispatch(DataAction.save_previous_tons())
@@ -121,12 +121,12 @@ export default function Statistics() {
 			}));
 			// 
 		}
-		set_maxi_Values((maxi_Value_TO: any) => ({
+		/* set_maxi_Values((maxi_Value_TO: any) => ({
 			...maxi_Value_TO,
 			[destination]: { 
 				maxiTO_VALUE: value,
 			},
-		}));
+		})); */
 		// const numericValue = parseFloat(value) || 0;
 		// dispatch(DataAction.changeMaxiTONS({ destination: k, value: numericValue }));
 		dispatch(DataAction.changeMaxiTONS({ destination: destination, value: value }));
@@ -355,7 +355,7 @@ export default function Statistics() {
 							{ affectationItem.name !== 'stock' ? ( 
 								<input
 								type="checkbox" 
-								checked={checkbox_Hold_State[affectationItem.name]} 
+								checked={checkbox_Hold_State[affectationItem.name] || false } 
 								// checked={affectationItem.visibleState[k]} 
 								onChange={() => Toggle_checkbox_boolean(affectationItem.name)}
 								/>
