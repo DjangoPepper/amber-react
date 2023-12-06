@@ -119,6 +119,8 @@ export default function Statistics() {
 					maxiTO_VALUE: value, 
 				},
 			}));
+			dispatch(DataAction.changeMaxiTONS({ destination: destination, value: value }));
+			dispatch(DataAction.save_maxi_tons())
 			// 
 		}
 		/* set_maxi_Values((maxi_Value_TO: any) => ({
@@ -129,8 +131,8 @@ export default function Statistics() {
 		})); */
 		// const numericValue = parseFloat(value) || 0;
 		// dispatch(DataAction.changeMaxiTONS({ destination: k, value: numericValue }));
-		dispatch(DataAction.changeMaxiTONS({ destination: destination, value: value }));
-		dispatch(DataAction.save_maxi_tons())
+		// dispatch(DataAction.changeMaxiTONS({ destination: destination, value: value }));
+		// dispatch(DataAction.save_maxi_tons())
 		};
 	const Toggle_Extended_Tally = () => {
 		set_Extended_Tally_Value((prevValue) => {
@@ -161,10 +163,10 @@ export default function Statistics() {
 		}, 0);
 
 	
-	const FromRedux_checkbox_Hold_State = useSelector<RootState, {[key: string]: boolean}>((state) => state.data.HOLD_checkbox_state);
-	const FromRedux_previousQT 			= useSelector<RootState, {[key: string]: string }>((state) => state.data.HOLD_previous_QTT);
-	const FromRedux_previousTO			= useSelector<RootState, {[key: string]: string }>((state) => state.data.HOLD_previous_TONS);
-	const FromRedux_maxiTO				= useSelector<RootState, {[key: string]: string }>((state) => state.data.HOLD_maxi_TONS);
+	// const FromRedux_checkbox_Hold_State = useSelector<RootState, {[key: string]: boolean}>((state) => state.data.HOLD_checkbox_state);
+	// const FromRedux_previousQT 			= useSelector<RootState, {[key: string]: string }>((state) => state.data.HOLD_previous_QTT);
+	// const FromRedux_previousTO			= useSelector<RootState, {[key: string]: string }>((state) => state.data.HOLD_previous_TONS);
+	// const FromRedux_maxiTO				= useSelector<RootState, {[key: string]: string }>((state) => state.data.HOLD_maxi_TONS);
 	// let firstRender = true;
 
 	// /* function init_statistiques() {
@@ -223,28 +225,15 @@ export default function Statistics() {
 		affectation.forEach((affectationItem) => {
 			const k = affectationItem.name as string;
 			if (k !== "stock") {
-				console.log("foreach");
-	
-				// Récupérer la valeur JSON du localStorage
 				const jsonString: string | null = localStorage.getItem("MAXI_data_storage");
-	
-				// Vérifier si la valeur existe
-				if (jsonString !== null) {
+				if (jsonString !== null && jsonString !== undefined) {
 					try {
-						// Parser la chaîne JSON en un objet JavaScript
 						const storageObject: Record<string, string> = JSON.parse(jsonString);
-	
-						// Récupérer la valeur spécifique à la clé H1
 						const h1Value: string | undefined = storageObject[k];
-	
-						// Vérifier si la valeur H1 existe
-						if (k !== undefined) {
+						if (k !== undefined && h1Value !== undefined) {
 							console.log(`La valeur de ${k} est : ${h1Value}`);
-							
-							// Faites quelque chose avec la valeur récupérée, par exemple, l'affecter à une variable
-							// const maVariable = h1Value;
 						} else {
-							console.log("La clé H1 n'a pas été trouvée dans l'objet du localStorage");
+							console.log(`La clé ${k} n'a pas été trouvée dans l'objet du MAXI_data_storage`);
 						}
 					} catch (error) {
 						console.error("Erreur lors de la conversion de la chaîne JSON en objet JavaScript :", error);
@@ -252,6 +241,57 @@ export default function Statistics() {
 				} else {
 					console.log("Aucune valeur trouvée pour la clé MAXI_data_storage");
 				}
+			}
+
+			const jsonString: string | null = localStorage.getItem("PREV_TONS_data_storage");
+			if (jsonString !== null && jsonString !== undefined) {
+				try {
+					const storageObject: Record<string, string> = JSON.parse(jsonString);
+					const h1Value: string | undefined = storageObject[k];
+					if (k !== undefined && h1Value !== undefined) {
+						console.log(`La valeur de ${k} est : ${h1Value}`);
+					} else {
+						console.log(`La clé ${k} n'a pas été trouvée dans l'objet du PREV_TONS_data_storage`);
+					}
+				} catch (error) {
+					console.error("Erreur lors de la conversion de la chaîne JSON en objet JavaScript :", error);
+				}
+			} else {
+				console.log("Aucune valeur trouvée pour la clé prev_tons_data_storage");
+			}
+
+			const Jsonstring: string | null = localStorage.getItem("PREV_QTT_data_storage");
+			if (Jsonstring !== null && Jsonstring !== undefined) {
+				try {
+					const storageObject: Record<string, string> = JSON.parse(Jsonstring);
+					const h1Value: string | undefined = storageObject[k];
+					if (k !== undefined && h1Value !== undefined) {
+						console.log(`La valeur de ${k} est : ${h1Value}`);
+					} else {
+						console.log(`La clé ${k} n'a pas été trouvée dans l'objet du PREV_QTT_data_storage`);
+					}
+				} catch (error) {
+					console.error("Erreur lors de la conversion de la chaîne JSON en objet JavaScript :", error);
+				}
+			} else {
+				console.log("Aucune valeur trouvée pour la clé PREV_QTT_data_storage");
+			}
+
+			const JsonString: string | null = localStorage.getItem("CHECKBOX_data_storage");
+			if (JsonString !== null && JsonString !== undefined) {
+				try {
+					const storageObject: Record<string, string> = JSON.parse(JsonString);
+					const h1Value: string | undefined = storageObject[k];
+					if (k !== undefined && h1Value !== undefined) {
+						console.log(`La valeur de ${k} est : ${h1Value}`);
+					} else {
+						console.log(`La clé ${k} n'a pas été trouvée dans l'objet du CHECKBOX_data_storage`);
+					}
+				} catch (error) {
+					console.error("Erreur lors de la conversion de la chaîne JSON en objet JavaScript :", error);
+				}
+			} else {
+				console.log("Aucune valeur trouvée pour la clé CHECKBOX_data_storage");
 			}
 		});
 	}
