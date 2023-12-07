@@ -81,16 +81,13 @@ export default function Statistics() {
 	};
 	const handle_PrevTO_VALUE_Change = (destination: string, value: string) => {
 		if(value !== undefined && value !== null && value !== "") { 
-			// 
 			set_previous_Value_TO((previous_Value_TO) => ({
 				...previous_Value_TO,
 				[destination]: { 
 					prevTO_VALUE: value, 
 				},
 			}));
-			// 
 		}
-
 		dispatch(DataAction.changePreviousTONS({ destination: destination, value: value }));
 		dispatch(DataAction.save_previous_tons())
 	};
@@ -131,11 +128,7 @@ export default function Statistics() {
 	};
 	const handle_Initiate_Rendering = (prevValue: boolean) => {
 		set_Initiate_Rendering(prevValue);
-		};
-	// };
-	// const handle_Initiate_rendering = (prevValue: boolean) => {
-	// 	set_Initiate_Rendering(prevValue);
-	// };
+	};
 
 	const catalog_data = useSelector<RootState, stepe_Data[]>((state) => state.data.catalog_data_state);
 
@@ -160,9 +153,6 @@ export default function Statistics() {
 						const h1Value: string | undefined = storageObject[k];
 						if (k !== undefined && h1Value !== undefined) {
 							console.log(`La valeur de ${k} est : ${h1Value}`);
-							// dispatch(DataAction.changeMaxiTONS({ destination: k, value: h1Value }));
-							// handle_maxiTO_VALUE_Change(k, h1Value);
-							// loaded_HOLD_maxi_TONS[k] = h1Value;
 							loaded_HOLD_maxi_TONS:true;
 						} else {
 							console.log(`La clé ${k} n'a pas été trouvée dans l'objet du MAXI_TONS_data_storage`);
@@ -182,6 +172,7 @@ export default function Statistics() {
 						const h1Value: string | undefined = storageObject[k];
 						if (k !== undefined && h1Value !== undefined) {
 							console.log(`La valeur de ${k} est : ${h1Value}`);
+							loaded_HOLD_prev_TONS:true;
 						} else {
 							console.log(`La clé ${k} n'a pas été trouvée dans l'objet du PREV_TONS_data_storage`);
 						}
@@ -199,6 +190,7 @@ export default function Statistics() {
 						const h1Value: string | undefined = storageObject[k];
 						if (k !== undefined && h1Value !== undefined) {
 							console.log(`La valeur de ${k} est : ${h1Value}`);
+							loaded_HOLD_prev_QTT:true;
 						} else {
 							console.log(`La clé ${k} n'a pas été trouvée dans l'objet du PREV_QTT_data_storage`);
 						}
@@ -216,6 +208,7 @@ export default function Statistics() {
 						const h1Value: string | undefined = storageObject[k];
 						if (k !== undefined && h1Value !== undefined) {
 							console.log(`La valeur de ${k} est : ${h1Value}`);
+							loaded_HOLD_checkbox:true;
 						} else {
 							console.log(`La clé ${k} n'a pas été trouvée dans l'objet du CHECKBOX_data_storage`);
 						}
@@ -231,10 +224,10 @@ export default function Statistics() {
 	
 
 	useEffect(() => {
-	if (Initiate_Rendering) {
-		init_statistiques();
-		toast.error('init Tally', { position: toast.POSITION.TOP_LEFT, autoClose: 500 });
-	}
+		if (Initiate_Rendering) {
+			init_statistiques();
+			toast.error('init Tally', { position: toast.POSITION.TOP_LEFT, autoClose: 500 });
+		}
 	}
 	, [Initiate_Rendering]);
 
@@ -373,6 +366,7 @@ export default function Statistics() {
 															: 
 															0
 													}
+													// <input type="text" value={inputValue} onChange={handleInputChange} />
 													onChange={(e) => handle_prevQT_VALUE_Change(affectationItem.name, e.target.value)}
 												/>
 											</td>
@@ -391,6 +385,13 @@ export default function Statistics() {
 															0
 													}
 													onChange={(e) => handle_PrevTO_VALUE_Change(affectationItem.name, e.target.value)}
+													// <input type="text" value={inputValue} onChange={handleInputChange} />
+													// const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+													// 	const value = e.target.value;
+													// 	// Mettre à jour le state avec la nouvelle valeur
+													// 	setInputValue(value);
+													// 	};
+
 												/>
 											</td>
 											</>
@@ -406,8 +407,6 @@ export default function Statistics() {
 												}
 											</td>
 											
-
-													
 {/* TTL_T */}											
 											<td style={{ textAlign: 'center'}}>
 												{(
@@ -417,7 +416,6 @@ export default function Statistics() {
 													: 0)
 												).toLocaleString("en-US", { minimumFractionDigits: 3, maximumFractionDigits: 3 })}
 											</td>
-
  {/* retour de condition stock */}		
 										</>
 									)
@@ -429,8 +427,6 @@ export default function Statistics() {
 				// console.log("Invisible : ", affectationItem.name)
 				return null;
 			})}
-
-
 				{/* PARTIE calcul */}
 				<tr>
 				{/* K */}
@@ -457,10 +453,6 @@ export default function Statistics() {
 				</tr>
 			</tbody>
 		</Table>
-{/* *********************************************************************************************** */}
-{/* *********************************************************************************************** */}
-{/* *********************************************************************************************** */}
-{/* *********************************************************************************************** */}
 {/* *********************************************************************************************** */}
 {/* *********************************************************************************************** */}
 {Extended_Tally_Value && (
@@ -578,13 +570,13 @@ export default function Statistics() {
 												className={
 												(() => {
 													try {
-													const maxiTo = parseFloat(maxi_Value_TO[affectationItem.name]?.maxiTO_VALUE) || 0;
+													const maxiTo_VALUE = parseFloat(maxi_Value_TO[affectationItem.name]?.maxiTO_VALUE) || 0;
 													const statsWeight = parseFloat(statistics[affectationItem.name]?.weight) || 0;
-													const prevTO = parseFloat(previous_Value_TO[affectationItem.name]?.prevTO_VALUE) || 0;
+													const prevTO_VALUE = parseFloat(previous_Value_TO[affectationItem.name]?.prevTO_VALUE) || 0;
 													const prevQT_VALUE = parseFloat(previous_Value_QT[affectationItem.name]?.prevQT_VALUE) || 0;
 
-													const result = (maxiTo - statsWeight - prevTO) / (
-														(statsWeight + prevTO) /
+													const result = (maxiTo_VALUE - statsWeight - prevTO_VALUE) / (
+														(statsWeight + prevTO_VALUE) /
 														(statistics[affectationItem.name]?.count + prevQT_VALUE)
 													);
 
@@ -596,13 +588,13 @@ export default function Statistics() {
 												}>
 												{(() => {
 													try {
-													const maxiTo = parseFloat(maxi_Value_TO[affectationItem.name]?.maxiTO_VALUE) || 0;
+													const maxiTo_VALUE = parseFloat(maxi_Value_TO[affectationItem.name]?.maxiTO_VALUE) || 0;
 													const statsWeight = parseFloat(statistics[affectationItem.name]?.weight) || 0;
-													const prevTO = parseFloat(previous_Value_TO[affectationItem.name]?.prevTO_VALUE) || 0;
+													const prevTO_VALUE = parseFloat(previous_Value_TO[affectationItem.name]?.prevTO_VALUE) || 0;
 													const prevQT_VALUE = parseFloat(previous_Value_QT[affectationItem.name]?.prevQT_VALUE) || 0;
 
-													const result = (maxiTo - statsWeight - prevTO) / (
-														(statsWeight + prevTO) /
+													const result = (maxiTo_VALUE - statsWeight - prevTO_VALUE) / (
+														(statsWeight + prevTO_VALUE) /
 														(statistics[affectationItem.name]?.count + prevQT_VALUE)
 													);
 
@@ -635,10 +627,6 @@ export default function Statistics() {
 )}
 {/* *********************************************************************************************** */}
 {/* *********************************************************************************************** */}
-
-
-
-		
 			</div>
 		);
 		}

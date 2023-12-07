@@ -317,6 +317,7 @@ function cleanData(values: any): stepe_Data {
 function Main() {
 	const dispatch = useDispatch();
 	const loaded_catalog = useSelector<RootState, boolean>(state => state.data.loaded_catalog);
+	// const [checkbox_Hold_State, set_checkbox_Hold_State] 				= useState<{ [key: string]: boolean }>({});	
 	const loaded_HOLD_checkbox_state = useSelector<RootState,boolean>(state => state.data.loaded_HOLD_checkbox_state);
 	const loaded_HOLD_previous_QTT = useSelector<RootState,boolean>(state => state.data.loaded_HOLD_previous_QTT);
 	const loaded_HOLD_previous_TONS = useSelector<RootState,boolean>(state => state.data.loaded_HOLD_previous_TONS);
