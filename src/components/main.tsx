@@ -317,7 +317,16 @@ function cleanData(values: any): stepe_Data {
 function Main() {
 	const dispatch = useDispatch();
 	const loaded_catalog = useSelector<RootState, boolean>(state => state.data.loaded_catalog);
+	const loaded_HOLD_checkbox_state = useSelector<RootState,boolean>(state => state.data.loaded_HOLD_checkbox_state);
+	const loaded_HOLD_previous_QTT = useSelector<RootState,boolean>(state => state.data.loaded_HOLD_previous_QTT);
+	const loaded_HOLD_previous_TONS = useSelector<RootState,boolean>(state => state.data.loaded_HOLD_previous_TONS);
+	const loaded_HOLD_maxi_TONS = useSelector<RootState,boolean>(state => state.data.loaded_HOLD_maxi_TONS);
 	
+	const saved_HOLD_checkbox_state = useSelector<RootState, boolean>(state => state.data.saved_HOLD_checkbox_state);
+	const saved_HOLD_previous_QTT = useSelector<RootState, boolean>(state => state.data.saved_HOLD_previous_QTT);
+	const saved_HOLD_previous_TONS = useSelector<RootState, boolean>(state => state.data.saved_HOLD_previous_TONS);
+	const saved_HOLD_maxi_TONS = useSelector<RootState, boolean>(state => state.data.saved_HOLD_maxi_TONS);
+
 	const onDrop = useCallback((acceptedFiles: any) => {
 		
 	const file = acceptedFiles[0];
@@ -337,7 +346,7 @@ function Main() {
 
 		if (workbook.Sheets['winwin']){																// la feuille simplifiée existe
 				Sheet = workbook.Sheets['winwin'];
-				toast.info('feuille simplifié trouvée', { position: toast.POSITION.TOP_RIGHT, autoClose: 5000 })
+				toast.info('Feuille simplifié', { position: toast.POSITION.TOP_RIGHT, autoClose: 5000 })
 				// toast('🦄 Wow so easy!', {
 				// 	position: "top-right",
 				// 	autoClose: 5000,
@@ -352,16 +361,16 @@ function Main() {
 		} 
 		else if (workbook.Sheets['Bobines']){
 			Sheet = CleanExcelSheet(workbook.Sheets['Bobines']);
-			toast.info('Utilisation feuille Bobines', { position: toast.POSITION.TOP_RIGHT })
+			toast.info('Feuille Bobines', { position: toast.POSITION.TOP_RIGHT })
 		}
 		else if (workbook.Sheets['Brames']){
 			Sheet = CleanExcelSheet(workbook.Sheets['Brames']);
-			toast.info('Utilisation feuille Brames', { position: toast.POSITION.TOP_RIGHT })
+			toast.info('Feuille Brames', { position: toast.POSITION.TOP_RIGHT })
 		}
 		else {
 			// Sheet = workbook.Sheets[workbook.SheetNames[0]];
 			Sheet = CleanExcelSheet(workbook.Sheets[workbook.SheetNames[0]]);
-			toast.info('Utilisation 1ere feuille par defaut', { position: toast.POSITION.TOP_RIGHT, autoClose: 1000 })
+			toast.info('Feuil1 par defaut', { position: toast.POSITION.TOP_RIGHT, autoClose: 1000 })
 							
 		}
 		

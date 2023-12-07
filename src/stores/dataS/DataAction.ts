@@ -42,19 +42,6 @@ export default class DataAction {
 	public static UPDATE_DONNEES = "DataAction.UPDATE_DONNEES";
 	public static ADD_DONNEES = "DataAction.ADD_DONNEES";
 
-	////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////
-
-	// public static add_donnees(nouvelles_donnees: { [destination: string]: string}): AnyAction {
-	// 	return { type: DataAction.ADD_DONNEES, payload: nouvelles_donnees };
-	// };
-	
-	// public static update_donnees(index: number, maj_donnees: { [destination: string]: string}): AnyAction {
-	// 	return { type: DataAction.UPDATE_DONNEES, payload: {index, maj_donnees }};
-	// }
-
 	public static load_catalog(data: string): AnyAction {
 		return { type: DataAction.LOAD_CATALOG, payload: JSON.parse(data) };
 	}

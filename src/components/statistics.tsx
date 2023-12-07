@@ -53,17 +53,7 @@ export default function Statistics() {
 		dispatch(DataAction.change_checkbox_state({ [k]: updatedCheckboxState[k] }));
 		dispatch(DataAction.save_checkbox_state())
 		};
-	// const handle_string_checkBOX_Change = (destination: string, value: string) => {
-	// 	set_string_checkbox_Hold_State((string_checkbox_Hold_State) => ({
-	// 		...string_checkbox_Hold_State,
-	// 		[destination]: { 
-	// 			chckBX_VALUE: value, 
-	// 		},
-	// 	}));
-	// 	// let numericValue = parseFloat(value) || 0;
-	// 	dispatch(DataAction.change_string_checkbox_state({ destination: destination, value: value }));
-	// 	dispatch(DataAction.save_string_checkbox_state());
-	// };
+
 	const handle_checkBOX_Change = (destination: string, value: boolean) => {
 		set_checkbox_Hold_State((checkbox_Hold_State) => ({
 			...checkbox_Hold_State,
@@ -100,13 +90,7 @@ export default function Statistics() {
 			}));
 			// 
 		}
-/* 		set_previous_Value_TO((previous_Value_TO) => ({
-			...previous_Value_TO,
-			[destination]: { 
-				prevTO_VALUE: value, 
-			},
-		})); */
-		// let numericValue = parseFloat(value) || 0;
+
 		dispatch(DataAction.changePreviousTONS({ destination: destination, value: value }));
 		dispatch(DataAction.save_previous_tons())
 	};
@@ -164,20 +148,25 @@ export default function Statistics() {
 		}, 0);
 
 		//MANQUE LES INPUTS AU DEMARRAGE
-		
+
 	function init_statistiques() {
 		affectation.forEach((affectationItem) => {
 			const k = affectationItem.name as string;
 			if (k !== "stock") {
-				const jsonString: string | null = localStorage.getItem("MAXI_TONS_data_storage");
-				if (jsonString !== null && jsonString !== undefined) {
+				const jsonStringM: string | null = localStorage.getItem("MAXI_TONS_data_storage");
+				if (jsonStringM !== null && jsonStringM !== undefined) {
 					try {
-						const storageObject: Record<string, string> = JSON.parse(jsonString);
+						const storageObject: Record<string, string> = JSON.parse(jsonStringM);
 						const h1Value: string | undefined = storageObject[k];
 						if (k !== undefined && h1Value !== undefined) {
 							console.log(`La valeur de ${k} est : ${h1Value}`);
+							// dispatch(DataAction.changeMaxiTONS({ destination: k, value: h1Value }));
+							// handle_maxiTO_VALUE_Change(k, h1Value);
+							// loaded_HOLD_maxi_TONS[k] = h1Value;
+							loaded_HOLD_maxi_TONS:true;
 						} else {
 							console.log(`La clé ${k} n'a pas été trouvée dans l'objet du MAXI_TONS_data_storage`);
+							// loaded_HOLD_maxi_TONS:false;
 						}
 					} catch (error) {
 						console.error("Erreur lors de la conversion de la chaîne JSON en objet JavaScript :", error);
@@ -185,57 +174,57 @@ export default function Statistics() {
 				} else {
 					console.log("Aucune valeur trouvée pour la clé MAXI_TONS_data_storage");
 				}
-			}
-
-			const jsonString: string | null = localStorage.getItem("PREV_TONS_data_storage");
-			if (jsonString !== null && jsonString !== undefined) {
-				try {
-					const storageObject: Record<string, string> = JSON.parse(jsonString);
-					const h1Value: string | undefined = storageObject[k];
-					if (k !== undefined && h1Value !== undefined) {
-						console.log(`La valeur de ${k} est : ${h1Value}`);
-					} else {
-						console.log(`La clé ${k} n'a pas été trouvée dans l'objet du PREV_TONS_data_storage`);
+			// }
+				const jsonString: string | null = localStorage.getItem("PREV_TONS_data_storage");
+				if (jsonString !== null && jsonString !== undefined) {
+					try {
+						const storageObject: Record<string, string> = JSON.parse(jsonString);
+						const h1Value: string | undefined = storageObject[k];
+						if (k !== undefined && h1Value !== undefined) {
+							console.log(`La valeur de ${k} est : ${h1Value}`);
+						} else {
+							console.log(`La clé ${k} n'a pas été trouvée dans l'objet du PREV_TONS_data_storage`);
+						}
+					} catch (error) {
+						console.error("Erreur lors de la conversion de la chaîne JSON en objet JavaScript :", error);
 					}
-				} catch (error) {
-					console.error("Erreur lors de la conversion de la chaîne JSON en objet JavaScript :", error);
+				} else {
+					console.log("Aucune valeur trouvée pour la clé prev_tons_data_storage");
 				}
-			} else {
-				console.log("Aucune valeur trouvée pour la clé prev_tons_data_storage");
-			}
 
-			const Jsonstring: string | null = localStorage.getItem("PREV_QTT_data_storage");
-			if (Jsonstring !== null && Jsonstring !== undefined) {
-				try {
-					const storageObject: Record<string, string> = JSON.parse(Jsonstring);
-					const h1Value: string | undefined = storageObject[k];
-					if (k !== undefined && h1Value !== undefined) {
-						console.log(`La valeur de ${k} est : ${h1Value}`);
-					} else {
-						console.log(`La clé ${k} n'a pas été trouvée dans l'objet du PREV_QTT_data_storage`);
+				const Jsonstring: string | null = localStorage.getItem("PREV_QTT_data_storage");
+				if (Jsonstring !== null && Jsonstring !== undefined) {
+					try {
+						const storageObject: Record<string, string> = JSON.parse(Jsonstring);
+						const h1Value: string | undefined = storageObject[k];
+						if (k !== undefined && h1Value !== undefined) {
+							console.log(`La valeur de ${k} est : ${h1Value}`);
+						} else {
+							console.log(`La clé ${k} n'a pas été trouvée dans l'objet du PREV_QTT_data_storage`);
+						}
+					} catch (error) {
+						console.error("Erreur lors de la conversion de la chaîne JSON en objet JavaScript :", error);
 					}
-				} catch (error) {
-					console.error("Erreur lors de la conversion de la chaîne JSON en objet JavaScript :", error);
+				} else {
+					console.log("Aucune valeur trouvée pour la clé PREV_QTT_data_storage");
 				}
-			} else {
-				console.log("Aucune valeur trouvée pour la clé PREV_QTT_data_storage");
-			}
 
-			const JsonString: string | null = localStorage.getItem("CHECKBOX_data_storage");
-			if (JsonString !== null && JsonString !== undefined) {
-				try {
-					const storageObject: Record<string, string> = JSON.parse(JsonString);
-					const h1Value: string | undefined = storageObject[k];
-					if (k !== undefined && h1Value !== undefined) {
-						console.log(`La valeur de ${k} est : ${h1Value}`);
-					} else {
-						console.log(`La clé ${k} n'a pas été trouvée dans l'objet du CHECKBOX_data_storage`);
+				const JsonString: string | null = localStorage.getItem("CHECKBOX_data_storage");
+				if (JsonString !== null && JsonString !== undefined) {
+					try {
+						const storageObject: Record<string, string> = JSON.parse(JsonString);
+						const h1Value: string | undefined = storageObject[k];
+						if (k !== undefined && h1Value !== undefined) {
+							console.log(`La valeur de ${k} est : ${h1Value}`);
+						} else {
+							console.log(`La clé ${k} n'a pas été trouvée dans l'objet du CHECKBOX_data_storage`);
+						}
+					} catch (error) {
+						console.error("Erreur lors de la conversion de la chaîne JSON en objet JavaScript :", error);
 					}
-				} catch (error) {
-					console.error("Erreur lors de la conversion de la chaîne JSON en objet JavaScript :", error);
+				} else {
+					console.log("Aucune valeur trouvée pour la clé CHECKBOX_data_storage");
 				}
-			} else {
-				console.log("Aucune valeur trouvée pour la clé CHECKBOX_data_storage");
 			}
 		});
 	}

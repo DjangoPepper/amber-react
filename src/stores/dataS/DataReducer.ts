@@ -26,17 +26,15 @@ interface DataState {
     HOLD_previous_TONS:  { [destinbation: string]: string };
     HOLD_maxi_TONS:      { [destinbation: string]: string };
     
-    loaded_checkbox_state: boolean,
-    loaded_previous_QTT: boolean;
-    loaded_previous_TONS: boolean;
-    loaded_maxi_TONS: boolean;
+    loaded_HOLD_checkbox_state: boolean,
+    loaded_HOLD_previous_QTT: boolean;
+    loaded_HOLD_previous_TONS: boolean;
+    loaded_HOLD_maxi_TONS: boolean;
     
     saved_HOLD_checkbox_state: boolean;
     saved_HOLD_previous_QTT: boolean;
     saved_HOLD_previous_TONS: boolean;
     saved_HOLD_maxi_TONS: boolean;
-
-    tableauDeDonnees: { [destination: string]: string }[];
 }
 
 const initialState: DataState = {
@@ -52,17 +50,16 @@ const initialState: DataState = {
     HOLD_previous_TONS: {}, 
     HOLD_maxi_TONS: {},
 
-    loaded_checkbox_state: false,
-    loaded_previous_QTT: false,
-    loaded_previous_TONS: false,
-    loaded_maxi_TONS: false,
+    loaded_HOLD_checkbox_state: false,
+    loaded_HOLD_previous_QTT: false,
+    loaded_HOLD_previous_TONS: false,
+    loaded_HOLD_maxi_TONS: false,
     
     saved_HOLD_checkbox_state: false,
     saved_HOLD_previous_QTT: false,
     saved_HOLD_previous_TONS: false,
     saved_HOLD_maxi_TONS: false,
-    
-    tableauDeDonnees: [],
+
 };
 
 export const dataReducer: Reducer<DataState> = (state = initialState, action: AnyAction): DataState => {
@@ -207,28 +204,28 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
                 return {
                     ...state,
                     HOLD_checkbox_state: action.payload,
-                    loaded_checkbox_state: true,
+                    loaded_HOLD_checkbox_state: true,
                     saved_HOLD_checkbox_state: false,
                 };
             case DataAction.LOAD_PREV_QTT:
                 return {
                     ...state,
                     HOLD_previous_QTT: action.payload,
-                    loaded_previous_QTT: true,
+                    loaded_HOLD_previous_QTT: true,
                     saved_HOLD_previous_QTT: false,
                 };
             case DataAction.LOAD_PREV_TONS:
                 return {
                     ...state,
                     HOLD_previous_TONS: action.payload,
-                    loaded_previous_TONS: true,
+                    loaded_HOLD_previous_TONS: true,
                     saved_HOLD_previous_TONS: false,
                 };
             case DataAction.LOAD_MAXI_TONS:
                 return {
                     ...state,
                     HOLD_maxi_TONS: action.payload,
-                    loaded_maxi_TONS: true,
+                    loaded_HOLD_maxi_TONS: true,
                     saved_HOLD_maxi_TONS: false,
                 }
 //
@@ -238,28 +235,7 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
                     ...state,
                     loaded_catalog: false,
                 }
-            //
-            //
-            //
-            // case DataAction.ADD_DONNEES:
-            //     return {
-            //         ...state,
-            //         catalog_data_state: {
-            //             ...state.catalog_data_state,
-            //             [action.payload.destination]: action.payload.value
-            //         }
-            //     }
-            // case DataAction.UPDATE_DONNEES:
-            //     const { index, data } = action.payload;
-            //     const updatedTableau = [...state.tableauDeDonnees];
-            //     updatedTableau[index] = data;
-            //     return {
-            //         ...state,
-            //         tableauDeDonnees: updatedTableau,
-            //     };
-            //
-            //
-            //
+
             default:
                 return state;
         }

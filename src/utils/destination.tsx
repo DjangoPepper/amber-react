@@ -1,8 +1,3 @@
-// import React from "react";
-// import { connect } from 'react-redux';
-// import { updateAffectationVisibility } from '../stores/dataS/destinationActions'
-// import Statistics from '../components/statistics';
-
 interface IHeader {
     key: string;
     name: string;
@@ -37,9 +32,3 @@ export const colors = affectation.reduce<{[key: string]: string}>((obj, d) => {
     obj[d.name] = d.color;
     return obj;
 }, {})
-
-// const mapStateToProps = (state: { destination: { affectations: any; }; }) => {
-//   return {
-//     affectations: state.destination.affectations,
-//   };
-// };
