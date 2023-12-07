@@ -134,7 +134,7 @@ export default function Statistics() {
 		// dispatch(DataAction.changeMaxiTONS({ destination: destination, value: value }));
 		// dispatch(DataAction.save_maxi_tons())
 		};
-		
+
 	const Toggle_Extended_Tally = () => {
 		set_Extended_Tally_Value((prevValue) => {
 			return !prevValue;
@@ -175,11 +175,11 @@ export default function Statistics() {
 	// 		const k = affectationItem.name as string;
 	// 		if (k !== "stock") {
 	// 			console.log("foreach");
-	// 			const FromStorage(k): string = localStorage.getItem(MAXI_data_storage[k]::string);
+	// 			const FromStorage(k): string = localStorage.getItem(MAXI_TONS_data_storage[k]::string);
 				
 	// 				// Mettre à jour le state avec les données déj
 				
-	// 				// const maxiData[k] = localStorage.getItem('maxi_data_storages');
+	// 				// const maxiData[k] = localStorage.getItem('MAXI_TONS_data_storages');
 	// 				// const prevTonsData = localStorage.getItem('prev_tons_data_storage');
 				
 	// 				// // Mettre à jour le state avec les données récupérées
@@ -205,9 +205,9 @@ export default function Statistics() {
 			const k = affectationItem.name as string;
 			if (k !== "stock") {
 				console.log("foreach");
-				const maxiData = JSON.parse(localStorage.getItem('MAXI_data_storage') || '{}');
+				const maxiData = JSON.parse(localStorage.getItem('MAXI_TONS_data_storage') || '{}');
 				// // Récupérer la valeur du localStorage
-				// const valueFromStorage: string | null = localStorage.getItem(MAXI_data_storage);
+				// const valueFromStorage: string | null = localStorage.getItem(MAXI_TONS_data_storage);
 	
 				// // Vérifier si la valeur existe
 				// if (valueFromStorage !== null) {
@@ -216,7 +216,7 @@ export default function Statistics() {
 				// 	// Faites quelque chose avec la valeur récupérée, par exemple, l'affecter à une variable
 				// 	// const maVariable = valueFromStorage;
 				// } else {
-				// 	console.log(`Aucune valeur trouvée pour la clé ${MAXI_data_storage[k]}`);
+				// 	console.log(`Aucune valeur trouvée pour la clé ${MAXI_TONS_data_storage[k]}`);
 				// }
 				console.log(maxiData);
 			}
@@ -226,7 +226,7 @@ export default function Statistics() {
 		affectation.forEach((affectationItem) => {
 			const k = affectationItem.name as string;
 			if (k !== "stock") {
-				const jsonString: string | null = localStorage.getItem("MAXI_data_storage");
+				const jsonString: string | null = localStorage.getItem("MAXI_TONS_data_storage");
 				if (jsonString !== null && jsonString !== undefined) {
 					try {
 						const storageObject: Record<string, string> = JSON.parse(jsonString);
@@ -234,13 +234,13 @@ export default function Statistics() {
 						if (k !== undefined && h1Value !== undefined) {
 							console.log(`La valeur de ${k} est : ${h1Value}`);
 						} else {
-							console.log(`La clé ${k} n'a pas été trouvée dans l'objet du MAXI_data_storage`);
+							console.log(`La clé ${k} n'a pas été trouvée dans l'objet du MAXI_TONS_data_storage`);
 						}
 					} catch (error) {
 						console.error("Erreur lors de la conversion de la chaîne JSON en objet JavaScript :", error);
 					}
 				} else {
-					console.log("Aucune valeur trouvée pour la clé MAXI_data_storage");
+					console.log("Aucune valeur trouvée pour la clé MAXI_TONS_data_storage");
 				}
 			}
 

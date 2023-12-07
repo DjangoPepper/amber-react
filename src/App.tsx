@@ -23,7 +23,7 @@ function init() {
 	// const Init_data_STRING_CHECKBOX_STATE = window.localStorage.getItem("STRING_CHECKBOX_data_storage");
 	const Init_data_PREV_QTT = window.localStorage.getItem("PREV_QTT_data_storage");
 	const Init_data_PREV_TONS = window.localStorage.getItem("PREV_TONS_data_storage");
-	const Init_data_MAXI = window.localStorage.getItem("MAXI_data_storage");
+	const Init_data_MAXI = window.localStorage.getItem("MAXI_TONS_data_storage");
 
 	if (Init_data_catalog) {
 			store.dispatch(DataAction.load_catalog(Init_data_catalog));
@@ -92,7 +92,7 @@ function init() {
 						const parsedMaxi = JSON.parse(Init_data_MAXI);
 						const destinationValue = parsedMaxi[destination];
 						store.dispatch(DataAction.changeMaxiTONS({[destination]: destinationValue}));
-						// window.localStorage.setItem("MAXI_data_storage", JSON.stringify({[destination]: parsedMaxi[destination]}));
+						// window.localStorage.setItem("MAXI_TONS_data_storage", JSON.stringify({[destination]: parsedMaxi[destination]}));
 					}
 				}
 			});

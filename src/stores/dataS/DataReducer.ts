@@ -190,7 +190,7 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
                 }
             case DataAction.SAVE_MAXI_TONS:
                 // if(state.saved_HOLD_maxi_TONS) return state;
-                window.localStorage.setItem("MAXI_data_storage", JSON.stringify(state.HOLD_maxi_TONS));
+                window.localStorage.setItem("MAXI_TONS_data_storage", JSON.stringify(state.HOLD_maxi_TONS));
                 return {
                     ...state,
                     // saved_HOLD_maxi_TONS: false
