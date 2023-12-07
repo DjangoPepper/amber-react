@@ -163,65 +163,8 @@ export default function Statistics() {
 		return total + (previous_Value_TO[k]?.prevTO_VALUE ? parseFloat(previous_Value_TO[k].prevTO_VALUE) : 0);
 		}, 0);
 
-	
-	// const FromRedux_checkbox_Hold_State = useSelector<RootState, {[key: string]: boolean}>((state) => state.data.HOLD_checkbox_state);
-	// const FromRedux_previousQT 			= useSelector<RootState, {[key: string]: string }>((state) => state.data.HOLD_previous_QTT);
-	// const FromRedux_previousTO			= useSelector<RootState, {[key: string]: string }>((state) => state.data.HOLD_previous_TONS);
-	// const FromRedux_maxiTO				= useSelector<RootState, {[key: string]: string }>((state) => state.data.HOLD_maxi_TONS);
-	// let firstRender = true;
-
-	// /* function init_statistiques() {
-	// 	affectation.forEach((affectationItem) => {
-	// 		const k = affectationItem.name as string;
-	// 		if (k !== "stock") {
-	// 			console.log("foreach");
-	// 			const FromStorage(k): string = localStorage.getItem(MAXI_TONS_data_storage[k]::string);
-				
-	// 				// Mettre à jour le state avec les données déj
-				
-	// 				// const maxiData[k] = localStorage.getItem('MAXI_TONS_data_storages');
-	// 				// const prevTonsData = localStorage.getItem('prev_tons_data_storage');
-				
-	// 				// // Mettre à jour le state avec les données récupérées
-	// 				// dispatch(DataAction.load_maxi_tons(JSON.parse(maxiData)));
-	// 				// dispatch(DataAction.load_prev_tons(JSON.parse(prevTonsData)));
-				
-	// 				// Autres actions à effectuer...
-				
-	// 				// Mettre à jour la page HTML si nécessaire
-	// 				handle_Initiate_Rendering(false);
-	// 			}
-	// 			} //end if stcok
-
-	// 	});
-	// 	// firstRender = false;
-	// 	// Toggle_Initiate_Rendering();
-	// 	// handle_Initiate_rendering(false);
-	// 	handle_Initiate_Rendering(false);
-
-	// }; */
-/* 	function nullinit_statistiques() {
-		affectation.forEach((affectationItem) => {
-			const k = affectationItem.name as string;
-			if (k !== "stock") {
-				console.log("foreach");
-				const maxiData = JSON.parse(localStorage.getItem('MAXI_TONS_data_storage') || '{}');
-				// // Récupérer la valeur du localStorage
-				// const valueFromStorage: string | null = localStorage.getItem(MAXI_TONS_data_storage);
-	
-				// // Vérifier si la valeur existe
-				// if (valueFromStorage !== null) {
-				// 	console.log(`La valeur de ${k} est : ${valueFromStorage}`);
-					
-				// 	// Faites quelque chose avec la valeur récupérée, par exemple, l'affecter à une variable
-				// 	// const maVariable = valueFromStorage;
-				// } else {
-				// 	console.log(`Aucune valeur trouvée pour la clé ${MAXI_TONS_data_storage[k]}`);
-				// }
-				console.log(maxiData);
-			}
-		});
-	} */
+		//MANQUE LES INPUTS AU DEMARRAGE
+		
 	function init_statistiques() {
 		affectation.forEach((affectationItem) => {
 			const k = affectationItem.name as string;
