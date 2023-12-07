@@ -134,6 +134,7 @@ export default function Statistics() {
 		// dispatch(DataAction.changeMaxiTONS({ destination: destination, value: value }));
 		// dispatch(DataAction.save_maxi_tons())
 		};
+		
 	const Toggle_Extended_Tally = () => {
 		set_Extended_Tally_Value((prevValue) => {
 			return !prevValue;
