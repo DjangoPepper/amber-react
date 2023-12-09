@@ -12,7 +12,6 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 
-
 function CleanExcelSheet(oSheet: any): stepe_Data {
 	toast.info('Nettoyage de la feuille', { position: toast.POSITION.TOP_RIGHT, autoClose: 2000 })// la feuille Bobines existe
 			
@@ -80,7 +79,6 @@ function removeProprietes(newsheet: any) {
 	// newRef = utils.encode_range({ s: { c: 0, r: 0 }, e: { c: utils.decode_col(newRef), r: utils.decode_row(newRef)}});	
 	return newRef;
 }
-
 
 function reconstruitRef(newesheet: any, newref: any): string {
 
@@ -312,8 +310,6 @@ function cleanData(values: any): stepe_Data {
     };
 }
 
-
-
 function Main() {
 	const dispatch = useDispatch();
 	const loaded_catalog = useSelector<RootState, boolean>(state => state.data.loaded_catalog);
@@ -422,6 +418,5 @@ function Main() {
 		</Container>
 	);
 }
-
 
 export default Main;

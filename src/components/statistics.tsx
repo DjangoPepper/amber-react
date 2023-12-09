@@ -3,7 +3,7 @@ import { RootState } from "../stores/rootStore";
 import DataAction from "../stores/dataS/DataAction";
 import { stepe_Data } from "../stores/dataS/DataReducer";
 import { Table } from "react-bootstrap";
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,ChangeEvent } from 'react';
 import { affectation} from "../utils/destination";
 import Button from 'react-bootstrap/Button';
 import { toast } from 'react-toastify';
@@ -150,10 +150,16 @@ export default function Statistics() {
 				if (jsonStringM !== null && jsonStringM !== undefined) {
 					try {
 						const storageObject: Record<string, string> = JSON.parse(jsonStringM);
-						const h1Value: string | undefined = storageObject[k];
-						if (k !== undefined && h1Value !== undefined) {
-							console.log(`La valeur de ${k} est : ${h1Value}`);
-							loaded_HOLD_maxi_TONS:true;
+						const Init_value: string | undefined = storageObject[k];
+						if (k !== undefined && Init_value !== undefined) {
+							console.log(`La valeur de ${k} est : ${Init_value}`);
+							// loaded_HOLD_maxi_TONS:true;
+							set_maxi_Values((newvaluefromstorage) => ({
+								...newvaluefromstorage,
+								[k]: { 
+									maxiTO_VALUE: Init_value, 
+								},
+							}));
 						} else {
 							console.log(`La clé ${k} n'a pas été trouvée dans l'objet du MAXI_TONS_data_storage`);
 							// loaded_HOLD_maxi_TONS:false;
@@ -169,10 +175,16 @@ export default function Statistics() {
 				if (jsonString !== null && jsonString !== undefined) {
 					try {
 						const storageObject: Record<string, string> = JSON.parse(jsonString);
-						const h1Value: string | undefined = storageObject[k];
-						if (k !== undefined && h1Value !== undefined) {
-							console.log(`La valeur de ${k} est : ${h1Value}`);
-							loaded_HOLD_prev_TONS:true;
+						const Init_value: string | undefined = storageObject[k];
+						if (k !== undefined && Init_value !== undefined) {
+							console.log(`La valeur de ${k} est : ${Init_value}`);
+							// loaded_HOLD_prev_TONS:true;
+							set_previous_Value_TO((newvaluefromstorage) => ({
+								...newvaluefromstorage,
+								[k]: { 
+									prevTO_VALUE: Init_value, 
+								},
+							}));
 						} else {
 							console.log(`La clé ${k} n'a pas été trouvée dans l'objet du PREV_TONS_data_storage`);
 						}
@@ -187,10 +199,16 @@ export default function Statistics() {
 				if (Jsonstring !== null && Jsonstring !== undefined) {
 					try {
 						const storageObject: Record<string, string> = JSON.parse(Jsonstring);
-						const h1Value: string | undefined = storageObject[k];
-						if (k !== undefined && h1Value !== undefined) {
-							console.log(`La valeur de ${k} est : ${h1Value}`);
-							loaded_HOLD_prev_QTT:true;
+						const Init_value: string | undefined = storageObject[k];
+						if (k !== undefined && Init_value !== undefined) {
+							console.log(`La valeur de ${k} est : ${Init_value}`);
+							// loaded_HOLD_prev_QTT:true;
+							set_previous_Value_QT((newvaluefromstorage) => ({
+								...newvaluefromstorage,
+								[k]: { 
+									prevQT_VALUE: Init_value, 
+								},
+							}));
 						} else {
 							console.log(`La clé ${k} n'a pas été trouvée dans l'objet du PREV_QTT_data_storage`);
 						}
@@ -205,10 +223,14 @@ export default function Statistics() {
 				if (JsonString !== null && JsonString !== undefined) {
 					try {
 						const storageObject: Record<string, string> = JSON.parse(JsonString);
-						const h1Value: string | undefined = storageObject[k];
-						if (k !== undefined && h1Value !== undefined) {
-							console.log(`La valeur de ${k} est : ${h1Value}`);
-							loaded_HOLD_checkbox:true;
+						const Init_value: string | undefined = storageObject[k];
+						if (k !== undefined && Init_value !== undefined) {
+							console.log(`La valeur de ${k} est : ${Init_value}`);
+							// loaded_HOLD_checkbox:true;
+							set_checkbox_Hold_State((newvaluefromstorage) => ({
+								...newvaluefromstorage,
+								[k]: Init_value === "true",
+							}));
 						} else {
 							console.log(`La clé ${k} n'a pas été trouvée dans l'objet du CHECKBOX_data_storage`);
 						}
@@ -366,8 +388,16 @@ export default function Statistics() {
 															: 
 															0
 													}
-													// <input type="text" value={inputValue} onChange={handleInputChange} />
-													onChange={(e) => handle_prevQT_VALUE_Change(affectationItem.name, e.target.value)}
+													// onChange={(e) => handle_prevQT_VALUE_Change(affectationItem.name, e.target.value)}
+													
+													// const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+													// const value = e.target.value;
+													// Mettre à jour le state avec la nouvelle valeur
+													// setInputValue(value);
+													// };
+
+													onChange={(e: ChangeEvent<HTMLInputElement>) => handle_prevQT_VALUE_Change(affectationItem.name, e.target.value)}
+													
 												/>
 											</td>
 
