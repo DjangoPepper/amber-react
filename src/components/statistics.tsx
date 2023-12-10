@@ -4,7 +4,7 @@ import DataAction from "../stores/dataS/DataAction";
 
 import { stepe_Data } from "../stores/dataS/DataReducer";
 import { Table } from "react-bootstrap";
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, ChangeEvent } from 'react';
 import { affectation} from "../utils/destination";
 // import { updateAffectationVisibility } from '../stores/data/destinationActions';
 
@@ -280,7 +280,8 @@ export default function Statistics() {
 															: 
 															0
 													}
-													onChange={(e) => handle_prevQT_VALUE_Change(affectationItem.name, e.target.value)}
+													// onChange={(e) => handle_prevQT_VALUE_Change(affectationItem.name, e.target.value)}
+													onChange={(e: ChangeEvent<HTMLInputElement>) => handle_prevQT_VALUE_Change(affectationItem.name, e.target.value)}
 												/>
 											</td>
 
