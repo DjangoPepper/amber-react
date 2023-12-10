@@ -24,7 +24,7 @@ interface DataState {
     HOLD_checkbox_state: { [destination: string]: boolean };
     HOLD_previous_QTT:   { [destinbation: string]: string };
     HOLD_previous_TONS:  { [destinbation: string]: string };
-    HOLD_maxi_TONS:      { [destinbation: string]: string };
+    HOLD_maxi_TONS_state:      { [destinbation: string]: string };
     
     loaded_HOLD_checkbox_state: boolean,
     loaded_HOLD_previous_QTT: boolean;
@@ -48,7 +48,7 @@ const initialState: DataState = {
     HOLD_checkbox_state: {},
     HOLD_previous_QTT: {},
     HOLD_previous_TONS: {}, 
-    HOLD_maxi_TONS: {},
+    HOLD_maxi_TONS_state: {},
 
     loaded_HOLD_checkbox_state: false,
     loaded_HOLD_previous_QTT: false,
@@ -97,7 +97,7 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
                     selectedPrepa: action.payload
                 }
 //
-            case DataAction.CHANGE_CHECKBOX_STATE:
+            case DataAction.CHANGE_STATE_CHECKBOX:
                 return {
                     ...state,
                     HOLD_checkbox_state: {
@@ -106,7 +106,7 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
                         // [action.payload.destination]: action.payload.value
                     },
                 };
-            case DataAction.CHANGE_PREVIOUS_QTT:
+            case DataAction.CHANGE_STATE_PREVIOUS_QTT:
                 return {
                     ...state,
                     HOLD_previous_QTT: {
@@ -115,7 +115,7 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
                         [action.payload.destination]: action.payload.value
                     },
                 };
-            case DataAction.CHANGE_PREVIOUS_TONS:
+            case DataAction.CHANGE_STATE_PREVIOUS_TONS:
                 return {
                     ...state,
                     HOLD_previous_TONS: {
@@ -124,11 +124,11 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
                         [action.payload.destination]: action.payload.value
                     },
                 };
-            case DataAction.CHANGE_MAXI_TONS:
+            case DataAction.CHANGE_STATE_MAXI_TONS:
                 return {
                     ...state,
-                    HOLD_maxi_TONS: {
-                        ...state.HOLD_maxi_TONS,
+                    HOLD_maxi_TONS_state: {
+                        ...state.HOLD_maxi_TONS_state,
                         // ...action.payload,
                         [action.payload.destination]: action.payload.value
                     },
@@ -156,7 +156,7 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
                     pickerColors: action.payload,
                 }
 //
-            case DataAction.SAVE_CATALOG:
+            case DataAction.SAVE_CATALOG_STORAGE:
                 // if(state.saved_catalog) return state;
                 // console.log("saving catalog...");
                 window.localStorage.setItem("CATALOG_data_storage", JSON.stringify(state.catalog_data_state));
@@ -164,30 +164,30 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
                     ...state,
                     saved_catalog: false
                 };
-            case DataAction.SAVE_CHECKBOX_STATE:
+            case DataAction.SAVE_STORAGE_CHECKED_BOX:
                 // if(state.saved_HOLD_checkbox_state) return state;
                 window.localStorage.setItem("CHECKBOX_data_storage", JSON.stringify(state.HOLD_checkbox_state));
                 return {
                     ...state,
                     saved_HOLD_checkbox_state: false
                 };
-            case DataAction.SAVE_PREV_QTT:
+            case DataAction.SAVE_STORAGE_PREV_QTT:
                 // if(state.saved_HOLD_previous_QTT) return state;
                 window.localStorage.setItem("PREV_QTT_data_storage", JSON.stringify(state.HOLD_previous_QTT));
                 return {
                     ...state,
                     saved_HOLD_previous_QTT: false
                 }
-            case DataAction.SAVE_PREV_TONS:
+            case DataAction.SAVE_STORAGE_PREV_TONS:
                 // if(state.saved_HOLD_previous_TONS) return state;
                 window.localStorage.setItem("PREV_TONS_data_storage", JSON.stringify(state.HOLD_previous_TONS));
                 return {
                     ...state,
                     saved_HOLD_previous_TONS: false
                 }
-            case DataAction.SAVE_MAXI_TONS:
+            case DataAction.SAVE_STORAGE_MAXI_TONS:
                 // if(state.saved_HOLD_maxi_TONS) return state;
-                window.localStorage.setItem("MAXI_TONS_data_storage", JSON.stringify(state.HOLD_maxi_TONS));
+                window.localStorage.setItem("MAXI_TONS_data_storage", JSON.stringify(state.HOLD_maxi_TONS_state));
                 return {
                     ...state,
                     // saved_HOLD_maxi_TONS: false
@@ -224,7 +224,7 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
             case DataAction.LOAD_MAXI_TONS:
                 return {
                     ...state,
-                    HOLD_maxi_TONS: action.payload,
+                    HOLD_maxi_TONS_state: action.payload,
                     loaded_HOLD_maxi_TONS: true,
                     saved_HOLD_maxi_TONS: false,
                 }

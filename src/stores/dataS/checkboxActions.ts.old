@@ -1,4 +1,4 @@
 // checkboxActions.ts
 import { createAction } from '@reduxjs/toolkit';
 
-export const CHANGE_CHECKBOX_STATE = createAction<{ [key: string]: boolean }>('CHANGE_CHECKBOX_STATE');
+export const CHANGE_STATE_CHECKBOX = createAction<{ [key: string]: boolean }>('CHANGE_STATE_CHECKBOX');
