@@ -106,16 +106,6 @@ export default function Statistics() {
 			dispatch(DataAction.save_maxi_tons())
 			// 
 		}
-		/* set_maxi_Values((maxi_Value_TO: any) => ({
-			...maxi_Value_TO,
-			[destination]: { 
-				maxiTO_VALUE: value,
-			},
-		})); */
-		// const numericValue = parseFloat(value) || 0;
-		// dispatch(DataAction.changeMaxiTONS({ destination: k, value: numericValue }));
-		// dispatch(DataAction.changeMaxiTONS({ destination: destination, value: value }));
-		// dispatch(DataAction.save_maxi_tons())
 		};
 
 	const Toggle_Extended_Tally = () => {
@@ -170,7 +160,7 @@ export default function Statistics() {
 						console.error("Erreur lors de la conversion de la chaîne JSON en objet JavaScript :", error);
 					}
 				} else {
-					console.log("Aucune valeur trouvée pour la clé MAXI_TONS_data_storage");
+					console.log("Aucune valeur trouvée dans MAXI_TONS_data_storage");
 				}
 			// }
 				const jsonString: string | null = localStorage.getItem("PREV_TONS_data_storage");
@@ -194,7 +184,7 @@ export default function Statistics() {
 						console.error("Erreur lors de la conversion de la chaîne JSON en objet JavaScript :", error);
 					}
 				} else {
-					console.log("Aucune valeur trouvée pour la clé prev_tons_data_storage");
+					console.log("Aucune valeur trouvée dans PREV_TONS_data_storage");
 				}
 
 				const Jsonstring: string | null = localStorage.getItem("PREV_QTT_data_storage");
@@ -218,7 +208,7 @@ export default function Statistics() {
 						console.error("Erreur lors de la conversion de la chaîne JSON en objet JavaScript :", error);
 					}
 				} else {
-					console.log("Aucune valeur trouvée pour la clé PREV_QTT_data_storage");
+					console.log("Aucune valeur trouvée dans PREV_QTT_data_storage");
 				}
 
 				const JsonString: string | null = localStorage.getItem("CHECKBOX_data_storage");
@@ -235,9 +225,6 @@ export default function Statistics() {
 								// [destination]: value,
 								[k]: Init_value === "true" ? true : false,
 							}));
-							// dispatch(DataAction.change_checkbox_state({ [k]: Init_value === "true" ? true : false }));
-							// dispatch(DataAction.save_checkbox_state());
-
 						} else {
 							console.log(`La clé ${k} n'a pas été trouvée dans l'objet du CHECKBOX_data_storage`);
 						}
@@ -245,7 +232,11 @@ export default function Statistics() {
 						console.error("Erreur lors de la conversion de la chaîne JSON en objet JavaScript :", error);
 					}
 				} else {
-					console.log("Aucune valeur trouvée pour la clé CHECKBOX_data_storage");
+					console.log("Aucune valeur trouvée dans CHECKBOX_data_storage");
+					set_checkbox_Hold_State((checkbox_Hold_State) => ({
+						...checkbox_Hold_State,
+						[k]: false,
+					}));
 				}
 			}
 		});
@@ -339,7 +330,7 @@ export default function Statistics() {
 								<input
 								type="checkbox" 
 								checked={checkbox_Hold_State[affectationItem.name] } 
-								onChange={(e) => Toggle_checkbox_boolean(affectationItem.name)}
+								onChange={(e: ChangeEvent<HTMLInputElement>) => Toggle_checkbox_boolean(affectationItem.name)}
 								// onChange={(e) => Toggle_checkbox_boolean(affectationItem.name)}
 								// onChange={(e: ChangeEvent<HTMLInputElement>) => handle_prevQT_VALUE_Change(affectationItem.name, e.target.value)}
 								// onChange={(e: ChangeEvent<HTMLInputElement>) => Toggle_checkbox_boolean(affectationItem.name)}

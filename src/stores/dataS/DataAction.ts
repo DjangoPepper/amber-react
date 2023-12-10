@@ -3,14 +3,14 @@ import {AnyAction} from "redux";
 export default class DataAction {
 		
 	public static CHANGE_CHECKBOX_STATE = "DataAction.CHANGE_CHECKBOX_STATE";
-	public static CHANGE_STRING_CHECKBOX_STATE = "DataAction.CHANGE_STRING_CHECKBOX_STATE";
+
 	public static CHANGE_PREVIOUS_QTT = "DataAction.CHANGE_PREVIOUS_QTT";
 	public static CHANGE_PREVIOUS_TONS = "DataAction.CHANGE_PREVIOUS_TONS";
 	public static CHANGE_MAXI_TONS = "DataAction.CHANGE_MAXI_TONS";
 
 	public static SAVE_CATALOG = "DataAction.SAVE_CATALOG";
 	public static SAVE_CHECKBOX_STATE = "DataAction.SAVE_CHECKBOX_STATE";
-	public static SAVE_STRING_CHECKBOX_STATE = "DataAction.SAVE_STRING_CHECKBOX_STATE";
+
 
 	public static SAVE_PREV_QTT = "DataAction.SAVE_PREV_QTT";
 	public static SAVE_PREV_TONS = "DataAction.SAVE_PREV_TONS";
@@ -64,9 +64,9 @@ export default class DataAction {
 	}
 	
 
-	public static change_string_checkbox_state(changestringcheckboxstate: { [destination: string]: string }): AnyAction {
-		return { type: DataAction.CHANGE_STRING_CHECKBOX_STATE, payload: changestringcheckboxstate };
-	}
+	// public static change_string_checkbox_state(changestringcheckboxstate: { [destination: string]: string }): AnyAction {
+	// 	return { type: DataAction.CHANGE_STRING_CHECKBOX_STATE, payload: changestringcheckboxstate };
+	// }
 	public static change_checkbox_state(changecheckboxstate: { [destination: string]: boolean }): AnyAction {
 		return { type: DataAction.CHANGE_CHECKBOX_STATE, payload: changecheckboxstate };
 	}
@@ -124,9 +124,9 @@ export default class DataAction {
 	public static save_checkbox_state(): AnyAction {
 		return { type: DataAction.SAVE_CHECKBOX_STATE };
 	}
-	public static save_string_checkbox_state(): AnyAction {
-		return { type: DataAction.SAVE_STRING_CHECKBOX_STATE };
-	}
+	// public static save_string_checkbox_state(): AnyAction {
+	// 	return { type: DataAction.SAVE_STRING_CHECKBOX_STATE };
+	// }
 	public static save_previous_qtt(): AnyAction {
 		return { type: DataAction.SAVE_PREV_QTT };
 	}

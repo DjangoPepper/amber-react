@@ -11,9 +11,8 @@ import { toast } from 'react-toastify';
 import { affectation } from './utils/destination';
 import { stringify } from 'querystring';
 
-
 let backupInterval = 60 * 1000; //30 * 1000 ms = 30s
-// let firstRender = false;
+
 
 function init() {
 		
@@ -28,41 +27,6 @@ function init() {
 	if (Init_data_catalog) {
 			store.dispatch(DataAction.load_catalog(Init_data_catalog));
 		}
-/* 
-	if (Init_data_STRING_CHECKBOX_STATE) {
-		const parsedStringCheckboxState = JSON.parse(Init_data_STRING_CHECKBOX_STATE);
-		// store.dispatch(DataAction.load_string_checkbox_state(JSON.parse(Init_data_STRING_CHECKBOX_STATE)));
-		store.dispatch(DataAction.change_checkbox_state(parsedStringCheckboxState));
-		}
-
-	if (Init_data_CHECKBOX_STATE) {
-			const parsedCheckboxState = JSON.parse(Init_data_CHECKBOX_STATE);
-			// store.dispatch(DataAction.load_checkbox_state(JSON.parse(Init_data_CHECKBOX_STATE)));
-			store.dispatch(DataAction.change_checkbox_state(JSON.parse(Init_data_CHECKBOX_STATE)));
-		}
-
-	if (Init_data_PREV_QTT) {
-			const parsedPrev_QTT = JSON.parse(Init_data_PREV_QTT);
-			// store.dispatch(DataAction.load_previous_qtt(JSON.parse(Init_data_PREV_QTT)));
-			store.dispatch(DataAction.changePreviousQTT(JSON.parse(parsedPrev_QTT)));
-		}
-
-	if (Init_data_PREV_TONS) {
-		const parsedPrev_TONS = JSON.parse(Init_data_PREV_TONS);
-			// store.dispatch(DataAction.load_previous_tons(JSON.parse(Init_data_PREV_TONS)));
-		store.dispatch(DataAction.changePreviousTONS(JSON.parse(parsedPrev_TONS)));
-		}
-
-	if (Init_data_MAXI) {
-			const parsedMaxi = JSON.parse(Init_data_MAXI); 
-				// store.dispatch(DataAction.load_maxi_tons(JSON.parse(Init_data_MAXI)));
-			store.dispatch(DataAction.changeMaxiTONS(JSON.parse(parsedMaxi)));
-		} 
-
- */
-////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////
-
 	affectation.map((affectationItem) => {
 				const destination = affectationItem.name;
 				if (destination === "stock") {
@@ -100,23 +64,12 @@ function init() {
 		setInterval(() => {
 				store.dispatch(DataAction.save_catalog());
 				store.dispatch(DataAction.save_checkbox_state()); //avec checkbox fait planter le navigateur ?
-				store.dispatch(DataAction.save_string_checkbox_state()); 
+				// store.dispatch(DataAction.save_string_checkbox_state()); 
 
 				store.dispatch(DataAction.save_previous_qtt());
 				store.dispatch(DataAction.save_previous_tons());
 				store.dispatch(DataAction.save_maxi_tons());
 
-
-				// affectation.map((affectationItem) => {
-				// 	const k = affectationItem.name;
-				// 	if (k === "stock") {
-				// 	} else {
-				// 	// store.dispatch(DataAction.change_CHECKBOX_STATE({ key: k, value: false }));
-				// 	// store.dispatch(DataAction.changePreviousQTT({ destination: k, value: 0 }));
-				// 	// store.dispatch(DataAction.changePreviousTONS({ destination: k, value: 0 }));
-				// 	// store.dispatch(DataAction.changeMaxiTONS({ destination: k, value: 1000 }));
-				// 	}
-				// });
 			toast.warning('AutoSave', { position: toast.POSITION.BOTTOM_LEFT, autoClose: 500 })
 		}, 
 		backupInterval);
