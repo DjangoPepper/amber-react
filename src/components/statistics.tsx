@@ -7,6 +7,7 @@ import React, { useState, useEffect,ChangeEvent } from 'react';
 import { affectation} from "../utils/destination";
 import Button from 'react-bootstrap/Button';
 import { toast } from 'react-toastify';
+import { stringify } from "querystring";
 
 export default function Statistics() {
 
@@ -55,6 +56,7 @@ export default function Statistics() {
 		};
 
 	const handle_checkBOX_Change = (destination: string, value: boolean) => {
+		// const [checkbox_Hold_State, set_checkbox_Hold_State] = useState<{ [key: string]: boolean }>({});	
 		set_checkbox_Hold_State((checkbox_Hold_State) => ({
 			...checkbox_Hold_State,
 			[destination]: value,
@@ -225,12 +227,17 @@ export default function Statistics() {
 						const storageObject: Record<string, string> = JSON.parse(JsonString);
 						const Init_value: string | undefined = storageObject[k];
 						if (k !== undefined && Init_value !== undefined) {
-							console.log(`La valeur de ${k} est : ${Init_value}`);
+							console.log(`La checkbox de ${k} est : ${Init_value}`);
 							// loaded_HOLD_checkbox:true;
-							set_checkbox_Hold_State((newvaluefromstorage) => ({
-								...newvaluefromstorage,
-								[k]: Init_value === "true",
+							// onChange={(e) => handle_PrevTO_VALUE_Change(affectationItem.name, e.target.value)}
+							set_checkbox_Hold_State((checkbox_Hold_State) => ({
+								...checkbox_Hold_State,
+								// [destination]: value,
+								[k]: Init_value === "true" ? true : false,
 							}));
+							// dispatch(DataAction.change_checkbox_state({ [k]: Init_value === "true" ? true : false }));
+							// dispatch(DataAction.save_checkbox_state());
+
 						} else {
 							console.log(`La clé ${k} n'a pas été trouvée dans l'objet du CHECKBOX_data_storage`);
 						}
@@ -243,8 +250,6 @@ export default function Statistics() {
 			}
 		});
 	}
-	
-
 	useEffect(() => {
 		if (Initiate_Rendering) {
 			init_statistiques();
@@ -273,23 +278,19 @@ export default function Statistics() {
 	if (statistics.stock) {
 			totalstockCount = statistics.stock.count;
 			totalstockWeight = statistics.stock.weight;
-
 			totalstockWeight = parseFloat(totalstockWeight.toFixed(3))
 			totalCalesCount  = totalCount   - totalstockCount;
-			
 			totalCalesWeight = totalWeight  - totalstockWeight;
 			totalCalesWeight = parseFloat(totalCalesWeight.toFixed(3));
 		}
-		else {
-			totalstockCount = 0;
-			totalstockWeight = 0;	
-			totalCalesCount  = totalCount;
-			totalCalesWeight = totalWeight;
-		}
+	else {
+		totalstockCount = 0;
+		totalstockWeight = 0;	
+		totalCalesCount  = totalCount;
+		totalCalesWeight = totalWeight;
+	}
 		});
-
 // 
-	
 		return (
 		<div>
 		<Table>
@@ -307,7 +308,6 @@ export default function Statistics() {
 					<>
 						<th style={{ textAlign: 'center', backgroundColor: 'gray' }}>PREV_Q</th>
 						<th style={{ textAlign: 'center', backgroundColor: 'gray' }}>PREV_T</th>
-					
 					</>
 					)}
 					<th style={{ textAlign: 'center' }}>TT_Q</th>
@@ -315,10 +315,8 @@ export default function Statistics() {
 				</tr>
 			</thead>
 			<tbody>
-			
 {/* HEADERS */}				
-							{affectation.map((affectationItem) => {
-
+				{affectation.map((affectationItem) => {
 				const statistics_array = statistics[affectationItem.name] || {}; // Utilise un objet vide par défaut
 				let chsafin = checkbox_Hold_State[affectationItem.name] || false;
 				if (
@@ -330,22 +328,22 @@ export default function Statistics() {
 					)
 				) {
 					// console.log("visible : ", affectationItem.name)
-					
 					return (
 						<tr key={affectationItem.name}>
-							
 {/* DEST */}
 							<td style={{ backgroundColor: selectedColors[affectationItem.name], textAlign: 'left' }}>{affectationItem.name}
 							{/* </td> */}
-							
 {/* CHECKBOX */} <>  </>
 							{/* <td> */}
 							{ affectationItem.name !== 'stock' ? ( 
 								<input
 								type="checkbox" 
-								checked={checkbox_Hold_State[affectationItem.name] || false } 
-								// checked={affectationItem.visibleState[k]} 
-								onChange={() => Toggle_checkbox_boolean(affectationItem.name)}
+								checked={checkbox_Hold_State[affectationItem.name] } 
+								onChange={(e) => Toggle_checkbox_boolean(affectationItem.name)}
+								// onChange={(e) => Toggle_checkbox_boolean(affectationItem.name)}
+								// onChange={(e: ChangeEvent<HTMLInputElement>) => handle_prevQT_VALUE_Change(affectationItem.name, e.target.value)}
+								// onChange={(e: ChangeEvent<HTMLInputElement>) => Toggle_checkbox_boolean(affectationItem.name)}
+
 								/>
 							):null}							
 							</td>
@@ -388,14 +386,6 @@ export default function Statistics() {
 															: 
 															0
 													}
-													// onChange={(e) => handle_prevQT_VALUE_Change(affectationItem.name, e.target.value)}
-													
-													// const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-													// const value = e.target.value;
-													// Mettre à jour le state avec la nouvelle valeur
-													// setInputValue(value);
-													// };
-
 													onChange={(e: ChangeEvent<HTMLInputElement>) => handle_prevQT_VALUE_Change(affectationItem.name, e.target.value)}
 													
 												/>
