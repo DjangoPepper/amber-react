@@ -12,7 +12,7 @@ import { affectation } from './utils/destination';
 import { stringify } from 'querystring';
 
 
-let backupInterval = 60 * 1000; //30 * 1000 ms = 30s
+let backupInterval = 61 * 1000; //30 * 1000 ms = 30s
 // let firstRender = false;
 
 function init() {
