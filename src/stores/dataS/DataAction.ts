@@ -9,7 +9,7 @@ export default class DataAction {
 	public static CHANGE_MAXI_TONS = "DataAction.CHANGE_MAXI_TONS";
 
 	public static SAVE_CATALOG = "DataAction.SAVE_CATALOG";
-	public static SAVE_CHECKBOX_STATE = "DataAction.SAVE_CHECKBOX_STATE";
+	public static SAVE_CHECKBOXES_STATE = "DataAction.SAVE_CHECKBOXES_STATE";
 	public static SAVE_STRING_CHECKBOX_STATE = "DataAction.SAVE_STRING_CHECKBOX_STATE";
 
 	public static SAVE_PREV_QTT = "DataAction.SAVE_PREV_QTT";
@@ -122,7 +122,7 @@ export default class DataAction {
 		return { type: DataAction.SAVE_CATALOG };
 	}
 	public static save_checkbox_state(): AnyAction {
-		return { type: DataAction.SAVE_CHECKBOX_STATE };
+		return { type: DataAction.SAVE_CHECKBOXES_STATE };
 	}
 	public static save_string_checkbox_state(): AnyAction {
 		return { type: DataAction.SAVE_STRING_CHECKBOX_STATE };

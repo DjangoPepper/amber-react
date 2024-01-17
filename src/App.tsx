@@ -28,17 +28,18 @@ function init() {
 	if (Init_data_catalog) {
 			store.dispatch(DataAction.load_catalog(Init_data_catalog));
 		}
+
+	if (Init_data_CHECKBOX_STATE) {
+		const parsedCheckboxState = JSON.parse(Init_data_CHECKBOX_STATE);
+		// store.dispatch(DataAction.load_checkbox_state(JSON.parse(Init_data_CHECKBOX_STATE)));
+		store.dispatch(DataAction.change_checkbox_state(JSON.parse(Init_data_CHECKBOX_STATE)));
+		}
+
 /* 
 	if (Init_data_STRING_CHECKBOX_STATE) {
 		const parsedStringCheckboxState = JSON.parse(Init_data_STRING_CHECKBOX_STATE);
 		// store.dispatch(DataAction.load_string_checkbox_state(JSON.parse(Init_data_STRING_CHECKBOX_STATE)));
 		store.dispatch(DataAction.change_checkbox_state(parsedStringCheckboxState));
-		}
-
-	if (Init_data_CHECKBOX_STATE) {
-			const parsedCheckboxState = JSON.parse(Init_data_CHECKBOX_STATE);
-			// store.dispatch(DataAction.load_checkbox_state(JSON.parse(Init_data_CHECKBOX_STATE)));
-			store.dispatch(DataAction.change_checkbox_state(JSON.parse(Init_data_CHECKBOX_STATE)));
 		}
 
 	if (Init_data_PREV_QTT) {
@@ -72,6 +73,7 @@ function init() {
 						// const parsedCheckboxState = JSON.parse(Init_data_CHECKBOX_STATE);
 						const destinationValue = false;
 						store.dispatch(DataAction.change_checkbox_state({[destination]: false}));
+						store.dispatch(DataAction.save_checkbox_state());
 						window.localStorage.setItem("CHECKBOX_data_storage", JSON.stringify({[destination]: destinationValue}));
 						}
 					if(Init_data_PREV_QTT) {

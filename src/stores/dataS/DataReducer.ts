@@ -164,13 +164,14 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
                     ...state,
                     saved_catalog: false
                 };
-            case DataAction.SAVE_CHECKBOX_STATE:
+            case DataAction.SAVE_CHECKBOXES_STATE:
                 // if(state.saved_HOLD_checkbox_state) return state;
                 window.localStorage.setItem("CHECKBOX_data_storage", JSON.stringify(state.HOLD_checkbox_state));
                 return {
                     ...state,
                     saved_HOLD_checkbox_state: false
                 };
+            
             case DataAction.SAVE_PREV_QTT:
                 // if(state.saved_HOLD_previous_QTT) return state;
                 window.localStorage.setItem("PREV_QTT_data_storage", JSON.stringify(state.HOLD_previous_QTT));
