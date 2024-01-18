@@ -67,12 +67,17 @@ function init() {
 				const destination = affectationItem.name;
 				if (destination === "stock") {
 				} else {
-					let destinationValue:string = "false";
+					// let destinationValue:string = "false";
 					if(Init_data_CHECKBOX_STATE === null || Init_data_CHECKBOX_STATE === undefined) {
-						// const parsedCheckboxState = JSON.parse(Init_data_CHECKBOX_STATE);
-						const destinationValue = false;
 						store.dispatch(DataAction.change_checkbox_state({[destination]: false}));
-						window.localStorage.setItem("CHECKBOX_data_storage", JSON.stringify({[destination]: destinationValue}));
+						window.localStorage.setItem("CHECKBOX_data_storage", JSON.stringify({[destination]: false}));
+						} else {
+							const parsedCheckboxState = JSON.parse(Init_data_CHECKBOX_STATE);
+							let  default_destination_Value: boolean = false;
+							parsedCheckboxState[destination] = default_destination_Value;
+							store.dispatch(DataAction.change_checkbox_state(parsedCheckboxState));
+							window.localStorage.setItem("CHECKBOX_data_storage", JSON.stringify(parsedCheckboxState));
+							
 						}
 					if(Init_data_PREV_QTT) {
 						const parsedPrev_QTT = JSON.parse(Init_data_PREV_QTT);
