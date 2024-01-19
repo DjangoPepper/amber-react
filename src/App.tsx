@@ -65,20 +65,78 @@ function init() {
 
 	affectation.map((affectationItem) => {
 				const destination = affectationItem.name;
+				const default_destinationValue: boolean = false;
 				if (destination === "stock") {
 				} else {
 					// let destinationValue:string = "false";
-					if(Init_data_CHECKBOX_STATE === null || Init_data_CHECKBOX_STATE === undefined) {
-						store.dispatch(DataAction.change_checkbox_state({[destination]: false}));
-						window.localStorage.setItem("CHECKBOX_data_storage", JSON.stringify({[destination]: false}));
-						} else {
-							const parsedCheckboxState = JSON.parse(Init_data_CHECKBOX_STATE);
-							let  default_destination_Value: boolean = false;
-							parsedCheckboxState[destination] = default_destination_Value;
-							store.dispatch(DataAction.change_checkbox_state(parsedCheckboxState));
-							window.localStorage.setItem("CHECKBOX_data_storage", JSON.stringify(parsedCheckboxState));
-							
-						}
+					// if(Init_data_CHECKBOX_STATE === null || Init_data_CHECKBOX_STATE === undefined) {
+					// 	store.dispatch(DataAction.change_checkbox_state({[destination]: false}));
+					// 	window.localStorage.setItem("CHECKBOX_data_storage", JSON.stringify({[destination]: false}));
+					// 	} else {
+					// 		const parsedCheckboxState = JSON.parse(Init_data_CHECKBOX_STATE);
+					// 		let  default_destination_Value: boolean = false;
+					// 		parsedCheckboxState[destination] = default_destination_Value;
+					// 		store.dispatch(DataAction.change_checkbox_state(parsedCheckboxState));
+					// 		window.localStorage.setItem("CHECKBOX_data_storage", JSON.stringify(parsedCheckboxState));
+					// 	}
+					// let destinationValue: boolean = false;
+
+				// 	if (Init_data_CHECKBOX_STATE === null || Init_data_CHECKBOX_STATE === undefined) {
+				// 		// Si Init_data_CHECKBOX_STATE n'existe pas, créez un nouvel objet avec la nouvelle valeur
+				// 		const newCheckboxState = { [destination]: default_destinationValue };
+				// 		// Mettez à jour l'état et le stockez
+				// 		store.dispatch(DataAction.change_checkbox_state(newCheckboxState));
+				// 		window.localStorage.setItem("CHECKBOX_data_storage", JSON.stringify(newCheckboxState));
+				// 	// } else {
+				// 	// 	// Si Init_data_CHECKBOX_STATE existe, récupérez l'état existant
+				// 	// 	const parsedCheckboxState = JSON.parse(Init_data_CHECKBOX_STATE);
+			
+				// 	// 	// Ajoutez la nouvelle valeur à la propriété spécifiée
+				// 	// 	// parsedCheckboxState[destination] = default_destinationValue;
+			
+				// 	// 	// Mettez à jour l'état et le stockez
+				// 	// 	store.dispatch(DataAction.change_checkbox_state(parsedCheckboxState));
+				// 	// 	window.localStorage.setItem("CHECKBOX_data_storage", JSON.stringify(parsedCheckboxState));
+				// 	// }
+				// } else {
+				// 	// Si Init_data_CHECKBOX_STATE existe, récupérez l'état existant
+				// 	const parsedCheckboxState = JSON.parse(Init_data_CHECKBOX_STATE);
+				
+				// 	// Vérifiez si la valeur existante est ni true ni false
+				// 	if (typeof parsedCheckboxState[destination] !== "boolean") {
+				// 		// Si la valeur n'est pas true ou false, définissez la valeur par défaut sur false
+				// 		parsedCheckboxState[destination] = false;
+				// 	}
+				
+				// 	// Ajoutez la nouvelle valeur à la propriété spécifiée
+				// 	// parsedCheckboxState[destination] = default_destinationValue;
+				
+				// 	// Mettez à jour l'état et le stockez
+				// 	store.dispatch(DataAction.change_checkbox_state(parsedCheckboxState));
+				// 	window.localStorage.setItem("CHECKBOX_data_storage", JSON.stringify(parsedCheckboxState));
+				// }
+				if (Init_data_CHECKBOX_STATE === null || Init_data_CHECKBOX_STATE === undefined) {
+					// Si Init_data_CHECKBOX_STATE n'existe pas, créez un nouvel objet avec la nouvelle valeur par défaut (false)
+					const newCheckboxState = { [destination]: false };
+					store.dispatch(DataAction.change_checkbox_state(newCheckboxState));
+					window.localStorage.setItem("CHECKBOX_data_storage", JSON.stringify(newCheckboxState));
+				} else {
+					// Si Init_data_CHECKBOX_STATE existe, récupérez l'état existant
+					const parsedCheckboxState = JSON.parse(Init_data_CHECKBOX_STATE);
+				
+					// Vérifiez si la valeur existante est ni true ni false
+					if (typeof parsedCheckboxState[destination] !== "boolean") {
+						// Si la valeur n'est pas true ou false, définissez la valeur par défaut sur false
+						parsedCheckboxState[destination] = false;
+					}
+				
+					// Ajoutez la nouvelle valeur à la propriété spécifiée
+					// parsedCheckboxState[destination] = default_destinationValue;
+				
+					// Mettez à jour l'état et le stockez (en tant que boolean, pas une chaîne)
+					store.dispatch(DataAction.change_checkbox_state(parsedCheckboxState));
+					window.localStorage.setItem("CHECKBOX_data_storage", JSON.stringify(parsedCheckboxState));
+				}
 					if(Init_data_PREV_QTT) {
 						const parsedPrev_QTT = JSON.parse(Init_data_PREV_QTT);
 						const destinationValue = parsedPrev_QTT[destination];
@@ -110,7 +168,6 @@ function init() {
 				store.dispatch(DataAction.save_previous_qtt());
 				store.dispatch(DataAction.save_previous_tons());
 				store.dispatch(DataAction.save_maxi_tons());
-
 
 				// affectation.map((affectationItem) => {
 				// 	const k = affectationItem.name;
