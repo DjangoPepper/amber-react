@@ -67,6 +67,7 @@ function init() {
 				const destination = affectationItem.name;
 				if (destination === "stock") {
 				} else {
+					
 					// let destinationValue:string = "false";
 					if(Init_data_CHECKBOX_STATE === null || Init_data_CHECKBOX_STATE === undefined) {
 						store.dispatch(DataAction.change_checkbox_state({[destination]: false}));
@@ -76,15 +77,30 @@ function init() {
 							let  default_destination_Value: boolean = false;
 							parsedCheckboxState[destination] = default_destination_Value;
 							store.dispatch(DataAction.change_checkbox_state(parsedCheckboxState));
-							window.localStorage.setItem("CHECKBOX_data_storage", JSON.stringify(parsedCheckboxState));
-							
+							window.localStorage.setItem("CHECKBOX_data_storage", JSON.stringify(parsedCheckboxState));	
 						}
-					if(Init_data_PREV_QTT) {
+					
+					if(Init_data_PREV_QTT === null || Init_data_PREV_QTT === undefined) {
+						store.dispatch(DataAction.changePreviousQTT({[destination]: "0"}));
+						window.localStorage.setItem("PREV_QTT_data_storage", JSON.stringify({[destination]: 0}));
+					} else {
 						const parsedPrev_QTT = JSON.parse(Init_data_PREV_QTT);
-						const destinationValue = parsedPrev_QTT[destination];
+						let destinationValue = parsedPrev_QTT[destination];
+						if (destinationValue === undefined || destinationValue === null) {
+							destinationValue = "0";
+						}
 						store.dispatch(DataAction.changePreviousQTT({[destination]: destinationValue}));
-						// window.localStorage.setItem("PREV_QTT_data_storage", JSON.stringify({[destination]: parsedPrev_QTT[destination]}));
+						window.localStorage.setItem("PREV_QTT_data_storage", JSON.stringify({[destination]: destinationValue}));
+						// window.localStorage.setItem("PREV_QTT_data_storage", JSON.stringify(parsedPrev_QTT));	
 					}
+
+					// if(Init_data_PREV_QTT) {
+					// 	const parsedPrev_QTT = JSON.parse(Init_data_PREV_QTT);
+					// 	let destinationValue = parsedPrev_QTT[destination];
+					// 	store.dispatch(DataAction.changePreviousQTT({[destination]: destinationValue}));
+					// 	// window.localStorage.setItem("PREV_QTT_data_storage", JSON.stringify({[destination]: parsedPrev_QTT[destination]}));
+					// }
+
 
 					if(Init_data_PREV_TONS) {
 						const parsedPrev_TONS = JSON.parse(Init_data_PREV_TONS);
