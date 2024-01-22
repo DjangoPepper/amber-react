@@ -15,16 +15,16 @@ export const HEADER: IHeader[] = [
 ]
 
 export const affectation = [
-    {name: "stock", color: "#ffffff", index:0,  previous_quantite: 0, previous_tonnes: 0, maxis_tonnes: 0},
-    {name: "H1",    color: "#00c87a", index:1,  previous_quantite: 0, previous_tonnes: 0, maxis_tonnes: 0},
-    {name: "H2",    color: "#f447d1", index:2,  previous_quantite: 0, previous_tonnes: 0, maxis_tonnes: 0},
-    {name: "H3",    color: "#3cbefc", index:3,  previous_quantite: 0, previous_tonnes: 0, maxis_tonnes: 0},
-    {name: "H4",    color: "#ff9b2c", index:4,  previous_quantite: 0, previous_tonnes: 0, maxis_tonnes: 0},
-    {name: "H5",    color: "#800080", index:5,  previous_quantite: 0, previous_tonnes: 0, maxis_tonnes: 0},
-    {name: "H6",    color: "#80ff00", index:6,  previous_quantite: 0, previous_tonnes: 0, maxis_tonnes: 0},
-    {name: "H7",    color: "#f03c28", index:7,  previous_quantite: 0, previous_tonnes: 0, maxis_tonnes: 0},
-    {name: "H8",    color: "#006ee6", index:8,  previous_quantite: 0, previous_tonnes: 0, maxis_tonnes: 0},
-    {name: "H9",    color: "#fdff5b", index:9,  previous_quantite: 0, previous_tonnes: 0, maxis_tonnes: 0},
+    {name: "stock", color: "#ffffff", index:0,  defaut_checkboxstate: 0 ,  previous_quantite: 0, previous_tonnes: 0, maxis_tonnes: 0},
+    {name: "H1",    color: "#00c87a", index:1,  defaut_checkboxstate: 0 ,  previous_quantite: 0, previous_tonnes: 0, maxis_tonnes: 0},
+    {name: "H2",    color: "#f447d1", index:2,  defaut_checkboxstate: 0 ,  previous_quantite: 0, previous_tonnes: 0, maxis_tonnes: 0},
+    {name: "H3",    color: "#3cbefc", index:3,  defaut_checkboxstate: 0 ,  previous_quantite: 0, previous_tonnes: 0, maxis_tonnes: 0},
+    {name: "H4",    color: "#ff9b2c", index:4,  defaut_checkboxstate: 0 ,  previous_quantite: 0, previous_tonnes: 0, maxis_tonnes: 0},
+    {name: "H5",    color: "#800080", index:5,  defaut_checkboxstate: 0 ,  previous_quantite: 0, previous_tonnes: 0, maxis_tonnes: 0},
+    {name: "H6",    color: "#80ff00", index:6,  defaut_checkboxstate: 0 ,  previous_quantite: 0, previous_tonnes: 0, maxis_tonnes: 0},
+    {name: "H7",    color: "#f03c28", index:7,  defaut_checkboxstate: 0 ,  previous_quantite: 0, previous_tonnes: 0, maxis_tonnes: 0},
+    {name: "H8",    color: "#006ee6", index:8,  defaut_checkboxstate: 0 ,  previous_quantite: 0, previous_tonnes: 0, maxis_tonnes: 0},
+    {name: "H9",    color: "#fdff5b", index:9,  defaut_checkboxstate: 0 ,  previous_quantite: 0, previous_tonnes: 0, maxis_tonnes: 0},
     {name: "H10",   color: "#008000", index:10, previous_quantite: 0, previous_tonnes: 0, maxis_tonnes: 0},
 ]
 
