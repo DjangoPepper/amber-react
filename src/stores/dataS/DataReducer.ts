@@ -106,7 +106,7 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
                         // [action.payload.destination]: action.payload.value
                     },
                 };
-            case DataAction.CHANGE_PREVIOUS_QTT:
+            case DataAction.CHANGE_PREVIOUS_QTT_STATE:
                 return {
                     ...state,
                     HOLD_previous_QTT: {
@@ -115,7 +115,7 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
                         [action.payload.destination]: action.payload.value
                     },
                 };
-            case DataAction.CHANGE_PREVIOUS_TONS:
+            case DataAction.CHANGE_PREVIOUS_TONS_STATE:
                 return {
                     ...state,
                     HOLD_previous_TONS: {
@@ -124,7 +124,7 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
                         [action.payload.destination]: action.payload.value
                     },
                 };
-            case DataAction.CHANGE_MAXI_TONS:
+            case DataAction.CHANGE_MAXI_TONS_STATE:
                 return {
                     ...state,
                     HOLD_maxi_TONS: {
