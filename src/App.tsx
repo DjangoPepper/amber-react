@@ -19,11 +19,10 @@ function init() {
 		
 	// const Init_data_catalog = window.localStorage.getItem("data");
 	const Init_data_catalog = window.localStorage.getItem("CATALOG_data_storage");
-	const Init_data_CHECKBOX_STATE = window.localStorage.getItem("CHECKBOX_data_storage");
-	// const Init_data_STRING_CHECKBOX_STATE = window.localStorage.getItem("STRING_CHECKBOX_data_storage");
+	const Init_data_CHECK_BOX = window.localStorage.getItem("CHECKBOX_data_storage");
 	const Init_data_PREV_QTT = window.localStorage.getItem("PREV_QTT_data_storage");
 	const Init_data_PREV_TONS = window.localStorage.getItem("PREV_TONS_data_storage");
-	const Init_data_MAXI = window.localStorage.getItem("MAXI_TONS_data_storage");
+	const Init_data_MAXI_TONS = window.localStorage.getItem("MAXI_TONS_data_storage");
 
 	if (Init_data_catalog) {
 			store.dispatch(DataAction.load_catalog(Init_data_catalog));
@@ -35,27 +34,27 @@ function init() {
 		store.dispatch(DataAction.change_checkbox_state(parsedStringCheckboxState));
 		}
 
-	if (Init_data_CHECKBOX_STATE) {
-			const parsedCheckboxState = JSON.parse(Init_data_CHECKBOX_STATE);
-			// store.dispatch(DataAction.load_checkbox_state(JSON.parse(Init_data_CHECKBOX_STATE)));
-			store.dispatch(DataAction.change_checkbox_state(JSON.parse(Init_data_CHECKBOX_STATE)));
+	if (Init_data_CHECK_BOX) {
+			const parsedCheckboxState = JSON.parse(Init_data_CHECK_BOX);
+			// store.dispatch(DataAction.load_checkbox_state(JSON.parse(Init_data_CHECK_BOX)));
+			store.dispatch(DataAction.change_checkbox_state(JSON.parse(Init_data_CHECK_BOX)));
 		}
 
 	if (Init_data_PREV_QTT) {
 			const parsedPrev_QTT = JSON.parse(Init_data_PREV_QTT);
-			// store.dispatch(DataAction.load_previous_qtt(JSON.parse(Init_data_PREV_QTT)));
+			// store.dispatch(DataAction.load_previous_qtt_state(JSON.parse(Init_data_PREV_QTT)));
 			store.dispatch(DataAction.changePreviousQTT(JSON.parse(parsedPrev_QTT)));
 		}
 
 	if (Init_data_PREV_TONS) {
 		const parsedPrev_TONS = JSON.parse(Init_data_PREV_TONS);
-			// store.dispatch(DataAction.load_previous_tons(JSON.parse(Init_data_PREV_TONS)));
+			// store.dispatch(DataAction.load_previous_tons_state(JSON.parse(Init_data_PREV_TONS)));
 		store.dispatch(DataAction.changePreviousTONS(JSON.parse(parsedPrev_TONS)));
 		}
 
-	if (Init_data_MAXI) {
-			const parsedMaxi = JSON.parse(Init_data_MAXI); 
-				// store.dispatch(DataAction.load_maxi_tons(JSON.parse(Init_data_MAXI)));
+	if (Init_data_MAXI_TONS) {
+			const parsedMaxi = JSON.parse(Init_data_MAXI_TONS); 
+				// store.dispatch(DataAction.load_maxi_tons(JSON.parse(Init_data_MAXI_TONS)));
 			store.dispatch(DataAction.changeMaxiTONS(JSON.parse(parsedMaxi)));
 		} 
 
@@ -69,31 +68,51 @@ function init() {
 				} else {
 					
 					// let destinationValue:string = "false";
-					if(Init_data_CHECKBOX_STATE === null || Init_data_CHECKBOX_STATE === undefined) {
+					if(Init_data_CHECK_BOX === null || Init_data_CHECK_BOX === undefined) {
 						store.dispatch(DataAction.change_checkbox_state({[destination]: false}));
 						window.localStorage.setItem("CHECKBOX_data_storage", JSON.stringify({[destination]: false}));
 						} else {
-							const parsedCheckboxState = JSON.parse(Init_data_CHECKBOX_STATE);
-							let  default_destination_Value: boolean = false;
-							parsedCheckboxState[destination] = default_destination_Value;
+							const parsedCheckboxState = JSON.parse(Init_data_CHECK_BOX);
+							// let  default_destination_Value: boolean = false;
+							parsedCheckboxState[destination] = false;
+							
 							store.dispatch(DataAction.change_checkbox_state(parsedCheckboxState));
 							window.localStorage.setItem("CHECKBOX_data_storage", JSON.stringify(parsedCheckboxState));	
 						}
-					
-					if(Init_data_PREV_QTT === null || Init_data_PREV_QTT === undefined) {
-						store.dispatch(DataAction.changePreviousQTT({[destination]: "0"}));
-						window.localStorage.setItem("PREV_QTT_data_storage", JSON.stringify({[destination]: 0}));
-					} else {
-						const parsedPrev_QTT = JSON.parse(Init_data_PREV_QTT);
-						let destinationValue = parsedPrev_QTT[destination];
-						if (destinationValue === undefined || destinationValue === null) {
+					///////////////////////////////////////////////////////////////////////////////////////////////////
+						if (Init_data_PREV_QTT === null || Init_data_PREV_QTT === undefined) {
+							store.dispatch(DataAction.changePreviousQTT({ [destination]: "0" }));
+							window.localStorage.setItem("PREV_QTT_data_storage", JSON.stringify({ [destination]: 0 }));
+						} else {
+							const parsedPrev_QTT = JSON.parse(Init_data_PREV_QTT);
+							let destinationValue = parsedPrev_QTT[destination];
+						
+							if (destinationValue === undefined || destinationValue === null) {
 							destinationValue = "0";
+							}
+						
+							// Ajouter la destination au lieu de la remplacer
+							const updatedPrev_QTT = { ...parsedPrev_QTT, [destination]: destinationValue };
+						
+							store.dispatch(DataAction.changePreviousQTT(updatedPrev_QTT));
+							window.localStorage.setItem("PREV_QTT_data_storage", JSON.stringify(updatedPrev_QTT));
 						}
-						store.dispatch(DataAction.changePreviousQTT({[destination]: destinationValue}));
-						window.localStorage.setItem("PREV_QTT_data_storage", JSON.stringify({[destination]: destinationValue}));
-						// window.localStorage.setItem("PREV_QTT_data_storage", JSON.stringify(parsedPrev_QTT));	
-					}
-
+						
+					// if(Init_data_PREV_QTT === null || Init_data_PREV_QTT === undefined) {
+					// 	store.dispatch(DataAction.changePreviousQTT({[destination]: "0"}));
+					// 	window.localStorage.setItem("PREV_QTT_data_storage", JSON.stringify({[destination]: 0}));
+					// } else {
+					// 	const parsedPrev_QTT = JSON.parse(Init_data_PREV_QTT);
+					// 	let destinationValue = parsedPrev_QTT[destination];
+					// 	if (destinationValue === undefined || destinationValue === null) {
+					// 		destinationValue = "0";
+					// 	}
+					// 	store.dispatch(DataAction.changePreviousQTT({[destination]: destinationValue}));
+					// 	window.localStorage.setItem("PREV_QTT_data_storage", JSON.stringify({[destination]: destinationValue}));
+					// 	// window.localStorage.setItem("PREV_QTT_data_storage", JSON.stringify(parsedPrev_QTT));	
+					// }
+					
+					///////////////////////////////////////////////////////////////////////////////////////////////////
 					// if(Init_data_PREV_QTT) {
 					// 	const parsedPrev_QTT = JSON.parse(Init_data_PREV_QTT);
 					// 	let destinationValue = parsedPrev_QTT[destination];
@@ -109,8 +128,8 @@ function init() {
 						// window.localStorage.setItem("PREV_TONS_data_storage", JSON.stringify({[destination]: parsedPrev_TONS[destination]}));
 					}
 
-					if(Init_data_MAXI) {
-						const parsedMaxi = JSON.parse(Init_data_MAXI);
+					if(Init_data_MAXI_TONS) {
+						const parsedMaxi = JSON.parse(Init_data_MAXI_TONS);
 						const destinationValue = parsedMaxi[destination];
 						store.dispatch(DataAction.changeMaxiTONS({[destination]: destinationValue}));
 						// window.localStorage.setItem("MAXI_TONS_data_storage", JSON.stringify({[destination]: parsedMaxi[destination]}));

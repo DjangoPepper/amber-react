@@ -164,21 +164,21 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
                     ...state,
                     saved_catalog: false
                 };
-            case DataAction.SAVE_CHECKBOX_STATE:
+            case DataAction.SAVE_CHECKBOX_STORAGE:
                 // if(state.saved_HOLD_checkbox_state) return state;
                 window.localStorage.setItem("CHECKBOX_data_storage", JSON.stringify(state.HOLD_checkbox_state));
                 return {
                     ...state,
                     saved_HOLD_checkbox_state: false
                 };
-            case DataAction.SAVE_PREV_QTT:
+            case DataAction.SAVE_PREV_QTT_STATE:
                 // if(state.saved_HOLD_previous_QTT) return state;
                 window.localStorage.setItem("PREV_QTT_data_storage", JSON.stringify(state.HOLD_previous_QTT));
                 return {
                     ...state,
                     saved_HOLD_previous_QTT: false
                 }
-            case DataAction.SAVE_PREV_TONS:
+            case DataAction.SAVE_PREV_TONS_STATE:
                 // if(state.saved_HOLD_previous_TONS) return state;
                 window.localStorage.setItem("PREV_TONS_data_storage", JSON.stringify(state.HOLD_previous_TONS));
                 return {
@@ -207,21 +207,21 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
                     loaded_HOLD_checkbox_state: true,
                     saved_HOLD_checkbox_state: false,
                 };
-            case DataAction.LOAD_PREV_QTT:
+            case DataAction.LOAD_PREV_QTT_STATE:
                 return {
                     ...state,
                     HOLD_previous_QTT: action.payload,
                     loaded_HOLD_previous_QTT: true,
                     saved_HOLD_previous_QTT: false,
                 };
-            case DataAction.LOAD_PREV_TONS:
+            case DataAction.LOAD_PREV_TONS_STATE:
                 return {
                     ...state,
                     HOLD_previous_TONS: action.payload,
                     loaded_HOLD_previous_TONS: true,
                     saved_HOLD_previous_TONS: false,
                 };
-            case DataAction.LOAD_MAXI_TONS:
+            case DataAction.LOAD_MAXI_TONS_STATE:
                 return {
                     ...state,
                     HOLD_maxi_TONS: action.payload,
