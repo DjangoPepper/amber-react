@@ -43,19 +43,19 @@ function init() {
 	if (Init_data_PREV_QTT) {
 			const parsedPrev_QTT = JSON.parse(Init_data_PREV_QTT);
 			// store.dispatch(DataAction.load_previous_qtt_state(JSON.parse(Init_data_PREV_QTT)));
-			store.dispatch(DataAction.changePreviousQTT(JSON.parse(parsedPrev_QTT)));
+			store.dispatch(DataAction.change_previous_qtt_state(JSON.parse(parsedPrev_QTT)));
 		}
 
 	if (Init_data_PREV_TONS) {
 		const parsedPrev_TONS = JSON.parse(Init_data_PREV_TONS);
 			// store.dispatch(DataAction.load_previous_tons_state(JSON.parse(Init_data_PREV_TONS)));
-		store.dispatch(DataAction.changePreviousTONS(JSON.parse(parsedPrev_TONS)));
+		store.dispatch(DataAction.change_previous_tons_state(JSON.parse(parsedPrev_TONS)));
 		}
 
 	if (Init_data_MAXI_TONS) {
 			const parsedMaxi = JSON.parse(Init_data_MAXI_TONS); 
-				// store.dispatch(DataAction.load_maxi_tons(JSON.parse(Init_data_MAXI_TONS)));
-			store.dispatch(DataAction.changeMaxiTONS(JSON.parse(parsedMaxi)));
+				// store.dispatch(DataAction.load_maxi_tons_state(JSON.parse(Init_data_MAXI_TONS)));
+			store.dispatch(DataAction.change_maxi_tons_state(JSON.parse(parsedMaxi)));
 		} 
 
  */
@@ -81,7 +81,7 @@ function init() {
 						}
 					///////////////////////////////////////////////////////////////////////////////////////////////////
 						if (Init_data_PREV_QTT === null || Init_data_PREV_QTT === undefined) {
-							store.dispatch(DataAction.changePreviousQTT({ [destination]: "0" }));
+							store.dispatch(DataAction.change_previous_qtt_state({ [destination]: "0" }));
 							window.localStorage.setItem("PREV_QTT_data_storage", JSON.stringify({ [destination]: 0 }));
 						} else {
 							const parsedPrev_QTT = JSON.parse(Init_data_PREV_QTT);
@@ -94,12 +94,12 @@ function init() {
 							// Ajouter la destination au lieu de la remplacer
 							const updatedPrev_QTT = { ...parsedPrev_QTT, [destination]: destinationValue };
 						
-							store.dispatch(DataAction.changePreviousQTT(updatedPrev_QTT));
+							store.dispatch(DataAction.change_previous_qtt_state(updatedPrev_QTT));
 							window.localStorage.setItem("PREV_QTT_data_storage", JSON.stringify(updatedPrev_QTT));
 						}
 						
 					// if(Init_data_PREV_QTT === null || Init_data_PREV_QTT === undefined) {
-					// 	store.dispatch(DataAction.changePreviousQTT({[destination]: "0"}));
+					// 	store.dispatch(DataAction.change_previous_qtt_state({[destination]: "0"}));
 					// 	window.localStorage.setItem("PREV_QTT_data_storage", JSON.stringify({[destination]: 0}));
 					// } else {
 					// 	const parsedPrev_QTT = JSON.parse(Init_data_PREV_QTT);
@@ -107,16 +107,16 @@ function init() {
 					// 	if (destinationValue === undefined || destinationValue === null) {
 					// 		destinationValue = "0";
 					// 	}
-					// 	store.dispatch(DataAction.changePreviousQTT({[destination]: destinationValue}));
+					// 	store.dispatch(DataAction.change_previous_qtt_state({[destination]: destinationValue}));
 					// 	window.localStorage.setItem("PREV_QTT_data_storage", JSON.stringify({[destination]: destinationValue}));
 					// 	// window.localStorage.setItem("PREV_QTT_data_storage", JSON.stringify(parsedPrev_QTT));	
 					// }
-					
+
 					///////////////////////////////////////////////////////////////////////////////////////////////////
 					// if(Init_data_PREV_QTT) {
 					// 	const parsedPrev_QTT = JSON.parse(Init_data_PREV_QTT);
 					// 	let destinationValue = parsedPrev_QTT[destination];
-					// 	store.dispatch(DataAction.changePreviousQTT({[destination]: destinationValue}));
+					// 	store.dispatch(DataAction.change_previous_qtt_state({[destination]: destinationValue}));
 					// 	// window.localStorage.setItem("PREV_QTT_data_storage", JSON.stringify({[destination]: parsedPrev_QTT[destination]}));
 					// }
 
@@ -124,14 +124,14 @@ function init() {
 					if(Init_data_PREV_TONS) {
 						const parsedPrev_TONS = JSON.parse(Init_data_PREV_TONS);
 						const destinationValue = parsedPrev_TONS[destination];
-						store.dispatch(DataAction.changePreviousTONS({[destination]: destinationValue}));
+						store.dispatch(DataAction.change_previous_tons_state({[destination]: destinationValue}));
 						// window.localStorage.setItem("PREV_TONS_data_storage", JSON.stringify({[destination]: parsedPrev_TONS[destination]}));
 					}
 
 					if(Init_data_MAXI_TONS) {
 						const parsedMaxi = JSON.parse(Init_data_MAXI_TONS);
 						const destinationValue = parsedMaxi[destination];
-						store.dispatch(DataAction.changeMaxiTONS({[destination]: destinationValue}));
+						store.dispatch(DataAction.change_maxi_tons_state({[destination]: destinationValue}));
 						// window.localStorage.setItem("MAXI_TONS_data_storage", JSON.stringify({[destination]: parsedMaxi[destination]}));
 					}
 				}
@@ -139,7 +139,7 @@ function init() {
 
 		setInterval(() => {
 				store.dispatch(DataAction.save_catalog());
-				store.dispatch(DataAction.save_checkbox_state()); //avec checkbox fait planter le navigateur ?
+				store.dispatch(DataAction.save_checkbox_storage()); //avec checkbox fait planter le navigateur ?
 				store.dispatch(DataAction.save_string_checkbox_state()); 
 
 				store.dispatch(DataAction.save_previous_qtt());
@@ -152,9 +152,9 @@ function init() {
 				// 	if (k === "stock") {
 				// 	} else {
 				// 	// store.dispatch(DataAction.change_CHECKBOX_STATE({ key: k, value: false }));
-				// 	// store.dispatch(DataAction.changePreviousQTT({ destination: k, value: 0 }));
-				// 	// store.dispatch(DataAction.changePreviousTONS({ destination: k, value: 0 }));
-				// 	// store.dispatch(DataAction.changeMaxiTONS({ destination: k, value: 1000 }));
+				// 	// store.dispatch(DataAction.change_previous_qtt_state({ destination: k, value: 0 }));
+				// 	// store.dispatch(DataAction.change_previous_tons_state({ destination: k, value: 0 }));
+				// 	// store.dispatch(DataAction.change_maxi_tons_state({ destination: k, value: 1000 }));
 				// 	}
 				// });
 			toast.warning('AutoSave', { position: toast.POSITION.BOTTOM_LEFT, autoClose: 500 })

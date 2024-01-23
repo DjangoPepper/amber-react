@@ -48,9 +48,9 @@ export default class DataAction {
 	public static load_checkbox_state(checkboxstate: { [destination: string]: boolean }): AnyAction {
 		return { type: DataAction.LOAD_CHECKBOX_STATE, payload: checkboxstate };
 	}
-	public static load_string_checkbox_state(stringcheckboxstate: { [destination: string]: string }): AnyAction {
-		return { type: DataAction.LOAD_CATALOG, payload: stringcheckboxstate };
-	}
+	// public static load_string_checkbox_state(stringcheckboxstate: { [destination: string]: string }): AnyAction {
+	// 	return { type: DataAction.LOAD_CATALOG, payload: stringcheckboxstate };
+	// }
 	public static load_previous_qtt_state(newqtt: { [destination: string]: string }): AnyAction {
 		return { type: DataAction.LOAD_PREV_QTT_STATE, payload: newqtt };
 	}
@@ -59,27 +59,24 @@ export default class DataAction {
 		return { type: DataAction.LOAD_PREV_TONS_STATE, payload: newtons };
 	}
 	
-	public static load_maxi_tons(newmaxi: { [destination: string]: number }): AnyAction {
+	public static load_maxi_tons_state(newmaxi: { [destination: string]: number }): AnyAction {
 		return { type: DataAction.LOAD_MAXI_TONS_STATE, payload: newmaxi };
 	}
 	
 
-	public static change_string_checkbox_state(changestringcheckboxstate: { [destination: string]: string }): AnyAction {
-		return { type: DataAction.CHANGE_STRING_CHECKBOX_STATE, payload: changestringcheckboxstate };
-	}
 	public static change_checkbox_state(changecheckboxstate: { [destination: string]: boolean }): AnyAction {
 		return { type: DataAction.CHANGE_CHECKBOX_STATE, payload: changecheckboxstate };
 	}
 
-	public static changePreviousQTT(changeqtt: { [destination: string]: string }): AnyAction {
+	public static change_previous_qtt_state(changeqtt: { [destination: string]: string }): AnyAction {
 		return { type: DataAction.CHANGE_PREVIOUS_QTT_STATE, payload: changeqtt };
 	}
 	
-	public static changePreviousTONS(changetons: { [destination: string]: string }): AnyAction {
+	public static change_previous_tons_state(changetons: { [destination: string]: string }): AnyAction {
 		return { type: DataAction.CHANGE_PREVIOUS_TONS_STATE, payload: changetons };
 	}
 //////
-	public static changeMaxiTONS(changemaxi: { [destination: string]: string }): AnyAction {
+	public static change_maxi_tons_state(changemaxi: { [destination: string]: string }): AnyAction {
 		return { type: DataAction.CHANGE_MAXI_TONS_STATE, payload: changemaxi };
 	}
 /////
@@ -121,7 +118,7 @@ export default class DataAction {
 	public static save_catalog(): AnyAction {
 		return { type: DataAction.SAVE_CATALOG_STORAGE };
 	}
-	public static save_checkbox_state(): AnyAction {
+	public static save_checkbox_storage(): AnyAction {
 		return { type: DataAction.SAVE_CHECKBOX_STORAGE };
 	}
 	public static save_string_checkbox_state(): AnyAction {

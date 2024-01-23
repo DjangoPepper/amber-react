@@ -52,7 +52,7 @@ export default function Statistics() {
 		set_checkbox_Hold_State(updatedCheckboxState);
 		// dispatch(DataAction.change_checkbox_state ( true ));
 		dispatch(DataAction.change_checkbox_state({ [k]: updatedCheckboxState[k] }));
-		dispatch(DataAction.save_checkbox_state())
+		dispatch(DataAction.save_checkbox_storage())
 		};
 
 	const handle_checkBOX_Change = (destination: string, value: boolean) => {
@@ -62,7 +62,7 @@ export default function Statistics() {
 			[destination]: value,
 		}));
 		dispatch(DataAction.change_checkbox_state({ [destination]: value }));
-		dispatch(DataAction.save_checkbox_state());
+		dispatch(DataAction.save_checkbox_storage());
 		};
 
 	const handle_prevQT_VALUE_Change = (destination: string, value: string) => {
@@ -78,7 +78,7 @@ export default function Statistics() {
 		}
 
 		// let numericValue = parseFloat(value) || 0;
-		dispatch(DataAction.changePreviousQTT({ destination: destination, value: value }));
+		dispatch(DataAction.change_previous_qtt_state({ destination: destination, value: value }));
 		dispatch(DataAction.save_previous_qtt())
 	};
 	const handle_PrevTO_VALUE_Change = (destination: string, value: string) => {
@@ -90,7 +90,7 @@ export default function Statistics() {
 				},
 			}));
 		}
-		dispatch(DataAction.changePreviousTONS({ destination: destination, value: value }));
+		dispatch(DataAction.change_previous_tons_state({ destination: destination, value: value }));
 		dispatch(DataAction.save_previous_tons())
 	};
 	const handle_maxiTO_VALUE_Change = (destination: string, value: string) => {
@@ -102,7 +102,7 @@ export default function Statistics() {
 					maxiTO_VALUE: value, 
 				},
 			}));
-			dispatch(DataAction.changeMaxiTONS({ destination: destination, value: value }));
+			dispatch(DataAction.change_maxi_tons_state({ destination: destination, value: value }));
 			dispatch(DataAction.save_maxi_tons())
 			// 
 		}
@@ -113,8 +113,8 @@ export default function Statistics() {
 			},
 		})); */
 		// const numericValue = parseFloat(value) || 0;
-		// dispatch(DataAction.changeMaxiTONS({ destination: k, value: numericValue }));
-		// dispatch(DataAction.changeMaxiTONS({ destination: destination, value: value }));
+		// dispatch(DataAction.change_maxi_tons_state({ destination: k, value: numericValue }));
+		// dispatch(DataAction.change_maxi_tons_state({ destination: destination, value: value }));
 		// dispatch(DataAction.save_maxi_tons())
 		};
 
@@ -236,7 +236,7 @@ export default function Statistics() {
 								[k]: Init_value === "true" ? true : false,
 							}));
 							// dispatch(DataAction.change_checkbox_state({ [k]: Init_value === "true" ? true : false }));
-							// dispatch(DataAction.save_checkbox_state());
+							// dispatch(DataAction.save_checkbox_storage());
 
 						} else {
 							console.log(`La clé ${k} n'a pas été trouvée dans l'objet du CHECKBOX_data_storage`);
