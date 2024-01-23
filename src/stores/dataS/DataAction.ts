@@ -10,7 +10,7 @@ export default class DataAction {
 
 	public static SAVE_CATALOG_STORAGE = "DataAction.SAVE_CATALOG_STORAGE";
 	public static SAVE_CHECKBOX_STORAGE = "DataAction.SAVE_CHECKBOX_STORAGE";
-	public static SAVE_STRING_CHECKBOX_STATE = "DataAction.SAVE_STRING_CHECKBOX_STATE";
+	public static SAVE_CHECKBOX_STATE = "DataAction.SAVE_CHECKBOX_STATE";
 
 	public static SAVE_PREV_QTT_STORAGE = "DataAction.SAVE_PREV_QTT_STORAGE";
 	public static SAVE_PREV_TONS_STORAGE = "DataAction.SAVE_PREV_TONS_STORAGE";
@@ -121,17 +121,17 @@ export default class DataAction {
 	public static save_checkbox_storage(): AnyAction {
 		return { type: DataAction.SAVE_CHECKBOX_STORAGE };
 	}
-	public static save_string_checkbox_state(): AnyAction {
-		return { type: DataAction.SAVE_STRING_CHECKBOX_STATE };
+	public static save_checkbox_state(): AnyAction {
+		return { type: DataAction.SAVE_CHECKBOX_STATE };
 	}
-	public static save_previous_qtt(): AnyAction {
+	public static save_previous_qtt_storage(): AnyAction {
 		return { type: DataAction.SAVE_PREV_QTT_STORAGE };
 	}
 
-	public static save_previous_tons(): AnyAction {
+	public static save_previous_tons_storage(): AnyAction {
 		return { type: DataAction.SAVE_PREV_TONS_STORAGE };
 	}
-	public static save_maxi_tons(): AnyAction {
+	public static save_maxi_tons_storage(): AnyAction {
 		return { type: DataAction.SAVE_MAXI_TONS_STORAGE };
 	}
 	

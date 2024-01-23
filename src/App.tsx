@@ -140,11 +140,11 @@ function init() {
 		setInterval(() => {
 				store.dispatch(DataAction.save_catalog());
 				store.dispatch(DataAction.save_checkbox_storage()); //avec checkbox fait planter le navigateur ?
-				store.dispatch(DataAction.save_string_checkbox_state()); 
+				store.dispatch(DataAction.save_checkbox_state()); 
 
-				store.dispatch(DataAction.save_previous_qtt());
-				store.dispatch(DataAction.save_previous_tons());
-				store.dispatch(DataAction.save_maxi_tons());
+				store.dispatch(DataAction.save_previous_qtt_storage());
+				store.dispatch(DataAction.save_previous_tons_storage());
+				store.dispatch(DataAction.save_maxi_tons_storage());
 
 
 				// affectation.map((affectationItem) => {

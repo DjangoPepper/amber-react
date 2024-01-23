@@ -79,7 +79,7 @@ export default function Statistics() {
 
 		// let numericValue = parseFloat(value) || 0;
 		dispatch(DataAction.change_previous_qtt_state({ destination: destination, value: value }));
-		dispatch(DataAction.save_previous_qtt())
+		dispatch(DataAction.save_previous_qtt_storage())
 	};
 	const handle_PrevTO_VALUE_Change = (destination: string, value: string) => {
 		if(value !== undefined && value !== null && value !== "") { 
@@ -91,7 +91,7 @@ export default function Statistics() {
 			}));
 		}
 		dispatch(DataAction.change_previous_tons_state({ destination: destination, value: value }));
-		dispatch(DataAction.save_previous_tons())
+		dispatch(DataAction.save_previous_tons_storage())
 	};
 	const handle_maxiTO_VALUE_Change = (destination: string, value: string) => {
 		if(value !== undefined && value !== null && value !== "") { 
@@ -103,7 +103,7 @@ export default function Statistics() {
 				},
 			}));
 			dispatch(DataAction.change_maxi_tons_state({ destination: destination, value: value }));
-			dispatch(DataAction.save_maxi_tons())
+			dispatch(DataAction.save_maxi_tons_storage())
 			// 
 		}
 		/* set_maxi_Values((maxi_Value_TO: any) => ({
@@ -115,7 +115,7 @@ export default function Statistics() {
 		// const numericValue = parseFloat(value) || 0;
 		// dispatch(DataAction.change_maxi_tons_state({ destination: k, value: numericValue }));
 		// dispatch(DataAction.change_maxi_tons_state({ destination: destination, value: value }));
-		// dispatch(DataAction.save_maxi_tons())
+		// dispatch(DataAction.save_maxi_tons_storage())
 		};
 
 	const Toggle_Extended_Tally = () => {
