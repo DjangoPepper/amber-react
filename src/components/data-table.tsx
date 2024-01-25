@@ -134,11 +134,8 @@ const useColumns = function useColumns(): any[] {
 //***********************************************************************/
 export default function DataTable() {
     const dispatch = useDispatch();
-    // const [showModal, setShowModal] = useState(false);
     const [PickerColorForSelectedCale, setPickerColorForSelectedCale] = useState<{ [key: string]: string }>({});
     const [newSelectedCale, setnewSelectedCale] = useState<string>('');
-    // const [ExtentedTally, setExtentedTally] = useState<string>('');
-
     const [newColor, setNewColor] = useState<string>('');
     
     // Accédez à la valeur sélectionnée depuis l'état Redux
@@ -158,7 +155,6 @@ export default function DataTable() {
     };
 
     const handleColorChange = (color: ColorResult) => {
-        // setSelectedColor(color.hex);
         setSelectedColors({...selectedColors, [newSelectedCale]: color.hex});
 
         const updateStickerdColors = { ...PickerColorForSelectedCale, [selectedCale]: color.hex };
@@ -174,13 +170,8 @@ export default function DataTable() {
             return item;
         });
     
-        // Mettez à jour l'état des données avec les modifications
-        // dispatch(DataAction.updateData(updatedData));
-    
         dispatch(DataAction.changeCouleur([newSelectedCale]));
-    
-        // Fermez la fenêtre contextuelle
-        // setShowModal(false);
+
         setnewSelectedCale("");
         };
 
@@ -242,16 +233,7 @@ export default function DataTable() {
     }
 
     const isStabiloButtonVisible = cale !== "stock"; // Condition pour déterminer la visibilité du bouton STABILO
-    // const TempColors = affectation.map((d) => d.color);
-    
-    // const [checkedRows, setCheckedRows] = useState<{ [key: number]: boolean }>({});
     const [checkedRows, setCheckedRows] = useState<{ [key: number]: boolean }>({});
-    // const handleCheckboxClick = (reference: number) => {
-    //     const updatedCheckedRows = { ...checkedRows };
-    //     updatedCheckedRows[reference] = !updatedCheckedRows[reference];
-    //     setCheckedRows(updatedCheckedRows);
-    // };
-
 
 
     return ( 

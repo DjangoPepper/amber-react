@@ -62,6 +62,47 @@ const initialState: DataState = {
 
 };
 
+/* //
+const removeUndefinedCouples = (state, propertyName) => {
+    const updatedProperty = { ...state[propertyName] };
+
+    // Filtrer les couples avec undefined: undefined
+    for (const key in updatedProperty) {
+        if (Object.prototype.hasOwnProperty.call(updatedProperty, key)) {
+            if (updatedProperty[key] === undefined) {
+                delete updatedProperty[key];
+            }
+        }
+    }
+
+    return {
+        ...state,
+        [propertyName]: updatedProperty,
+    };
+};
+// */
+//
+const removeUndefinedCouples = (state: DataState, propertyName: keyof DataState) => {
+    const updatedProperty = { ...state[propertyName] as { [key: string]: string | boolean } };
+
+    // Filtrer les couples avec undefined: undefined
+    for (const key in updatedProperty) {
+        if (Object.prototype.hasOwnProperty.call(updatedProperty, key)) {
+            if (updatedProperty[key] === undefined) {
+                delete updatedProperty[key];
+            }
+        }
+    }
+
+    return {
+        ...state,
+        [propertyName]: updatedProperty,
+    } as DataState;
+};
+
+//
+
+
 export const dataReducer: Reducer<DataState> = (state = initialState, action: AnyAction): DataState => {
         switch (action.type) {
             case DataAction.IMPORT_DATA:
@@ -97,15 +138,33 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
                     selectedPrepa: action.payload
                 }
 //
+/*          // case DataAction.CHANGE_CHECKBOX_STATE:
+            //     return {
+            //         ...state,
+            //         HOLD_checked_BOX: {
+            //             ...state.HOLD_checked_BOX,
+            //             ...action.payload,
+            //             // [action.payload.destination]: action.payload.value
+            //         },
+            //     }; 
+*/
             case DataAction.CHANGE_CHECKBOX_STATE:
-                return {
-                    ...state,
-                    HOLD_checked_BOX: {
-                        ...state.HOLD_checked_BOX,
-                        ...action.payload,
-                        // [action.payload.destination]: action.payload.value
-                    },
+                const updatedCheckBox = {
+                    ...state.HOLD_checked_BOX,
+                    ...action.payload,
                 };
+
+                // Vérifiez si le couple name: "H1" existe déjà
+                if (!updatedCheckBox[action.payload.name]) {
+                    updatedCheckBox[action.payload.name] = action.payload.value;
+                }
+
+                return removeUndefinedCouples (
+                    {
+                        ...state,
+                        HOLD_checked_BOX: updatedCheckBox,
+                    }, 'HOLD_checked_BOX');
+
             case DataAction.CHANGE_PREVIOUS_QTT_STATE:
                 return {
                     ...state,

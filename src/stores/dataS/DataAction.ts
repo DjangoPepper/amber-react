@@ -18,8 +18,7 @@ export default class DataAction {
 	// public static SAVE_MAXIS = "DataAction.SAVE_MAXIS";
 	
 	public static LOAD_CATALOG = "DataAction.LOAD_CATALOG";
-	public static LOAD_CHECKBOX_STATE = "DataAction.LOAD__STRING_CHECKBOX_STATE";
-	public static LOAD_STRING_CHECKBOX_STATE = "DataAction.LOAD_CHECKBOX_STATE";
+	public static LOAD_CHECKBOX_STATE = "DataAction.LOAD_CHECKBOX_STATE";
 	public static LOAD_PREV_QTT_STATE = "DataAction.LOAD_PREV_QTT_STATE";
 	public static LOAD_PREV_TONS_STATE = "DataAction.LOAD_PREV_TONS_STATE";
 	public static LOAD_MAXI_TONS_STATE = "DataAction.LOAD_MAXI_TONS_STATE";
@@ -48,7 +47,7 @@ export default class DataAction {
 	public static load_checkbox_state(checkboxstate: { [destination: string]: boolean }): AnyAction {
 		return { type: DataAction.LOAD_CHECKBOX_STATE, payload: checkboxstate };
 	}
-	// public static load_string_checkbox_state(stringcheckboxstate: { [destination: string]: string }): AnyAction {
+	// public static LOAD_CHECKBOX_STATE(stringcheckboxstate: { [destination: string]: string }): AnyAction {
 	// 	return { type: DataAction.LOAD_CATALOG, payload: stringcheckboxstate };
 	// }
 	public static load_previous_qtt_state(newqtt: { [destination: string]: string }): AnyAction {
