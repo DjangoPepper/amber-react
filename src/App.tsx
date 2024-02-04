@@ -16,18 +16,55 @@ let backupInterval = 61 * 1000; //30 * 1000 ms = 30s
 // let firstRender = false;
 
 function init() {
-		
-	// const Init_data_catalog = window.localStorage.getItem("data");
+	// Récupération	du local storage	
 	const Init_data_catalog = window.localStorage.getItem("CATALOG_data_storage");
 	let Init_data_CHECK_BOX = window.localStorage.getItem("CHECKBOX_data_storage");
 	let Init_data_PREV_QTT  = window.localStorage.getItem("PREV_QTT_data_storage");
 	let Init_data_PREV_TONS = window.localStorage.getItem("PREV_TONS_data_storage");
 	let Init_data_MAXI_TONS = window.localStorage.getItem("MAXI_TONS_data_storage");
 
+	// Enregistrement du catalog dans le state
 	if (Init_data_catalog) {
 			store.dispatch(DataAction.load_catalog(Init_data_catalog));
 		}
+	
+		// Création des listes vides
+		let EMPTYCheck_BOX = affectation.map(item => ({ [item.name]: false }));
+		let EmptyPrev_QTT = affectation.map(item => ({ [item.name]: "0" }));
+		let EmptyPrev_TONS = affectation.map(item => ({ [item.name]: "0" }));
+		let EmptyMaxi_TONS = affectation.map(item => ({ [item.name]: "0" }));
 
+
+		
+
+
+		
+		
+		// let EmptyMaxi_TONS = affectation.map(item => ({ [String(item.name)]: "0" }));
+		// let EmptyMaxi_TONS = affectation.map(item => ({ [String(item.name)]: "false" }));
+		// let EmptyMaxi_TONS = affectation.map(item => ({ [item.name.toString()]: "0" }));
+		// let EmptyMaxi_TONS = affectation.map(item => ({ ["" + item.name + "" ]: "0" }));
+
+		// if (Init_data_CHECK_BOX) {
+		// 	// Vérifiez si Init_data_CHECK_BOX est une chaîne JSON valide
+		// 	try {
+		// 		const parsedCheckboxState = JSON.parse(Init_data_CHECK_BOX);
+		// 		EMPTYCheck_BOX = parsedCheckboxState;
+		// 	} catch (error) {
+		// 		console.error("Erreur de parsing JSON pour Init_data_CHECK_BOX :", error);
+		// 	}
+		// }
+		
+
+		// let defaultCheckboxState = affectation.map(item => ({ name: item.name, defaut_checked_box: false }));
+		// Init_data_CHECK_BOX = JSON.stringify(defaultCheckboxState);
+		
+		// let updatedCheckboxState = affectation.map(item => (
+		// 	item.defaut_checked_box !== undefined ? item.defaut_checked_box : false
+		// ));
+
+/* 
+	//
 	if (Init_data_CHECK_BOX) {
 		// const parsedCheckboxState = JSON.parse(Init_data_CHECK_BOX);
 		// store.dispatch(DataAction.change_checkbox_state(JSON.parse(parsedCheckboxState)));
@@ -38,36 +75,147 @@ function init() {
 				// const parsedCheckboxState = JSON.parse(Init_data_CHECK_BOX);
 				// store.dispatch(DataAction.change_checkbox_state(parsedCheckboxState));
 		}
+	//
+ */
 
-	if (Init_data_PREV_QTT) {
-		// const parsedPrev_QTT = JSON.parse(Init_data_PREV_QTT);
-		// store.dispatch(DataAction.change_previous_qtt_state(parsedPrev_QTT));
-		} else {
-				const defaultPrev_QTT = affectation.map(item => ({ name: item.name, prevQT_VALUE: item.previous_quantite }));
-				Init_data_PREV_QTT = JSON.stringify(defaultPrev_QTT);
-				// const parsedPrev_QTT = JSON.parse(Init_data_PREV_QTT);
-				// store.dispatch(DataAction.change_previous_qtt_state(parsedPrev_QTT));
-		}
+/* 	// if (Init_data_CHECK_BOX) {
+	// 	// Vérifiez si Init_data_CHECK_BOX est une chaîne JSON valide
+	// 	try {
+	// 		const parsedCheckboxState = JSON.parse(Init_data_CHECK_BOX);
+	
+	// 		// Vérifiez chaque couple name: etat et créez-le avec la valeur par défaut si nécessaire
+	// 		const updatedCheckboxState = parsedCheckboxState.map(item => ({
+	// 			name: item.name,
+	// 			defaut_checked_box: item.defaut_checked_box !== undefined ? item.defaut_checked_box : false,
+	// 		}));
+	
+	// 		// Mettez à jour Init_data_CHECK_BOX avec le nouveau tableau d'objets
+	// 		Init_data_CHECK_BOX = JSON.stringify(updatedCheckboxState);
+	
+	// 		// Utilisez store.dispatch pour mettre à jour l'état dans votre application Redux si nécessaire
+	// 		// store.dispatch(DataAction.change_checkbox_state(updatedCheckboxState));
+	// 	} catch (error) {
+	// 		// Gérez les erreurs de parsing JSON
+	// 		console.error("Erreur de parsing JSON pour Init_data_CHECK_BOX :", error);
+	// 		// const defaultCheckboxState = affectation.map(item => ({ name: item.name, defaut_checked_box: false }));
+	// 		const defaultCheckboxState = affectation.map(item => ({ name: item.name, defaut_checked_box: false }));
+	// 		Init_data_CHECK_BOX = JSON.stringify(defaultCheckboxState);
+	// 	}
+	// } else {
+	// 	// Créez Init_data_CHECK_BOX avec la valeur par défaut
+	// 	const defaultCheckboxState = affectation.map(item => ({ name: item.name, defaut_checked_box: false }));
+	// 	Init_data_CHECK_BOX = JSON.stringify(defaultCheckboxState);
+	
+	// 	// Utilisez store.dispatch pour mettre à jour l'état dans votre application Redux si nécessaire
+	// 	// store.dispatch(DataAction.change_checkbox_state(defaultCheckboxState));
+	// } */
+	
+	// if (Init_data_CHECK_BOX) {
+	// 	// Vérifiez si Init_data_CHECK_BOX est une chaîne JSON valide
+	// 	try {
+	// 		const parsedCheckboxState = JSON.parse(Init_data_CHECK_BOX);
+	
+	// 		// Vérifiez chaque objet dans le tableau et assurez-vous que la propriété "defaut_checked_box" est définie
+	// 		const updatedCheckboxState = parsedCheckboxState.map(item => ({
+	// 			name: item.name,
+	// 			defaut_checked_box: item.defaut_checked_box !== undefined ? item.defaut_checked_box : false,
+	// 		}));
+	
+	// 		// Mettez à jour Init_data_CHECK_BOX avec le nouveau tableau d'objets
+	// 		Init_data_CHECK_BOX = JSON.stringify(updatedCheckboxState);
+	
+	// 		// Utilisez store.dispatch pour mettre à jour l'état dans votre application Redux si nécessaire
+	// 		// store.dispatch(DataAction.change_checkbox_state(updatedCheckboxState));
+	// 	} catch (error) {
+	// 		// Gérez les erreurs de parsing JSON
+	// 		console.error("Erreur de parsing JSON pour Init_data_CHECK_BOX :", error);
+	// 	}
+	// } else {
+	// 	// Créez Init_data_CHECK_BOX avec la valeur par défaut
+	// 	const defaultCheckboxState = affectation.map(item => ({ name: item.name, defaut_checked_box: false }));
+	// 	Init_data_CHECK_BOX = JSON.stringify(defaultCheckboxState);
+	
+	// 	// Utilisez store.dispatch pour mettre à jour l'état dans votre application Redux si nécessaire
+	// 	// store.dispatch(DataAction.change_checkbox_state(defaultCheckboxState));
+	// }
+	
+	
+	// if (Init_data_CHECK_BOX && Init_data_CHECK_BOX.trim() !== '{}' && isValidJson(Init_data_CHECK_BOX)) {
+	// 	try {
+	// 		const parsedCheckboxState = JSON.parse(Init_data_CHECK_BOX);
+	
+	// 		// Vérifiez si parsedCheckboxState est un tableau non vide
+	// 		if (Array.isArray(parsedCheckboxState) && parsedCheckboxState.length > 0) {
+	// 			// Vérifiez chaque objet dans le tableau et assurez-vous que la propriété "defaut_checked_box" est définie
+	// 			// const updatedCheckboxState = parsedCheckboxState.map(item => ({
+	// 			// 	name: item.name,
+	// 			// 	defaut_checked_box: item.defaut_checked_box !== undefined ? item.defaut_checked_box : false,
+	// 			// }));
+	// 			const updatedCheckboxState = parsedCheckboxState.map(item => (
+	// 				item.defaut_checked_box !== undefined ? item.defaut_checked_box : false
+	// 			));
+				
+	
+	// 			// Mettez à jour Init_data_CHECK_BOX avec le nouveau tableau d'objets
+	// 			Init_data_CHECK_BOX = JSON.stringify(updatedCheckboxState);
+	
+	// 			// Utilisez store.dispatch pour mettre à jour l'état dans votre application Redux si nécessaire
+	// 			// store.dispatch(DataAction.change_checkbox_state(updatedCheckboxState));
+	// 		} else {
+	// 			console.error("Le JSON parsé n'est pas un tableau non vide.");
+	// 		}
+	// 	} catch (error) {
+	// 		// Gérez les erreurs de parsing JSON
+	// 		console.error("Erreur de parsing JSON pour Init_data_CHECK_BOX :", error);
+	// 	}
+	// } else {
+	// 	// Créez Init_data_CHECK_BOX avec la valeur par défaut
+	// 	const defaultCheckboxState = affectation.map(item => ({ name: item.name, defaut_checked_box: false }));
+	// 	Init_data_CHECK_BOX = JSON.stringify(defaultCheckboxState);
+	
+	// 	// Utilisez store.dispatch pour mettre à jour l'état dans votre application Redux si nécessaire
+	// 	// store.dispatch(DataAction.change_checkbox_state(defaultCheckboxState));
+	// }
+	
+	// Fonction utilitaire pour vérifier si une chaîne est une JSON valide
+	// function isValidJson(str: string): boolean {
+	// 	try {
+	// 		JSON.parse(str);
+	// 		return true;
+	// 	} catch (e) {
+	// 		return false;
+	// 	}
+	// }
+	
+	// if (Init_data_PREV_QTT) {
+	// 	// const parsedPrev_QTT = JSON.parse(Init_data_PREV_QTT);
+	// 	// store.dispatch(DataAction.change_previous_qtt_state(parsedPrev_QTT));
+	// 	} else {
+	// 			const defaultPrev_QTT = affectation.map(item => ({ name: item.name, prevQT_VALUE: item.previous_quantite }));
+	// 			Init_data_PREV_QTT = JSON.stringify(defaultPrev_QTT);
+	// 			// const parsedPrev_QTT = JSON.parse(Init_data_PREV_QTT);
+	// 			// store.dispatch(DataAction.change_previous_qtt_state(parsedPrev_QTT));
+	// 	}
 
-	if (Init_data_PREV_TONS) {
-		// const parsedPrev_TONS = JSON.parse(Init_data_PREV_TONS);
-		// store.dispatch(DataAction.change_previous_tons_state(parsedPrev_TONS));
-		} else {
-				const defaultPrev_TONS = affectation.map(item => ({ name: item.name, prevTO_VALUE: item.previous_tonnes }));
-				Init_data_PREV_TONS = JSON.stringify(defaultPrev_TONS);
-				// const parsedPrev_TONS = JSON.parse(Init_data_PREV_TONS);
-				// store.dispatch(DataAction.change_previous_tons_state(parsedPrev_TONS));
-		}
+	// if (Init_data_PREV_TONS) {
+	// 	// const parsedPrev_TONS = JSON.parse(Init_data_PREV_TONS);
+	// 	// store.dispatch(DataAction.change_previous_tons_state(parsedPrev_TONS));
+	// 	} else {
+	// 			const defaultPrev_TONS = affectation.map(item => ({ name: item.name, prevTO_VALUE: item.previous_tonnes }));
+	// 			Init_data_PREV_TONS = JSON.stringify(defaultPrev_TONS);
+	// 			// const parsedPrev_TONS = JSON.parse(Init_data_PREV_TONS);
+	// 			// store.dispatch(DataAction.change_previous_tons_state(parsedPrev_TONS));
+	// 	}
 
-	if (Init_data_MAXI_TONS) {
-		// const parsedMaxi = JSON.parse(Init_data_MAXI_TONS); 
-		// store.dispatch(DataAction.change_maxi_tons_state(parsedMaxi));
-		} else {
-				const defaultMaxi = affectation.map(item => ({ name: item.name, maxiTO_VALUE: item.maxis_tonnes }));
-				Init_data_MAXI_TONS = JSON.stringify(defaultMaxi);
-				// const parsedMaxi = JSON.parse(Init_data_MAXI_TONS);
-				// store.dispatch(DataAction.change_maxi_tons_state(parsedMaxi));
-		} 
+	// if (Init_data_MAXI_TONS) {
+	// 	// const parsedMaxi = JSON.parse(Init_data_MAXI_TONS); 
+	// 	// store.dispatch(DataAction.change_maxi_tons_state(parsedMaxi));
+	// 	} else {
+	// 			const defaultMaxi_TONS = affectation.map(item => ({ name: item.name, maxiTO_VALUE: item.maxis_tonnes }));
+	// 			Init_data_MAXI_TONS = JSON.stringify(defaultMaxi_TONS);
+	// 			// const parsedMaxi = JSON.parse(Init_data_MAXI_TONS);
+	// 			// store.dispatch(DataAction.change_maxi_tons_state(parsedMaxi));
+	// 	} 
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////
@@ -172,7 +320,7 @@ function init() {
 		backupInterval);
 }
 
-init();
+// init();
 
 function App() {
 	useLeavePageConfirm(true);

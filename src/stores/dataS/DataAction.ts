@@ -8,6 +8,11 @@ export default class DataAction {
 	public static CHANGE_PREVIOUS_TONS_STATE = "DataAction.CHANGE_PREVIOUS_TONS_STATE";
 	public static CHANGE_MAXI_TONS_STATE = "DataAction.CHANGE_MAXI_TONS_STATE";
 
+	public static CREATE_CHECKBOX_STATE = "CREATE_CHECKBOX_STATE";
+	public static CREATE_PREVIOUS_QTT_STATE = "CREATE_PREVIOUS_QTT_STATE";
+	public static CREATE_PREVIOUS_TONS_STATE = "CREATE_PREVIOUS_TONS_STATE";
+	public static CREATE_MAXI_TONS_STATE = "CREATE_MAXI_TONS_STATE";
+	
 	public static SAVE_CATALOG_STORAGE = "DataAction.SAVE_CATALOG_STORAGE";
 	public static SAVE_CHECKBOX_STORAGE = "DataAction.SAVE_CHECKBOX_STORAGE";
 	public static SAVE_CHECKBOX_STATE = "DataAction.SAVE_CHECKBOX_STATE";
@@ -74,11 +79,35 @@ export default class DataAction {
 	public static change_previous_tons_state(changetons: { [destination: string]: string }): AnyAction {
 		return { type: DataAction.CHANGE_PREVIOUS_TONS_STATE, payload: changetons };
 	}
-//////
+
 	public static change_maxi_tons_state(changemaxi: { [destination: string]: string }): AnyAction {
 		return { type: DataAction.CHANGE_MAXI_TONS_STATE, payload: changemaxi };
 	}
 /////
+	// public static CREATE_CHECKBOX_STATE = "CREATE_CHECKBOX_STATE";
+	// public static CREATE_PREVIOUS_QTT_STATE = "CREATE_PREVIOUS_QTT_STATE";
+	// public static CREATE_PREVIOUS_TONS_STATE = "CREATE_PREVIOUS_TONS_STATE";
+	// public static CREATE_MAXI_QTT_STATE = "CREATE_MAXI_QTT_STATE";
+	
+	public static create_checkbox_state(createcdvalue: { [destination: string]: string }): AnyAction {
+		return { type:DataAction.CREATE_CHECKBOX_STATE, payload: createcdvalue };
+	}
+
+	public static create_previous_qtt_state(createcdvalue: {[destibation: string]: string }): AnyAction {
+		return { type: DataAction.CREATE_PREVIOUS_QTT_STATE, payload: createcdvalue} ;
+	}
+
+	public static create_previous_tons_state(createcdvalue: {[destibation: string]: string }): AnyAction {
+		return { type: DataAction.CREATE_PREVIOUS_TONS_STATE, payload: createcdvalue} ;
+	}
+	public static create_maxi_tons_state(createcdvalue: {[destibation: string]: string }): AnyAction {
+		return { type: DataAction.CREATE_PREVIOUS_QTT_STATE, payload: createcdvalue} ;
+	}
+
+/////
+
+
+
 
 	public static deleteRow(rank: string): AnyAction {
 		return { type: DataAction.DELETE_ROW, payload: rank };
