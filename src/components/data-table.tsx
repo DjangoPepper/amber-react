@@ -101,7 +101,7 @@ const useColumns = function useColumns(): any[] {
             cell: EditableCell,
             filterFn: fuzzyFilter,
         }),
-// #####################################################################################################################
+        // #####################################################################################################################
         columnHelper.accessor('reference', {
             header: 'REF',
             cell: ({row}: any) =>
@@ -109,14 +109,13 @@ const useColumns = function useColumns(): any[] {
                     onClick={() => {
                     dispatch(DataAction.moveRow(row.original.reference)); //je change la detination de ref cale1,cale2, etc..
                     }}
-                >
+                    >
                     {SpaceatPos(row.original.reference)}
                 </Button>,
             filterFn: fuzzyFilter,
 
         }),
-// #####################################################################################################################
-
+        // #####################################################################################################################
         columnHelper.accessor('weight', {
             header: "POIDS",
             cell: info => info.getValue(),
@@ -129,7 +128,7 @@ const useColumns = function useColumns(): any[] {
     ];
 
     return columns;
-}
+    }
 //***********************************************************************/
 //***********************************************************************/
 //***********************************************************************/
