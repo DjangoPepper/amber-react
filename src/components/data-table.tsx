@@ -91,7 +91,9 @@ const globalFilterFn: FilterFn<stepe_Data> = (row, columnId, filterValue: string
     };
 
 const useColumns = function useColumns(): any[] {
+    const [open, setOpen] = useState(false);
     const dispatch = useDispatch();
+
         const columns = [
             columnHelper.accessor('rank', {
                 header: () => 'RANG',
@@ -106,14 +108,18 @@ const useColumns = function useColumns(): any[] {
             columnHelper.accessor('reference', {
                 header: 'REF',
                 cell: ({row}: any) =>
-                    <Button 
-                        onClick={() => {
-                        dispatch(DataAction.moveRow(row.original.reference)); //je change la detination de ref cale1,cale2, etc..
-                        }}
-                        >
-                        {SpaceatPos(row.original.reference)}
-                    </Button>,
-                filterFn: fuzzyFilter,
+                    <div>
+                        <button onClick={() => setOpen(true)}> Click to Open       Popup</button>
+                        {open ? <Popup text="Hello there!" closePopup={() => setOpen(false)} /> : null}
+                    </div>
+                    // <Button 
+                    //     onClick={() => {
+                    //     dispatch(DataAction.moveRow(row.original.reference)); //je change la detination de ref cale1,cale2, etc..
+                    //     }}
+                    //     >
+                    //     {SpaceatPos(row.original.reference)}
+                    // </Button>,
+                // filterFn: fuzzyFilter,
 
             }),
             // #####################################################################################################################
