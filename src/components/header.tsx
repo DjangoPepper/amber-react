@@ -6,7 +6,7 @@ function Header() {
     return (
         <Navbar bg="light" expand="lg">
             <Container>
-                <Navbar.Brand href="#home">STEpe v1.3.1 dev a</Navbar.Brand>
+                <Navbar.Brand href="#home">STEpe v0527-2139 dev a</Navbar.Brand>
 
             </Container>
         </Navbar>

@@ -94,47 +94,61 @@ const useColumns = function useColumns(): any[] {
     const [open, setOpen] = useState(false);
     const dispatch = useDispatch();
 
-        const columns = [
-            columnHelper.accessor('rank', {
-                header: () => 'RANG',
-                filterFn: fuzzyFilter,
-            }),
-            columnHelper.accessor('prepa', {
-                header: () => 'PREPA',
-                cell: EditableCell,
-                filterFn: fuzzyFilter,
-            }),
-            // #####################################################################################################################
-            columnHelper.accessor('reference', {
-                header: 'REF',
-                cell: ({row}: any) =>
-                    <div>
-                        <button onClick={() => setOpen(true)}> Click to Open       Popup</button>
-                        {open ? <Popup text="Hello there!" closePopup={() => setOpen(false)} /> : null}
-                    </div>
-                    // <Button 
-                    //     onClick={() => {
-                    //     dispatch(DataAction.moveRow(row.original.reference)); //je change la detination de ref cale1,cale2, etc..
-                    //     }}
-                    //     >
-                    //     {SpaceatPos(row.original.reference)}
-                    // </Button>,
-                // filterFn: fuzzyFilter,
+    const columns = [
+        columnHelper.accessor('rank', {
+            header: () => 'RANG',
+            filterFn: fuzzyFilter,
+        }),
+        columnHelper.accessor('prepa', {
+            header: () => 'PREPA',
+            cell: EditableCell,
+            filterFn: fuzzyFilter,
+        }),
+        // #####################################################################################################################
+        columnHelper.accessor('reference', {
+            header: 'REF',
+            cell: ({row}: any) =>
+                <div>
+                    <button onClick={() => setOpen(true)}> 
+                        {SpaceatPos(row.original.reference)} 
+                    </button>
+                    {open ? ( 
+                    <   Popup 
+                            text={SpaceatPos(row.original.reference)} 
+                            closePopup={
+                                () => {
+                                    setOpen(false);
+                                    // dispatch(DataAction.moveRow(row.original.reference));
+                                }
+                            }
+                            
+                    /> 
+                    ) : null}
+                </div>
+                
+                // <Button 
+                //     onClick={() => {
+                //     dispatch(DataAction.moveRow(row.original.reference)); //je change la detination de ref cale1,cale2, etc..
+                //     }}
+                //     >
+                //     {SpaceatPos(row.original.reference)}
+                // </Button>,
+            // filterFn: fuzzyFilter,
 
-            }),
-            // #####################################################################################################################
-            columnHelper.accessor('weight', {
-                header: "POIDS",
-                cell: info => info.getValue(),
-                filterFn: fuzzyFilter,
-            }),
-            columnHelper.accessor('destination', {
-                header: 'DEST',
-                filterFn: fuzzyFilter,
-            })
-            ];
+        }),
+        // #####################################################################################################################
+        columnHelper.accessor('weight', {
+            header: "POIDS",
+            cell: info => info.getValue(),
+            filterFn: fuzzyFilter,
+        }),
+        columnHelper.accessor('destination', {
+            header: 'DEST',
+            filterFn: fuzzyFilter,
+        })
+        ];
 
-        return columns;
+    return columns;
     }
 //***********************************************************************************************************************************************/
 const App = () => {
