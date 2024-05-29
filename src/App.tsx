@@ -38,24 +38,25 @@ function init() {
 				toast.warning('AutoSave', { position: toast.POSITION.BOTTOM_LEFT, autoClose: 500 })
 		}, 
 		backupInterval);
-		toast.info('Init Tally', { position: toast.POSITION.BOTTOM_LEFT, autoClose: 500 })
+		
+		toast.info('Init Tally', { position: toast.POSITION.TOP_LEFT, autoClose: 500 })
 		affectation.map((affectationItem) => {
 			const k = affectationItem.name;
 
 			store.dispatch(DataAction.change_checkbox_state({ [k]: false }));
-			store.dispatch(DataAction.save_checkbox_state());
+			// store.dispatch(DataAction.save_checkbox_state());
 
 			// store.dispatch(DataAction.changePreviousQTT({ destination: k, value: "0" }));
-			store.dispatch(DataAction.changePreviousQTT({ [k]: "0" }));
-			store.dispatch(DataAction.save_previous_qtt());
+			store.dispatch(DataAction.changePreviousQTT({ [k]: 0:Number }));
+			// store.dispatch(DataAction.save_previous_qtt());
 			
 			// store.dispatch(DataAction.changePreviousTONS({ destination: k, value: "0" }));
 			store.dispatch(DataAction.changePreviousTONS({ [k]: "0" }));
-			store.dispatch(DataAction.save_previous_tons());
+			// store.dispatch(DataAction.save_previous_tons());
 			
 			// store.dispatch(DataAction.changeMaxiTONS({ destination: k, value: "0" }));
 			store.dispatch(DataAction.changeMaxiTONS({ [k]: "0" }));
-			store.dispatch(DataAction.save_maxi_tons());
+			// store.dispatch(DataAction.save_maxi_tons());
 
 			// if (k === "stock") {
 			// } else {
