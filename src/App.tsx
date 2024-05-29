@@ -46,10 +46,12 @@ function init_catalog() {
 
 function init_tally() {
 		const Init_data_tally = window.localStorage.getItem("tally");
-		if(Init_data_tally) {
+		if(Init_data_tally!=null) {
 				store.dispatch(DataAction.loaded_tally(Init_data_tally));
-		}
-}
+		} else {
+				store.dispatch(DataAction.loaded_tally("0"));}
+	};
+
 init_catalog();
 init_tally();
 
