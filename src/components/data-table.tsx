@@ -26,7 +26,7 @@ import Filter, {fuzzyFilter} from "./filter";
 import './index-tanstack.css'
 
 
-//FRED ****************************************************************
+ 
 import SpaceatPos from "./SpaceatPos";
 import * as fs from 'fs'
 import * as path from 'path'
@@ -40,20 +40,16 @@ function backupCurrentDateTime(): string {
     const now = new Date();
     const day = String(now.getDate()).padStart(2, '0');
     const month = monthNames[now.getMonth()];  
-
-    //const month = String(now.getMonth() + 1).padStart(2, '0');
-    //const year = String(now.getFullYear());
     const hour = String(now.getHours()).padStart(2, '0');
     const minute = String(now.getMinutes()).padStart(2, '0');
-
     return `Stepe ${month}${day}_${hour}${minute}.xlsx`;
-}
+    };
 
 declare module '@tanstack/react-table' {
     interface TableMeta<TData extends RowData> {
         updateData: (reference: number, columnId: string, value: unknown) => void
-    }
-}
+        }
+    };
 
 const columnHelper = createColumnHelper<stepe_Data>();
 
@@ -62,8 +58,7 @@ const EditableCell = ({ getValue, row, column, table }: any) => {
     const [value, setValue] = React.useState(initialValue)
     const onBlur = () => {
         table.options.meta?.updateData(row.original.reference, column.id, value);
-    }
-
+        }
     React.useEffect(() => {
         setValue(initialValue)
     }, [initialValue])
@@ -74,23 +69,19 @@ const EditableCell = ({ getValue, row, column, table }: any) => {
             onChange={e => setValue(e.target.value)}
             onBlur={onBlur}
             style={{width: "59px"}}
-            // largeur prepa box
         />
-    )
-};
+        )
+    };
 
 const globalFilterFn: FilterFn<stepe_Data> = (row, columnId, filterValue: string) => {
     const search = filterValue.toLowerCase();
-
     let value = row.getValue(columnId) as string;
     if (typeof value === 'number') value = String(value);
-
     return value?.toLowerCase().includes(search);
-};
+    };
 
 const useColumns = function useColumns(): any[] {
     const dispatch = useDispatch();
-
     const columns = [
         columnHelper.accessor('rank', {
             header: () => 'RANG',
@@ -101,22 +92,18 @@ const useColumns = function useColumns(): any[] {
             cell: EditableCell,
             filterFn: fuzzyFilter,
         }),
-// #####################################################################################################################
         columnHelper.accessor('reference', {
             header: 'REF',
             cell: ({row}: any) =>
                 <Button 
                     onClick={() => {
-                    dispatch(DataAction.moveRow(row.original.reference)); //je change la detination de ref cale1,cale2, etc..
+                    dispatch(DataAction.moveRow(row.original.reference));  
                     }}
                 >
                     {SpaceatPos(row.original.reference)}
                 </Button>,
             filterFn: fuzzyFilter,
-
         }),
-// #####################################################################################################################
-
         columnHelper.accessor('weight', {
             header: "POIDS",
             cell: info => info.getValue(),
@@ -129,69 +116,47 @@ const useColumns = function useColumns(): any[] {
     ];
 
     return columns;
-}
-//***********************************************************************/
-//***********************************************************************/
-//***********************************************************************/
-//***********************************************************************/
+    };
+
 export default function DataTable() {
     const dispatch = useDispatch();
-    // const [showModal, setShowModal] = useState(false);
     const [PickerColorForSelectedCale, setPickerColorForSelectedCale] = useState<{ [key: string]: string }>({});
     const [newSelectedCale, setnewSelectedCale] = useState<string>('');
-    // const [ExtentedTally, setExtentedTally] = useState<string>('');
-
     const [newColor, setNewColor] = useState<string>('');
-    
-    // Accédez à la valeur sélectionnée depuis l'état Redux
     const selectedCale = useSelector<RootState, string>((state) => state.data.selectedCale);
     const selectedColors = useSelector<RootState, { [key: string]: string }>((state) => state.data.pickerColors);
     const setSelectedColors = (colors: { [key: string]: string }) => {
         dispatch(DataAction.changePickColors(colors));
-    }
-    
+        };
     const handleStabiloClick = () => { 
         setnewSelectedCale(selectedCale);
-    };
+        };
 
     const handleCloseModal = () => { 
-        // setShowModal(false); 
         setnewSelectedCale(""); 
-    };
+        };
 
     const handleColorChange = (color: ColorResult) => {
-        // setSelectedColor(color.hex);
         setSelectedColors({...selectedColors, [newSelectedCale]: color.hex});
-
         const updateStickerdColors = { ...PickerColorForSelectedCale, [selectedCale]: color.hex };
         setPickerColorForSelectedCale(updateStickerdColors);
-    };
+        };
     
     const handleSaveChanges = () => {
-        // Mettez à jour la couleur pour toutes les affectation identiques
         const updatedData = data.map((item) => {
                 if (item.destination === newSelectedCale) {
                     return { ...item, color: newColor };
                 }
             return item;
-        });
-    
-        // Mettez à jour l'état des données avec les modifications
-        // dispatch(DataAction.updateData(updatedData));
-    
+            });
         dispatch(DataAction.changeCouleur([newSelectedCale]));
-    
-        // Fermez la fenêtre contextuelle
-        // setShowModal(false);
         setnewSelectedCale("");
         };
-
     const [sorting, setSorting] = React.useState<SortingState>([]);
     const [globalFilter, setGlobalFilter] = React.useState('')
     const cale = useSelector<RootState, string>(state => state.data.selectedCale);
     const data = useSelector<RootState, stepe_Data[]>(state => state.data.catalog_data_state);
     const columns = useColumns();
-    
     const table = useReactTable({
         data,
         columns,
@@ -214,7 +179,6 @@ export default function DataTable() {
                 }
             },
         },
-
         getRowId: (row) => {return row.reference; } ,
         debugTable: true,
     }
@@ -230,32 +194,18 @@ export default function DataTable() {
         const wb = utils.book_new();
         utils.book_append_sheet(wb, sheet);
         writeFile(wb, backupCurrentDateTime())
-    };
+        };
 
     const clear = () => dispatch(DataAction.clear());
     const [hold, setHold] = useState('');
-    
     const handleHoldChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         dispatch(DataAction.changeCale(e.target.value)) 
         const selectedWorkingHoldValue = (e.target.value);
         const selectedWorkingHoldOption = affectation.find((d) => d.name === selectedWorkingHoldValue);
         setHold(selectedWorkingHoldValue);
-        
     }
-
-    const isStabiloButtonVisible = cale !== "stock"; // Condition pour déterminer la visibilité du bouton STABILO
-    // const TempColors = affectation.map((d) => d.color);
-    
-    // const [checkedRows, setCheckedRows] = useState<{ [key: number]: boolean }>({});
+    const isStabiloButtonVisible = cale !== "stock";  
     const [checkedRows, setCheckedRows] = useState<{ [key: number]: boolean }>({});
-    // const handleCheckboxClick = (reference: number) => {
-    //     const updatedCheckedRows = { ...checkedRows };
-    //     updatedCheckedRows[reference] = !updatedCheckedRows[reference];
-    //     setCheckedRows(updatedCheckedRows);
-    // };
-
-
-
     return ( 
         <>
             <div className="d-flex">
@@ -335,29 +285,15 @@ export default function DataTable() {
                 <TableRS>
                     <tbody className="overflow-auto" style={{maxHeight: "100px"}}>
                     {table.getRowModel().rows.map(row => {
-                        // const reference = row.original.reference as number;
                         const reference = parseInt(row.original.reference, 10);
-                        
                         const isChecked = checkedRows[reference] || false;
-
             return (
                                 <tr 
                                     key={row.id} 
                                     style={{
-                                        // backgroundColor: colors[row.getValue("destination") as string]}}>
                                         backgroundColor: selectedColors[row.getValue("destination") as string]
                                     }}
                                 >
-                                    {/* //fred jeudi */}
-                                    {/* <td>
-                                        <input
-                                            type="checkbox"
-                                            checked={isChecked}
-                                            onClick={() => handleCheckboxClick(reference)}
-                                        />
-                                    </td> */}
-                                    {/* //fred jeudi */}
-                                    
                                     {row.getVisibleCells().map(cell => {
                                         return (
                                             <td key={cell.id}>
@@ -372,7 +308,6 @@ export default function DataTable() {
                             )
                         })}
                     </tbody>
-
                     <tfoot>
                     </tfoot>
                 </TableRS>
@@ -386,9 +321,6 @@ export default function DataTable() {
                 >
                     {'<<'}
                 </button>&nbsp;&nbsp;&nbsp;&nbsp;
-                
-
-
                 <button
                     className="border rounded p-1"
                     onClick={() => table.previousPage()}
@@ -396,7 +328,6 @@ export default function DataTable() {
                 >
                     {'<'}
                 </button>&nbsp;&nbsp;&nbsp;&nbsp;
-
                 <button
                     className="border rounded p-1"
                     onClick={() => table.nextPage()}
@@ -409,11 +340,9 @@ export default function DataTable() {
                     className="border rounded p-1"
                     onClick={() => table.setPageIndex(table.getPageCount() - 1)}
                     disabled={!table.getCanNextPage()}
-                    // onclick={() => table.index
                 >
                     {'>>'}
                 </button>&nbsp;&nbsp;&nbsp;&nbsp;
-
                 <span className="flex items-center gap-1">
                     {/* <div>Page</div> */}
                     <strong>
@@ -450,9 +379,6 @@ export default function DataTable() {
                 </select>
                 
             </div>
-
-            {/* Modale pour modifier la valeur et la couleur */}
-            {/* <Modal show={showModal} onHide={handleCloseModal}> */}
             <Modal show={Boolean(newSelectedCale)} onHide={handleCloseModal}>
             <Modal.Header closeButton>
                 <Modal.Title>Modifier la valeur et la couleur</Modal.Title>
@@ -461,8 +387,6 @@ export default function DataTable() {
                 <Form.Group>
                 <Form.Label>Nouvelle couleur</Form.Label>
                 <SketchPicker
-                    // color={selectedColor} // color fixé par tableau                    
-                    // color={selectedColors[newSelectedCale]}
                     color={PickerColorForSelectedCale[newSelectedCale] || '' }
                     onChange={handleColorChange}
                 />

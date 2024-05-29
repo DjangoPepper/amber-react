@@ -264,6 +264,7 @@ function Main() {
 	const onDrop = useCallback((acceptedFiles: any) => {
 	const file = acceptedFiles[0];
 	const reader = new FileReader();
+
 	reader.onload = function (evt) {
 		const rawData = evt.target?.result;
 		if(!rawData) return;
@@ -320,8 +321,7 @@ function Main() {
 					</Dropzone>
 				</Col>
 			</Row>}
-		<ToastContainer />
-		
+		<ToastContainer />		
 		</Container>
 	);
 }
