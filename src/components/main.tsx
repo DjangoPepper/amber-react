@@ -11,8 +11,6 @@ import Statistics from "./statistics";
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-
-
 function CleanExcelSheet(oSheet: any): stepe_Data {
 	toast.info('Allegement feuille', { position: toast.POSITION.TOP_RIGHT,autoClose: 1000 }) 
 
@@ -28,7 +26,7 @@ function CleanExcelSheet(oSheet: any): stepe_Data {
 			reconstruitRef(oSheet, oSheet['!ref']);
 			return oSheet;
 
-}
+	};
 
 function removeProprietes(newsheet: any) {
 	const range = utils.decode_range(newsheet['!ref']);
@@ -49,7 +47,7 @@ function removeProprietes(newsheet: any) {
 		}
 	}
 	return newRef;
-}
+	};
 
 
 function reconstruitRef(newesheet: any, newref: any): string {
@@ -72,7 +70,7 @@ function reconstruitRef(newesheet: any, newref: any): string {
 		}
 	}
 	return newRef;
-}
+	};
 
 function SuppressionCellulesNull(newsheet: any): any {
 	const range = utils.decode_range(newsheet['!ref']);
@@ -94,7 +92,7 @@ function SuppressionCellulesNull(newsheet: any): any {
     endRow--;
 	}
 	return newsheet;
-}
+	};
 
 function copySheetWithHeadersAndNumbers(sheet: any, headersRow: number): any {
     const range = utils.decode_range(sheet['!ref']);
@@ -134,7 +132,7 @@ function copySheetWithHeadersAndNumbers(sheet: any, headersRow: number): any {
     copiedSheet['!ref'] = utils.encode_range(newRef);
 
     return copiedSheet;
-}
+	};
 
 function fillUndefinedNumberCells(sheet: any) {
     const range = utils.decode_range(sheet['!ref']);
@@ -149,7 +147,7 @@ function fillUndefinedNumberCells(sheet: any) {
             }
         }
     }
-}
+	};
 
 function reconstructRefWithoutEmptyRows(newsheet: any) {
     const range = utils.decode_range(newsheet['!ref']);
@@ -186,7 +184,7 @@ function reconstructRefWithoutEmptyRows(newsheet: any) {
         newsheet['!ref'] = newRef;
     }
     return newsheet;
-}
+	};
 
 function findHeaderRow (newsheet: any, headers: string[]): number | 0 {
 	const range = utils.decode_range(newsheet['!ref']);
@@ -202,7 +200,7 @@ function findHeaderRow (newsheet: any, headers: string[]): number | 0 {
 	}
 	
 	return 0;
-};
+	};
 
 function deleteExcelMarginsInfos(newsheet: any) {
 	const margins = newsheet['!margins'];
@@ -244,18 +242,16 @@ function cleanData(values: any): stepe_Data {
 		const upperCaseKey = key.toUpperCase();
 		const cleanedKey = removeAccents(upperCaseKey);
 		toUpperCaseKeysValues[cleanedKey] = values[key];
-	}
-
+		}
     return {
-        rank: toUpperCaseKeysValues["POS"] || toUpperCaseKeysValues["NUMERO"] || toUpperCaseKeysValues["RANG"] || toUpperCaseKeysValues["N°"],
-        prepa: toUpperCaseKeysValues["ZONE"] || toUpperCaseKeysValues["PREPA"] ,
-        reference: toUpperCaseKeysValues["N° DE COILS"] || toUpperCaseKeysValues["N° DE BRAME"] || toUpperCaseKeysValues["N° PRODUIT"] ||  toUpperCaseKeysValues["REFERENCE"] || toUpperCaseKeysValues["REF"] || toUpperCaseKeysValues["COILS"] || toUpperCaseKeysValues["BRAMES"],
-        weight: toUpperCaseKeysValues["POIDS"] || toUpperCaseKeysValues["TONS"],
-        position: toUpperCaseKeysValues["POSITION"],
-        destination: toUpperCaseKeysValues["DESTINATION"] || toUpperCaseKeysValues["DEST"] || "stock"
+		rank: toUpperCaseKeysValues["POS"] || toUpperCaseKeysValues["NUMERO"] || toUpperCaseKeysValues["RANG"] || toUpperCaseKeysValues["N°"],
+		prepa: toUpperCaseKeysValues["ZONE"] || toUpperCaseKeysValues["PREPA"] ,
+		reference: toUpperCaseKeysValues["N° DE COILS"] || toUpperCaseKeysValues["N° DE BRAME"] || toUpperCaseKeysValues["N° PRODUIT"] ||  toUpperCaseKeysValues["REFERENCE"] || toUpperCaseKeysValues["REF"] || toUpperCaseKeysValues["COILS"] || toUpperCaseKeysValues["BRAMES"],
+		weight: toUpperCaseKeysValues["POIDS"] || toUpperCaseKeysValues["TONS"],
+		position: toUpperCaseKeysValues["POSITION"],
+		destination: toUpperCaseKeysValues["DESTINATION"] || toUpperCaseKeysValues["DEST"] || "stock"
 		};
 	};
-
 
 
 function Main() {
@@ -264,7 +260,6 @@ function Main() {
 	const onDrop = useCallback((acceptedFiles: any) => {
 	const file = acceptedFiles[0];
 	const reader = new FileReader();
-
 	reader.onload = function (evt) {
 		const rawData = evt.target?.result;
 		if(!rawData) return;
@@ -273,7 +268,7 @@ function Main() {
 		};
 		if (workbook.Sheets['winwin']){																 
 				Sheet = workbook.Sheets['winwin'];
-				toast.info('LECTURE FEUILLE WiNWiN', { position: toast.POSITION.TOP_RIGHT, autoClose: 5000 })		
+				toast.info('Feuille winwin', { position: toast.POSITION.TOP_RIGHT, autoClose: 5000 })		
 		} 
 		else if (workbook.Sheets['Bobines']){
 			Sheet = CleanExcelSheet(workbook.Sheets['Bobines']);
@@ -289,9 +284,10 @@ function Main() {
 		}
 		dispatch(DataAction.importData(utils.sheet_to_json(Sheet).map(cleanData)));
 		dispatch(DataAction.changeOriginalpos("stock"));
-	};
+		};
 	reader.readAsBinaryString(file);
 	}, []);
+
 
 	return (
 		<Container className="p-2">
@@ -323,8 +319,8 @@ function Main() {
 			</Row>}
 		<ToastContainer />		
 		</Container>
-	);
-}
+		);
+	};
 
 
 export default Main;

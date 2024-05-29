@@ -13,22 +13,18 @@ import DataAction from "./stores/dataS/DataAction";
 // import { toast, ToastContainer } from 'react-toastify';
 import { toast } from 'react-toastify';
 
-
 let backupInterval = 30 * 1000; //30 * 1000 ms = 30s
 // let firstRender = false;
 
-function init() {
-		
+function init_catalog() {		
 	const Init_data_catalog = window.localStorage.getItem("data");
-		
 		if(Init_data_catalog) {
 				store.dispatch(DataAction.loaded_catalog(Init_data_catalog));
 				// store.dispatch(DataAction.load_checkbox_state(Init_data_catalog));
 				// store.dispatch(DataAction.load_previous_qtt(Init_data_catalog));
 				// store.dispatch(DataAction.load_previous_tons(Init_data_catalog));
 				// store.dispatch(DataAction.load_maxi_tons(Init_data_catalog));
-		}
-		
+		}		
 		setInterval(() => {
 				store.dispatch(DataAction.save_catalog());
 				// store.dispatch(DataAction.save_checkbox_state());
@@ -38,7 +34,6 @@ function init() {
 				toast.warning('AutoSave', { position: toast.POSITION.BOTTOM_LEFT, autoClose: 500 })
 		}, 
 		backupInterval);
-		
 		// affectation.map((affectationItem) => {
 		// 	const k = affectationItem.name;
 		// 	if (k === "stock") {
@@ -47,9 +42,16 @@ function init() {
 		// 		// store.dispatch(DataAction.load_checkbox_state)
 		// 	}
 		// });
-}
+	};
 
-init();
+function init_tally() {
+		const Init_data_tally = window.localStorage.getItem("tally");
+		if(Init_data_tally) {
+				store.dispatch(DataAction.loaded_tally(Init_data_tally));
+		}
+}
+init_catalog();
+init_tally();
 
 function App() {
 	useLeavePageConfirm(true);

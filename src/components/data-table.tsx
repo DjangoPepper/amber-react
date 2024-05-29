@@ -13,7 +13,6 @@ import {
     useReactTable,
     getPaginationRowModel
     } from "@tanstack/react-table";
-
 import {utils, writeFile } from "xlsx";
 import {Button, Modal, Form, Table as TableRS} from "react-bootstrap";
 import {useDispatch, useSelector} from "react-redux";
@@ -24,12 +23,9 @@ import DataAction from "../stores/dataS/DataAction";
 import {colors, affectation, HEADER} from "../utils/destination";
 import Filter, {fuzzyFilter} from "./filter";
 import './index-tanstack.css'
-
-
- 
 import SpaceatPos from "./SpaceatPos";
-import * as fs from 'fs'
-import * as path from 'path'
+// import * as fs from 'fs'
+// import * as path from 'path'
 
 const monthNames = [
     'jan', 'fev', 'mar', 'avr', 'mai', 'juin',
@@ -118,6 +114,7 @@ const useColumns = function useColumns(): any[] {
     return columns;
     };
 
+    
 export default function DataTable() {
     const dispatch = useDispatch();
     const [PickerColorForSelectedCale, setPickerColorForSelectedCale] = useState<{ [key: string]: string }>({});
@@ -181,8 +178,7 @@ export default function DataTable() {
         },
         getRowId: (row) => {return row.reference; } ,
         debugTable: true,
-    }
-    );
+        });
     
     const tableContainerRef = React.useRef<HTMLDivElement>(null)
     const exportData = () => {
@@ -203,7 +199,7 @@ export default function DataTable() {
         const selectedWorkingHoldValue = (e.target.value);
         const selectedWorkingHoldOption = affectation.find((d) => d.name === selectedWorkingHoldValue);
         setHold(selectedWorkingHoldValue);
-    }
+        };
     const isStabiloButtonVisible = cale !== "stock";  
     const [checkedRows, setCheckedRows] = useState<{ [key: number]: boolean }>({});
     return ( 
