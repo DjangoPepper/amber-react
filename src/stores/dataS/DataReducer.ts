@@ -2,6 +2,7 @@ import { AnyAction } from "redux";
 import DataAction from "./DataAction";
 import {Reducer} from "@reduxjs/toolkit";
 import { colors } from "../../utils/destination";
+import { stat } from "fs";
 
 export type stepe_Data = {
     rank: number
@@ -183,6 +184,7 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
                 };
             case DataAction.SAVE_PREV_TONS:
                 // if(state.saved_HOLD_previous_TONS_status) return state;
+                state.saved_HOLD_previous_TONS_status = true;
                 window.localStorage.setItem("local_pkilos", JSON.stringify(state.HOLD_previous_TONS));
                 return {
                     ...state,
@@ -190,6 +192,7 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
                 };
             case DataAction.SAVE_MAXI_TONS:
                 // if(state.saved_HOLD_maxi_TONS_status) return state;
+                state.saved_HOLD_maxi_TONS_status = true;
                 window.localStorage.setItem("local_maxi", JSON.stringify(state.HOLD_maxi_TONS));
                 return {
                     ...state,
