@@ -161,8 +161,6 @@ export default function Statistics() {
 						statistics_array.count > 0
 					)
 				) {
-					 
-					
 					return (
 						<tr key={affectationItem.name}>
 							
