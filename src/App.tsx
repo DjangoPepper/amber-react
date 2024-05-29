@@ -31,10 +31,10 @@ function init() {
 		
 		setInterval(() => {
 				store.dispatch(DataAction.save_catalog());
-				store.dispatch(DataAction.save_checkbox_state());
-				store.dispatch(DataAction.save_previous_qtt());
-				store.dispatch(DataAction.save_previous_tons());
-				store.dispatch(DataAction.save_maxi_tons());
+				// store.dispatch(DataAction.save_checkbox_state());
+				// store.dispatch(DataAction.save_previous_qtt());
+				// store.dispatch(DataAction.save_previous_tons());
+				// store.dispatch(DataAction.save_maxi_tons());
 				toast.warning('AutoSave', { position: toast.POSITION.BOTTOM_LEFT, autoClose: 500 })
 		}, 
 		backupInterval);

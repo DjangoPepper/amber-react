@@ -6,11 +6,11 @@ import { stepe_Data } from "../stores/dataS/DataReducer";
 import { Table } from "react-bootstrap";
 import React, { useState, useEffect } from 'react';
 import { affectation} from "../utils/destination";
-// import { updateAffectationVisibility } from '../stores/data/destinationActions';
+ 
 
 import Button from 'react-bootstrap/Button';
-// import {firstRender} from '../App';	
-// import { toast, ToastContainer } from 'react-toastify';
+ 
+ 
 import { toast } from 'react-toastify';
 
 export default function Statistics() {
@@ -37,67 +37,15 @@ export default function Statistics() {
 	const selectedColors = useSelector<RootState, { [key: string]: string }>((state) => state.data.pickerColors);
 
 	const Toggle_checkbox_boolean = (k: string) => {
-
-		// Créez une copie de l'état actuel des cases à cocher
 		const updatedCheckboxState = { ...checkbox_Hold_State };
-	
-		// Vérifiez si la destination k est déjà dans l'état des cases à cocher
-		if (updatedCheckboxState[k] !== undefined) {
-		  // Si oui, basculez simplement la valeur (true devient false, false devient true)
-			updatedCheckboxState[k] = !updatedCheckboxState[k];
-		} else {
-		  // Si la destination n'est pas dans l'état, ajoutez-la et définissez-la comme cochée (true)
-			updatedCheckboxState[k] = true;
-		}
-		// Mettez à jour l'état des cases à cocher avec la nouvelle valeur
+			if (updatedCheckboxState[k] !== undefined) {
+				updatedCheckboxState[k] = !updatedCheckboxState[k];
+			} else {
+				updatedCheckboxState[k] = true;
+			}
 		set_checkbox_Hold_State(updatedCheckboxState);
-		// dispatch(DataAction.change_checkbox_state ( true ));
-		dispatch(DataAction.change_checkbox_state({ [k]: updatedCheckboxState[k] }));
 		};
 	
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-const handle_checkBOX_Change = (destination: string, value: boolean) => {
-	dispatch(DataAction.change_checkbox_state({ [destination]: value }));
-	};
-	
-	const handle_prevQT_VALUE_Change = (destination: string, value: string) => {
-		set_previous_Value_QT((previous_Value_QT) => ({
-			...previous_Value_QT,
-			[destination]: { 
-				prevQT_VALUE: value, 
-			},
-		}));
-		// let numericValue = parseFloat(value) || 0;
-		dispatch(DataAction.changePreviousQTT({ destination: destination, value: value }));
-		};
-
-	const handle_PrevTO_VALUE_Change = (destination: string, value: string) => {
-		set_previous_Value_TO((previous_Value_TO) => ({
-			...previous_Value_TO,
-			[destination]: { 
-				prevTO_VALUE: value,  
-			},
-		}));
-		// let numericValue = parseFloat(value) || 0;
-		dispatch(DataAction.changePreviousTONS({ destination: destination, value: value }));
-		};
-
-
-	const handle_maxiTO_Change = (destination: string, value: string) => {
-			// handle_maxiTO_Change(affectationItem.name, e.target.value)}
-			set_maxi_Values((maxi_Value_TO: any) => ({
-				...maxi_Value_TO,
-				[destination]: { maxi_To: value },
-			}));
-			// const numericValue = parseFloat(value) || 0;
-			dispatch(DataAction.changeMaxiTONS({ destination: destination, value}));
-				};
-		
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////	
 
 		const handle_Extended_Tally = () => {
 			set_Extended_Tally_Value((prevValue) => {
@@ -106,10 +54,8 @@ const handle_checkBOX_Change = (destination: string, value: boolean) => {
 			});
 		};
 	
-//
-//
 	const catalog_data = useSelector<RootState, stepe_Data[]>((state) => state.data.catalog_data_state);
-//	
+
 
 	const totalPreviousCalesCount = Object.keys(previous_Value_QT).reduce((total, k) => {
 		return total + (previous_Value_QT[k] ? parseFloat(previous_Value_QT[k].prevQT_VALUE) : 0);
@@ -119,7 +65,6 @@ const handle_checkBOX_Change = (destination: string, value: boolean) => {
 		return total + (previous_Value_TO[k]?.prevTO_VALUE ? parseFloat(previous_Value_TO[k].prevTO_VALUE) : 0);
 		}, 0);
 
-	///
 	let firstRender = true;
 	function init_tally() {
 		affectation.forEach((affectationItem) => {
@@ -150,13 +95,13 @@ const handle_checkBOX_Change = (destination: string, value: boolean) => {
 		}, {});
 
 	
-//
+ 
 	Object.values(statistics).forEach((destinationStats: any ) => {    
 		totalCount += destinationStats.count;
 		totalWeight += destinationStats.weight;
 		totalCalesCount = totalCount ;
 		totalCalesWeight = totalWeight;
-//
+ 
 	if (statistics.stock) {
 			totalstockCount = statistics.stock.count;
 			totalstockWeight = statistics.stock.weight;
@@ -175,7 +120,7 @@ const handle_checkBOX_Change = (destination: string, value: boolean) => {
 		}
 		});
 
-// 
+ 
 	
 		return (
 		<div>
@@ -206,7 +151,7 @@ const handle_checkBOX_Change = (destination: string, value: boolean) => {
 {/* HEADERS */}				
 							{affectation.map((affectationItem) => {
 
-				const statistics_array = statistics[affectationItem.name] || {}; // Utilise un objet vide par défaut
+				const statistics_array = statistics[affectationItem.name] || {};  
 				let chsafin = checkbox_Hold_State[affectationItem.name] || false;
 				if (
 					chsafin || 
@@ -216,7 +161,7 @@ const handle_checkBOX_Change = (destination: string, value: boolean) => {
 						statistics_array.count > 0
 					)
 				) {
-					// console.log("visible : ", affectationItem.name)
+					 
 					
 					return (
 						<tr key={affectationItem.name}>
@@ -231,7 +176,7 @@ const handle_checkBOX_Change = (destination: string, value: boolean) => {
 								<input
 								type="checkbox" 
 								checked={checkbox_Hold_State[affectationItem.name]} 
-								// checked={affectationItem.visibleState[k]} 
+								 
 								onChange={() => Toggle_checkbox_boolean(affectationItem.name)}
 								/>
 							):null}							
@@ -275,7 +220,7 @@ const handle_checkBOX_Change = (destination: string, value: boolean) => {
 															: 
 															0
 													}
-													onChange={(e) => handle_prevQT_VALUE_Change(affectationItem.name, e.target.value)}
+													 
 												/>
 											</td>
 
@@ -292,7 +237,7 @@ const handle_checkBOX_Change = (destination: string, value: boolean) => {
 															: 
 															0
 													}
-													onChange={(e) => handle_PrevTO_VALUE_Change(affectationItem.name, e.target.value)}
+													 
 												/>
 											</td>
 											</>
@@ -328,7 +273,7 @@ const handle_checkBOX_Change = (destination: string, value: boolean) => {
 						</tr>
 											);
 				}
-				// console.log("Invisible : ", affectationItem.name)
+				 
 				return null;
 			})}
 
@@ -383,7 +328,7 @@ const handle_checkBOX_Change = (destination: string, value: boolean) => {
 {/* HEADERS */}
 			{affectation.map((affectationItem) => {
 
-				const statistics_array = statistics[affectationItem.name] || {}; // Utilisez un objet vide par défaut
+				const statistics_array = statistics[affectationItem.name] || {};  
 				let chsafin = checkbox_Hold_State[affectationItem.name] || false;
 				if (
 					chsafin || 
@@ -393,7 +338,7 @@ const handle_checkBOX_Change = (destination: string, value: boolean) => {
 						statistics_array.count > 0
 					)
 				) {
-					// console.log("visible : ", affectationItem.name)
+					 
 					
 					return (
 						<tr key={affectationItem.name}>
@@ -433,7 +378,7 @@ const handle_checkBOX_Change = (destination: string, value: boolean) => {
 															(previous_Value_QT[affectationItem.name]?.prevQT_VALUE ?
 																parseFloat(previous_Value_QT[affectationItem.name].prevQT_VALUE) : 0)
 														)
-														// (totalCalesCount + totalPreviousCalesCount) / (totalCalesWeight + totalPreviousCalesWeight) 
+														 
 													).toLocaleString("en-US", { minimumFractionDigits: 3, maximumFractionDigits: 3 })
 												}
 											</td>
@@ -444,8 +389,8 @@ const handle_checkBOX_Change = (destination: string, value: boolean) => {
 												<input
 													type="text"
 													style={{ width: '80px' }}
-													value={maxi_Value_TO[affectationItem.name] ? maxi_Value_TO[affectationItem.name].maxi_To : 0} // Utilisez prevValues[affectationItem.name].prevTo pour la valeur 
-													onChange={(e) => handle_maxiTO_Change(affectationItem.name, e.target.value)}
+													value={maxi_Value_TO[affectationItem.name] ? maxi_Value_TO[affectationItem.name].maxi_To : 0}  
+													 
 												/>
 											</td>
 
@@ -523,7 +468,7 @@ const handle_checkBOX_Change = (destination: string, value: boolean) => {
 						</tr>
 					);
 				}
-				// console.log("Invisible : ", affectationItem.name)
+				 
 				return null;
 			})}
 

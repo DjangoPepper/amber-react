@@ -14,51 +14,23 @@ import 'react-toastify/dist/ReactToastify.css';
 
 
 function CleanExcelSheet(oSheet: any): stepe_Data {
-	toast.info('Allegement feuille', { position: toast.POSITION.TOP_RIGHT,autoClose: 1000 })// la feuille Bobines existe
-			
-			// effacement des cellules fusionnées
+	toast.info('Allegement feuille', { position: toast.POSITION.TOP_RIGHT,autoClose: 1000 }) 
+
 			deleteExcelMergesInfos(oSheet);
-
-			// Traitement des margins
 			deleteExcelMarginsInfos(oSheet);
-
-			// Traitement des lignes vides
 			reconstructRefWithoutEmptyRows(oSheet);
-			
-			// Résolution des formules
 			risolveFormulas(oSheet);
-
-			// Supprimer les proprietes inutiles
 			removeProprietes(oSheet);
-
-			//Suppression des infos XML dans r 
-			// removeBalisesXml(oSheet);
-
-			// //trouve la ligne de la feuille avec les headers
 			const headersRow = findHeaderRow(oSheet, ['N°','NUMERO', 'RANG', 'POS', 'POSITION']);
-			
-			//creer les cellules vides
 			fillUndefinedNumberCells(oSheet);
-
-			//cree une copie de la feuille simplifiée avec les headers en premier puis toutes les cellules  dont la premiere celulles est un nombre			
 			oSheet = copySheetWithHeadersAndNumbers(oSheet, headersRow);
-
-			// Suppression des lignes Null
 			SuppressionCellulesNull(oSheet);
-
-			// reconstruction de la propriété !ref;
 			reconstruitRef(oSheet, oSheet['!ref']);
-			// deleteExcelMergesInfos(oSheet);
-
-			// Supprimer les apostrophes
-			// SupprimerLesApostrophes(oSheet);
-
 			return oSheet;
 
 }
 
 function removeProprietes(newsheet: any) {
-	// const range = utils.decode_range(!ref);
 	const range = utils.decode_range(newsheet['!ref']);
 	let newRef = '';
 	let startRow = range.s.r;
@@ -72,12 +44,10 @@ function removeProprietes(newsheet: any) {
 			const cell = newsheet[cellAddress];
 			
 			if (cell !== undefined && cell.v !== null && cell.v !== '') {
-				// newRef = cellAddress;
 				newRef = utils.encode_range({ s: { c: 0, r: 0 }, e: { c: Rcol, r: Rrow }});
 			}
 		}
 	}
-	// newRef = utils.encode_range({ s: { c: 0, r: 0 }, e: { c: utils.decode_col(newRef), r: utils.decode_row(newRef)}});	
 	return newRef;
 }
 
@@ -97,12 +67,10 @@ function reconstruitRef(newesheet: any, newref: any): string {
 			const cell = newesheet[cellAddress];
 			
 			if (cell !== undefined && cell.v !== null && cell.v !== '') {
-				// newRef = cellAddress;
 				newRef = utils.encode_range({ s: { c: 0, r: 0 }, e: { c: Rcol, r: Rrow }});
 			}
 		}
 	}
-	// newRef = utils.encode_range({ s: { c: 0, r: 0 }, e: { c: utils.decode_col(newRef), r: utils.decode_row(newRef)}});	
 	return newRef;
 }
 
@@ -115,8 +83,6 @@ function SuppressionCellulesNull(newsheet: any): any {
 	
 
 	while (endRow >= startRow) {
-
-		// for (let col = startCol; col <= endCol; col++) {
 		for (let col = endCol; col >= startCol; col--) {
 			const cellAddress = utils.encode_cell({ r: endRow, c: col });
 			const cell = newsheet[cellAddress];
@@ -126,15 +92,13 @@ function SuppressionCellulesNull(newsheet: any): any {
 			}
 		}
     endRow--;
-  	}
-  	return newsheet;
+	}
+	return newsheet;
 }
 
 function copySheetWithHeadersAndNumbers(sheet: any, headersRow: number): any {
     const range = utils.decode_range(sheet['!ref']);
     const copiedSheet: any = {};
-
-    // Copier les headers à la première ligne
     for (let col = range.s.c; col <= range.e.c; col++) {
         const headerCellAddress = utils.encode_cell({ r: headersRow, c: col });
         const cell = sheet[headerCellAddress];
@@ -143,23 +107,15 @@ function copySheetWithHeadersAndNumbers(sheet: any, headersRow: number): any {
         }
     }
 
-    let newRow = 1; // Nouvelle ligne à insérer
+    let newRow = 1;  
     for (let row = headersRow + 1; row <= range.e.r; row++) {
         const firstCellAddress = utils.encode_cell({ r: row, c: range.s.c });
         const firstCell = sheet[firstCellAddress];
-		// const thirdCellAddress = utils.encode_cell({ r: row, c: range.s.c +2});
-        // const thirdCell = sheet[firstCellAddress];
-
-        
         if (firstCell !== undefined && typeof firstCell.v === 'number') {
-            // Insérer la ligne dans la nouvelle feuille
             for (let col = range.s.c; col <= range.e.c; col++) {
                 const cellAddress = utils.encode_cell({ r: row, c: col });
                 const cell = sheet[cellAddress];		
-				
-				if (cell !== undefined) {
-
-					
+				if (cell !== undefined) {					
 					if (cell.t === 'n') {
 						copiedSheet[utils.encode_cell({ r: newRow, c: col })] = { ...cell, v: parseFloat(cell.v) };
 					}else{
@@ -171,7 +127,6 @@ function copySheetWithHeadersAndNumbers(sheet: any, headersRow: number): any {
         }
     }
 
-    // Mettre à jour !ref
     const newRef = {
         s: { c: range.s.c, r: 0 },
         e: { c: range.e.c, r: newRow - 1 },
@@ -199,13 +154,11 @@ function fillUndefinedNumberCells(sheet: any) {
 function reconstructRefWithoutEmptyRows(newsheet: any) {
     const range = utils.decode_range(newsheet['!ref']);
     let newRef = '';
-
     let startRow = range.s.r;
     let endRow = range.e.r;
     let startCol = range.s.c;
     let endCol = range.e.c;
 
-    // Trouver la dernière ligne non vide
     while (endRow >= startRow) {
         let isEmpty = true;
         for (let col = startCol; col <= endCol; col++) {
@@ -222,24 +175,19 @@ function reconstructRefWithoutEmptyRows(newsheet: any) {
         endRow--;
     }
 
-    if (startRow <= endRow) {
-        // Supprimer les lignes vides en partant de la dernière ligne
+    if (startRow <= endRow) {        
         for (let row = range.e.r; row > endRow; row--) {
             for (let col = startCol; col <= endCol; col++) {
                 const cellAddress = utils.encode_cell({ r: row, c: col });
                 delete newsheet[cellAddress];
             }
         }
-
-        // Mettre à jour la propriété !ref avec la nouvelle valeur
         newRef = utils.encode_range({ s: { c: startCol, r: startRow }, e: { c: endCol, r: endRow } });
         newsheet['!ref'] = newRef;
     }
-
     return newsheet;
 }
 
-//trouve la ligne avec les headers
 function findHeaderRow (newsheet: any, headers: string[]): number | 0 {
 	const range = utils.decode_range(newsheet['!ref']);
 	
@@ -256,21 +204,19 @@ function findHeaderRow (newsheet: any, headers: string[]): number | 0 {
 	return 0;
 };
 
-//Traitement des margins
 function deleteExcelMarginsInfos(newsheet: any) {
 	const margins = newsheet['!margins'];
 		if (margins) {
 			delete newsheet['!margins'];
 		}
-};
+	};
 
-//Traitement des merge
 function deleteExcelMergesInfos(newsheet: any) {
 	const merges = newsheet['!merges'];
 		if (merges) {
 			delete newsheet['!merges'];
 		}
-};
+	};
 
 function risolveFormulas(newsheet: any){
 	const formulaRange = utils.decode_range(newsheet['!ref']);
@@ -283,22 +229,20 @@ function risolveFormulas(newsheet: any){
 				cell.v = calculatedValue;
 				delete cell.f;
 				delete cell.F;
+				}
 			}
 		}
-	}
-}
+	};
 
 function removeAccents(str: string) {
     return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-}
+	};
 
 function cleanData(values: any): stepe_Data {
 	const toUpperCaseKeysValues: any = {};
 	for (const key in values) {
 		const upperCaseKey = key.toUpperCase();
-		// if (upperCaseKey in values ) {console.log("fred", values,upperCaseKey);}
 		const cleanedKey = removeAccents(upperCaseKey);
-		// const cleanedKey = removeAccentsAndApostrophes(upperCaseKey);
 		toUpperCaseKeysValues[cleanedKey] = values[key];
 	}
 
@@ -309,46 +253,26 @@ function cleanData(values: any): stepe_Data {
         weight: toUpperCaseKeysValues["POIDS"] || toUpperCaseKeysValues["TONS"],
         position: toUpperCaseKeysValues["POSITION"],
         destination: toUpperCaseKeysValues["DESTINATION"] || toUpperCaseKeysValues["DEST"] || "stock"
-    };
-}
+		};
+	};
 
 
 
 function Main() {
 	const dispatch = useDispatch();
 	const loaded_catalog = useSelector<RootState, boolean>(state => state.data.loaded_catalog_status);
-	
 	const onDrop = useCallback((acceptedFiles: any) => {
-		
 	const file = acceptedFiles[0];
 	const reader = new FileReader();
-	
 	reader.onload = function (evt) {
-
 		const rawData = evt.target?.result;
 		if(!rawData) return;
-		
 		const workbook = read(rawData, {type: 'binary'});
-		// const sheetName = workbook.SheetNames[0];
-		
 		let Sheet: { [key: string]: any } = {
-			// ...FirstSheet,
 		};
-
-		if (workbook.Sheets['winwin']){																// la feuille simplifiée existe
+		if (workbook.Sheets['winwin']){																 
 				Sheet = workbook.Sheets['winwin'];
-				toast.info('LECTURE FEUILLE WiNWiN', { position: toast.POSITION.TOP_RIGHT, autoClose: 5000 })
-				// toast('🦄 Wow so easy!', {
-				// 	position: "top-right",
-				// 	autoClose: 5000,
-				// 	hideProgressBar: false,
-				// 	closeOnClick: true,
-				// 	pauseOnHover: true,
-				// 	draggable: true,
-				// 	progress: undefined,
-				// 	theme: "light",
-				// 	});
-				
+				toast.info('LECTURE FEUILLE WiNWiN', { position: toast.POSITION.TOP_RIGHT, autoClose: 5000 })		
 		} 
 		else if (workbook.Sheets['Bobines']){
 			Sheet = CleanExcelSheet(workbook.Sheets['Bobines']);
@@ -359,26 +283,14 @@ function Main() {
 			toast.info('Feuille Brames trouvée', { position: toast.POSITION.TOP_RIGHT })
 		}
 		else {
-			// Sheet = workbook.Sheets[workbook.SheetNames[0]];
 			Sheet = CleanExcelSheet(workbook.Sheets[workbook.SheetNames[0]]);
-			// toast.error("Defined sheet doesn't exist", { position: toast.POSITION.TOP_RIGHT })
 			toast.info('Feuille par defaut !', { position: toast.POSITION.TOP_RIGHT, autoClose: 1000 })
-							
 		}
-		
-		// Utilisez le nouvel objet newSheet comme vous le feriez avec sheet
-		// console.log("New sheet with removed content:", newSheet);
-		
 		dispatch(DataAction.importData(utils.sheet_to_json(Sheet).map(cleanData)));
-		// dispatch(DataAction.importData(utils.sheet_to_json(sheet).map(cleanData)));
-		// dispatch(DataAction.importData(utils.sheet_to_json(selectedSheet).map(cleanData)));
-			// // dispatch(DataAction.moveRow(row.original.reference)); //je change la detination de ref cale1,cale2, etc..
 		dispatch(DataAction.changeOriginalpos("stock"));
-		// toast.success('catalog stepe_Data imported', { position: toast.POSITION.TOP_RIGHT })
 	};
 	reader.readAsBinaryString(file);
 	}, []);
-	// const [mavariablelocale, setMavariablelocale] = useState()
 
 	return (
 		<Container className="p-2">
