@@ -9,7 +9,7 @@ import Main from "./components/main";
 import {store} from "./stores/rootStore";
 import { useLeavePageConfirm } from "./components/use-leave";
 import DataAction from "./stores/dataS/DataAction";
-// import { affectation } from './utils/destination';
+import { affectation } from './utils/destination';
 // import { toast, ToastContainer } from 'react-toastify';
 import { toast } from 'react-toastify';
 
@@ -39,14 +39,32 @@ function init() {
 		}, 
 		backupInterval);
 		
-		// affectation.map((affectationItem) => {
-		// 	const k = affectationItem.name;
-		// 	if (k === "stock") {
-		// 	} else {
-		// 		store.dispatch(DataAction.change_checkbox_state({ [k]: false }));
-		// 		// store.dispatch(DataAction.load_checkbox_state)
-		// 	}
-		// });
+		affectation.map((affectationItem) => {
+			const k = affectationItem.name;
+			store.dispatch(DataAction.change_checkbox_state({ [k]: false }));
+			// store.dispatch(DataAction.load_checkbox_state( k ));
+			store.dispatch(DataAction.save_checkbox_state());
+
+			// if (k === "stock") {
+			// } else {
+			// 	store.dispatch(DataAction.change_checkbox_state({ [k]: false }));
+			// 	// store.dispatch(DataAction.load_checkbox_state)
+			// }
+
+			//public static load_checkbox_state(data: string): AnyAction {
+			// 	return { type: DataAction.LOAD_PREV_QTT, payload: JSON.parse(data) };
+			// }
+
+			// public static change_checkbox_state(changecheckboxstate: { [destination: string]: boolean }): AnyAction {
+			// 	return { type: DataAction.CHANGE_CHECKBOX_STATE, payload: changecheckboxstate };
+			// }
+
+			// public static save_checkbox_state(): AnyAction {
+			// 	return { type: DataAction.SAVE_CHECKBOX_STATE };
+			// }
+
+
+		});
 }
 
 init();

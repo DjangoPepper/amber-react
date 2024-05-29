@@ -337,7 +337,7 @@ function Main() {
 
 		if (workbook.Sheets['winwin']){																// la feuille simplifiée existe
 				Sheet = workbook.Sheets['winwin'];
-				toast.info('LECTURE FEUILLE WiNWiN', { position: toast.POSITION.TOP_RIGHT, autoClose: 5000 })
+				toast.info('Feuille  Simplifiée trouvée', { position: toast.POSITION.TOP_RIGHT, autoClose: 5000 })
 				// toast('🦄 Wow so easy!', {
 				// 	position: "top-right",
 				// 	autoClose: 5000,
