@@ -1,39 +1,27 @@
 import { useSelector, useDispatch} from "react-redux";
 import { RootState } from "../stores/rootStore";
-import DataAction from "../stores/dataS/DataAction";
-
 import { stepe_Data } from "../stores/dataS/DataReducer";
 import { Table } from "react-bootstrap";
 import React, { useState, useEffect } from 'react';
 import { affectation} from "../utils/destination";
- 
-
 import Button from 'react-bootstrap/Button';
- 
- 
-import { toast } from 'react-toastify';
+
 
 export default function Statistics() {
 
 	let totalCount = 0;
 	let totalWeight = 0;
-
 	let totalCalesCount = 0;
 	let totalCalesWeight = 0;
-
 	let totalstockCount = 0;
 	let totalstockWeight = 0;
 
 
-	const dispatch = useDispatch();	
 	const [Extended_Tally_Value, set_Extended_Tally_Value] = React.useState(false);
-
 	const [checkbox_Hold_State, set_checkbox_Hold_State] = useState<{ [key: string]: boolean }>({});	
-	
 	const [previous_Value_QT, set_previous_Value_QT] = useState<{ [key: string]: { prevQT_VALUE: string } }>({});
 	const [previous_Value_TO, set_previous_Value_TO] = useState<{ [key: string]: { prevTO_VALUE: string } }>({});
 	const [maxi_Value_TO, set_maxi_Values] 			 = useState<{ [key: string]: { maxi_To: string      } }>({});
-
 	const selectedColors = useSelector<RootState, { [key: string]: string }>((state) => state.data.pickerColors);
 
 	const Toggle_checkbox_boolean = (k: string) => {
@@ -66,22 +54,22 @@ export default function Statistics() {
 		}, 0);
 
 	let firstRender = true;
-	function init_tally() {
-		affectation.forEach((affectationItem) => {
-			const k = affectationItem.name as string;
-			if (k !== "stock") {
+	// function init_tally() {
+	// 	affectation.forEach((affectationItem) => {
+	// 		const k = affectationItem.name as string;
+	// 		if (k !== "stock") {
 
 				
-				}
-		});
-		firstRender = false;
-	};
+	// 			}
+	// 	});
+	// 	firstRender = false;
+	// };
 
 
 	useEffect(() => {
 	if (firstRender) {
-		init_tally();
-		toast.error('init Tally', { position: toast.POSITION.TOP_LEFT, autoClose: 500 });
+		// init_tally();
+		// toast.error('init Tally', { position: toast.POSITION.TOP_LEFT, autoClose: 500 });
 	}
 	}, [firstRender]);
 
@@ -174,7 +162,7 @@ export default function Statistics() {
 								<input
 								type="checkbox" 
 								checked={checkbox_Hold_State[affectationItem.name]} 
-								 
+							
 								onChange={() => Toggle_checkbox_boolean(affectationItem.name)}
 								/>
 							):null}							
