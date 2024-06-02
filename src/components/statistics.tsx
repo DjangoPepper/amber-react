@@ -33,7 +33,6 @@ export default function Statistics() {
 			}
 		set_checkbox_Hold_State(updatedCheckboxState);
 		};
-	
 
 		const handle_Extended_Tally = () => {
 			set_Extended_Tally_Value((prevValue) => {
@@ -41,9 +40,8 @@ export default function Statistics() {
 				return !prevValue;
 			});
 		};
-	
-	const catalog_data = useSelector<RootState, stepe_Data[]>((state) => state.data.catalog_data_state);
 
+	const catalog_data = useSelector<RootState, stepe_Data[]>((state) => state.data.catalog_data_state);
 
 	const totalPreviousCalesCount = Object.keys(previous_Value_QT).reduce((total, k) => {
 		return total + (previous_Value_QT[k] ? parseFloat(previous_Value_QT[k].prevQT_VALUE) : 0);
