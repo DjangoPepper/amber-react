@@ -22,6 +22,11 @@ export default class DataAction {
 	public static UPDATE_DONNEES = "DataAction.UPDATE_DONNEES";
 	public static ADD_DONNEES = "DataAction.ADD_DONNEES";
 
+	public static SET_TALLY_HOLD_CHECKBOX = "DataAction.SET_TALLY_HOLD_CHECKBOX";
+	public static SET_TALLY_HOLD_PREVQTT = "DataAction.SET_TALLY_HOLD_PREVQTT";
+	public static SET_TALLY_HOLD_PREVTONS = "DataAction.SET_TALLY_HOLD_PREVTONS";
+	public static SET_TALLY_HOLD_MAXITONS = "DataAction.SET_TALLY_HOLD_MAXITONS";
+
 	public static deleteRow(rank: string): AnyAction {
 		return { type: DataAction.DELETE_ROW, payload: rank };
 	}
@@ -60,4 +65,18 @@ export default class DataAction {
 	public static clear(): AnyAction {
 		return { type: DataAction.CLEAR };
 	}
+
+	public static set_Tally_Hold_Checkbox(Tally_Hold: string, Tally_checkedBox: Boolean):AnyAction {
+		return {type: DataAction.SET_TALLY_HOLD_CHECKBOX, payload: {Tally_Hold, Tally_checkedBox}};
+	}
+	public static set_Tally_Hold_Prevqtt(Tally_Hold: string, value: number):AnyAction {
+		return {type: DataAction.SET_TALLY_HOLD_CHECKBOX, payload: {Tally_Hold, value}};
+	}
+	public static set_Tally_Hold_Prevtons(Tally_Hold: string, value: number):AnyAction {
+		return {type: DataAction.SET_TALLY_HOLD_CHECKBOX, payload: {Tally_Hold, value}};
+	}
+	public static set_Tally_Hold_Maxitons(Tally_Hold: string, value: number):AnyAction {
+		return {type: DataAction.SET_TALLY_HOLD_CHECKBOX, payload: {Tally_Hold, value}};
+	}
 }
+

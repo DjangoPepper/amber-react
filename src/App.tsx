@@ -50,11 +50,11 @@ function init_tally() {
 				affectation.map((affectationItem) => {
 					const k = affectationItem.name;
 					// false pour checkbox
-					store.dispatch(DataAction.set_checkbox({ [k]: false }));
+					store.dispatch(DataAction.set_Tally_Hold_Checkbox(k, false));
 					// 0 pour prevqtt,prevtons,maxitons
-					store.dispatch(DataAction.set_prevqtt({ [k]: 0 }));
-					store.dispatch(DataAction.set_prevtons({ [k]: 0 }));
-					store.dispatch(DataAction.set_maxitons({ [k]: 0 }));
+					store.dispatch(DataAction.set_Tally_Hold_Prevqtt( k, 0));
+					store.dispatch(DataAction.set_Tally_Hold_Prevtons(k, 0));
+					store.dispatch(DataAction.set_Tally_Hold_Maxitons(k, 0));
 				});
 		} else {
 				// store.dispatch(DataAction.loaded_tally("0"));}			

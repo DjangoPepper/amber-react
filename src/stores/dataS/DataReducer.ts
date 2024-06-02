@@ -108,6 +108,42 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
                     loaded_catalog_status: false,
                 }
 
+            case DataAction.SET_TALLY_HOLD_CHECKBOX:
+                return {
+                    ...state,
+                    // catalog_data_state: state.catalog_data_state.map((item) => {
+                    catalog_data_state: state.catalog_data_state.map((item) => {
+                        return {
+                            ...item,
+                            [action.payload.Tally_Hold]: action.payload.Tally_checkedBox
+                        }
+                    })
+                }
+            
+            case DataAction.SET_TALLY_HOLD_PREVQTT:
+                return {
+                    ...state,
+                    // catalog_data_state: state.catalog_data_state.map((item) => {
+                    catalog_data_state: state.catalog_data_state.map((item) => {
+                        return {
+                            ...item,
+                            [action.payload.Tally_Hold]: action.payload.value
+                        }
+                    })
+                }    
+            
+            case DataAction.SET_TALLY_HOLD_MAXITONS:
+                return {
+                    ...state,
+                    // catalog_data_state: state.catalog_data_state.map((item) => {
+                    catalog_data_state: state.catalog_data_state.map((item) => {
+                        return {
+                            ...item,
+                            [action.payload.Tally_Hold]: action.payload.value
+                        }
+                    })
+                }
+
             default:
                 return state;
         }
