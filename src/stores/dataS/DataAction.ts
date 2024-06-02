@@ -8,7 +8,6 @@ export default class DataAction {
 	public static UPDATE_ROW = "DataAction.UPDATE_ROW";
 	
 	public static SAVE_CATALOG = "DataAction.SAVE_CATALOG";
-	
 	public static LOAD_CATALOG = "DataAction.LOAD_CATALOG";
 	
 	public static CLEAR = "DataAction.CLEAR";
@@ -39,7 +38,7 @@ export default class DataAction {
 	public static changeOriginalpos(destination: string): AnyAction {
 		return { type: DataAction.CHANGE_ORIGINAL_POS, payload: "stock"};
 	}	
-	public static importData(data: any[]): AnyAction {
+	public static importCatalogDatas(data: any[]): AnyAction {
 		return { type: DataAction.IMPORT_DATA, payload: data };
 	}
 	public static changeCale(cale: string): AnyAction {

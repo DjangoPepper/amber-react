@@ -282,7 +282,7 @@ function Main() {
 			Sheet = CleanExcelSheet(workbook.Sheets[workbook.SheetNames[0]]);
 			toast.info('Feuille par defaut !', { position: toast.POSITION.TOP_RIGHT, autoClose: 1000 })
 		}
-		dispatch(DataAction.importData(utils.sheet_to_json(Sheet).map(cleanData)));
+		dispatch(DataAction.importCatalogDatas(utils.sheet_to_json(Sheet).map(cleanData)));
 		dispatch(DataAction.changeOriginalpos("stock"));
 		};
 	reader.readAsBinaryString(file);
