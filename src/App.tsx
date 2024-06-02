@@ -56,6 +56,7 @@ function init_tally() {
 					store.dispatch(DataAction.set_Tally_Hold_Prevtons(k, 0));
 					store.dispatch(DataAction.set_Tally_Hold_Maxitons(k, 0));
 				});
+				toast.info('AutoTally', { position: toast.POSITION.BOTTOM_LEFT, autoClose: 500 })
 		} else {
 				// store.dispatch(DataAction.loaded_tally("0"));}			
 		}

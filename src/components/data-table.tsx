@@ -201,7 +201,7 @@ export default function DataTable() {
         setHold(selectedWorkingHoldValue);
         };
     const isStabiloButtonVisible = cale !== "stock";  
-    const [checkedRows, setCheckedRows] = useState<{ [key: number]: boolean }>({});
+    // const [checkedRows, setCheckedRows] = useState<{ [key: number]: boolean }>({});
     return ( 
         <>
             <div className="d-flex">
@@ -281,8 +281,8 @@ export default function DataTable() {
                 <TableRS>
                     <tbody className="overflow-auto" style={{maxHeight: "100px"}}>
                     {table.getRowModel().rows.map(row => {
-                        const reference = parseInt(row.original.reference, 10);
-                        const isChecked = checkedRows[reference] || false;
+                        // const reference = parseInt(row.original.reference, 10);
+                        // const isChecked = checkedRows[reference] || false;
             return (
                                 <tr 
                                     key={row.id} 

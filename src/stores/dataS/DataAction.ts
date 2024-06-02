@@ -66,8 +66,8 @@ export default class DataAction {
 		return { type: DataAction.CLEAR };
 	}
 
-	public static set_Tally_Hold_Checkbox(Tally_Hold: string, Tally_checkedBox: Boolean):AnyAction {
-		return {type: DataAction.SET_TALLY_HOLD_CHECKBOX, payload: {Tally_Hold, Tally_checkedBox}};
+	public static set_Tally_Hold_Checkbox(Tally_Hold: string, boll_value: Boolean):AnyAction {
+		return {type: DataAction.SET_TALLY_HOLD_CHECKBOX, payload: {Tally_Hold, boll_value}};
 	}
 	public static set_Tally_Hold_Prevqtt(Tally_Hold: string, value: number):AnyAction {
 		return {type: DataAction.SET_TALLY_HOLD_CHECKBOX, payload: {Tally_Hold, value}};
