@@ -10,12 +10,17 @@ export type Catalog_Data = {
     destination: string
     position: string
     prepa: string
+    
 }
 export type Tally_Data = {
     Tally_Hold: number
     Tally_Pqtt: string
     Tally_Ptons: string
     Tally_Maxitons: string
+}
+
+export type Stepe_Data = {
+    steppe: string   
 }
 
 // interface Isteppe {
