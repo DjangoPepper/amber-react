@@ -26,6 +26,9 @@ export default class DataAction {
 	public static SET_TALLY_HOLD_PREVTONS = "DataAction.SET_TALLY_HOLD_PREVTONS";
 	public static SET_TALLY_HOLD_MAXITONS = "DataAction.SET_TALLY_HOLD_MAXITONS";
 
+	public static SAVE_TALLY = "DataAction.SAVE_TALLY";
+	public static LOAD_TALLY = "DataAction.LOAD_TALLY";
+	
 	public static deleteRow(rank: string): AnyAction {
 		return { type: DataAction.DELETE_ROW, payload: rank };
 	}

@@ -1,11 +1,10 @@
 import { useSelector, useDispatch} from "react-redux";
 import { RootState } from "../stores/rootStore";
-import { stepe_Data } from "../stores/dataS/DataReducer";
+import { Catalog_Data } from "../stores/dataS/DataReducer";
 import { Table } from "react-bootstrap";
 import React, { useState, useEffect } from 'react';
 import { affectation} from "../utils/destination";
 import Button from 'react-bootstrap/Button';
-
 
 export default function Statistics() {
 
@@ -22,7 +21,7 @@ export default function Statistics() {
 	const [previous_Value_QT, set_previous_Value_QT] = useState<{ [key: string]: { prevQT_VALUE: string } }>({});
 	const [previous_Value_TO, set_previous_Value_TO] = useState<{ [key: string]: { prevTO_VALUE: string } }>({});
 	const [maxi_Value_TO, set_maxi_Values] 			 = useState<{ [key: string]: { maxi_To: string      } }>({});
-	const selectedColors = useSelector<RootState, { [key: string]: string }>((state) => state.data.pickerColors);
+	const selectedColors = useSelector<RootState, { [key: string]: string }>((state) => state.data.ICata_pickerColors);
 
 	const Toggle_checkbox_boolean = (k: string) => {
 		const updatedCheckboxState = { ...checkbox_Hold_State };
@@ -41,7 +40,7 @@ export default function Statistics() {
 			});
 		};
 
-	const catalog_data = useSelector<RootState, stepe_Data[]>((state) => state.data.catalog_data_state);
+	const catalog_data = useSelector<RootState, Catalog_Data[]>((state) => state.data.ICata_catalog_state);
 
 	const totalPreviousCalesCount = Object.keys(previous_Value_QT).reduce((total, k) => {
 		return total + (previous_Value_QT[k] ? parseFloat(previous_Value_QT[k].prevQT_VALUE) : 0);
@@ -52,16 +51,6 @@ export default function Statistics() {
 		}, 0);
 
 	let firstRender = true;
-	// function init_tally() {
-	// 	affectation.forEach((affectationItem) => {
-	// 		const k = affectationItem.name as string;
-	// 		if (k !== "stock") {
-
-				
-	// 			}
-	// 	});
-	// 	firstRender = false;
-	// };
 
 
 	useEffect(() => {
@@ -81,13 +70,13 @@ export default function Statistics() {
 		}, {});
 
 	
- 
+
 	Object.values(statistics).forEach((destinationStats: any ) => {    
 		totalCount += destinationStats.count;
 		totalWeight += destinationStats.weight;
 		totalCalesCount = totalCount ;
 		totalCalesWeight = totalWeight;
- 
+
 	if (statistics.stock) {
 			totalstockCount = statistics.stock.count;
 			totalstockWeight = statistics.stock.weight;
@@ -105,8 +94,6 @@ export default function Statistics() {
 			totalCalesWeight = totalWeight;
 		}
 		});
-
- 
 	
 		return (
 		<div>

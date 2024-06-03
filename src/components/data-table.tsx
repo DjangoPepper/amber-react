@@ -17,7 +17,7 @@ import {utils, writeFile } from "xlsx";
 import {Button, Modal, Form, Table as TableRS} from "react-bootstrap";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../stores/rootStore";
-import {stepe_Data} from "../stores/dataS/DataReducer";
+import {Catalog_Data} from "../stores/dataS/DataReducer";
 import DebouncedInput from "./debounceInput";
 import DataAction from "../stores/dataS/DataAction";
 import {colors, affectation, HEADER} from "../utils/destination";
@@ -47,7 +47,7 @@ declare module '@tanstack/react-table' {
         }
     };
 
-const columnHelper = createColumnHelper<stepe_Data>();
+const columnHelper = createColumnHelper<Catalog_Data>();
 
 const EditableCell = ({ getValue, row, column, table }: any) => {
     const initialValue = getValue()
@@ -69,7 +69,7 @@ const EditableCell = ({ getValue, row, column, table }: any) => {
         )
     };
 
-const globalFilterFn: FilterFn<stepe_Data> = (row, columnId, filterValue: string) => {
+const globalFilterFn: FilterFn<Catalog_Data> = (row, columnId, filterValue: string) => {
     const search = filterValue.toLowerCase();
     let value = row.getValue(columnId) as string;
     if (typeof value === 'number') value = String(value);
@@ -117,42 +117,42 @@ const useColumns = function useColumns(): any[] {
     
 export default function DataTable() {
     const dispatch = useDispatch();
-    const [PickerColorForSelectedCale, setPickerColorForSelectedCale] = useState<{ [key: string]: string }>({});
-    const [newSelectedCale, setnewSelectedCale] = useState<string>('');
+    const [PickerColorForICata_selectedCale, setPickerColorForICata_selectedCale] = useState<{ [key: string]: string }>({});
+    const [newICata_selectedCale, setnewICata_selectedCale] = useState<string>('');
     const [newColor, setNewColor] = useState<string>('');
-    const selectedCale = useSelector<RootState, string>((state) => state.data.selectedCale);
-    const selectedColors = useSelector<RootState, { [key: string]: string }>((state) => state.data.pickerColors);
+    const ICata_selectedCale = useSelector<RootState, string>((state) => state.data.ICata_selectedCale);
+    const selectedColors = useSelector<RootState, { [key: string]: string }>((state) => state.data.ICata_pickerColors);
     const setSelectedColors = (colors: { [key: string]: string }) => {
         dispatch(DataAction.changePickColors(colors));
         };
     const handleStabiloClick = () => { 
-        setnewSelectedCale(selectedCale);
+        setnewICata_selectedCale(ICata_selectedCale);
         };
 
     const handleCloseModal = () => { 
-        setnewSelectedCale(""); 
+        setnewICata_selectedCale(""); 
         };
 
     const handleColorChange = (color: ColorResult) => {
-        setSelectedColors({...selectedColors, [newSelectedCale]: color.hex});
-        const updateStickerdColors = { ...PickerColorForSelectedCale, [selectedCale]: color.hex };
-        setPickerColorForSelectedCale(updateStickerdColors);
+        setSelectedColors({...selectedColors, [newICata_selectedCale]: color.hex});
+        const updateStickerdColors = { ...PickerColorForICata_selectedCale, [ICata_selectedCale]: color.hex };
+        setPickerColorForICata_selectedCale(updateStickerdColors);
         };
     
     const handleSaveChanges = () => {
         const updatedData = data.map((item) => {
-                if (item.destination === newSelectedCale) {
+                if (item.destination === newICata_selectedCale) {
                     return { ...item, color: newColor };
                 }
             return item;
             });
-        dispatch(DataAction.changeCouleur([newSelectedCale]));
-        setnewSelectedCale("");
+        dispatch(DataAction.changeCouleur([newICata_selectedCale]));
+        setnewICata_selectedCale("");
         };
     const [sorting, setSorting] = React.useState<SortingState>([]);
     const [globalFilter, setGlobalFilter] = React.useState('')
-    const cale = useSelector<RootState, string>(state => state.data.selectedCale);
-    const data = useSelector<RootState, stepe_Data[]>(state => state.data.catalog_data_state);
+    const cale = useSelector<RootState, string>(state => state.data.ICata_selectedCale);
+    const data = useSelector<RootState, Catalog_Data[]>(state => state.data.ICata_catalog_state);
     const columns = useColumns();
     const table = useReactTable({
         data,
@@ -184,7 +184,7 @@ export default function DataTable() {
     const exportData = () => {
         const aoa: any[][] = [HEADER.map(h => h.name)];
         for (const row of data) {
-            aoa.push(HEADER.map(h => row[h.key as keyof stepe_Data]));
+            aoa.push(HEADER.map(h => row[h.key as keyof Catalog_Data]));
         }
         const sheet = utils.aoa_to_sheet(aoa)
         const wb = utils.book_new();
@@ -375,7 +375,7 @@ export default function DataTable() {
                 </select>
                 
             </div>
-            <Modal show={Boolean(newSelectedCale)} onHide={handleCloseModal}>
+            <Modal show={Boolean(newICata_selectedCale)} onHide={handleCloseModal}>
             <Modal.Header closeButton>
                 <Modal.Title>Modifier la valeur et la couleur</Modal.Title>
             </Modal.Header>
@@ -383,7 +383,7 @@ export default function DataTable() {
                 <Form.Group>
                 <Form.Label>Nouvelle couleur</Form.Label>
                 <SketchPicker
-                    color={PickerColorForSelectedCale[newSelectedCale] || '' }
+                    color={PickerColorForICata_selectedCale[newICata_selectedCale] || '' }
                     onChange={handleColorChange}
                 />
                 </Form.Group>

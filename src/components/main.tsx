@@ -4,14 +4,14 @@ import {Col, Container, Row} from "react-bootstrap";
 import {read, utils} from "xlsx";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../stores/rootStore";
-import {stepe_Data} from "../stores/dataS/DataReducer";
+import {Catalog_Data} from "../stores/dataS/DataReducer";
 import DataAction from "../stores/dataS/DataAction";
 import DataTable from "./data-table";
 import Statistics from "./statistics";
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-function CleanExcelSheet(oSheet: any): stepe_Data {
+function CleanExcelSheet(oSheet: any): Catalog_Data {
 	toast.info('Allegement feuille', { position: toast.POSITION.TOP_RIGHT,autoClose: 1000 }) 
 
 			deleteExcelMergesInfos(oSheet);
@@ -236,7 +236,7 @@ function removeAccents(str: string) {
     return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 	};
 
-function cleanData(values: any): stepe_Data {
+function cleanData(values: any): Catalog_Data {
 	const toUpperCaseKeysValues: any = {};
 	for (const key in values) {
 		const upperCaseKey = key.toUpperCase();
@@ -256,7 +256,7 @@ function cleanData(values: any): stepe_Data {
 
 function Main() {
 	const dispatch = useDispatch();
-	const loaded_catalog = useSelector<RootState, boolean>(state => state.data.loaded_catalog_status);
+	const loaded_catalog = useSelector<RootState, boolean>(state => state.data.ICata_loaded_status);
 	const onDrop = useCallback((acceptedFiles: any) => {
 	const file = acceptedFiles[0];
 	const reader = new FileReader();
