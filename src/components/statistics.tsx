@@ -2,7 +2,7 @@ import { useSelector, useDispatch} from "react-redux";
 import { RootState } from "../stores/rootStore";
 import DataAction from "../stores/dataS/DataAction";
 
-import { stepe_Data } from "../stores/dataS/DataReducer";
+import { export_stepe_Data } from "../stores/dataS/DataReducer";
 import { Table } from "react-bootstrap";
 import React, { useState, useEffect } from 'react';
 import { affectation} from "../utils/destination";
@@ -117,7 +117,7 @@ export default function Statistics() {
 	
 //
 //
-	const catalog_data = useSelector<RootState, stepe_Data[]>((state) => state.data.catalog_data_state);
+	const catalog_data = useSelector<RootState, export_stepe_Data[]>((state) => state.data.catalog_data_state);
 //	
 
 	const totalPreviousCalesCount = Object.keys(previous_Value_QT).reduce((total, k) => {

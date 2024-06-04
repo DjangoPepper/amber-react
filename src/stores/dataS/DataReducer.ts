@@ -3,7 +3,7 @@ import DataAction from "./DataAction";
 import {Reducer} from "@reduxjs/toolkit";
 import { colors } from "../../utils/destination";
 
-export type stepe_Data = {
+export type export_stepe_Data = {
     rank: number
     reference: string
     weight: number
@@ -12,8 +12,8 @@ export type stepe_Data = {
     prepa: string
 }
 
-interface DataState {
-    catalog_data_state: stepe_Data[];
+interface Interface_stepe_state {
+    catalog_data_state: export_stepe_Data[];
     selectedCale: string;
     selectedPrepa: string;
     loaded_catalog_status: boolean;
@@ -35,10 +35,11 @@ interface DataState {
     saved_HOLD_previous_TONS_status: boolean;
     saved_HOLD_maxi_TONS_status: boolean;
 
-    // tableauDeDonnees: { [destination: string]: string }[];
+    loaded_tally_status: boolean;
+    saved_tally_status: boolean;
 }
 
-const initialState: DataState = {
+const initial_stepe_Data_State: Interface_stepe_state = {
     catalog_data_state: [],
     selectedCale: "stock",
     selectedPrepa: "_",
@@ -46,10 +47,10 @@ const initialState: DataState = {
     saved_catalog_status: true,
     pickerColors: colors,
     
-    HOLD_checkbox_state: {},
-    HOLD_previous_QTT: {},
-    HOLD_previous_TONS: {}, 
-    HOLD_maxi_TONS: {},
+    HOLD_checkbox_state: {"H1": false, "H2": false, "H3": false, "H4": false, "H5": false, "H6": false, "H7": false, "H8": false, "H9": false, "H10": false},
+    HOLD_previous_QTT: {"H1": "0", "H2": "0", "H3": "0", "H4": "0", "H5": "0", "H6": "0", "H7": "0", "H8": "0", "H9": "0", "H10": "0"},
+    HOLD_previous_TONS: {"H1": "0", "H2": "0", "H3": "0", "H4": "0", "H5": "0", "H6": "0", "H7": "0", "H8": "0", "H9": "0", "H10": "0"}, 
+    HOLD_maxi_TONS: {"H1": "0", "H2": "0", "H3": "0", "H4": "0", "H5": "0", "H6": "0", "H7": "0", "H8": "0", "H9": "0", "H10": "0"},
 
     loaded_HOLD_checkbox_state_status: false,
     loaded_HOLD_previous_QTT_status: false,
@@ -61,10 +62,11 @@ const initialState: DataState = {
     saved_HOLD_previous_TONS_status: false,
     saved_HOLD_maxi_TONS_status: false,
 
-    // tableauDeDonnees: [],
+    loaded_tally_status: false,
+    saved_tally_status: true,
 };
 
-export const dataReducer: Reducer<DataState> = (state = initialState, action: AnyAction): DataState => {
+export const dataReducer: Reducer<Interface_stepe_state> = (state = initial_stepe_Data_State, action: AnyAction): Interface_stepe_state => {
         switch (action.type) {
             case DataAction.IMPORT_DATA:
                 return {
