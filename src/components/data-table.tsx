@@ -144,8 +144,8 @@ export default function DataTable() {
     const [newColor, setNewColor] = useState<string>('');
     
     // Accédez à la valeur sélectionnée depuis l'état Redux
-    const selectedCale = useSelector<RootState, string>((state) => state.data.selectedCale);
-    const selectedColors = useSelector<RootState, { [key: string]: string }>((state) => state.data.pickerColors);
+    const selectedCale = useSelector<RootState, string>((state) => state.dataSS.selectedCale);
+    const selectedColors = useSelector<RootState, { [key: string]: string }>((state) => state.dataSS.pickerColors);
     const setSelectedColors = (colors: { [key: string]: string }) => {
         dispatch(DataAction.changePickColors(colors));
     }
@@ -188,8 +188,8 @@ export default function DataTable() {
 
     const [sorting, setSorting] = React.useState<SortingState>([]);
     const [globalFilter, setGlobalFilter] = React.useState('')
-    const cale = useSelector<RootState, string>(state => state.data.selectedCale);
-    const data = useSelector<RootState, export_stepe_catalog_Data[]>(state => state.data.catalog_data_state);
+    const cale = useSelector<RootState, string>(state => state.dataSS.selectedCale);
+    const data = useSelector<RootState, export_stepe_catalog_Data[]>(state => state.dataSS.catalog_data_state);
     const columns = useColumns();
     
     const table = useReactTable({

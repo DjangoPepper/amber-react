@@ -34,7 +34,7 @@ export default function Statistics() {
 	const [previous_Value_TO, set_previous_Value_TO] = useState<{ [key: string]: { prevTO_VALUE: string } }>({});
 	const [maxi_Value_TO, set_maxi_Values] 			 = useState<{ [key: string]: { maxi_To: string      } }>({});
 
-	const selectedColors = useSelector<RootState, { [key: string]: string }>((state) => state.data.pickerColors);
+	const selectedColors = useSelector<RootState, { [key: string]: string }>((state) => state.dataSS.pickerColors);
 
 	const Toggle_checkbox_boolean = (k: string) => {
 
@@ -130,7 +130,7 @@ export default function Statistics() {
 	
 //
 //
-	const catalog_data = useSelector<RootState, export_stepe_catalog_Data[]>((state) => state.data.catalog_data_state);
+	const catalog_data = useSelector<RootState, export_stepe_catalog_Data[]>((state) => state.dataSS.catalog_data_state);
 //	
 
 	const totalPreviousCalesCount = Object.keys(previous_Value_QT).reduce((total, k) => {

@@ -115,6 +115,7 @@ export default class DataAction {
 		return { type: DataAction.SAVE_MAXI_TONS };
 	}
 
+	//*********************************************************************** */
 	public static loaded_catalog(data: string): AnyAction {
 		return { type: DataAction.LOAD_CATALOG, payload: JSON.parse(data) };
 	}
@@ -122,6 +123,7 @@ export default class DataAction {
 	public static loaded_tally(data: string): AnyAction {
 		return { type: DataAction.LOAD_TALLY, payload: JSON.parse(data) };
 	}
+//*********************************************************************** */
 
 	public static load_checkbox_state(data: string): AnyAction {
 		return { type: DataAction.LOAD_PREV_QTT, payload: JSON.parse(data) };

@@ -172,7 +172,7 @@ export const dataReducer: Reducer<Interface_stepe_state> = (state = initial_step
             case DataAction.SAVE_CATALOG:
                 if(state.saved_catalog_status) return state;
                 // console.log("saving catalog...");
-                window.localStorage.setItem("data", JSON.stringify(state.catalog_data_state));
+                window.localStorage.setItem("localstorage_catalog_datas", JSON.stringify(state.catalog_data_state));
                 return {
                     ...state,
                     saved_catalog_status: false
@@ -181,10 +181,10 @@ export const dataReducer: Reducer<Interface_stepe_state> = (state = initial_step
             case DataAction.SAVE_TALLY:
                 if(state.saved_tally_status) return state;
                 // console.log("saving catalog...");
-                window.localStorage.setItem("tally", JSON.stringify(state.tally_data_state));
+                window.localStorage.setItem("localstorage_tally_datas", JSON.stringify(state.tally_data_state));
                 return {
                     ...state,
-                    saved_catalog_status: false
+                    saved_tally_status: false
                 }
 //****************************************************************************************************
             case DataAction.SAVE_CHECKBOX_STATE:
@@ -219,7 +219,7 @@ export const dataReducer: Reducer<Interface_stepe_state> = (state = initial_step
                     ...state,
                     saved_TAlly_HOLD_maxi_TONS_status: false
                 };
-
+//**************************************************************************************************** */
             case DataAction.LOAD_CATALOG:
                 return {
                     ...state,
@@ -231,7 +231,7 @@ export const dataReducer: Reducer<Interface_stepe_state> = (state = initial_step
             case DataAction.LOAD_TALLY:
                 return {
                     ...state,
-                    catalog_data_state: action.payload,
+                    tally_data_state: action.payload,
                     loaded_tally_status: true,
                     saved_tally_status: true,
                 }
@@ -261,28 +261,7 @@ export const dataReducer: Reducer<Interface_stepe_state> = (state = initial_step
                     ...state,
                     loaded_catalog_status: false,
                 }
-        //
-        //
-        //
-        //     case DataAction.ADD_DONNEES:
-        //         return {
-        //             ...state,
-        //             catalog_data_state: {
-        //                 ...state.catalog_data_state,
-        //                 [action.payload.destination]: action.payload.value
-        //             }
-        //         }
-        //     case DataAction.UPDATE_DONNEES:
-        //         const { index, data } = action.payload;
-        //         const updatedTableau = [...state.tableauDeDonnees];
-        //         updatedTableau[index] = data;
-        //         return {
-        //             ...state,
-        //             tableauDeDonnees: updatedTableau,
-        //         };
-        //     //
-        //     //
-        //     //
+
             default:
                 return state;
         }

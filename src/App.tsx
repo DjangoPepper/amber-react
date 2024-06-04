@@ -19,7 +19,7 @@ let backupInterval = 30 * 1000; //30 * 1000 ms = 30s
 
 function init_cata() {
 		
-	const Init_catalogDATAS = window.localStorage.getItem("data");
+	const Init_catalogDATAS = window.localStorage.getItem("stepe_catalogue_DATAS");
 	if(Init_catalogDATAS) {
 		store.dispatch(DataAction.loaded_catalog(Init_catalogDATAS));
 		}
