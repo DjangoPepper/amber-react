@@ -43,19 +43,32 @@ export default function Statistics() {
 	
 		// Vérifiez si la destination k est déjà dans l'état des cases à cocher
 		if (updatedCheckboxState[k] !== undefined) {
-		  // Si oui, basculez simplement la valeur (true devient false, false devient true)
-			updatedCheckboxState[k] = !updatedCheckboxState[k];
-		} else {
+			//si prevqtt,prevtons, maxitons non vide & updatedCheckboxState[k] = false alors updatedCheckboxState[k] = true
+			if ((Number(previous_Value_QT[k].prevQT_VALUE) > 0 || 
+				Number(previous_Value_TO[k].prevTO_VALUE) > 0 || 
+				Number(maxi_Value_TO[k].maxi_To) > 0 ))
+				//  && updatedCheckboxState[k] === false) 
+				{
+					updatedCheckboxState[k] = true;
+					toast.error("Ligne tally pleine", { position: toast.POSITION.TOP_RIGHT,autoClose: 1500 })
+					// 160,3: 		toast.error('init Tally', { position: toast.POSITION.TOP_LEFT, autoClose: 500 });
+				} else {
+					// Si oui, basculez simplement la valeur (true devient false, false devient true)
+					updatedCheckboxState[k] = !updatedCheckboxState[k];
 		  // Si la destination n'est pas dans l'état, ajoutez-la et définissez-la comme cochée (true)
-			updatedCheckboxState[k] = true;
-		}
+			// updatedCheckboxState[k] = true;
+				}
 		// Mettez à jour l'état des cases à cocher avec la nouvelle valeur
 		set_checkbox_Hold_State(updatedCheckboxState);
-		// dispatch(DataAction.change_checkbox_state ( true ));
 		dispatch(DataAction.change_checkbox_state({ [k]: updatedCheckboxState[k] }));
 		dispatch(DataAction.save_checkbox_state());
-		};
-	
+		} else {
+			updatedCheckboxState[k] = true;
+			set_checkbox_Hold_State(updatedCheckboxState);
+			dispatch(DataAction.change_checkbox_state({ [k]: updatedCheckboxState[k] }));
+			dispatch(DataAction.save_checkbox_state());
+		}
+	};
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -145,7 +158,8 @@ export default function Statistics() {
 	useEffect(() => {
 	if (firstRender) {
 		init_tally();
-		toast.error('init Tally', { position: toast.POSITION.TOP_LEFT, autoClose: 500 });
+		toast.error('init Tally', { position: toast.POSITION.TOP_LEFT, autoClose: 2000 });
+
 	}
 	}, [firstRender]);
 
