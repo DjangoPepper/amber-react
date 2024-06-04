@@ -17,39 +17,42 @@ import { toast } from 'react-toastify';
 let backupInterval = 30 * 1000; //30 * 1000 ms = 30s
 // let firstRender = false;
 
-function init() {
+function init_cata() {
 		
-	const Init_data_catalog = window.localStorage.getItem("data");
-		
-		if(Init_data_catalog) {
-				store.dispatch(DataAction.loaded_catalog(Init_data_catalog));
-				// store.dispatch(DataAction.load_checkbox_state(Init_data_catalog));
-				// store.dispatch(DataAction.load_previous_qtt(Init_data_catalog));
-				// store.dispatch(DataAction.load_previous_tons(Init_data_catalog));
-				// store.dispatch(DataAction.load_maxi_tons(Init_data_catalog));
+	const Init_catalogDATAS = window.localStorage.getItem("data");
+	if(Init_catalogDATAS) {
+		store.dispatch(DataAction.loaded_catalog(Init_catalogDATAS));
+		}
+	setInterval(() => {
+		store.dispatch(DataAction.save_catalog());
+		// store.dispatch(DataAction.save_checkbox_state());
+		// store.dispatch(DataAction.save_previous_qtt());
+		// store.dispatch(DataAction.save_previous_tons());
+		// store.dispatch(DataAction.save_maxi_tons());
+		toast.warning('AutoSave catalog', { position: toast.POSITION.BOTTOM_LEFT, autoClose: 500 })
+		}, 
+	backupInterval);
+	}
+
+function init_tally(){
+	const Init_tallyDATAS = window.localStorage.getItem("tally");
+	if(Init_tallyDATAS) {
+		store.dispatch(DataAction.loaded_tally(Init_tallyDATAS));
 		}
 		
-		setInterval(() => {
-				store.dispatch(DataAction.save_catalog());
-				store.dispatch(DataAction.save_checkbox_state());
-				store.dispatch(DataAction.save_previous_qtt());
-				store.dispatch(DataAction.save_previous_tons());
-				store.dispatch(DataAction.save_maxi_tons());
-				toast.warning('AutoSave', { position: toast.POSITION.BOTTOM_LEFT, autoClose: 500 })
-		}, 
-		backupInterval);
-		
-		// affectation.map((affectationItem) => {
-		// 	const k = affectationItem.name;
-		// 	if (k === "stock") {
-		// 	} else {
-		// 		store.dispatch(DataAction.change_checkbox_state({ [k]: false }));
-		// 		// store.dispatch(DataAction.load_checkbox_state)
-		// 	}
-		// });
+	setInterval(() => {
+		store.dispatch(DataAction.save_tally());
+		store.dispatch(DataAction.save_checkbox_state());
+		store.dispatch(DataAction.save_previous_qtt());
+		store.dispatch(DataAction.save_previous_tons());
+		store.dispatch(DataAction.save_maxi_tons());
+		toast.warning('AutoSave tally', { position: toast.POSITION.BOTTOM_LEFT, autoClose: 500 })
+	}, 
+	backupInterval);
 }
 
-init();
+init_cata();
+init_tally();
 
 function App() {
 	useLeavePageConfirm(true);

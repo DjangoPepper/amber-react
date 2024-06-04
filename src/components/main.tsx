@@ -4,7 +4,7 @@ import {Col, Container, Row} from "react-bootstrap";
 import {read, utils} from "xlsx";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../stores/rootStore";
-import {export_stepe_Data} from "../stores/dataS/DataReducer";
+import {export_stepe_catalog_Data} from "../stores/dataS/DataReducer";
 import DataAction from "../stores/dataS/DataAction";
 import DataTable from "./data-table";
 import Statistics from "./statistics";
@@ -13,7 +13,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 
 
-function CleanExcelSheet(oSheet: any): export_stepe_Data {
+function CleanExcelSheet(oSheet: any): export_stepe_catalog_Data {
 	toast.info('Allegement feuille', { position: toast.POSITION.TOP_RIGHT,autoClose: 1000 })// la feuille Bobines existe
 			
 			// effacement des cellules fusionnées
@@ -292,7 +292,7 @@ function removeAccents(str: string) {
     return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 }
 
-function cleanData(values: any): export_stepe_Data {
+function cleanData(values: any): export_stepe_catalog_Data {
 	const toUpperCaseKeysValues: any = {};
 	for (const key in values) {
 		const upperCaseKey = key.toUpperCase();
@@ -374,7 +374,7 @@ function Main() {
 		// dispatch(DataAction.importData(utils.sheet_to_json(selectedSheet).map(cleanData)));
 			// // dispatch(DataAction.moveRow(row.original.reference)); //je change la detination de ref cale1,cale2, etc..
 		dispatch(DataAction.changeOriginalpos("stock"));
-		// toast.success('catalog export_stepe_Data imported', { position: toast.POSITION.TOP_RIGHT })
+		// toast.success('catalog export_stepe_catalog_Data imported', { position: toast.POSITION.TOP_RIGHT })
 	};
 	reader.readAsBinaryString(file);
 	}, []);

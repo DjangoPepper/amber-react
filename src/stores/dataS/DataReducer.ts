@@ -3,7 +3,7 @@ import DataAction from "./DataAction";
 import {Reducer} from "@reduxjs/toolkit";
 import { colors } from "../../utils/destination";
 
-export type export_stepe_Data = {
+export type export_stepe_catalog_Data = {
     rank: number
     reference: string
     weight: number
@@ -12,28 +12,36 @@ export type export_stepe_Data = {
     prepa: string
 }
 
+export type export_stepe_tally_Data = {
+    tally_Dest: number
+    tally_PUnits: string
+    tally_PKilos: number
+    tally_Max: string
+}
+
 interface Interface_stepe_state {
-    catalog_data_state: export_stepe_Data[];
+    catalog_data_state: export_stepe_catalog_Data[];
+    tally_data_state: export_stepe_tally_Data[];
     selectedCale: string;
     selectedPrepa: string;
     loaded_catalog_status: boolean;
     saved_catalog_status: boolean;
     pickerColors: { [key: string]: string };
     
-    HOLD_checkbox_state: { [destination: string]: boolean };
-    HOLD_previous_QTT:   { [destination: string]: string };
-    HOLD_previous_TONS:  { [destination: string]: string };
-    HOLD_maxi_TONS:      { [destination: string]: string };
+    TAlly_HOLD_checkbox: { [destination: string]: boolean };
+    TAlly_HOLD_previous_QTT:   { [destination: string]: string };
+    TAlly_HOLD_previous_TONS:  { [destination: string]: string };
+    TAlly_HOLD_maxi_TONS:      { [destination: string]: string };
     
-    loaded_HOLD_checkbox_state_status: boolean;
-    loaded_HOLD_previous_QTT_status: boolean;
-    loaded_HOLD_previous_TONS_status: boolean;
-    loaded_HOLD_maxi_TONS_status: boolean;
+    loaded_TAlly_HOLD_checkbox_status: boolean;
+    loaded_TAlly_HOLD_previous_QTT_status: boolean;
+    loaded_TAlly_HOLD_previous_TONS_status: boolean;
+    loaded_TAlly_HOLD_maxi_TONS_status: boolean;
     
-    saved_HOLD_checkbox_state_status: boolean;
-    saved_HOLD_previous_QTT_status: boolean;
-    saved_HOLD_previous_TONS_status: boolean;
-    saved_HOLD_maxi_TONS_status: boolean;
+    saved_TAlly_HOLD_checkbox_status: boolean;
+    saved_TAlly_HOLD_previous_QTT_status: boolean;
+    saved_TAlly_HOLD_previous_TONS_status: boolean;
+    saved_TAlly_HOLD_maxi_TONS_status: boolean;
 
     loaded_tally_status: boolean;
     saved_tally_status: boolean;
@@ -41,26 +49,27 @@ interface Interface_stepe_state {
 
 const initial_stepe_Data_State: Interface_stepe_state = {
     catalog_data_state: [],
+    tally_data_state: [],
     selectedCale: "stock",
     selectedPrepa: "_",
     loaded_catalog_status: false,
     saved_catalog_status: true,
     pickerColors: colors,
     
-    HOLD_checkbox_state: {"H1": false, "H2": false, "H3": false, "H4": false, "H5": false, "H6": false, "H7": false, "H8": false, "H9": false, "H10": false},
-    HOLD_previous_QTT: {"H1": "0", "H2": "0", "H3": "0", "H4": "0", "H5": "0", "H6": "0", "H7": "0", "H8": "0", "H9": "0", "H10": "0"},
-    HOLD_previous_TONS: {"H1": "0", "H2": "0", "H3": "0", "H4": "0", "H5": "0", "H6": "0", "H7": "0", "H8": "0", "H9": "0", "H10": "0"}, 
-    HOLD_maxi_TONS: {"H1": "0", "H2": "0", "H3": "0", "H4": "0", "H5": "0", "H6": "0", "H7": "0", "H8": "0", "H9": "0", "H10": "0"},
+    TAlly_HOLD_checkbox: {"H1": false, "H2": false, "H3": false, "H4": false, "H5": false, "H6": false, "H7": false, "H8": false, "H9": false, "H10": false},
+    TAlly_HOLD_previous_QTT: {"H1": "0", "H2": "0", "H3": "0", "H4": "0", "H5": "0", "H6": "0", "H7": "0", "H8": "0", "H9": "0", "H10": "0"},
+    TAlly_HOLD_previous_TONS: {"H1": "0", "H2": "0", "H3": "0", "H4": "0", "H5": "0", "H6": "0", "H7": "0", "H8": "0", "H9": "0", "H10": "0"}, 
+    TAlly_HOLD_maxi_TONS: {"H1": "0", "H2": "0", "H3": "0", "H4": "0", "H5": "0", "H6": "0", "H7": "0", "H8": "0", "H9": "0", "H10": "0"},
 
-    loaded_HOLD_checkbox_state_status: false,
-    loaded_HOLD_previous_QTT_status: false,
-    loaded_HOLD_previous_TONS_status: false,
-    loaded_HOLD_maxi_TONS_status: false,
+    loaded_TAlly_HOLD_checkbox_status: false,
+    loaded_TAlly_HOLD_previous_QTT_status: false,
+    loaded_TAlly_HOLD_previous_TONS_status: false,
+    loaded_TAlly_HOLD_maxi_TONS_status: false,
 
-    saved_HOLD_checkbox_state_status: false,
-    saved_HOLD_previous_QTT_status: false,
-    saved_HOLD_previous_TONS_status: false,
-    saved_HOLD_maxi_TONS_status: false,
+    saved_TAlly_HOLD_checkbox_status: false,
+    saved_TAlly_HOLD_previous_QTT_status: false,
+    saved_TAlly_HOLD_previous_TONS_status: false,
+    saved_TAlly_HOLD_maxi_TONS_status: false,
 
     loaded_tally_status: false,
     saved_tally_status: true,
@@ -103,8 +112,8 @@ export const dataReducer: Reducer<Interface_stepe_state> = (state = initial_step
             case DataAction.CHANGE_CHECKBOX_STATE:
                 return {
                     ...state,
-                    HOLD_checkbox_state: {
-                        ...state.HOLD_checkbox_state,
+                    TAlly_HOLD_checkbox: {
+                        ...state.TAlly_HOLD_checkbox,
                         ...action.payload,
                         // [action.payload.destination]: action.payload.value
                     },
@@ -114,8 +123,8 @@ export const dataReducer: Reducer<Interface_stepe_state> = (state = initial_step
             case DataAction.CHANGE_PREVIOUS_QTT:
                 return {
                     ...state,
-                    HOLD_previous_QTT: {
-                        ...state.HOLD_previous_QTT,
+                    TAlly_HOLD_previous_QTT: {
+                        ...state.TAlly_HOLD_previous_QTT,
                         [action.payload.destination]: action.payload.value
                         // ...action.payload,
                     },
@@ -123,8 +132,8 @@ export const dataReducer: Reducer<Interface_stepe_state> = (state = initial_step
             case DataAction.CHANGE_PREVIOUS_TONS:
                 return {
                     ...state,
-                    HOLD_previous_TONS: {
-                        ...state.HOLD_previous_TONS,
+                    TAlly_HOLD_previous_TONS: {
+                        ...state.TAlly_HOLD_previous_TONS,
                         [action.payload.destination]: action.payload.value
                         // ...action.payload,
                     },
@@ -132,8 +141,8 @@ export const dataReducer: Reducer<Interface_stepe_state> = (state = initial_step
             case DataAction.CHANGE_MAXI_TONS:
                 return {
                     ...state,
-                    HOLD_maxi_TONS: {
-                        ...state.HOLD_maxi_TONS,
+                    TAlly_HOLD_maxi_TONS: {
+                        ...state.TAlly_HOLD_maxi_TONS,
                         [action.payload.destination]: action.payload.value
                         // ...action.payload,
                     },
@@ -159,6 +168,7 @@ export const dataReducer: Reducer<Interface_stepe_state> = (state = initial_step
                     ...state,
                     pickerColors: action.payload,
                 }
+//**************************************************************************************************** */
             case DataAction.SAVE_CATALOG:
                 if(state.saved_catalog_status) return state;
                 // console.log("saving catalog...");
@@ -167,37 +177,47 @@ export const dataReducer: Reducer<Interface_stepe_state> = (state = initial_step
                     ...state,
                     saved_catalog_status: false
                 }
-            case DataAction.SAVE_CHECKBOX_STATE:
-                // if(state.saved_HOLD_checkbox_state_status) return state;
-                window.localStorage.setItem("local_checkbox", JSON.stringify(state.HOLD_checkbox_state));
-                state.saved_HOLD_checkbox_state_status = true;
+//**************************************************************************************************** */
+            case DataAction.SAVE_TALLY:
+                if(state.saved_tally_status) return state;
+                // console.log("saving catalog...");
+                window.localStorage.setItem("tally", JSON.stringify(state.tally_data_state));
                 return {
                     ...state,
-                    saved_HOLD_checkbox_state_status: false
+                    saved_catalog_status: false
+                }
+//****************************************************************************************************
+            case DataAction.SAVE_CHECKBOX_STATE:
+                // if(state.saved_TAlly_HOLD_checkbox_status) return state;
+                window.localStorage.setItem("local_checkbox", JSON.stringify(state.TAlly_HOLD_checkbox));
+                state.saved_TAlly_HOLD_checkbox_status = true;
+                return {
+                    ...state,
+                    saved_TAlly_HOLD_checkbox_status: false
                 };
             case DataAction.SAVE_PREV_QTT:
-                // if(state.saved_HOLD_previous_QTT_status) return state;
-                state.saved_HOLD_previous_QTT_status = true;
-                window.localStorage.setItem("local_punit", JSON.stringify(state.HOLD_previous_QTT));
+                // if(state.saved_TAlly_HOLD_previous_QTT_status) return state;
+                state.saved_TAlly_HOLD_previous_QTT_status = true;
+                window.localStorage.setItem("local_punit", JSON.stringify(state.TAlly_HOLD_previous_QTT));
                 return {
                     ...state,
-                    saved_HOLD_previous_QTT_status: false
+                    saved_TAlly_HOLD_previous_QTT_status: false
                 };
             case DataAction.SAVE_PREV_TONS:
-                // if(state.saved_HOLD_previous_TONS_status) return state;
-                state.saved_HOLD_previous_TONS_status = true;
-                window.localStorage.setItem("local_pkilos", JSON.stringify(state.HOLD_previous_TONS));
+                // if(state.saved_TAlly_HOLD_previous_TONS_status) return state;
+                state.saved_TAlly_HOLD_previous_TONS_status = true;
+                window.localStorage.setItem("local_pkilos", JSON.stringify(state.TAlly_HOLD_previous_TONS));
                 return {
                     ...state,
-                    saved_HOLD_previous_TONS_status: false
+                    saved_TAlly_HOLD_previous_TONS_status: false
                 };
             case DataAction.SAVE_MAXI_TONS:
-                // if(state.saved_HOLD_maxi_TONS_status) return state;
-                state.saved_HOLD_maxi_TONS_status = true;
-                window.localStorage.setItem("local_maxi", JSON.stringify(state.HOLD_maxi_TONS));
+                // if(state.saved_TAlly_HOLD_maxi_TONS_status) return state;
+                state.saved_TAlly_HOLD_maxi_TONS_status = true;
+                window.localStorage.setItem("local_maxi", JSON.stringify(state.TAlly_HOLD_maxi_TONS));
                 return {
                     ...state,
-                    saved_HOLD_maxi_TONS_status: false
+                    saved_TAlly_HOLD_maxi_TONS_status: false
                 };
 
             case DataAction.LOAD_CATALOG:
@@ -207,25 +227,34 @@ export const dataReducer: Reducer<Interface_stepe_state> = (state = initial_step
                     loaded_catalog_status: true,
                     saved_catalog_status: true,
                 }
+//****************************************************************************************************
+            case DataAction.LOAD_TALLY:
+                return {
+                    ...state,
+                    catalog_data_state: action.payload,
+                    loaded_tally_status: true,
+                    saved_tally_status: true,
+                }
+//****************************************************************************************************
             case DataAction.LOAD_CHECKBOX_STATE:
                 return {
                     ...state,
-                    HOLD_checkbox_state: action.payload,
+                    TAlly_HOLD_checkbox: action.payload,
                 };
                 case DataAction.LOAD_PREV_QTT:
                     return {
                         ...state,
-                        HOLD_previous_QTT: action.payload,
+                        TAlly_HOLD_previous_QTT: action.payload,
                     };
             case DataAction.LOAD_PREV_TONS:
                 return {
                     ...state,
-                    HOLD_previous_TONS: action.payload,
+                    TAlly_HOLD_previous_TONS: action.payload,
                 };
             case DataAction.LOAD_MAXI_TONS:
                 return {
                     ...state,
-                    HOLD_maxi_TONS: action.payload,
+                    TAlly_HOLD_maxi_TONS: action.payload,
                 }
             case DataAction.CLEAR:
                 return {

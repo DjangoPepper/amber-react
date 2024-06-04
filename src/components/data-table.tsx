@@ -18,7 +18,7 @@ import {utils, writeFile } from "xlsx";
 import {Button, Modal, Form, Table as TableRS} from "react-bootstrap";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../stores/rootStore";
-import {export_stepe_Data} from "../stores/dataS/DataReducer";
+import {export_stepe_catalog_Data} from "../stores/dataS/DataReducer";
 import DebouncedInput from "./debounceInput";
 import DataAction from "../stores/dataS/DataAction";
 import {colors, affectation, HEADER} from "../utils/destination";
@@ -55,7 +55,7 @@ declare module '@tanstack/react-table' {
     }
 }
 
-const columnHelper = createColumnHelper<export_stepe_Data>();
+const columnHelper = createColumnHelper<export_stepe_catalog_Data>();
 
 const EditableCell = ({ getValue, row, column, table }: any) => {
     const initialValue = getValue()
@@ -79,7 +79,7 @@ const EditableCell = ({ getValue, row, column, table }: any) => {
     )
 };
 
-const globalFilterFn: FilterFn<export_stepe_Data> = (row, columnId, filterValue: string) => {
+const globalFilterFn: FilterFn<export_stepe_catalog_Data> = (row, columnId, filterValue: string) => {
     const search = filterValue.toLowerCase();
 
     let value = row.getValue(columnId) as string;
@@ -189,7 +189,7 @@ export default function DataTable() {
     const [sorting, setSorting] = React.useState<SortingState>([]);
     const [globalFilter, setGlobalFilter] = React.useState('')
     const cale = useSelector<RootState, string>(state => state.data.selectedCale);
-    const data = useSelector<RootState, export_stepe_Data[]>(state => state.data.catalog_data_state);
+    const data = useSelector<RootState, export_stepe_catalog_Data[]>(state => state.data.catalog_data_state);
     const columns = useColumns();
     
     const table = useReactTable({
@@ -224,7 +224,7 @@ export default function DataTable() {
     const exportData = () => {
         const aoa: any[][] = [HEADER.map(h => h.name)];
         for (const row of data) {
-            aoa.push(HEADER.map(h => row[h.key as keyof export_stepe_Data]));
+            aoa.push(HEADER.map(h => row[h.key as keyof export_stepe_catalog_Data]));
         }
         const sheet = utils.aoa_to_sheet(aoa)
         const wb = utils.book_new();
