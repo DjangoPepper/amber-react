@@ -20,10 +20,10 @@ interface DataState {
     saved_catalog_status: boolean;
     pickerColors: { [key: string]: string };
     
-    HOLD_checkbox_state: { [destination:  string]: boolean };
-    HOLD_previous_QTT:   { [destinbation: string]: string };
-    HOLD_previous_TONS:  { [destinbation: string]: string };
-    HOLD_maxi_TONS:      { [destinbation: string]: string };
+    HOLD_checkbox_state: { [destination: string]: boolean };
+    HOLD_previous_QTT:   { [destination: string]: string };
+    HOLD_previous_TONS:  { [destination: string]: string };
+    HOLD_maxi_TONS:      { [destination: string]: string };
     
     loaded_HOLD_checkbox_state_status: boolean;
     loaded_HOLD_previous_QTT_status: boolean;
@@ -123,8 +123,8 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
                     ...state,
                     HOLD_previous_TONS: {
                         ...state.HOLD_previous_TONS,
-                        // [action.payload.destination]: action.payload.value
-                        ...action.payload,
+                        [action.payload.destination]: action.payload.value
+                        // ...action.payload,
                     },
                 };
             case DataAction.CHANGE_MAXI_TONS:
@@ -132,8 +132,8 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
                     ...state,
                     HOLD_maxi_TONS: {
                         ...state.HOLD_maxi_TONS,
-                        // [action.payload.destination]: action.payload.value
-                        ...action.payload,
+                        [action.payload.destination]: action.payload.value
+                        // ...action.payload,
                     },
                 };
             case DataAction.CHANGE_CALE:
@@ -183,6 +183,7 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
                 };
             case DataAction.SAVE_PREV_TONS:
                 // if(state.saved_HOLD_previous_TONS_status) return state;
+                state.saved_HOLD_previous_TONS_status = true;
                 window.localStorage.setItem("local_pkilos", JSON.stringify(state.HOLD_previous_TONS));
                 return {
                     ...state,
@@ -190,6 +191,7 @@ export const dataReducer: Reducer<DataState> = (state = initialState, action: An
                 };
             case DataAction.SAVE_MAXI_TONS:
                 // if(state.saved_HOLD_maxi_TONS_status) return state;
+                state.saved_HOLD_maxi_TONS_status = true;
                 window.localStorage.setItem("local_maxi", JSON.stringify(state.HOLD_maxi_TONS));
                 return {
                     ...state,

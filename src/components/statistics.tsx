@@ -53,14 +53,16 @@ export default function Statistics() {
 		set_checkbox_Hold_State(updatedCheckboxState);
 		// dispatch(DataAction.change_checkbox_state ( true ));
 		dispatch(DataAction.change_checkbox_state({ [k]: updatedCheckboxState[k] }));
+		dispatch(DataAction.save_checkbox_state());
 		};
 	
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-const handle_checkBOX_Change = (destination: string, value: boolean) => {
-	dispatch(DataAction.change_checkbox_state({ [destination]: value }));
-	};
+// const handle_checkBOX_Change = (destination: string, value: boolean) => {
+// 	dispatch(DataAction.change_checkbox_state({ [destination]: value }));
+// 	dispatch(DataAction.save_checkbox_state());
+// 	};
 	
 	const handle_prevQT_VALUE_Change = (destination: string, value: string) => {
 		set_previous_Value_QT((previous_Value_QT) => ({
@@ -70,7 +72,10 @@ const handle_checkBOX_Change = (destination: string, value: boolean) => {
 			},
 		}));
 		// let numericValue = parseFloat(value) || 0;
-		dispatch(DataAction.changePreviousQTT({ destination: destination, value: value }));
+		// dispatch(DataAction.changePreviousQTT({ destination: destination, value: value }));
+		dispatch(DataAction.changePreviousQTT({ destination, value }));
+		dispatch(DataAction.save_previous_qtt());
+
 		};
 
 	const handle_PrevTO_VALUE_Change = (destination: string, value: string) => {
@@ -81,7 +86,9 @@ const handle_checkBOX_Change = (destination: string, value: boolean) => {
 			},
 		}));
 		// let numericValue = parseFloat(value) || 0;
-		dispatch(DataAction.changePreviousTONS({ destination: destination, value: value }));
+		// dispatch(DataAction.changePreviousTONS({ destination: destination, value: value }));
+		dispatch(DataAction.changePreviousTONS({ destination, value }));
+		dispatch(DataAction.save_previous_tons());
 		};
 
 
@@ -92,7 +99,9 @@ const handle_checkBOX_Change = (destination: string, value: boolean) => {
 				[destination]: { maxi_To: value },
 			}));
 			// const numericValue = parseFloat(value) || 0;
-			dispatch(DataAction.changeMaxiTONS({ destination: destination, value}));
+			// dispatch(DataAction.changeMaxiTONS({ destination: destination, value}));
+			dispatch(DataAction.changeMaxiTONS({ destination, value}));
+			dispatch(DataAction.save_maxi_tons());
 				};
 		
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
