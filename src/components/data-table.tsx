@@ -158,7 +158,24 @@ const row = {
             header: () => 'PREPA',
             cell: EditableCell,
             filterFn: fuzzyFilter,
-            }),
+        }),
+// /* // #####################################################################################################################
+//         columnHelper.accessor('reference', {
+//             header: 'REF',
+//             cell: ({row}: any) =>
+                
+//                 <Button 
+//                     onClick={() => {
+//                     dispatch(DataAction.moveRow(row.original.reference)); //je change la detination de ref cale1,cale2, etc..
+//                     }}
+//                 >
+//                     {SpaceatPos(row.original.reference)}
+//                 </Button>,
+                
+//             filterFn: fuzzyFilter,
+
+//         }),
+// ##################################################################################################################### */
         columnHelper.accessor('reference', {
             header: 'REF',
             cell: ({ row }: any) => (
@@ -166,22 +183,22 @@ const row = {
                     <Button onClick={() => {
                         toast(<Msg2 closeToast={closeToast} row2={row.original.reference} />,
                         { position: toast.POSITION.TOP_RIGHT, autoClose: 3000 });
-                        }}> {SpaceatPos(row.original.reference)}
-                    </Button>
-                </div>
-                ),
+                }}>{SpaceatPos(row.original.reference)}
+            </Button>
+            </div>
+            ),
             filterFn: fuzzyFilter,
-            }),
-
+        }),
+// ##################################################################################################################### */
         columnHelper.accessor('weight', {
             header: "POIDS",
             cell: info => info.getValue(),
             filterFn: fuzzyFilter,
-            }),
+        }),
         columnHelper.accessor('destination', {
             header: 'DEST',
             filterFn: fuzzyFilter,
-            })
+        })
     ];
 
     return columns;
