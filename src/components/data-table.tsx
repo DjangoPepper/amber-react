@@ -111,8 +111,15 @@ const dispatch = useDispatch();
 const closeToast = () => {
     // Code pour fermer le toast
 };
+const Msg2 = ({closedToast}:any) => (
+    <div>
+        Lorem ipsum dolor
+        <button>Retry</button>
+        <button onClick={closeToast}>Close</button>
+    </div>
+    )
 
-// const handleButtonClick = (reference: string) => {
+    // const handleButtonClick = (reference: string) => {
 //     toast(({ closeToast }) => (
 //         <Msg
 //             closeToast={closeToast}
@@ -164,10 +171,14 @@ const closeToast = () => {
                 //     {SpaceatPos(row.original.reference)}
                 // </Button>
                 <div>
-                <Button onClick={() => { dispatch(DataAction.moveRow(row.original.reference)); }}>
-                    {SpaceatPos(row.original.reference)}
-                </Button>
-                <Msg closeToast={closeToast} row={row} />
+                    
+                    {/* <button onClick={() => toast(<Msg />)}>{SpaceatPos(row.original.reference)}</button> */}
+                    <Button onClick={() =>  toast(<Msg closeToast={closeToast} row={row.original.reference}></Msg>)}>{SpaceatPos(row.original.reference)}</Button>
+                    {/* <button onClick={() => toast(<Msg2 />)}>Hello 😀</button> */}
+                    {/* <Button onClick={() => { toast(<closeToast />); }}>{SpaceatPos(row.original.reference)}</Button> */}
+                    {/* <Msg closeToast={closeToast} row={row} /> */}
+                    {/* <Button onClick={() => { dispatch(DataAction.moveRow(row.original.reference)); }}>{SpaceatPos(row.original.reference)} </Button> */}
+                    {/* <Msg closeToast={closeToast} row={row} /> */}
             </div>
             ),
             filterFn: fuzzyFilter,
