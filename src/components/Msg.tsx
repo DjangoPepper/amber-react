@@ -23,13 +23,14 @@ const Msg: React.FC<MsgProps> = ({ closeToast, row }) => {
 
     return (
         <div>
-            {/* VERIFICATION
+            VERIFICATION
             <Button onClick={() => { dispatch(DataAction.moveRow(row.original.reference)); }}>
                 {SpaceatPos(row.original.reference)}
             </Button>
-            <button onClick={closeToast}>INVALIDE</button> */}
+            <button onClick={closeToast}>INVALIDE</button>
             VERIFICATION
-            <Button onClick={() => { dispatch(DataAction.moveRow(row.original.reference)); }}>{SpaceatPos(row.original.reference)}
+            <Button onClick={() => { dispatch(DataAction.moveRow(row.original.reference)); }}>
+                {SpaceatPos(row.original.reference)}
             </Button>
             <button onClick={closeToast}>INVALIDE</button>
         </div>
