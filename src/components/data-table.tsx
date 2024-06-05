@@ -26,7 +26,7 @@ import Filter, {fuzzyFilter} from "./filter";
 import './index-tanstack.css'
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+import Msg2 from "./Msg2";
 
 //FRED ****************************************************************
 import SpaceatPos from "./SpaceatPos";
@@ -108,32 +108,44 @@ const useColumns = function useColumns(): any[] {
 
 const dispatch = useDispatch();
 //FRED
-const closeToast = () => {
+/* const closeToast = () => {
     // Code pour fermer le toast
-};
-const Msg2 = ({closedToast}:any) => (
-    <div>
-        Lorem ipsum dolor
-        <button>Retry</button>
-        <button onClick={closeToast}>Close</button>
-    </div>
-    )
+}; */
 
-    // const handleButtonClick = (reference: string) => {
-//     toast(({ closeToast }) => (
-//         <Msg
-//             closeToast={closeToast}
-//             onValidate={() => {
-//                 dispatch(DataAction.moveRow(reference));
-//                 // closeToast();
-//                 if (closeToast) {
-//                     closeToast();
-//                 }
+const closeToast = () => {
+    toast.dismiss();
+};
+const row = {
+    original: {
+        reference: 123 // Assurez-vous que cela correspond à la structure de vos données
+    }
+};
+
+/* const Msg2 = ({closedToast,row2}:any) => (
+    <div>
+        {SpaceatPos(row2)}
+        <Button onClick={dispatch(DataAction.moveRow(row2))}>{SpaceatPos(row2)}</Button>
+        <Button onClick={closeToast}>Close</Button>
+    </div>
+    ) */
+
+/* const handleButtonClick = (reference: string) => {
+    toast(({ closeToast }) => (
+        <Msg
+            closeToast={closeToast}
+            onValidate={() => {
+                dispatch(DataAction.moveRow(reference));
+                // closeToast();
+                if (closeToast) {
+                    closeToast();
+                }
                 
-//             }}
-//         />
-//     ));
-// };
+            }}
+        />
+    ));
+}; */
+
+
 //FRED
 
 
@@ -146,53 +158,30 @@ const Msg2 = ({closedToast}:any) => (
             header: () => 'PREPA',
             cell: EditableCell,
             filterFn: fuzzyFilter,
-        }),
-// /* // #####################################################################################################################
-//         columnHelper.accessor('reference', {
-//             header: 'REF',
-//             cell: ({row}: any) =>
-                
-//                 <Button 
-//                     onClick={() => {
-//                     dispatch(DataAction.moveRow(row.original.reference)); //je change la detination de ref cale1,cale2, etc..
-//                     }}
-//                 >
-//                     {SpaceatPos(row.original.reference)}
-//                 </Button>,
-                
-//             filterFn: fuzzyFilter,
-
-//         }),
-// ##################################################################################################################### */
+            }),
         columnHelper.accessor('reference', {
             header: 'REF',
             cell: ({ row }: any) => (
-                // <Button onClick={() => closeToast()}>
-                //     {SpaceatPos(row.original.reference)}
-                // </Button>
                 <div>
-                    
-                    {/* <button onClick={() => toast(<Msg />)}>{SpaceatPos(row.original.reference)}</button> */}
-                    <Button onClick={() =>  toast(<Msg closeToast={closeToast} row={row.original.reference}></Msg>)}>{SpaceatPos(row.original.reference)}</Button>
-                    {/* <button onClick={() => toast(<Msg2 />)}>Hello 😀</button> */}
-                    {/* <Button onClick={() => { toast(<closeToast />); }}>{SpaceatPos(row.original.reference)}</Button> */}
-                    {/* <Msg closeToast={closeToast} row={row} /> */}
-                    {/* <Button onClick={() => { dispatch(DataAction.moveRow(row.original.reference)); }}>{SpaceatPos(row.original.reference)} </Button> */}
-                    {/* <Msg closeToast={closeToast} row={row} /> */}
-            </div>
-            ),
+                    <Button onClick={() => {
+                        toast(<Msg2 closeToast={closeToast} row2={row.original.reference} />,
+                        { position: toast.POSITION.TOP_RIGHT, autoClose: 3000 });
+                        }}> {SpaceatPos(row.original.reference)}
+                    </Button>
+                </div>
+                ),
             filterFn: fuzzyFilter,
-        }),
-// ##################################################################################################################### */
+            }),
+
         columnHelper.accessor('weight', {
             header: "POIDS",
             cell: info => info.getValue(),
             filterFn: fuzzyFilter,
-        }),
+            }),
         columnHelper.accessor('destination', {
             header: 'DEST',
             filterFn: fuzzyFilter,
-        })
+            })
     ];
 
     return columns;

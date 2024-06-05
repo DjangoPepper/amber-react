@@ -24,15 +24,10 @@ const Msg: React.FC<MsgProps> = ({ closeToast, row }) => {
     return (
         <div>
             VERIFICATION
-            <Button onClick={() => { dispatch(DataAction.moveRow(row.original.reference)); }}>
-                {SpaceatPos(row.original.reference)}
-            </Button>
-            <button onClick={closeToast}>INVALIDE</button>
-            VERIFICATION
-            <Button onClick={() => { dispatch(DataAction.moveRow(row.original.reference)); }}>
-                {SpaceatPos(row.original.reference)}
-            </Button>
-            <button onClick={closeToast}>INVALIDE</button>
+            <Button onClick={() => { dispatch(DataAction.moveRow(row.original.reference)); }}> {SpaceatPos(row.original.reference)} </Button>           
+            <button onClick={closeToast}>INVALIDE</button> VERIFICATION.... : 
+            {/* <Button onClick={() => { dispatch(DataAction.moveRow(row.original.reference)); }}> {SpaceatPos(row.original.reference)} </Button>
+            <button onClick={closeToast}>INVALIDE</button> */}
         </div>
     );
 };
