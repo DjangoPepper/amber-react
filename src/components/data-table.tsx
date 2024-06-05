@@ -18,23 +18,32 @@ import {utils, writeFile } from "xlsx";
 import {Button, Modal, Form, Table as TableRS} from "react-bootstrap";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../stores/rootStore";
-import {stepe_Data} from "../stores/dataS/DataReducer";
+import {export_stepe_catalog_Data} from "../stores/dataS/DataReducer";
 import DebouncedInput from "./debounceInput";
 import DataAction from "../stores/dataS/DataAction";
 import {colors, affectation, HEADER} from "../utils/destination";
 import Filter, {fuzzyFilter} from "./filter";
 import './index-tanstack.css'
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 
 //FRED ****************************************************************
 import SpaceatPos from "./SpaceatPos";
-import * as fs from 'fs'
-import * as path from 'path'
+// import * as fs from 'fs'
+// import * as path from 'path'
+// import { AnyAction } from "redux";
+interface MsgProps {
+    closeToast: () => void;
+}
+
+
 
 const monthNames = [
     'jan', 'fev', 'mar', 'avr', 'mai', 'juin',
     'juil', 'aou', 'sep', 'oct', 'nov', 'dec'
     ];
+
 
 function backupCurrentDateTime(): string {
     const now = new Date();
@@ -47,15 +56,17 @@ function backupCurrentDateTime(): string {
     const minute = String(now.getMinutes()).padStart(2, '0');
 
     return `Stepe ${month}${day}_${hour}${minute}.xlsx`;
-}
+    }
 
-declare module '@tanstack/react-table' {
+
+    declare module '@tanstack/react-table' {
     interface TableMeta<TData extends RowData> {
         updateData: (reference: number, columnId: string, value: unknown) => void
+        }
     }
-}
 
-const columnHelper = createColumnHelper<stepe_Data>();
+
+const columnHelper = createColumnHelper<export_stepe_catalog_Data>();
 
 const EditableCell = ({ getValue, row, column, table }: any) => {
     const initialValue = getValue()
@@ -77,18 +88,32 @@ const EditableCell = ({ getValue, row, column, table }: any) => {
             // largeur prepa box
         />
     )
-};
+    };
 
-const globalFilterFn: FilterFn<stepe_Data> = (row, columnId, filterValue: string) => {
+const globalFilterFn: FilterFn<export_stepe_catalog_Data> = (row, columnId, filterValue: string) => {
     const search = filterValue.toLowerCase();
 
     let value = row.getValue(columnId) as string;
     if (typeof value === 'number') value = String(value);
 
     return value?.toLowerCase().includes(search);
-};
+    };
 
 const useColumns = function useColumns(): any[] {
+    //FRED
+    // const Msg: React.FC<MsgProps> = ({ closeToast }) => (
+    //     <div>
+    //         VERIFICATION
+    //         {/* <button> VALIDE</button> */}
+    //         <Button onClick={() => { dispatch(DataAction.moveRow(row.original.reference));
+    //                 }}
+    //             >
+    //                 {SpaceatPos(row.original.reference)}
+    //             </Button>,
+    //         <button onClick={closeToast}>INVALIDE</button>
+    //     </div>
+    // );
+    //FRED
     const dispatch = useDispatch();
 
     const columns = [
@@ -101,22 +126,53 @@ const useColumns = function useColumns(): any[] {
             cell: EditableCell,
             filterFn: fuzzyFilter,
         }),
-// #####################################################################################################################
-        columnHelper.accessor('reference', {
-            header: 'REF',
-            cell: ({row}: any) =>
-                <Button 
-                    onClick={() => {
-                    dispatch(DataAction.moveRow(row.original.reference)); //je change la detination de ref cale1,cale2, etc..
-                    }}
-                >
-                    {SpaceatPos(row.original.reference)}
-                </Button>,
-            filterFn: fuzzyFilter,
+// /* // #####################################################################################################################
+//         columnHelper.accessor('reference', {
+//             header: 'REF',
+//             cell: ({row}: any) =>
+                
+//                 <Button 
+//                     onClick={() => {
+//                     dispatch(DataAction.moveRow(row.original.reference)); //je change la detination de ref cale1,cale2, etc..
+//                     }}
+//                 >
+//                     {SpaceatPos(row.original.reference)}
+//                 </Button>,
+                
+//             filterFn: fuzzyFilter,
 
-        }),
+//         }),
+// // ##################################################################################################################### */
 // #####################################################################################################################
+    columnHelper.accessor('reference', {
+        header: 'REF',
+        cell: ({row}: any) =>
+            
+            <Button 
+                onClick={() => {
+                dispatch(DataAction.moveRow(row.original.reference)); //je change la detination de ref cale1,cale2, etc..
+                }}
+            >
+                {SpaceatPos(row.original.reference)}
+            </Button>,
 
+            //FRED
+            // const Msg: React.FC<MsgProps> = ({ closeToast }) => (
+            // <div>
+            //     VERIFICATION
+            //     <button> VALIDE</button>
+            //     <Button onClick={() => { dispatch(DataAction.moveRow(row.original.reference));}}
+            //         >
+            //             {SpaceatPos(row.original.reference)}
+            //         </Button>,
+            //     <button onClick={closeToast}>INVALIDE</button>
+            // </div>
+            // );
+            //FRED    
+        filterFn: fuzzyFilter,
+
+    }),
+// #####################################################################################################################
         columnHelper.accessor('weight', {
             header: "POIDS",
             cell: info => info.getValue(),
@@ -144,8 +200,8 @@ export default function DataTable() {
     const [newColor, setNewColor] = useState<string>('');
     
     // Accédez à la valeur sélectionnée depuis l'état Redux
-    const selectedCale = useSelector<RootState, string>((state) => state.data.selectedCale);
-    const selectedColors = useSelector<RootState, { [key: string]: string }>((state) => state.data.pickerColors);
+    const selectedCale = useSelector<RootState, string>((state) => state.dataSS.selectedCale);
+    const selectedColors = useSelector<RootState, { [key: string]: string }>((state) => state.dataSS.pickerColors);
     const setSelectedColors = (colors: { [key: string]: string }) => {
         dispatch(DataAction.changePickColors(colors));
     }
@@ -188,8 +244,8 @@ export default function DataTable() {
 
     const [sorting, setSorting] = React.useState<SortingState>([]);
     const [globalFilter, setGlobalFilter] = React.useState('')
-    const cale = useSelector<RootState, string>(state => state.data.selectedCale);
-    const data = useSelector<RootState, stepe_Data[]>(state => state.data.catalog_data_state);
+    const cale = useSelector<RootState, string>(state => state.dataSS.selectedCale);
+    const data = useSelector<RootState, export_stepe_catalog_Data[]>(state => state.dataSS.catalog_data_state);
     const columns = useColumns();
     
     const table = useReactTable({
@@ -224,7 +280,7 @@ export default function DataTable() {
     const exportData = () => {
         const aoa: any[][] = [HEADER.map(h => h.name)];
         for (const row of data) {
-            aoa.push(HEADER.map(h => row[h.key as keyof stepe_Data]));
+            aoa.push(HEADER.map(h => row[h.key as keyof export_stepe_catalog_Data]));
         }
         const sheet = utils.aoa_to_sheet(aoa)
         const wb = utils.book_new();
@@ -477,6 +533,7 @@ export default function DataTable() {
                 </Button>
             </Modal.Footer>
             </Modal>
+            <ToastContainer />
         </>
     );
 }

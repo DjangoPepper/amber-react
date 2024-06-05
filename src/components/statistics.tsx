@@ -2,7 +2,7 @@ import { useSelector, useDispatch} from "react-redux";
 import { RootState } from "../stores/rootStore";
 import DataAction from "../stores/dataS/DataAction";
 
-import { stepe_Data } from "../stores/dataS/DataReducer";
+import { export_stepe_catalog_Data } from "../stores/dataS/DataReducer";
 import { Table } from "react-bootstrap";
 import React, { useState, useEffect } from 'react';
 import { affectation} from "../utils/destination";
@@ -34,7 +34,7 @@ export default function Statistics() {
 	const [previous_Value_TO, set_previous_Value_TO] = useState<{ [key: string]: { prevTO_VALUE: string } }>({});
 	const [maxi_Value_TO, set_maxi_Values] 			 = useState<{ [key: string]: { maxi_To: string      } }>({});
 
-	const selectedColors = useSelector<RootState, { [key: string]: string }>((state) => state.data.pickerColors);
+	const selectedColors = useSelector<RootState, { [key: string]: string }>((state) => state.dataSS.pickerColors);
 
 	const Toggle_checkbox_boolean = (k: string) => {
 
@@ -43,24 +43,39 @@ export default function Statistics() {
 	
 		// Vérifiez si la destination k est déjà dans l'état des cases à cocher
 		if (updatedCheckboxState[k] !== undefined) {
-		  // Si oui, basculez simplement la valeur (true devient false, false devient true)
-			updatedCheckboxState[k] = !updatedCheckboxState[k];
-		} else {
+			//si prevqtt,prevtons, maxitons non vide & updatedCheckboxState[k] = false alors updatedCheckboxState[k] = true
+			if ((Number(previous_Value_QT[k].prevQT_VALUE) > 0 || 
+				Number(previous_Value_TO[k].prevTO_VALUE) > 0 || 
+				Number(maxi_Value_TO[k].maxi_To) > 0 ))
+				//  && updatedCheckboxState[k] === false) 
+				{
+					updatedCheckboxState[k] = true;
+					toast.error("Ligne tally pleine", { position: toast.POSITION.TOP_RIGHT,autoClose: 1500 })
+					// 160,3: 		toast.error('init Tally', { position: toast.POSITION.TOP_LEFT, autoClose: 500 });
+				} else {
+					// Si oui, basculez simplement la valeur (true devient false, false devient true)
+					updatedCheckboxState[k] = !updatedCheckboxState[k];
 		  // Si la destination n'est pas dans l'état, ajoutez-la et définissez-la comme cochée (true)
-			updatedCheckboxState[k] = true;
-		}
+			// updatedCheckboxState[k] = true;
+				}
 		// Mettez à jour l'état des cases à cocher avec la nouvelle valeur
 		set_checkbox_Hold_State(updatedCheckboxState);
-		// dispatch(DataAction.change_checkbox_state ( true ));
 		dispatch(DataAction.change_checkbox_state({ [k]: updatedCheckboxState[k] }));
-		};
-	
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-const handle_checkBOX_Change = (destination: string, value: boolean) => {
-	dispatch(DataAction.change_checkbox_state({ [destination]: value }));
+		dispatch(DataAction.save_checkbox_state());
+		} else {
+			updatedCheckboxState[k] = true;
+			set_checkbox_Hold_State(updatedCheckboxState);
+			dispatch(DataAction.change_checkbox_state({ [k]: updatedCheckboxState[k] }));
+			dispatch(DataAction.save_checkbox_state());
+		}
 	};
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// const handle_checkBOX_Change = (destination: string, value: boolean) => {
+// 	dispatch(DataAction.change_checkbox_state({ [destination]: value }));
+// 	dispatch(DataAction.save_checkbox_state());
+// 	};
 	
 	const handle_prevQT_VALUE_Change = (destination: string, value: string) => {
 		set_previous_Value_QT((previous_Value_QT) => ({
@@ -70,7 +85,10 @@ const handle_checkBOX_Change = (destination: string, value: boolean) => {
 			},
 		}));
 		// let numericValue = parseFloat(value) || 0;
-		dispatch(DataAction.changePreviousQTT({ destination: destination, value: value }));
+		// dispatch(DataAction.change_previous_qtt({ destination: destination, value: value }));
+		dispatch(DataAction.change_previous_qtt({ destination, value }));
+		dispatch(DataAction.save_previous_qtt());
+
 		};
 
 	const handle_PrevTO_VALUE_Change = (destination: string, value: string) => {
@@ -81,18 +99,22 @@ const handle_checkBOX_Change = (destination: string, value: boolean) => {
 			},
 		}));
 		// let numericValue = parseFloat(value) || 0;
-		dispatch(DataAction.changePreviousTONS({ destination: destination, value: value }));
+		// dispatch(DataAction.change_previous_tons({ destination: destination, value: value }));
+		dispatch(DataAction.change_previous_tons({ destination, value }));
+		dispatch(DataAction.save_previous_tons());
 		};
 
 
-	const handle_maxiTO_Change = (destination: string, value: string) => {
-			// handle_maxiTO_Change(affectationItem.name, e.target.value)}
+	const handle_maxiTO_VALUE_Change = (destination: string, value: string) => {
+			// handle_maxiTO_VALUE_Change(affectationItem.name, e.target.value)}
 			set_maxi_Values((maxi_Value_TO: any) => ({
 				...maxi_Value_TO,
 				[destination]: { maxi_To: value },
 			}));
 			// const numericValue = parseFloat(value) || 0;
-			dispatch(DataAction.changeMaxiTONS({ destination: destination, value}));
+			// dispatch(DataAction.change_maxi_tons({ destination: destination, value}));
+			dispatch(DataAction.change_maxi_tons({ destination, value}));
+			dispatch(DataAction.save_maxi_tons());
 				};
 		
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -108,7 +130,7 @@ const handle_checkBOX_Change = (destination: string, value: boolean) => {
 	
 //
 //
-	const catalog_data = useSelector<RootState, stepe_Data[]>((state) => state.data.catalog_data_state);
+	const catalog_data = useSelector<RootState, export_stepe_catalog_Data[]>((state) => state.dataSS.catalog_data_state);
 //	
 
 	const totalPreviousCalesCount = Object.keys(previous_Value_QT).reduce((total, k) => {
@@ -136,7 +158,8 @@ const handle_checkBOX_Change = (destination: string, value: boolean) => {
 	useEffect(() => {
 	if (firstRender) {
 		init_tally();
-		toast.error('init First Render', { position: toast.POSITION.TOP_LEFT, autoClose: 500 });
+		toast.error('init Tally', { position: toast.POSITION.TOP_LEFT, autoClose: 2000 });
+
 	}
 	}, [firstRender]);
 
@@ -445,7 +468,7 @@ const handle_checkBOX_Change = (destination: string, value: boolean) => {
 													type="text"
 													style={{ width: '80px' }}
 													value={maxi_Value_TO[affectationItem.name] ? maxi_Value_TO[affectationItem.name].maxi_To : 0} // Utilisez prevValues[affectationItem.name].prevTo pour la valeur 
-													onChange={(e) => handle_maxiTO_Change(affectationItem.name, e.target.value)}
+													onChange={(e) => handle_maxiTO_VALUE_Change(affectationItem.name, e.target.value)}
 												/>
 											</td>
 

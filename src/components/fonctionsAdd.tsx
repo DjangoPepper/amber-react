@@ -1,12 +1,12 @@
 import {read, utils} from "xlsx";
-import {stepe_Data} from "../stores/dataS/DataReducer";
+import {export_stepe_catalog_Data} from "../stores/dataS/DataReducer";
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import "./fonctionsAdd";
 import { parse } from "path";
 
 
-export function CleanExcelSheet(oSheet: any): stepe_Data {
+export function CleanExcelSheet(oSheet: any): export_stepe_catalog_Data {
 	
 	// Recuperation du range de la feuille
 	let rangeInfo = PowerRanger(oSheet)
@@ -295,7 +295,7 @@ function removeAccents(str: string) {
     return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 }
 
-export function cleanData(values: any): stepe_Data {
+export function cleanData(values: any): export_stepe_catalog_Data {
 	const toUpperCaseKeysValues: any = {};
 	for (const key in values) {
 		const upperCaseKey = key.toUpperCase();
