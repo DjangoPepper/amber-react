@@ -33,11 +33,13 @@ import SpaceatPos from "./SpaceatPos";
 // import * as fs from 'fs'
 // import * as path from 'path'
 // import { AnyAction } from "redux";
-interface MsgProps {
-    closeToast: () => void;
-}
+import Msg from "./Msg"
 
-
+const row = {
+    original: {
+        reference: 133
+    }
+};
 
 const monthNames = [
     'jan', 'fev', 'mar', 'avr', 'mai', 'juin',
@@ -60,10 +62,13 @@ function backupCurrentDateTime(): string {
 
 
     declare module '@tanstack/react-table' {
-    interface TableMeta<TData extends RowData> {
-        updateData: (reference: number, columnId: string, value: unknown) => void
+        interface TableMeta<TData extends RowData> {
+            updateData: (reference: number, columnId: string, value: unknown) => void
+            }
         }
-    }
+
+
+
 
 
 const columnHelper = createColumnHelper<export_stepe_catalog_Data>();
@@ -100,21 +105,30 @@ const globalFilterFn: FilterFn<export_stepe_catalog_Data> = (row, columnId, filt
     };
 
 const useColumns = function useColumns(): any[] {
-    //FRED
-    // const Msg: React.FC<MsgProps> = ({ closeToast }) => (
-    //     <div>
-    //         VERIFICATION
-    //         {/* <button> VALIDE</button> */}
-    //         <Button onClick={() => { dispatch(DataAction.moveRow(row.original.reference));
-    //                 }}
-    //             >
-    //                 {SpaceatPos(row.original.reference)}
-    //             </Button>,
-    //         <button onClick={closeToast}>INVALIDE</button>
-    //     </div>
-    // );
-    //FRED
-    const dispatch = useDispatch();
+
+const dispatch = useDispatch();
+//FRED
+const closeToast = () => {
+    // Code pour fermer le toast
+};
+
+// const handleButtonClick = (reference: string) => {
+//     toast(({ closeToast }) => (
+//         <Msg
+//             closeToast={closeToast}
+//             onValidate={() => {
+//                 dispatch(DataAction.moveRow(reference));
+//                 // closeToast();
+//                 if (closeToast) {
+//                     closeToast();
+//                 }
+                
+//             }}
+//         />
+//     ));
+// };
+//FRED
+
 
     const columns = [
         columnHelper.accessor('rank', {
@@ -142,37 +156,23 @@ const useColumns = function useColumns(): any[] {
 //             filterFn: fuzzyFilter,
 
 //         }),
-// // ##################################################################################################################### */
-// #####################################################################################################################
-    columnHelper.accessor('reference', {
-        header: 'REF',
-        cell: ({row}: any) =>
-            
-            <Button 
-                onClick={() => {
-                dispatch(DataAction.moveRow(row.original.reference)); //je change la detination de ref cale1,cale2, etc..
-                }}
-            >
-                {SpaceatPos(row.original.reference)}
-            </Button>,
-
-            //FRED
-            // const Msg: React.FC<MsgProps> = ({ closeToast }) => (
-            // <div>
-            //     VERIFICATION
-            //     <button> VALIDE</button>
-            //     <Button onClick={() => { dispatch(DataAction.moveRow(row.original.reference));}}
-            //         >
-            //             {SpaceatPos(row.original.reference)}
-            //         </Button>,
-            //     <button onClick={closeToast}>INVALIDE</button>
-            // </div>
-            // );
-            //FRED    
-        filterFn: fuzzyFilter,
-
-    }),
-// #####################################################################################################################
+// ##################################################################################################################### */
+        columnHelper.accessor('reference', {
+            header: 'REF',
+            cell: ({ row }: any) => (
+                // <Button onClick={() => closeToast()}>
+                //     {SpaceatPos(row.original.reference)}
+                // </Button>
+                <div>
+                <Button onClick={() => { dispatch(DataAction.moveRow(row.original.reference)); }}>
+                    {SpaceatPos(row.original.reference)}
+                </Button>
+                <Msg closeToast={closeToast} row={row} />
+            </div>
+            ),
+            filterFn: fuzzyFilter,
+        }),
+// ##################################################################################################################### */
         columnHelper.accessor('weight', {
             header: "POIDS",
             cell: info => info.getValue(),
@@ -534,6 +534,7 @@ export default function DataTable() {
             </Modal.Footer>
             </Modal>
             <ToastContainer />
+            
         </>
     );
 }

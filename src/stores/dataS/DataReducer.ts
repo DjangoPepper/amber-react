@@ -206,29 +206,17 @@ export const dataReducer: Reducer<Interface_stepe_state> = (state = initial_step
                     saved_TAlly_HOLD_previous_QTT_status: false
                 };
             case DataAction.SAVE_PREV_TONS:
-<<<<<<< HEAD
-                // if(state.saved_HOLD_previous_TONS_status) return state;
-                state.saved_HOLD_previous_TONS_status = true;
-                window.localStorage.setItem("local_pkilos", JSON.stringify(state.HOLD_previous_TONS));
-=======
                 // if(state.saved_TAlly_HOLD_previous_TONS_status) return state;
                 state.saved_TAlly_HOLD_previous_TONS_status = true;
                 window.localStorage.setItem("local_pkilos", JSON.stringify(state.TAlly_HOLD_previous_TONS));
->>>>>>> bugnoloadedtally
                 return {
                     ...state,
                     saved_TAlly_HOLD_previous_TONS_status: false
                 };
             case DataAction.SAVE_MAXI_TONS:
-<<<<<<< HEAD
-                // if(state.saved_HOLD_maxi_TONS_status) return state;
-                state.saved_HOLD_maxi_TONS_status = true;
-                window.localStorage.setItem("local_maxi", JSON.stringify(state.HOLD_maxi_TONS));
-=======
                 // if(state.saved_TAlly_HOLD_maxi_TONS_status) return state;
                 state.saved_TAlly_HOLD_maxi_TONS_status = true;
                 window.localStorage.setItem("local_maxi", JSON.stringify(state.TAlly_HOLD_maxi_TONS));
->>>>>>> bugnoloadedtally
                 return {
                     ...state,
                     saved_TAlly_HOLD_maxi_TONS_status: false
