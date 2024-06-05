@@ -85,8 +85,8 @@ export default function Statistics() {
 			},
 		}));
 		// let numericValue = parseFloat(value) || 0;
-		// dispatch(DataAction.changePreviousQTT({ destination: destination, value: value }));
-		dispatch(DataAction.changePreviousQTT({ destination, value }));
+		// dispatch(DataAction.change_previous_qtt({ destination: destination, value: value }));
+		dispatch(DataAction.change_previous_qtt({ destination, value }));
 		dispatch(DataAction.save_previous_qtt());
 
 		};
@@ -99,21 +99,21 @@ export default function Statistics() {
 			},
 		}));
 		// let numericValue = parseFloat(value) || 0;
-		// dispatch(DataAction.changePreviousTONS({ destination: destination, value: value }));
-		dispatch(DataAction.changePreviousTONS({ destination, value }));
+		// dispatch(DataAction.change_previous_tons({ destination: destination, value: value }));
+		dispatch(DataAction.change_previous_tons({ destination, value }));
 		dispatch(DataAction.save_previous_tons());
 		};
 
 
-	const handle_maxiTO_Change = (destination: string, value: string) => {
-			// handle_maxiTO_Change(affectationItem.name, e.target.value)}
+	const handle_maxiTO_VALUE_Change = (destination: string, value: string) => {
+			// handle_maxiTO_VALUE_Change(affectationItem.name, e.target.value)}
 			set_maxi_Values((maxi_Value_TO: any) => ({
 				...maxi_Value_TO,
 				[destination]: { maxi_To: value },
 			}));
 			// const numericValue = parseFloat(value) || 0;
-			// dispatch(DataAction.changeMaxiTONS({ destination: destination, value}));
-			dispatch(DataAction.changeMaxiTONS({ destination, value}));
+			// dispatch(DataAction.change_maxi_tons({ destination: destination, value}));
+			dispatch(DataAction.change_maxi_tons({ destination, value}));
 			dispatch(DataAction.save_maxi_tons());
 				};
 		
@@ -468,7 +468,7 @@ export default function Statistics() {
 													type="text"
 													style={{ width: '80px' }}
 													value={maxi_Value_TO[affectationItem.name] ? maxi_Value_TO[affectationItem.name].maxi_To : 0} // Utilisez prevValues[affectationItem.name].prevTo pour la valeur 
-													onChange={(e) => handle_maxiTO_Change(affectationItem.name, e.target.value)}
+													onChange={(e) => handle_maxiTO_VALUE_Change(affectationItem.name, e.target.value)}
 												/>
 											</td>
 

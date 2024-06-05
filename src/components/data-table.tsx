@@ -24,17 +24,26 @@ import DataAction from "../stores/dataS/DataAction";
 import {colors, affectation, HEADER} from "../utils/destination";
 import Filter, {fuzzyFilter} from "./filter";
 import './index-tanstack.css'
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 
 //FRED ****************************************************************
 import SpaceatPos from "./SpaceatPos";
-import * as fs from 'fs'
-import * as path from 'path'
+// import * as fs from 'fs'
+// import * as path from 'path'
+// import { AnyAction } from "redux";
+interface MsgProps {
+    closeToast: () => void;
+}
+
+
 
 const monthNames = [
     'jan', 'fev', 'mar', 'avr', 'mai', 'juin',
     'juil', 'aou', 'sep', 'oct', 'nov', 'dec'
     ];
+
 
 function backupCurrentDateTime(): string {
     const now = new Date();
@@ -47,13 +56,15 @@ function backupCurrentDateTime(): string {
     const minute = String(now.getMinutes()).padStart(2, '0');
 
     return `Stepe ${month}${day}_${hour}${minute}.xlsx`;
-}
+    }
 
-declare module '@tanstack/react-table' {
+
+    declare module '@tanstack/react-table' {
     interface TableMeta<TData extends RowData> {
         updateData: (reference: number, columnId: string, value: unknown) => void
+        }
     }
-}
+
 
 const columnHelper = createColumnHelper<export_stepe_catalog_Data>();
 
@@ -77,7 +88,7 @@ const EditableCell = ({ getValue, row, column, table }: any) => {
             // largeur prepa box
         />
     )
-};
+    };
 
 const globalFilterFn: FilterFn<export_stepe_catalog_Data> = (row, columnId, filterValue: string) => {
     const search = filterValue.toLowerCase();
@@ -86,9 +97,23 @@ const globalFilterFn: FilterFn<export_stepe_catalog_Data> = (row, columnId, filt
     if (typeof value === 'number') value = String(value);
 
     return value?.toLowerCase().includes(search);
-};
+    };
 
 const useColumns = function useColumns(): any[] {
+    //FRED
+    // const Msg: React.FC<MsgProps> = ({ closeToast }) => (
+    //     <div>
+    //         VERIFICATION
+    //         {/* <button> VALIDE</button> */}
+    //         <Button onClick={() => { dispatch(DataAction.moveRow(row.original.reference));
+    //                 }}
+    //             >
+    //                 {SpaceatPos(row.original.reference)}
+    //             </Button>,
+    //         <button onClick={closeToast}>INVALIDE</button>
+    //     </div>
+    // );
+    //FRED
     const dispatch = useDispatch();
 
     const columns = [
@@ -101,22 +126,53 @@ const useColumns = function useColumns(): any[] {
             cell: EditableCell,
             filterFn: fuzzyFilter,
         }),
-// #####################################################################################################################
-        columnHelper.accessor('reference', {
-            header: 'REF',
-            cell: ({row}: any) =>
-                <Button 
-                    onClick={() => {
-                    dispatch(DataAction.moveRow(row.original.reference)); //je change la detination de ref cale1,cale2, etc..
-                    }}
-                >
-                    {SpaceatPos(row.original.reference)}
-                </Button>,
-            filterFn: fuzzyFilter,
+// /* // #####################################################################################################################
+//         columnHelper.accessor('reference', {
+//             header: 'REF',
+//             cell: ({row}: any) =>
+                
+//                 <Button 
+//                     onClick={() => {
+//                     dispatch(DataAction.moveRow(row.original.reference)); //je change la detination de ref cale1,cale2, etc..
+//                     }}
+//                 >
+//                     {SpaceatPos(row.original.reference)}
+//                 </Button>,
+                
+//             filterFn: fuzzyFilter,
 
-        }),
+//         }),
+// // ##################################################################################################################### */
 // #####################################################################################################################
+    columnHelper.accessor('reference', {
+        header: 'REF',
+        cell: ({row}: any) =>
+            
+            <Button 
+                onClick={() => {
+                dispatch(DataAction.moveRow(row.original.reference)); //je change la detination de ref cale1,cale2, etc..
+                }}
+            >
+                {SpaceatPos(row.original.reference)}
+            </Button>,
 
+            //FRED
+            // const Msg: React.FC<MsgProps> = ({ closeToast }) => (
+            // <div>
+            //     VERIFICATION
+            //     <button> VALIDE</button>
+            //     <Button onClick={() => { dispatch(DataAction.moveRow(row.original.reference));}}
+            //         >
+            //             {SpaceatPos(row.original.reference)}
+            //         </Button>,
+            //     <button onClick={closeToast}>INVALIDE</button>
+            // </div>
+            // );
+            //FRED    
+        filterFn: fuzzyFilter,
+
+    }),
+// #####################################################################################################################
         columnHelper.accessor('weight', {
             header: "POIDS",
             cell: info => info.getValue(),
@@ -477,6 +533,7 @@ export default function DataTable() {
                 </Button>
             </Modal.Footer>
             </Modal>
+            <ToastContainer />
         </>
     );
 }

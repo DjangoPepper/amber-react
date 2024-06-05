@@ -17,9 +17,8 @@ import { toast } from 'react-toastify';
 let backupInterval = 30 * 1000; //30 * 1000 ms = 30s
 // let firstRender = false;
 
-function init_cata() {
-		
-	const Init_catalogDATAS = window.localStorage.getItem("stepe_catalogue_DATAS");
+function init_cata() {	
+	const Init_catalogDATAS = window.localStorage.getItem("local_catalog");
 	if(Init_catalogDATAS) {
 		store.dispatch(DataAction.loaded_catalog(Init_catalogDATAS));
 		}
@@ -35,7 +34,7 @@ function init_cata() {
 	}
 
 function init_tally(){
-	const Init_tallyDATAS = window.localStorage.getItem("tally");
+	const Init_tallyDATAS = window.localStorage.getItem("local_tally");
 	if(Init_tallyDATAS) {
 		store.dispatch(DataAction.loaded_tally(Init_tallyDATAS));
 		}

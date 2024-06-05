@@ -172,7 +172,8 @@ export const dataReducer: Reducer<Interface_stepe_state> = (state = initial_step
             case DataAction.SAVE_CATALOG:
                 if(state.saved_catalog_status) return state;
                 // console.log("saving catalog...");
-                window.localStorage.setItem("localstorage_catalog_datas", JSON.stringify(state.catalog_data_state));
+                // window.localStorage.setItem("local_catalog", JSON.stringify(state.catalog_data_state));
+                window.localStorage.setItem("local_catalog", JSON.stringify(state.catalog_data_state));
                 return {
                     ...state,
                     saved_catalog_status: false
@@ -181,7 +182,7 @@ export const dataReducer: Reducer<Interface_stepe_state> = (state = initial_step
             case DataAction.SAVE_TALLY:
                 if(state.saved_tally_status) return state;
                 // console.log("saving catalog...");
-                window.localStorage.setItem("localstorage_tally_datas", JSON.stringify(state.tally_data_state));
+                window.localStorage.setItem("local_tally", JSON.stringify(state.tally_data_state));
                 return {
                     ...state,
                     saved_tally_status: false
@@ -231,7 +232,7 @@ export const dataReducer: Reducer<Interface_stepe_state> = (state = initial_step
             case DataAction.LOAD_TALLY:
                 return {
                     ...state,
-                    tally_data_state: action.payload,
+                    catalog_data_state: action.payload,
                     loaded_tally_status: true,
                     saved_tally_status: true,
                 }

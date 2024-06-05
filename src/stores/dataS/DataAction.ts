@@ -44,16 +44,16 @@ export default class DataAction {
 		return { type: DataAction.CHANGE_CHECKBOX_STATE, payload: changecheckboxstate };
 	}
 
-	public static changePreviousQTT(changedqtt: { [destination: string]: string }): AnyAction {
+	public static change_previous_qtt(changedqtt: { [destination: string]: string }): AnyAction {
 		return { type: DataAction.CHANGE_PREVIOUS_QTT, payload: changedqtt };
 	}
 	
-	public static changePreviousTONS(changetons: { [destination: string]: string }): AnyAction {
+	public static change_previous_tons(changetons: { [destination: string]: string }): AnyAction {
 		return { type: DataAction.CHANGE_PREVIOUS_TONS, payload: changetons };
 
 	}
 //////
-	public static changeMaxiTONS(changemaxi: { [destination: string]: string }): AnyAction {
+	public static change_maxi_tons(changemaxi: { [destination: string]: string }): AnyAction {
 		return { type: DataAction.CHANGE_MAXI_TONS, payload: changemaxi };
 	}
 /////
