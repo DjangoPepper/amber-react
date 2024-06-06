@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react'
+import React, {useCallback} from 'react'
 import Dropzone from 'react-dropzone'
 import {Col, Container, Row} from "react-bootstrap";
 import {read, utils} from "xlsx";
@@ -126,8 +126,8 @@ function SuppressionCellulesNull(newsheet: any): any {
 			}
 		}
     endRow--;
-  	}
-  	return newsheet;
+	}
+	return newsheet;
 }
 
 function copySheetWithHeadersAndNumbers(sheet: any, headersRow: number): any {

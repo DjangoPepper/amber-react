@@ -9,7 +9,7 @@ import Main from "./components/main";
 import {store} from "./stores/rootStore";
 import { useLeavePageConfirm } from "./components/use-leave";
 import DataAction from "./stores/dataS/DataAction";
-import { affectation } from './utils/destination';
+// import { affectation } from './utils/destination';
 // import { toast, ToastContainer } from 'react-toastify';
 import { toast } from 'react-toastify';
 
