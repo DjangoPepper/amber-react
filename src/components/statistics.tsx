@@ -1,44 +1,35 @@
 import { useSelector, useDispatch} from "react-redux";
 import { RootState } from "../stores/rootStore";
 import DataAction from "../stores/dataS/DataAction";
-
 import { export_stepe_catalog_Data } from "../stores/dataS/DataReducer";
 import { Table } from "react-bootstrap";
 import React, { useState, useEffect } from 'react';
 import { affectation} from "../utils/destination";
-// import { updateAffectationVisibility } from '../stores/data/destinationActions';
-
 import Button from 'react-bootstrap/Button';
-// import {firstRender} from '../App';	
-// import { toast, ToastContainer } from 'react-toastify';
 import { toast } from 'react-toastify';
 
 export default function Statistics() {
 
 	let totalCount = 0;
 	let totalWeight = 0;
-
 	let totalCalesCount = 0;
 	let totalCalesWeight = 0;
-
 	let totalstockCount = 0;
 	let totalstockWeight = 0;
 
-
 	const dispatch = useDispatch();	
 	const [Extended_Tally_Value, set_Extended_Tally_Value] = React.useState(false);
-	const [checkbox_Hold_State, set_checkbox_Hold_State] = useState<{ [key: string]: boolean }>({});		
-	const [previous_Value_QT, set_previous_Value_QT] = useState<{ [key: string]: { prevQT_VALUE: string } }>({});
-	const [previous_Value_TO, set_previous_Value_TO] = useState<{ [key: string]: { prevTO_VALUE: string } }>({});
-	const [maxi_Value_TO, set_maxi_Values] 			 = useState<{ [key: string]: { maxi_To: string      } }>({});
+	const [checkbox_Value_BO, set_checkbox_Value_BO] = useState<{ [key: string]: boolean }>({});		
+	const [Ncheckbox_Value_BO, set_Ncheckbox_Value_BO] = useState<{ [key: string]: { checkBX_VALUE: string} }>({});		
+	const [previous_Value_QT, set_previous_Value_QT] = useState<{ [key: string]:   { prevQT_VALUE: string } }>({});
+	const [previous_Value_TO, set_previous_Value_TO] = useState<{ [key: string]:   { prevTO_VALUE: string } }>({});
+	const [maxi_Value_TO, set_maxi_Values] 			 = useState<{ [key: string]:   { maxi_To: string      } }>({});
 
 	const selectedColors = useSelector<RootState, { [key: string]: string }>((state) => state.dataSS.pickerColors);
 
 	const Toggle_checkbox_boolean = (k: string) => {
-
 		// Créez une copie de l'état actuel des cases à cocher
-		const updatedCheckboxState = { ...checkbox_Hold_State };
-
+		const updatedCheckboxState = { ...checkbox_Value_BO };
 		// Vérifiez si la destination k est déjà dans l'état des cases à cocher
 		if (updatedCheckboxState[k] !== undefined) {
 			//si prevqtt,prevtons, maxitons non vide & updatedCheckboxState[k] = false alors updatedCheckboxState[k] = true
@@ -57,12 +48,12 @@ export default function Statistics() {
 				// updatedCheckboxState[k] = true;
 			}
 			// Mettez à jour l'état des cases à cocher avec la nouvelle valeur
-			set_checkbox_Hold_State(updatedCheckboxState);
+			set_checkbox_Value_BO(updatedCheckboxState);
 			dispatch(DataAction.change_checkbox_state({ [k]: updatedCheckboxState[k] }));
 			dispatch(DataAction.save_checkbox_state());
 		} else {
 			updatedCheckboxState[k] = true;
-			set_checkbox_Hold_State(updatedCheckboxState);
+			set_checkbox_Value_BO(updatedCheckboxState);
 			dispatch(DataAction.change_checkbox_state({ [k]: updatedCheckboxState[k] }));
 			dispatch(DataAction.save_checkbox_state());
 		}
@@ -70,10 +61,21 @@ export default function Statistics() {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// const handle_checkBOX_Change = (destination: string, value: boolean) => {
-// 	dispatch(DataAction.change_checkbox_state({ [destination]: value }));
-// 	dispatch(DataAction.save_checkbox_state());
-// 	};
+	// const handle_checkBOX_Change = (destination: string, value: boolean) => {
+	// 	dispatch(DataAction.change_checkbox_state({ [destination]: value }));
+	// 	dispatch(DataAction.save_checkbox_state());
+	// 	};
+	const handle_checkBOX_VALUE_Change = (destination: string, value: boolean) => {
+		// const NewCheckbox = { ...checkbox_Value_BO };
+		// set_Ncheckbox_Value_BO((Ncheckbox_Value_BO) => ({
+		// 	...Ncheckbox_Value_BO,
+		// 	[destination]: {
+		// 	// 	Ncheckbox_Value_BO: value,
+		// 	},
+		// }));
+		dispatch(DataAction.change_checkbox_state({ [destination]: value }));
+		dispatch(DataAction.save_checkbox_state());
+		};
 	
 	const handle_prevQT_VALUE_Change = (destination: string, value: string) => {
 		set_previous_Value_QT((previous_Value_QT) => ({
@@ -82,11 +84,8 @@ export default function Statistics() {
 				prevQT_VALUE: value, 
 			},
 		}));
-		// let numericValue = parseFloat(value) || 0;
-		// dispatch(DataAction.change_previous_qtt({ destination: destination, value: value }));
 		dispatch(DataAction.change_previous_qtt({ destination, value }));
 		dispatch(DataAction.save_previous_qtt());
-
 		};
 
 	const handle_PrevTO_VALUE_Change = (destination: string, value: string) => {
@@ -147,6 +146,36 @@ export default function Statistics() {
 				if(Object.prototype.hasOwnProperty.call(parsedMaxiTons, key)) {
 					const value = parsedMaxiTons[key];
 					handle_maxiTO_VALUE_Change(key, value);
+				}
+			}
+		}
+		const Init_previous_tons = window.localStorage.getItem("local_pkilos");
+		if (Init_previous_tons) {
+			const parsedPreviousTons = Init_previous_tons ? JSON.parse(Init_previous_tons) : {};
+			for (const key in parsedPreviousTons) {
+				if(Object.prototype.hasOwnProperty.call(parsedPreviousTons, key)) {
+					const value = parsedPreviousTons[key];
+					handle_PrevTO_VALUE_Change(key, value);
+				}
+			}
+		}
+		const Init_previous_qtt = window.localStorage.getItem("local_punits");
+		if (Init_previous_qtt) {
+			const parsedPreviousQT = Init_previous_qtt ? JSON.parse(Init_previous_qtt) : {};
+			for (const key in parsedPreviousQT) {
+				if(Object.prototype.hasOwnProperty.call(parsedPreviousQT, key)) {
+					const value = parsedPreviousQT[key];
+					handle_prevQT_VALUE_Change(key, value);
+				}
+			}
+		}
+		const Init_boxe_check = window.localStorage.getItem("local_checkbox");
+		if (Init_boxe_check) {
+			const parsedCheckboxState = Init_boxe_check ? JSON.parse(Init_boxe_check) : {};
+			for (const key in parsedCheckboxState) {
+				if(Object.prototype.hasOwnProperty.call(parsedCheckboxState, key)) {
+					const value = parsedCheckboxState[key];
+					handle_checkBOX_VALUE_Change(key, value);
 				}
 			}
 		}
@@ -248,7 +277,7 @@ export default function Statistics() {
 							{affectation.map((affectationItem) => {
 
 				const statistics_array = statistics[affectationItem.name] || {}; // Utilise un objet vide par défaut
-				let chsafin = checkbox_Hold_State[affectationItem.name] || false;
+				let chsafin = checkbox_Value_BO[affectationItem.name] || false;
 				if (
 					chsafin || 
 					(
@@ -271,7 +300,7 @@ export default function Statistics() {
 							{ affectationItem.name !== 'stock' ? ( 
 								<input
 								type="checkbox" 
-								checked={checkbox_Hold_State[affectationItem.name]} 
+								checked={checkbox_Value_BO[affectationItem.name]} 
 								// checked={affectationItem.visibleState[k]} 
 								onChange={() => Toggle_checkbox_boolean(affectationItem.name)}
 								/>
@@ -425,7 +454,7 @@ export default function Statistics() {
 			{affectation.map((affectationItem) => {
 
 				const statistics_array = statistics[affectationItem.name] || {}; // Utilisez un objet vide par défaut
-				let chsafin = checkbox_Hold_State[affectationItem.name] || false;
+				let chsafin = checkbox_Value_BO[affectationItem.name] || false;
 				if (
 					chsafin || 
 					(

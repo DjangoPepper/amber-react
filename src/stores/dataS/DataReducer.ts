@@ -200,7 +200,7 @@ export const dataReducer: Reducer<Interface_stepe_state> = (state = initial_step
             case DataAction.SAVE_PREV_QTT:
                 // if(state.saved_TAlly_HOLD_previous_QTT_status) return state;
                 state.saved_TAlly_HOLD_previous_QTT_status = true;
-                window.localStorage.setItem("local_punit", JSON.stringify(state.TAlly_HOLD_previous_QTT));
+                window.localStorage.setItem("local_punits", JSON.stringify(state.TAlly_HOLD_previous_QTT));
                 return {
                     ...state,
                     saved_TAlly_HOLD_previous_QTT_status: false

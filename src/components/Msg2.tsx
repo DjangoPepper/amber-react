@@ -14,11 +14,12 @@ const Msg2: React.FC<Msg2Props> = ({ closeToast, row2 }) => {
 
     return (
         <div>
-            {/* {SpaceatPos(row2)} */}
             VERIFICATION : &nbsp;
+            {/* <Button onClick={() => dispatch(DataAction.moveRow(row2))}>{SpaceatPos(row2)}</Button> */}
             <Button onClick={() => dispatch(DataAction.moveRow(row2))}>{SpaceatPos(row2)}</Button>
             &nbsp;
-            <Button onClick={closeToast}>Close</Button>
+            {/* <Button onClick={closeToast}>Close</Button> */}
+            <Button>Close</Button>
         </div>
     );
 };
