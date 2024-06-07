@@ -14,7 +14,7 @@ import Button from 'react-bootstrap/Button';
 import { toast } from 'react-toastify';
 interface AffectationItem {
 	name: string;
-	// color: string;
+	value: string;
 }
 interface MaxiTons {
 	[key: string]: string;
@@ -168,40 +168,24 @@ export default function Statistics() {
     const [firstRender, setFirstRender] = useState<boolean>(true);
 
 	useEffect(() => {
-		//
-/* 		const affectations = affectation.reduce((acc: MaxiTons, item: AffectationItem) => {
-            if (!parsedMaxiTons[item.name]) {
-                acc[item.name] = '0';
-            } else {
-                acc[item.name] = parsedMaxiTons[item.name];
-            }
-            return acc;
-        }, {});
-		
-		setMaxiValues(affectations);
-		// }, []);
-		// */
-		function nothinbuthelpfull_tally() {
-			affectation.forEach((affectationItem) => {
-				const k = affectationItem.name as string;
-				if (k !== "stock") {}
-			});
-			// firstRender = false;
-			setFirstRender(false);
-			};
 		if (firstRender) {
-			// nothinbuthelpfull_tally();
-			toast.error('useEffect refresh', { position: toast.POSITION.TOP_LEFT, autoClose: 2000 });
+			const Init_maxi_tons= window.localStorage.getItem("local_maxi");
+			
+			if (Init_maxi_tons) {
+				const parsedMaxiTons = Init_maxi_tons ? JSON.parse(Init_maxi_tons) : {};
+				toast.error('statistic refresh', { position: toast.POSITION.TOP_LEFT, autoClose: 2000 });
+				for (const key in parsedMaxiTons) {
+					if(Object.prototype.hasOwnProperty.call(parsedMaxiTons, key)) {
+						const value = parsedMaxiTons[key];
+						handle_maxiTO_VALUE_Change(key, value);
+					}
+				}
 			setFirstRender(false);
-
-		}
-		// }, [firstRender]);
-	}, [firstRender, affectation, parsedMaxiTons]);
-
-
-	// const [maxi_Value_TO, set_maxi_Values] = useState<{ [key: string]: { maxi_To: string } }>(parsedMaxiTons);
-		
-
+			}
+		}}, 
+		[firstRender]);
+			
+	
 		Object.values(statistics).forEach((destinationStats: any ) => {    
 		totalCount += destinationStats.count;
 		totalWeight += destinationStats.weight;
