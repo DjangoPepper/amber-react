@@ -316,8 +316,8 @@ function cleanData(values: any): export_stepe_catalog_Data {
 
 function Main() {
 	const dispatch = useDispatch();
-	const loaded_catalog = useSelector<RootState, boolean>(state => state.dataSS.loaded_catalog_status);
-	// const loaded_catalog = useSelector<RootState, boolean>(state => state.data.loaded_catalog_status);
+	const main_loaded_catalog = useSelector<RootState, boolean>(state => state.dataSS.loaded_catalog_status);
+	// const main_loaded_catalog = useSelector<RootState, boolean>(state => state.data.main_loaded_catalog_status);
 	
 	const onDrop = useCallback((acceptedFiles: any) => {
 		
@@ -383,7 +383,7 @@ function Main() {
 
 	return (
 		<Container className="p-2">
-			{loaded_catalog ? <Row>
+			{main_loaded_catalog ? <Row>
 				<Col>
 					<DataTable />
 				</Col>

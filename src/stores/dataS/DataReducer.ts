@@ -148,6 +148,15 @@ export const dataReducer: Reducer<Interface_stepe_state> = (state = initial_step
                         // ...action.payload,
                     },
                 };
+                case DataAction.CHANGE_MAXI_THONS:
+                    return {
+                        ...state,
+                        TAlly_HOLD_maxi_TONS: {
+                            ...state.TAlly_HOLD_maxi_TONS,
+                            ...action.payload
+                        },
+                    };
+                
             case DataAction.CHANGE_CALE:
                 return {
                     ...state,
@@ -263,6 +272,7 @@ export const dataReducer: Reducer<Interface_stepe_state> = (state = initial_step
                     ...state,
                     loaded_catalog_status: false,
                 }
+            
 
             default:
                 return state;

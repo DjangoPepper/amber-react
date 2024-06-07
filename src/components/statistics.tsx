@@ -12,44 +12,68 @@ import Button from 'react-bootstrap/Button';
 // import {firstRender} from '../App';	
 // import { toast, ToastContainer } from 'react-toastify';
 import { toast } from 'react-toastify';
+interface AffectationItem {
+	name: string;
+	// color: string;
+}
+interface MaxiTons {
+	[key: string]: string;
+}
 
 export default function Statistics() {
 
 	let totalCount = 0;
 	let totalWeight = 0;
-
 	let totalCalesCount = 0;
 	let totalCalesWeight = 0;
-
 	let totalstockCount = 0;
 	let totalstockWeight = 0;
-
+	// let firstRender = true;
 
 	const dispatch = useDispatch();	
 	const [Extended_Tally_Value, set_Extended_Tally_Value] = React.useState(false);
-
-	const [checkbox_Hold_State, set_checkbox_Hold_State] = useState<{ [key: string]: boolean }>({});	
-	
+	const [checkbox_Hold_State, set_checkbox_Hold_State] = useState<{ [key: string]: boolean }>({});		
 	const [previous_Value_QT, set_previous_Value_QT] = useState<{ [key: string]: { prevQT_VALUE: string } }>({});
 	const [previous_Value_TO, set_previous_Value_TO] = useState<{ [key: string]: { prevTO_VALUE: string } }>({});
 	const [maxi_Value_TO, set_maxi_Values] 			 = useState<{ [key: string]: { maxi_To: string      } }>({});
-
 	const selectedColors = useSelector<RootState, { [key: string]: string }>((state) => state.dataSS.pickerColors);
-
 	const Toggle_checkbox_boolean = (k: string) => {
-
 		// Créez une copie de l'état actuel des cases à cocher
-		const updatedCheckboxState = { ...checkbox_Hold_State };
-	
+		const updatedCheckboxState = { ...checkbox_Hold_State };	
 		// Vérifiez si la destination k est déjà dans l'état des cases à cocher
 		if (updatedCheckboxState[k] !== undefined) {
+			if (checkbox_Hold_State[k] === undefined) {
+				updatedCheckboxState[k] = false;
+			}
+
+			if ( previous_Value_QT[k].prevQT_VALUE === undefined ) {
+				set_previous_Value_QT((previous_Value_QT) => ({
+					...previous_Value_QT,
+					[k]: { prevQT_VALUE: '0' },
+				}));
+			}
+
+			if ( previous_Value_TO[k].prevTO_VALUE === undefined ) {
+				set_previous_Value_TO((previous_Value_TO) => ({
+					...previous_Value_TO,
+					[k]: { prevTO_VALUE: '0' },
+				}));
+			}
+
+			if ( maxi_Value_TO[k].maxi_To === undefined ) {
+				set_maxi_Values((maxi_Value_TO) => ({
+					...maxi_Value_TO,
+					[k]: { maxi_To: '0' },
+				}));
+			}
+		
 			//si prevqtt,prevtons, maxitons non vide & updatedCheckboxState[k] = false alors updatedCheckboxState[k] = true
 			if ((Number(previous_Value_QT[k].prevQT_VALUE) > 0 || 
-				previous_Value_QT[k].prevQT_VALUE !== undefined ||
+				// previous_Value_QT[k].prevQT_VALUE !== undefined ||
 				Number(previous_Value_TO[k].prevTO_VALUE) > 0 || 
-				previous_Value_TO[k].prevTO_VALUE !== undefined ||
-				Number(maxi_Value_TO[k].maxi_To) > 0 ||
-				maxi_Value_TO[k].maxi_To !== undefined))
+				// previous_Value_TO[k].prevTO_VALUE !== undefined ||
+				Number(maxi_Value_TO[k].maxi_To) > 0 ))
+				// maxi_Value_TO[k].maxi_To !== undefined))
 				//  && updatedCheckboxState[k] === false) 
 				{
 					updatedCheckboxState[k] = true;
@@ -71,27 +95,17 @@ export default function Statistics() {
 			dispatch(DataAction.change_checkbox_state({ [k]: updatedCheckboxState[k] }));
 			dispatch(DataAction.save_checkbox_state());
 		}
-	};
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// const handle_checkBOX_Change = (destination: string, value: boolean) => {
-// 	dispatch(DataAction.change_checkbox_state({ [destination]: value }));
-// 	dispatch(DataAction.save_checkbox_state());
-// 	};
-	
+		};
+
 	const handle_prevQT_VALUE_Change = (destination: string, value: string) => {
 		set_previous_Value_QT((previous_Value_QT) => ({
 			...previous_Value_QT,
 			[destination]: { 
 				prevQT_VALUE: value, 
 			},
-		}));
-		// let numericValue = parseFloat(value) || 0;
-		// dispatch(DataAction.change_previous_qtt({ destination: destination, value: value }));
+			}));
 		dispatch(DataAction.change_previous_qtt({ destination, value }));
-		dispatch(DataAction.save_previous_qtt());
-
+		dispatch(DataAction.save_previous_qtt_state());
 		};
 
 	const handle_PrevTO_VALUE_Change = (destination: string, value: string) => {
@@ -104,25 +118,20 @@ export default function Statistics() {
 		// let numericValue = parseFloat(value) || 0;
 		// dispatch(DataAction.change_previous_tons({ destination: destination, value: value }));
 		dispatch(DataAction.change_previous_tons({ destination, value }));
-		dispatch(DataAction.save_previous_tons());
+		dispatch(DataAction.save_previous_tons_state());
 		};
 
 
 	const handle_maxiTO_VALUE_Change = (destination: string, value: string) => {
-			// handle_maxiTO_VALUE_Change(affectationItem.name, e.target.value)}
-			set_maxi_Values((maxi_Value_TO: any) => ({
-				...maxi_Value_TO,
-				[destination]: { maxi_To: value },
-			}));
-			// const numericValue = parseFloat(value) || 0;
-			// dispatch(DataAction.change_maxi_tons({ destination: destination, value}));
-			dispatch(DataAction.change_maxi_tons({ destination, value}));
-			dispatch(DataAction.save_maxi_tons());
-				};
+		set_maxi_Values((maxi_Value_TO: any) => ({
+			...maxi_Value_TO,
+			[destination]: { maxi_To: value },
+		}));
+		dispatch(DataAction.change_maxi_tons({ destination, value}));
+		dispatch(DataAction.save_maximum_tons_state());
+		};
 		
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////	
+
 
 		const handle_Extended_Tally = () => {
 			set_Extended_Tally_Value((prevValue) => {
@@ -131,11 +140,8 @@ export default function Statistics() {
 			});
 		};
 	
-//
-//
-	const catalog_data = useSelector<RootState, export_stepe_catalog_Data[]>((state) => state.dataSS.catalog_data_state);
-//	
 
+	const catalog_data = useSelector<RootState, export_stepe_catalog_Data[]>((state) => state.dataSS.catalog_data_state);
 	const totalPreviousCalesCount = Object.keys(previous_Value_QT).reduce((total, k) => {
 		return total + (previous_Value_QT[k] ? parseFloat(previous_Value_QT[k].prevQT_VALUE) : 0);
 		}, 0);
@@ -143,30 +149,7 @@ export default function Statistics() {
 	const totalPreviousCalesWeight = Object.keys(previous_Value_TO).reduce((total, k) => {
 		return total + (previous_Value_TO[k]?.prevTO_VALUE ? parseFloat(previous_Value_TO[k].prevTO_VALUE) : 0);
 		}, 0);
-
-	///
-	let firstRender = true;
 	
-
-
-	useEffect(() => {
-			function nothinbuthelpfull_tally() {
-				affectation.forEach((affectationItem) => {
-					const k = affectationItem.name as string;
-					if (k !== "stock") {
-
-						
-						}
-				});
-				firstRender = false;
-				};
-			if (firstRender) {
-				nothinbuthelpfull_tally();
-				toast.error('useEffect refresh', { position: toast.POSITION.TOP_LEFT, autoClose: 2000 });
-
-			}
-		}, [firstRender]);
-
 	const statistics = catalog_data.reduce<any>((p, row) => {
 		if (!p[row.destination]) {
 			p[row.destination] = { count: 0, weight: 0  };
@@ -176,14 +159,55 @@ export default function Statistics() {
 		return p;
 		}, {});
 
-	
-//
-	Object.values(statistics).forEach((destinationStats: any ) => {    
+	const Init_maxi_tons = window.localStorage.getItem("local_maxi");
+
+	// const parsedMaxiTons = Init_maxi_tons ? JSON.parse(Init_maxi_tons) : {};
+	const [affectation, setAffectation] = useState<AffectationItem[]>([]);
+    const [parsedMaxiTons, setParsedMaxiTons] = useState<MaxiTons>({});
+    const [maxiValues, setMaxiValues] = useState<MaxiTons>({});
+    const [firstRender, setFirstRender] = useState<boolean>(true);
+
+	useEffect(() => {
+		//
+/* 		const affectations = affectation.reduce((acc: MaxiTons, item: AffectationItem) => {
+            if (!parsedMaxiTons[item.name]) {
+                acc[item.name] = '0';
+            } else {
+                acc[item.name] = parsedMaxiTons[item.name];
+            }
+            return acc;
+        }, {});
+		
+		setMaxiValues(affectations);
+		// }, []);
+		// */
+		function nothinbuthelpfull_tally() {
+			affectation.forEach((affectationItem) => {
+				const k = affectationItem.name as string;
+				if (k !== "stock") {}
+			});
+			// firstRender = false;
+			setFirstRender(false);
+			};
+		if (firstRender) {
+			// nothinbuthelpfull_tally();
+			toast.error('useEffect refresh', { position: toast.POSITION.TOP_LEFT, autoClose: 2000 });
+			setFirstRender(false);
+
+		}
+		// }, [firstRender]);
+	}, [firstRender, affectation, parsedMaxiTons]);
+
+
+	// const [maxi_Value_TO, set_maxi_Values] = useState<{ [key: string]: { maxi_To: string } }>(parsedMaxiTons);
+		
+
+		Object.values(statistics).forEach((destinationStats: any ) => {    
 		totalCount += destinationStats.count;
 		totalWeight += destinationStats.weight;
 		totalCalesCount = totalCount ;
 		totalCalesWeight = totalWeight;
-//
+
 	if (statistics.stock) {
 			totalstockCount = statistics.stock.count;
 			totalstockWeight = statistics.stock.weight;
