@@ -150,7 +150,7 @@ export default function Statistics() {
 
 
 	useEffect(() => {
-			function init_tally() {
+			function nothinbuthelpfull_tally() {
 				affectation.forEach((affectationItem) => {
 					const k = affectationItem.name as string;
 					if (k !== "stock") {
@@ -161,7 +161,7 @@ export default function Statistics() {
 				firstRender = false;
 				};
 			if (firstRender) {
-				init_tally();
+				nothinbuthelpfull_tally();
 				toast.error('useEffect refresh', { position: toast.POSITION.TOP_LEFT, autoClose: 2000 });
 
 			}
