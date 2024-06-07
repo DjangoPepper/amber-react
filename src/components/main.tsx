@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react'
+import React, {useCallback/* , useState */} from 'react'
 import Dropzone from 'react-dropzone'
 import {Col, Container, Row} from "react-bootstrap";
 import {read, utils} from "xlsx";
@@ -373,12 +373,12 @@ function Main() {
 		dispatch(DataAction.importData(utils.sheet_to_json(Sheet).map(cleanData)));
 		// dispatch(DataAction.importData(utils.sheet_to_json(sheet).map(cleanData)));
 		// dispatch(DataAction.importData(utils.sheet_to_json(selectedSheet).map(cleanData)));
-			// // dispatch(DataAction.moveRow(row.original.reference)); //je change la detination de ref cale1,cale2, etc..
+		// dispatch(DataAction.moveRow(row.original.reference)); //je change la detination de ref cale1,cale2, etc..
 		dispatch(DataAction.changeOriginalpos("stock"));
 		// toast.success('catalog export_stepe_catalog_Data imported', { position: toast.POSITION.TOP_RIGHT })
 	};
 	reader.readAsBinaryString(file);
-	}, []);
+	},[]);
 	// const [mavariablelocale, setMavariablelocale] = useState()
 
 	return (

@@ -45,8 +45,11 @@ export default function Statistics() {
 		if (updatedCheckboxState[k] !== undefined) {
 			//si prevqtt,prevtons, maxitons non vide & updatedCheckboxState[k] = false alors updatedCheckboxState[k] = true
 			if ((Number(previous_Value_QT[k].prevQT_VALUE) > 0 || 
+				previous_Value_QT[k].prevQT_VALUE !== undefined ||
 				Number(previous_Value_TO[k].prevTO_VALUE) > 0 || 
-				Number(maxi_Value_TO[k].maxi_To) > 0 ))
+				previous_Value_TO[k].prevTO_VALUE !== undefined ||
+				Number(maxi_Value_TO[k].maxi_To) > 0 ||
+				maxi_Value_TO[k].maxi_To !== undefined))
 				//  && updatedCheckboxState[k] === false) 
 				{
 					updatedCheckboxState[k] = true;
@@ -143,25 +146,26 @@ export default function Statistics() {
 
 	///
 	let firstRender = true;
-	function init_tally() {
-		affectation.forEach((affectationItem) => {
-			const k = affectationItem.name as string;
-			if (k !== "stock") {
-
-				
-				}
-		});
-		firstRender = false;
-	};
+	
 
 
 	useEffect(() => {
-	if (firstRender) {
-		init_tally();
-		toast.error('init Tally', { position: toast.POSITION.TOP_LEFT, autoClose: 2000 });
+			function init_tally() {
+				affectation.forEach((affectationItem) => {
+					const k = affectationItem.name as string;
+					if (k !== "stock") {
 
-	}
-	}, [firstRender]);
+						
+						}
+				});
+				firstRender = false;
+				};
+			if (firstRender) {
+				init_tally();
+				toast.error('useEffect refresh', { position: toast.POSITION.TOP_LEFT, autoClose: 2000 });
+
+			}
+		}, [firstRender]);
 
 	const statistics = catalog_data.reduce<any>((p, row) => {
 		if (!p[row.destination]) {
