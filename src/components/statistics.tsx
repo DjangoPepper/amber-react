@@ -27,9 +27,7 @@ export default function Statistics() {
 
 	const dispatch = useDispatch();	
 	const [Extended_Tally_Value, set_Extended_Tally_Value] = React.useState(false);
-
-	const [checkbox_Hold_State, set_checkbox_Hold_State] = useState<{ [key: string]: boolean }>({});	
-	
+	const [checkbox_Hold_State, set_checkbox_Hold_State] = useState<{ [key: string]: boolean }>({});		
 	const [previous_Value_QT, set_previous_Value_QT] = useState<{ [key: string]: { prevQT_VALUE: string } }>({});
 	const [previous_Value_TO, set_previous_Value_TO] = useState<{ [key: string]: { prevTO_VALUE: string } }>({});
 	const [maxi_Value_TO, set_maxi_Values] 			 = useState<{ [key: string]: { maxi_To: string      } }>({});
@@ -40,28 +38,28 @@ export default function Statistics() {
 
 		// Créez une copie de l'état actuel des cases à cocher
 		const updatedCheckboxState = { ...checkbox_Hold_State };
-	
+
 		// Vérifiez si la destination k est déjà dans l'état des cases à cocher
 		if (updatedCheckboxState[k] !== undefined) {
 			//si prevqtt,prevtons, maxitons non vide & updatedCheckboxState[k] = false alors updatedCheckboxState[k] = true
-			if ((Number(previous_Value_QT[k].prevQT_VALUE) > 0 || 
-				Number(previous_Value_TO[k].prevTO_VALUE) > 0 || 
+			if ((Number(previous_Value_QT[k].prevQT_VALUE) > 0 ||
+				Number(previous_Value_TO[k].prevTO_VALUE) > 0 ||
 				Number(maxi_Value_TO[k].maxi_To) > 0 ))
-				//  && updatedCheckboxState[k] === false) 
-				{
-					updatedCheckboxState[k] = true;
+			//  && updatedCheckboxState[k] === false) 
+			{
+				updatedCheckboxState[k] = true;
 					toast.error("Ligne tally pleine", { position: toast.POSITION.TOP_RIGHT,autoClose: 1500 })
-					// 160,3: 		toast.error('init Tally', { position: toast.POSITION.TOP_LEFT, autoClose: 500 });
-				} else {
-					// Si oui, basculez simplement la valeur (true devient false, false devient true)
-					updatedCheckboxState[k] = !updatedCheckboxState[k];
-		  // Si la destination n'est pas dans l'état, ajoutez-la et définissez-la comme cochée (true)
-			// updatedCheckboxState[k] = true;
-				}
-		// Mettez à jour l'état des cases à cocher avec la nouvelle valeur
-		set_checkbox_Hold_State(updatedCheckboxState);
-		dispatch(DataAction.change_checkbox_state({ [k]: updatedCheckboxState[k] }));
-		dispatch(DataAction.save_checkbox_state());
+				// 160,3: 		toast.error('init Tally', { position: toast.POSITION.TOP_LEFT, autoClose: 500 });
+			} else {
+				// Si oui, basculez simplement la valeur (true devient false, false devient true)
+				updatedCheckboxState[k] = !updatedCheckboxState[k];
+				// Si la destination n'est pas dans l'état, ajoutez-la et définissez-la comme cochée (true)
+				// updatedCheckboxState[k] = true;
+			}
+			// Mettez à jour l'état des cases à cocher avec la nouvelle valeur
+			set_checkbox_Hold_State(updatedCheckboxState);
+			dispatch(DataAction.change_checkbox_state({ [k]: updatedCheckboxState[k] }));
+			dispatch(DataAction.save_checkbox_state());
 		} else {
 			updatedCheckboxState[k] = true;
 			set_checkbox_Hold_State(updatedCheckboxState);
@@ -106,13 +104,10 @@ export default function Statistics() {
 
 
 	const handle_maxiTO_VALUE_Change = (destination: string, value: string) => {
-			// handle_maxiTO_VALUE_Change(affectationItem.name, e.target.value)}
 			set_maxi_Values((maxi_Value_TO: any) => ({
 				...maxi_Value_TO,
 				[destination]: { maxi_To: value },
 			}));
-			// const numericValue = parseFloat(value) || 0;
-			// dispatch(DataAction.change_maxi_tons({ destination: destination, value}));
 			dispatch(DataAction.change_maxi_tons({ destination, value}));
 			dispatch(DataAction.save_maxi_tons());
 				};
@@ -144,13 +139,17 @@ export default function Statistics() {
 	///
 	let firstRender = true;
 	function init_tally() {
-		affectation.forEach((affectationItem) => {
-			const k = affectationItem.name as string;
-			if (k !== "stock") {
-
-				
+		const Init_maxi_tons= window.localStorage.getItem("local_maxi");	
+		if (Init_maxi_tons) {
+			const parsedMaxiTons = Init_maxi_tons ? JSON.parse(Init_maxi_tons) : {};
+			toast.error('statistic refresh', { position: toast.POSITION.TOP_LEFT, autoClose: 2000 });
+			for (const key in parsedMaxiTons) {
+				if(Object.prototype.hasOwnProperty.call(parsedMaxiTons, key)) {
+					const value = parsedMaxiTons[key];
+					handle_maxiTO_VALUE_Change(key, value);
 				}
-		});
+			}
+		}
 		firstRender = false;
 	};
 
@@ -158,8 +157,7 @@ export default function Statistics() {
 	useEffect(() => {
 	if (firstRender) {
 		init_tally();
-		toast.error('init Tally', { position: toast.POSITION.TOP_LEFT, autoClose: 2000 });
-
+		toast.error('refresh  Tally', { position: toast.POSITION.TOP_LEFT, autoClose: 2000 });
 	}
 	}, [firstRender]);
 
@@ -172,8 +170,28 @@ export default function Statistics() {
 		return p;
 		}, {});
 
+	// const Init_maxi_tons = window.localStorage.getItem("local_maxi");
+
+	// useEffect(() => {
+		// if (firstRender) {
+		// 	const Init_maxi_tons= window.localStorage.getItem("local_maxi");
+			
+		// 	if (Init_maxi_tons) {
+		// 		const parsedMaxiTons = Init_maxi_tons ? JSON.parse(Init_maxi_tons) : {};
+		// 		toast.error('statistic refresh', { position: toast.POSITION.TOP_LEFT, autoClose: 2000 });
+		// 		for (const key in parsedMaxiTons) {
+		// 			if(Object.prototype.hasOwnProperty.call(parsedMaxiTons, key)) {
+		// 				const value = parsedMaxiTons[key];
+		// 				handle_maxiTO_VALUE_Change(key, value);
+		// 			}
+		// 		}
+		// 	// setFirstRender(false)
+		// 	firstRender = false;
+		// 	}
+		// }}, 
+		// [firstRender]);
+			
 	
-//
 	Object.values(statistics).forEach((destinationStats: any ) => {    
 		totalCount += destinationStats.count;
 		totalWeight += destinationStats.weight;
