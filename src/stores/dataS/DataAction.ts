@@ -39,7 +39,22 @@ export default class DataAction {
 	public static CHANGE_PREVIOUS_QTT = "DataAction.CHANGE_PREVIOUS_QTT";
 	public static CHANGE_PREVIOUS_TONS = "DataAction.CHANGE_PREVIOUS_TONS";
 	public static CHANGE_MAXI_TONS = "DataAction.CHANGE_MAXI_TONS";
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	public static CHANGE_EXTENDED = "DataAction.CHANGE_EXTENDED";
+	public static SAVE_EXTENDED = "DataAction.SAVE_EXTENDED";
+	public static LOAD_EXTENDED = "DataAction.LOAD_EXTENDED";
 
+	public static load_Extended(data: string): AnyAction {
+		return { type: DataAction.LOAD_EXTENDED, payload: JSON.parse(data) };
+	}
+	// public static change_extended(changeExtended: { [destination: string]: boolean }): AnyAction {
+	public static change_extended(changeExtended: boolean ): AnyAction {
+		return { type: DataAction.CHANGE_EXTENDED, payload: changeExtended };
+	}
+	public static save_extended(): AnyAction {
+		return { type: DataAction.SAVE_EXTENDED };
+	}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	public static change_checkbox_state(changecheckboxstate: { [destination: string]: boolean }): AnyAction {
 		return { type: DataAction.CHANGE_CHECKBOX_STATE, payload: changecheckboxstate };
 	}

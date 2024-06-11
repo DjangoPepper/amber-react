@@ -18,6 +18,7 @@ export type export_stepe_tally_Data = {
     tally_PUnits: string
     tally_PKilos: number
     tally_Max: string
+    Extended_Tally: boolean
 }
 
 interface Interface_stepe_state {
@@ -46,6 +47,11 @@ interface Interface_stepe_state {
 
     loaded_tally_status: boolean;
     saved_tally_status: boolean;
+
+    loaded_Extended_Tally: boolean;
+    saved_Extended_Tally: boolean;
+    Extended_Tally: boolean
+    Extended_TallyButton_Status: boolean;
 }
 
 const initial_stepe_Data_State: Interface_stepe_state = {
@@ -74,6 +80,12 @@ const initial_stepe_Data_State: Interface_stepe_state = {
 
     loaded_tally_status: false,
     saved_tally_status: true,
+
+    loaded_Extended_Tally: false,
+    saved_Extended_Tally: true,
+    Extended_Tally: false,
+    Extended_TallyButton_Status: false,
+    
 };
 
 export const dataReducer: Reducer<Interface_stepe_state> = (state = initial_stepe_Data_State, action: AnyAction): Interface_stepe_state => {
@@ -169,7 +181,7 @@ export const dataReducer: Reducer<Interface_stepe_state> = (state = initial_step
                     ...state,
                     pickerColors: action.payload,
                 }
-//**************************************************************************************************** */
+
             case DataAction.SAVE_CATALOG:
                 if(state.saved_catalog_status) return state;
                 // console.log("saving catalog...");
@@ -179,7 +191,7 @@ export const dataReducer: Reducer<Interface_stepe_state> = (state = initial_step
                     ...state,
                     saved_catalog_status: false
                 }
-//**************************************************************************************************** */
+
             case DataAction.SAVE_TALLY:
                 if(state.saved_tally_status) return state;
                 // console.log("saving catalog...");
@@ -189,9 +201,33 @@ export const dataReducer: Reducer<Interface_stepe_state> = (state = initial_step
                     saved_tally_status: false
                 }
 //****************************************************************************************************
+            case DataAction.CHANGE_EXTENDED:
+                return {
+                    ...state.tally_data_state,
+                    ...action.payload,
+                }
+            case DataAction.load_Extended:
+                // case DataAction.LOAD_PREV_QTT:
+                //     return {
+                //         ...state,
+                //         TAlly_HOLD_previous_QTT: action.payload,
+                return {
+                    ...state,
+                    Extended_Tally: action.payload
+                }
+                
+
+            case DataAction.SAVE_EXTENDED:
+                if(state.saved_Extended_Tally) return state;
+                window.localStorage.setItem("local_Extended", JSON.stringify(state.Extended_Tally));
+                return {
+                    ...state,
+                    saved_Extended_Tally: false
+                }
+//**************************************************************************************************** */
             case DataAction.SAVE_CHECKBOX_STATE:
                 // if(state.saved_TAlly_HOLD_checkbox_status) return state;
-                window.localStorage.setItem("local_checkbox", JSON.stringify(state.TAlly_HOLD_checkbox));
+                window.localStorage.setItem("local_chkbox", JSON.stringify(state.TAlly_HOLD_checkbox));
                 state.saved_TAlly_HOLD_checkbox_status = true;
                 return {
                     ...state,
@@ -200,7 +236,7 @@ export const dataReducer: Reducer<Interface_stepe_state> = (state = initial_step
             case DataAction.SAVE_PREV_QTT:
                 // if(state.saved_TAlly_HOLD_previous_QTT_status) return state;
                 state.saved_TAlly_HOLD_previous_QTT_status = true;
-                window.localStorage.setItem("local_punit", JSON.stringify(state.TAlly_HOLD_previous_QTT));
+                window.localStorage.setItem("local_pqtt", JSON.stringify(state.TAlly_HOLD_previous_QTT));
                 return {
                     ...state,
                     saved_TAlly_HOLD_previous_QTT_status: false
@@ -208,7 +244,7 @@ export const dataReducer: Reducer<Interface_stepe_state> = (state = initial_step
             case DataAction.SAVE_PREV_TONS:
                 // if(state.saved_TAlly_HOLD_previous_TONS_status) return state;
                 state.saved_TAlly_HOLD_previous_TONS_status = true;
-                window.localStorage.setItem("local_pkilos", JSON.stringify(state.TAlly_HOLD_previous_TONS));
+                window.localStorage.setItem("local_ptons", JSON.stringify(state.TAlly_HOLD_previous_TONS));
                 return {
                     ...state,
                     saved_TAlly_HOLD_previous_TONS_status: false
@@ -221,7 +257,7 @@ export const dataReducer: Reducer<Interface_stepe_state> = (state = initial_step
                     ...state,
                     saved_TAlly_HOLD_maxi_TONS_status: false
                 };
-//**************************************************************************************************** */
+
             case DataAction.LOAD_CATALOG:
                 return {
                     ...state,

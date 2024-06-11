@@ -26,20 +26,17 @@ export default function Statistics() {
 
 
 	const dispatch = useDispatch();	
-	const [Extended_Tally_Value, set_Extended_Tally_Value] = React.useState(false);
-
+	const [Extended_Tally, set_Extended_Tally_Value] = React.useState(false);
+	// const [value, setValue] = React.useState(initialValue)
 	const [checkbox_Hold_State, set_checkbox_Hold_State] = useState<{ [key: string]: boolean }>({});	
-	
 	const [previous_Value_QT, set_previous_Value_QT] = useState<{ [key: string]: string }>({});
-	// const [previous_Value_TO, set_previous_Value_TO] = useState<{ [key: string]: { prevTO_VALUE: string } }>({});
 	const [previous_Value_TO, set_previous_Value_TO] = useState<{ [key: string]: string }>({});
-	// const [maxi_Value_TO, set_maxi_Values] 			 = useState<{ [key: string]: { maxi_To: string      } }>({});
 	const [maxi_Value_TO, set_maxi_Values] 			 = useState<{ [key: string]: string }>({});
 
 	const selectedColors = useSelector<RootState, { [key: string]: string }>((state) => state.dataSS.pickerColors);
 
 	useEffect(() => {
-		const punits = window.localStorage.getItem("local_punit");
+		const punits = window.localStorage.getItem("local_pqtt");
 		if(punits) {
 			set_previous_Value_QT(JSON.parse(punits));
 		}
@@ -115,9 +112,11 @@ export default function Statistics() {
 		dispatch(DataAction.save_maxi_tons());
 		};
 
-		const handle_Extended_Tally = () => {
+		const toggle_Extended = () => {
 			set_Extended_Tally_Value((prevValue) => {
-				console.log("handle_Extended_Tally :", prevValue);
+				console.log("toggle_Extended :", prevValue);
+				dispatch(DataAction.change_extended(prevValue));
+				dispatch(DataAction.save_extended());
 				return !prevValue;
 			});
 		};
@@ -140,10 +139,7 @@ export default function Statistics() {
 	function init_tally() {
 		affectation.forEach((affectationItem) => {
 			const k = affectationItem.name as string;
-			if (k !== "stock") {
-
-				
-				}
+			if (k !== "stock") {}
 		});
 		firstRender = false;
 	};
@@ -153,7 +149,6 @@ export default function Statistics() {
 	if (firstRender) {
 		init_tally();
 		toast.error('init Tally', { position: toast.POSITION.TOP_LEFT, autoClose: 2000 });
-
 	}
 	}, [firstRender]);
 
@@ -203,11 +198,11 @@ export default function Statistics() {
 					<th style={{ textAlign: 'left' }}>DesT</th>
 					{/* <th style={{ textAlign: 'center' }}>K</th> */}
 					<th style={{ textAlign: 'center' }}>
-					<Button variant="info" onClick={handle_Extended_Tally}>T</Button>
+					<Button variant="info" onClick={toggle_Extended}>T</Button>
 					</th>
 					<th style={{ textAlign: 'center' }}>Units</th>
 					<th style={{ textAlign: 'center' }}>Kilos</th>
-					{Extended_Tally_Value && (
+					{Extended_Tally && (
 					<>
 						<th style={{ textAlign: 'center', backgroundColor: 'gray' }}>P Units</th>
 						<th style={{ textAlign: 'center', backgroundColor: 'gray' }}>P Kilos</th>
@@ -279,7 +274,7 @@ export default function Statistics() {
 											{/* sinon affiche toute les colonnes */}
 
 {/* PREV_Q */}
-{Extended_Tally_Value && (
+{Extended_Tally && (
 					<>
 											<td style={{ textAlign: 'center',backgroundColor: 'gray' }}>		
 												<input
@@ -358,7 +353,7 @@ export default function Statistics() {
 				<td style={{ textAlign: 'center'}}>{isNaN(totalCalesCount) ? 0 : totalCalesCount}</td>										
 				{/* T */}
 				<td style={{ textAlign: 'center'}}>{isNaN(totalCalesWeight) ? 0 : totalCalesWeight.toLocaleString("en-US")}</td>				
-				{Extended_Tally_Value && (
+				{Extended_Tally && (
 					<>
 						{/*PREV_Q */}
 						<td style={{ textAlign: 'center',backgroundColor: 'gray' }}>{isNaN(totalPreviousCalesCount) ? 0 : totalPreviousCalesCount}</td>
@@ -381,7 +376,7 @@ export default function Statistics() {
 {/* *********************************************************************************************** */}
 {/* *********************************************************************************************** */}
 {/* *********************************************************************************************** */}
-{Extended_Tally_Value && (
+{Extended_Tally && (
 <Table>
 			{/* ... En-tête de table ... */}		
 			<thead>
