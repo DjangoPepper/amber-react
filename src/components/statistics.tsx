@@ -31,8 +31,10 @@ export default function Statistics() {
 	const [checkbox_Hold_State, set_checkbox_Hold_State] = useState<{ [key: string]: boolean }>({});	
 	
 	const [previous_Value_QT, set_previous_Value_QT] = useState<{ [key: string]: string }>({});
-	const [previous_Value_TO, set_previous_Value_TO] = useState<{ [key: string]: { prevTO_VALUE: string } }>({});
-	const [maxi_Value_TO, set_maxi_Values] 			 = useState<{ [key: string]: { maxi_To: string      } }>({});
+	// const [previous_Value_TO, set_previous_Value_TO] = useState<{ [key: string]: { prevTO_VALUE: string } }>({});
+	const [previous_Value_TO, set_previous_Value_TO] = useState<{ [key: string]: string }>({});
+	// const [maxi_Value_TO, set_maxi_Values] 			 = useState<{ [key: string]: { maxi_To: string      } }>({});
+	const [maxi_Value_TO, set_maxi_Values] 			 = useState<{ [key: string]: string }>({});
 
 	const selectedColors = useSelector<RootState, { [key: string]: string }>((state) => state.dataSS.pickerColors);
 
@@ -52,8 +54,8 @@ export default function Statistics() {
 		if (updatedCheckboxState[k] !== undefined) {
 			//si prevqtt,prevtons, maxitons non vide & updatedCheckboxState[k] = false alors updatedCheckboxState[k] = true
 			if ((Number(previous_Value_QT[k]) > 0 ||
-				Number(previous_Value_TO[k].prevTO_VALUE) > 0 || 
-				Number(maxi_Value_TO[k].maxi_To) > 0 ))
+				Number(previous_Value_TO[k]) > 0 || 
+				Number(maxi_Value_TO[k]) > 0 ))
 				//  && updatedCheckboxState[k] === false) 
 				{
 					updatedCheckboxState[k] = true;
@@ -89,8 +91,6 @@ export default function Statistics() {
 			...previous_Value_QT,
 			[destination]: value,
 		}));
-		// let numericValue = parseFloat(value) || 0;
-		// dispatch(DataAction.change_previous_qtt({ destination: destination, value: value }));
 		dispatch(DataAction.change_previous_qtt({ destination, value }));
 		dispatch(DataAction.save_previous_qtt());
 
@@ -99,32 +99,21 @@ export default function Statistics() {
 	const handle_PrevTO_VALUE_Change = (destination: string, value: string) => {
 		set_previous_Value_TO((previous_Value_TO) => ({
 			...previous_Value_TO,
-			[destination]: { 
-				prevTO_VALUE: value,  
-			},
+			[destination]: value,  
 		}));
-		// let numericValue = parseFloat(value) || 0;
-		// dispatch(DataAction.change_previous_tons({ destination: destination, value: value }));
 		dispatch(DataAction.change_previous_tons({ destination, value }));
 		dispatch(DataAction.save_previous_tons());
 		};
 
 
 	const handle_maxiTO_VALUE_Change = (destination: string, value: string) => {
-			// handle_maxiTO_VALUE_Change(affectationItem.name, e.target.value)}
-			set_maxi_Values((maxi_Value_TO: any) => ({
-				...maxi_Value_TO,
-				[destination]: { maxi_To: value },
-			}));
-			// const numericValue = parseFloat(value) || 0;
-			// dispatch(DataAction.change_maxi_tons({ destination: destination, value}));
-			dispatch(DataAction.change_maxi_tons({ destination, value}));
-			dispatch(DataAction.save_maxi_tons());
-				};
-		
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////	
+		set_maxi_Values((maxi_Value_TO: any) => ({
+			...maxi_Value_TO,
+			[destination]: value,
+		}));
+		dispatch(DataAction.change_maxi_tons({ destination, value}));
+		dispatch(DataAction.save_maxi_tons());
+		};
 
 		const handle_Extended_Tally = () => {
 			set_Extended_Tally_Value((prevValue) => {
@@ -143,7 +132,7 @@ export default function Statistics() {
 		}, 0);
 	
 	const totalPreviousCalesWeight = Object.keys(previous_Value_TO).reduce((total, k) => {
-		return total + (previous_Value_TO[k]?.prevTO_VALUE ? parseFloat(previous_Value_TO[k].prevTO_VALUE) : 0);
+		return total + (previous_Value_TO[k] ? parseFloat(previous_Value_TO[k]) : 0);
 		}, 0);
 
 	///
@@ -315,7 +304,7 @@ export default function Statistics() {
 													style={{ width: '80px' }}
 													value={
 														previous_Value_TO[affectationItem.name] ? 
-															previous_Value_TO[affectationItem.name].prevTO_VALUE 
+															previous_Value_TO[affectationItem.name]
 															: 
 															0
 													}
@@ -341,8 +330,8 @@ export default function Statistics() {
 											<td style={{ textAlign: 'center'}}>
 												{(
 													(statistics[affectationItem.name]?.weight ?? 0) +
-													(previous_Value_TO[affectationItem.name]?.prevTO_VALUE
-													? parseFloat(previous_Value_TO[affectationItem.name].prevTO_VALUE)
+													(previous_Value_TO[affectationItem.name]
+													? parseFloat(previous_Value_TO[affectationItem.name])
 													: 0)
 												).toLocaleString("en-US", { minimumFractionDigits: 3, maximumFractionDigits: 3 })}
 											</td>
@@ -450,8 +439,8 @@ export default function Statistics() {
 														(
 															(statistics[affectationItem.name]?.weight ??  0) 
 															+
-															(previous_Value_TO[affectationItem.name]?.prevTO_VALUE ?
-																parseFloat(previous_Value_TO[affectationItem.name].prevTO_VALUE) : 0)
+															(previous_Value_TO[affectationItem.name]?
+																parseFloat(previous_Value_TO[affectationItem.name]) : 0)
 														)
 														/
 														(
@@ -471,7 +460,7 @@ export default function Statistics() {
 												<input
 													type="text"
 													style={{ width: '80px' }}
-													value={maxi_Value_TO[affectationItem.name] ? maxi_Value_TO[affectationItem.name].maxi_To : 0} // Utilisez prevValues[affectationItem.name].prevTo pour la valeur 
+													value={maxi_Value_TO[affectationItem.name] ? maxi_Value_TO[affectationItem.name] : 0} // Utilisez prevValues[affectationItem.name].prevTo pour la valeur 
 													onChange={(e) => handle_maxiTO_VALUE_Change(affectationItem.name, e.target.value)}
 												/>
 											</td>
@@ -481,10 +470,10 @@ export default function Statistics() {
 											<td style={{ textAlign: 'center'}} 
 												className={
 												(
-														(parseFloat(maxi_Value_TO[affectationItem.name]?.maxi_To ?? 0) - 
+														(parseFloat(maxi_Value_TO[affectationItem.name] ?? 0) - 
 															(
 																(parseFloat(statistics[affectationItem.name]?.weight) || 0) +
-																(parseFloat(previous_Value_TO[affectationItem.name]?.prevTO_VALUE) || 0)
+																(parseFloat(previous_Value_TO[affectationItem.name]) || 0)
 															)
 														) < 0 ? 'red-text' : 'blue-text'
 												)
@@ -492,10 +481,10 @@ export default function Statistics() {
 												>
 											{
 												(
-													parseFloat(maxi_Value_TO[affectationItem.name]?.maxi_To ?? 0) - 
+													parseFloat(maxi_Value_TO[affectationItem.name]?? 0) - 
 													(
 													(parseFloat(statistics[affectationItem.name]?.weight) || 0) +
-													(parseFloat(previous_Value_TO[affectationItem.name]?.prevTO_VALUE) || 0)
+													(parseFloat(previous_Value_TO[affectationItem.name]) || 0)
 													)
 												).toLocaleString("en-US", { minimumFractionDigits: 3, maximumFractionDigits: 3 })
 											}
@@ -507,9 +496,9 @@ export default function Statistics() {
 												className={
 												(() => {
 													try {
-													const maxiTo = parseFloat(maxi_Value_TO[affectationItem.name]?.maxi_To) || 0;
+													const maxiTo = parseFloat(maxi_Value_TO[affectationItem.name]) || 0;
 													const statsWeight = parseFloat(statistics[affectationItem.name]?.weight) || 0;
-													const prevTO = parseFloat(previous_Value_TO[affectationItem.name]?.prevTO_VALUE) || 0;
+													const prevTO = parseFloat(previous_Value_TO[affectationItem.name]) || 0;
 													const prevQT_VALUE = parseFloat(previous_Value_QT[affectationItem.name]) || 0;
 
 													const result = (maxiTo - statsWeight - prevTO) / (
@@ -525,9 +514,9 @@ export default function Statistics() {
 												}>
 												{(() => {
 													try {
-													const maxiTo = parseFloat(maxi_Value_TO[affectationItem.name]?.maxi_To) || 0;
+													const maxiTo = parseFloat(maxi_Value_TO[affectationItem.name]) || 0;
 													const statsWeight = parseFloat(statistics[affectationItem.name]?.weight) || 0;
-													const prevTO = parseFloat(previous_Value_TO[affectationItem.name]?.prevTO_VALUE) || 0;
+													const prevTO = parseFloat(previous_Value_TO[affectationItem.name]) || 0;
 													const prevQT_VALUE = parseFloat(previous_Value_QT[affectationItem.name]) || 0;
 
 													const result = (maxiTo - statsWeight - prevTO) / (
