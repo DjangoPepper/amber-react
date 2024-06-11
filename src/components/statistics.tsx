@@ -30,11 +30,18 @@ export default function Statistics() {
 
 	const [checkbox_Hold_State, set_checkbox_Hold_State] = useState<{ [key: string]: boolean }>({});	
 	
-	const [previous_Value_QT, set_previous_Value_QT] = useState<{ [key: string]: { prevQT_VALUE: string } }>({});
+	const [previous_Value_QT, set_previous_Value_QT] = useState<{ [key: string]: string }>({});
 	const [previous_Value_TO, set_previous_Value_TO] = useState<{ [key: string]: { prevTO_VALUE: string } }>({});
 	const [maxi_Value_TO, set_maxi_Values] 			 = useState<{ [key: string]: { maxi_To: string      } }>({});
 
 	const selectedColors = useSelector<RootState, { [key: string]: string }>((state) => state.dataSS.pickerColors);
+
+	useEffect(() => {
+		const punits = window.localStorage.getItem("local_punit");
+		if(punits) {
+			set_previous_Value_QT(JSON.parse(punits));
+		}
+	}, []);
 
 	const Toggle_checkbox_boolean = (k: string) => {
 
@@ -44,7 +51,7 @@ export default function Statistics() {
 		// Vérifiez si la destination k est déjà dans l'état des cases à cocher
 		if (updatedCheckboxState[k] !== undefined) {
 			//si prevqtt,prevtons, maxitons non vide & updatedCheckboxState[k] = false alors updatedCheckboxState[k] = true
-			if ((Number(previous_Value_QT[k].prevQT_VALUE) > 0 || 
+			if ((Number(previous_Value_QT[k]) > 0 ||
 				Number(previous_Value_TO[k].prevTO_VALUE) > 0 || 
 				Number(maxi_Value_TO[k].maxi_To) > 0 ))
 				//  && updatedCheckboxState[k] === false) 
@@ -80,9 +87,7 @@ export default function Statistics() {
 	const handle_prevQT_VALUE_Change = (destination: string, value: string) => {
 		set_previous_Value_QT((previous_Value_QT) => ({
 			...previous_Value_QT,
-			[destination]: { 
-				prevQT_VALUE: value, 
-			},
+			[destination]: value,
 		}));
 		// let numericValue = parseFloat(value) || 0;
 		// dispatch(DataAction.change_previous_qtt({ destination: destination, value: value }));
@@ -134,7 +139,7 @@ export default function Statistics() {
 //	
 
 	const totalPreviousCalesCount = Object.keys(previous_Value_QT).reduce((total, k) => {
-		return total + (previous_Value_QT[k] ? parseFloat(previous_Value_QT[k].prevQT_VALUE) : 0);
+		return total + (previous_Value_QT[k] ? parseFloat(previous_Value_QT[k]) : 0);
 		}, 0);
 	
 	const totalPreviousCalesWeight = Object.keys(previous_Value_TO).reduce((total, k) => {
@@ -228,7 +233,6 @@ export default function Statistics() {
 			
 {/* HEADERS */}				
 							{affectation.map((affectationItem) => {
-
 				const statistics_array = statistics[affectationItem.name] || {}; // Utilise un objet vide par défaut
 				let chsafin = checkbox_Hold_State[affectationItem.name] || false;
 				if (
@@ -294,7 +298,7 @@ export default function Statistics() {
 													style={{ width: '45px' }}
 													value={
 														previous_Value_QT[affectationItem.name] ? 
-															previous_Value_QT[affectationItem.name].prevQT_VALUE 
+															previous_Value_QT[affectationItem.name]
 															: 
 															0
 													}
@@ -324,8 +328,8 @@ export default function Statistics() {
 											<td style={{ textAlign: 'center'}}>
 												{(
 													(statistics[affectationItem.name]?.count ?? 0) +
-													(previous_Value_QT[affectationItem.name]?.prevQT_VALUE
-													? parseFloat(previous_Value_QT[affectationItem.name].prevQT_VALUE)
+													(previous_Value_QT[affectationItem.name]
+													? parseFloat(previous_Value_QT[affectationItem.name])
 													: 0)
 												)
 												}
@@ -453,8 +457,8 @@ export default function Statistics() {
 														(
 															(statistics[affectationItem.name]?.count ?? 0) 
 															+ 
-															(previous_Value_QT[affectationItem.name]?.prevQT_VALUE ?
-																parseFloat(previous_Value_QT[affectationItem.name].prevQT_VALUE) : 0)
+															(previous_Value_QT[affectationItem.name] ?
+																parseFloat(previous_Value_QT[affectationItem.name]) : 0)
 														)
 														// (totalCalesCount + totalPreviousCalesCount) / (totalCalesWeight + totalPreviousCalesWeight) 
 													).toLocaleString("en-US", { minimumFractionDigits: 3, maximumFractionDigits: 3 })
@@ -506,7 +510,7 @@ export default function Statistics() {
 													const maxiTo = parseFloat(maxi_Value_TO[affectationItem.name]?.maxi_To) || 0;
 													const statsWeight = parseFloat(statistics[affectationItem.name]?.weight) || 0;
 													const prevTO = parseFloat(previous_Value_TO[affectationItem.name]?.prevTO_VALUE) || 0;
-													const prevQT_VALUE = parseFloat(previous_Value_QT[affectationItem.name]?.prevQT_VALUE) || 0;
+													const prevQT_VALUE = parseFloat(previous_Value_QT[affectationItem.name]) || 0;
 
 													const result = (maxiTo - statsWeight - prevTO) / (
 														(statsWeight + prevTO) /
@@ -524,7 +528,7 @@ export default function Statistics() {
 													const maxiTo = parseFloat(maxi_Value_TO[affectationItem.name]?.maxi_To) || 0;
 													const statsWeight = parseFloat(statistics[affectationItem.name]?.weight) || 0;
 													const prevTO = parseFloat(previous_Value_TO[affectationItem.name]?.prevTO_VALUE) || 0;
-													const prevQT_VALUE = parseFloat(previous_Value_QT[affectationItem.name]?.prevQT_VALUE) || 0;
+													const prevQT_VALUE = parseFloat(previous_Value_QT[affectationItem.name]) || 0;
 
 													const result = (maxiTo - statsWeight - prevTO) / (
 														(statsWeight + prevTO) /
