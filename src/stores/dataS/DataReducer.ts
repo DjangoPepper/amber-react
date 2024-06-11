@@ -243,11 +243,11 @@ export const dataReducer: Reducer<Interface_stepe_state> = (state = initial_step
                     ...state,
                     TAlly_HOLD_checkbox: action.payload,
                 };
-                case DataAction.LOAD_PREV_QTT:
-                    return {
-                        ...state,
-                        TAlly_HOLD_previous_QTT: action.payload,
-                    };
+            case DataAction.LOAD_PREV_QTT:
+                return {
+                    ...state,
+                    TAlly_HOLD_previous_QTT: action.payload,
+                };
             case DataAction.LOAD_PREV_TONS:
                 return {
                     ...state,
@@ -262,6 +262,32 @@ export const dataReducer: Reducer<Interface_stepe_state> = (state = initial_step
                 return {
                     ...state,
                     loaded_catalog_status: false,
+                }
+            case DataAction.LOAD_EXTENDED:
+                return {
+                    ...state,
+                    catalog_data_state: action.payload
+                }
+                // case DataAction.SAVE_MAXI_TONS:
+                //     // if(state.saved_TAlly_HOLD_maxi_TONS_status) return state;
+                //     state.saved_TAlly_HOLD_maxi_TONS_status = true;
+                //     window.localStorage.setItem("local_maxi", JSON.stringify(state.TAlly_HOLD_maxi_TONS));
+                //     return {
+                //         ...state,
+                //         saved_TAlly_HOLD_maxi_TONS_status: false
+                //     };
+            case DataAction.SAVE_EXTENDED:
+                if(state.saved_EXTENDED_status) return state;
+                saved_TAlly_HOLD_maxi_TONS_status: true
+                window.localStorage.setItem("local_extended", JSON.stringify(action.payload));
+                return {
+                    ...state,
+                    catalog_data_state: action.payload
+                }
+            case DataAction.CHANGE_EXTENDED:
+                return {
+                    ...state,
+                    catalog_data_state: action.payload
                 }
 
             default:
