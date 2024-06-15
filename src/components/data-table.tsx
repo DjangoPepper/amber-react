@@ -30,9 +30,6 @@ import Msg2 from "./Msg2";
 
 //FRED ****************************************************************
 import SpaceatPos from "./SpaceatPos";
-// import * as fs from 'fs'
-// import * as path from 'path'
-// import { AnyAction } from "redux";
 import Msg from "./Msg"
 
 const row = {
@@ -51,24 +48,18 @@ function backupCurrentDateTime(): string {
     const now = new Date();
     const day = String(now.getDate()).padStart(2, '0');
     const month = monthNames[now.getMonth()];  
-
     //const month = String(now.getMonth() + 1).padStart(2, '0');
     //const year = String(now.getFullYear());
     const hour = String(now.getHours()).padStart(2, '0');
     const minute = String(now.getMinutes()).padStart(2, '0');
-
     return `Stepe ${month}${day}_${hour}${minute}.xlsx`;
-    }
+    };
 
-
-    declare module '@tanstack/react-table' {
-        interface TableMeta<TData extends RowData> {
-            updateData: (reference: number, columnId: string, value: unknown) => void
-            }
+declare module '@tanstack/react-table' {
+    interface TableMeta<TData extends RowData> {
+        updateData: (reference: number, columnId: string, value: unknown) => void
         }
-
-
-
+    };
 
 
 const columnHelper = createColumnHelper<export_stepe_catalog_Data>();
@@ -81,6 +72,7 @@ const EditableCell = ({ getValue, row, column, table }: any) => {
     }
 
     React.useEffect(() => {
+        // const pageSize = Number(localStorage.getItem('pageSize')) || 12;
         setValue(initialValue)
     }, [initialValue])
 
@@ -145,7 +137,12 @@ const row = {
     ));
 }; */
 
-
+// const pageSize = Number(localStorage.getItem('pageSize')) || Number(localStorage.setItem('pageSize', '14')) || 14;
+const pageSize = Number(localStorage.getItem('local_pageSize'))  || 14;
+if (!pageSize) {
+    localStorage.setItem('local_pageSize', '14');
+    // pageSize = Number(localStorage.getItem('pageSize')) || 14;
+    }
 //FRED
 
 
@@ -327,6 +324,7 @@ export default function DataTable() {
     //     setCheckedRows(updatedCheckedRows);
     // };
 
+    // const pageSize = Number(localStorage.getItem('pageSize')) || 10;
 
 
     return ( 
@@ -509,16 +507,31 @@ export default function DataTable() {
                     />
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 </span>
-                <select
+{/*                 <select
                     value={table.getState().pagination.pageSize}
                     onChange={e => {
                         table.setPageSize(Number(e.target.value))
                     }}
                 >
-                    {[10, 40, 80, 120, 200].map(pageSize => (
+                    {[10, 42, 84, 126, 210].map(pageSize => (
                         <option key={pageSize} value={pageSize}>
                             {pageSize}
                         </option>
+                    ))}
+                </select>
+*/}
+                <select
+                    value={table.getState().pagination.pageSize}
+                    onChange={(e) => {
+                        const pageSize = Number(e.target.value);
+                        table.setPageSize(pageSize);
+                        localStorage.setItem('local_pageSize', pageSize.toString());
+                    }}
+                >
+                    {[10, 42, 84, 126, 210].map((pageSize) => (
+                    <option key={pageSize} value={pageSize}>
+                        {pageSize}
+                    </option>
                     ))}
                 </select>
                 

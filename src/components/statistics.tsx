@@ -24,26 +24,43 @@ export default function Statistics() {
 	let totalstockCount = 0;
 	let totalstockWeight = 0;
 
+	let firstRender = true;
 
 	const dispatch = useDispatch();	
 	const [Extended_Tally_Value, set_Extended_Tally_Value] = React.useState(false);
-
 	const [checkbox_Hold_State, set_checkbox_Hold_State] = useState<{ [key: string]: boolean }>({});	
-	
 	const [previous_Value_QT, set_previous_Value_QT] = useState<{ [key: string]: string }>({});
-	// const [previous_Value_TO, set_previous_Value_TO] = useState<{ [key: string]: { prevTO_VALUE: string } }>({});
 	const [previous_Value_TO, set_previous_Value_TO] = useState<{ [key: string]: string }>({});
-	// const [maxi_Value_TO, set_maxi_Values] 			 = useState<{ [key: string]: { maxi_To: string      } }>({});
 	const [maxi_Value_TO, set_maxi_Values] 			 = useState<{ [key: string]: string }>({});
 
 	const selectedColors = useSelector<RootState, { [key: string]: string }>((state) => state.dataSS.pickerColors);
+
+	// useEffect(() => {
+	// 	const punits = window.localStorage.getItem("local_punit");
+	// 	if(punits) {
+	// 		set_previous_Value_QT(JSON.parse(punits));
+	// 	}
+	// }, []);
 
 	useEffect(() => {
 		const punits = window.localStorage.getItem("local_punit");
 		if(punits) {
 			set_previous_Value_QT(JSON.parse(punits));
 		}
-	}, []);
+
+		function init_tally() {
+			affectation.forEach((affectationItem) => {
+				const k = affectationItem.name as string;
+				if (k !== "stock") {}
+			});
+			firstRender = false;
+			};
+				
+			if (firstRender) {
+				init_tally();
+				toast.error('init Tally', { position: toast.POSITION.TOP_LEFT, autoClose: 2000 });
+				}
+		}, [firstRender]);
 
 	const Toggle_checkbox_boolean = (k: string) => {
 
@@ -136,7 +153,20 @@ export default function Statistics() {
 		}, 0);
 
 	///
-	let firstRender = true;
+	// let firstRender = true;
+/* 	function init_tally() {
+		affectation.forEach((affectationItem) => {
+			const k = affectationItem.name as string;
+			if (k !== "stock") {
+
+				
+				}
+		});
+		firstRender = false;
+	}; */
+
+
+/* 	useEffect(() => {
 	function init_tally() {
 		affectation.forEach((affectationItem) => {
 			const k = affectationItem.name as string;
@@ -146,16 +176,12 @@ export default function Statistics() {
 				}
 		});
 		firstRender = false;
-	};
-
-
-	useEffect(() => {
+		};	
 	if (firstRender) {
 		init_tally();
 		toast.error('init Tally', { position: toast.POSITION.TOP_LEFT, autoClose: 2000 });
-
-	}
-	}, [firstRender]);
+		}
+	}, [firstRender]); */
 
 	const statistics = catalog_data.reduce<any>((p, row) => {
 		if (!p[row.destination]) {
