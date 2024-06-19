@@ -27,17 +27,13 @@ import './index-tanstack.css'
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Msg2 from "./Msg2";
-
-//FRED ****************************************************************
 import SpaceatPos from "./SpaceatPos";
-import Msg from "./Msg"
 
 const row = {
     original: {
         reference: 133
     }
 };
-
 const monthNames = [
     'jan', 'fev', 'mar', 'avr', 'mai', 'juin',
     'juil', 'aou', 'sep', 'oct', 'nov', 'dec'
@@ -59,11 +55,8 @@ declare module '@tanstack/react-table' {
     interface TableMeta<TData extends RowData> {
         updateData: (reference: number, columnId: string, value: unknown) => void
         }
-    };
-
-
+};
 const columnHelper = createColumnHelper<export_stepe_catalog_Data>();
-
 const EditableCell = ({ getValue, row, column, table }: any) => {
     const initialValue = getValue()
     const [value, setValue] = React.useState(initialValue)
@@ -72,15 +65,19 @@ const EditableCell = ({ getValue, row, column, table }: any) => {
     }
     // LA?
     const [pageSize, setPageSize] = React.useState(99);
+    /* const [pageSize, setPageSize] = useState(() => {
+        const savedPageSize = window.localStorage.getItem('local_pageSize');
+        return savedPageSize !== null ? Number(savedPageSize) : 88; // Utiliser 88 si non trouvé
+    }); */
+    
     React.useEffect(() => {
-        // definire la valeur par defaut ou la lit depuis local_storage si ellle existe
-        const e_pageSize = Number(window.localStorage.getItem('local_pageSize')) || 99;
-        // Stocke la valeur dans le localStorage à chaque changement de pageSize
-        window.localStorage.setItem('local_pageSize', JSON.stringify(e_pageSize));        
+        // Mettre à jour le localStorage et l'état à partir du localStorage ou de la valeur par défaut
+        const savedPageSize = window.localStorage.getItem('local_pageSize');
+        const e_pageSize = savedPageSize !== null ? Number(savedPageSize) : 88;
         setPageSize(e_pageSize);
-        setValue(initialValue)
-    }, [initialValue,pageSize])
-    //ICI ?
+        window.localStorage.setItem('local_pageSize', e_pageSize.toString());
+        }, [initialValue]); // initialValue en dépendance si nécessaire
+    
     return (
         <input
             value={value as string}
@@ -102,55 +99,15 @@ const globalFilterFn: FilterFn<export_stepe_catalog_Data> = (row, columnId, filt
     };
 
 const useColumns = function useColumns(): any[] {
-
-const dispatch = useDispatch();
-//FRED
-/* const closeToast = () => {
-    // Code pour fermer le toast
-}; */
-
-const closeToast = () => {
-    toast.dismiss();
-};
-const row = {
-    original: {
-        reference: 123 // Assurez-vous que cela correspond à la structure de vos données
-    }
-};
-
-/* const Msg2 = ({closedToast,row2}:any) => (
-    <div>
-        {SpaceatPos(row2)}
-        <Button onClick={dispatch(DataAction.moveRow(row2))}>{SpaceatPos(row2)}</Button>
-        <Button onClick={closeToast}>Close</Button>
-    </div>
-    ) */
-
-/* const handleButtonClick = (reference: string) => {
-    toast(({ closeToast }) => (
-        <Msg
-            closeToast={closeToast}
-            onValidate={() => {
-                dispatch(DataAction.moveRow(reference));
-                // closeToast();
-                if (closeToast) {
-                    closeToast();
-                }
-                
-            }}
-        />
-    ));
-}; */
-
-// const pageSize = Number(localStorage.getItem('pageSize')) || Number(localStorage.setItem('pageSize', '14')) || 14;
-// const pageSize = Number(localStorage.getItem('local_pageSize'))  || 14;
-// if (!pageSize) {
-//     localStorage.setItem('local_pageSize', '14');
-//     // pageSize = Number(localStorage.getItem('pageSize')) || 14;
-//     }
-//FRED
-
-
+    const dispatch = useDispatch();
+    const closeToast = () => {
+        toast.dismiss();
+    };
+    const row = {
+        original: {
+            reference: 123 // Assurez-vous que cela correspond à la structure de vos données
+        }
+    };
     const columns = [
         columnHelper.accessor('rank', {
             header: () => 'RANG',
@@ -161,23 +118,6 @@ const row = {
             cell: EditableCell,
             filterFn: fuzzyFilter,
         }),
-// /* // #####################################################################################################################
-//         columnHelper.accessor('reference', {
-//             header: 'REF',
-//             cell: ({row}: any) =>
-                
-//                 <Button 
-//                     onClick={() => {
-//                     dispatch(DataAction.moveRow(row.original.reference)); //je change la detination de ref cale1,cale2, etc..
-//                     }}
-//                 >
-//                     {SpaceatPos(row.original.reference)}
-//                 </Button>,
-                
-//             filterFn: fuzzyFilter,
-
-//         }),
-// ##################################################################################################################### */
         columnHelper.accessor('reference', {
             header: 'REF',
             cell: ({ row }: any) => (
@@ -191,7 +131,6 @@ const row = {
             ),
             filterFn: fuzzyFilter,
         }),
-// ##################################################################################################################### */
         columnHelper.accessor('weight', {
             header: "POIDS",
             cell: info => info.getValue(),
@@ -202,38 +141,26 @@ const row = {
             filterFn: fuzzyFilter,
         })
     ];
-
     return columns;
-}
-//***********************************************************************/
-//***********************************************************************/
-//***********************************************************************/
-//***********************************************************************/
+};
+
 export default function DataTable() {
     const dispatch = useDispatch();
-    // const [showModal, setShowModal] = useState(false);
     const [PickerColorForSelectedCale, setPickerColorForSelectedCale] = useState<{ [key: string]: string }>({});
     const [newSelectedCale, setnewSelectedCale] = useState<string>('');
-    // const [ExtentedTally, setExtentedTally] = useState<string>('');
-
     const [newColor, setNewColor] = useState<string>('');
-    
-    // Accédez à la valeur sélectionnée depuis l'état Redux
     const selectedCale = useSelector<RootState, string>((state) => state.dataSS.selectedCale);
     const selectedColors = useSelector<RootState, { [key: string]: string }>((state) => state.dataSS.pickerColors);
     const setSelectedColors = (colors: { [key: string]: string }) => {
         dispatch(DataAction.changePickColors(colors));
-    }
-    
+    };
     const handleStabiloClick = () => { 
         setnewSelectedCale(selectedCale);
     };
-
     const handleCloseModal = () => { 
         // setShowModal(false); 
         setnewSelectedCale(""); 
     };
-
     const handleColorChange = (color: ColorResult) => {
         // setSelectedColor(color.hex);
         setSelectedColors({...selectedColors, [newSelectedCale]: color.hex});
@@ -241,7 +168,6 @@ export default function DataTable() {
         const updateStickerdColors = { ...PickerColorForSelectedCale, [selectedCale]: color.hex };
         setPickerColorForSelectedCale(updateStickerdColors);
     };
-    
     const handleSaveChanges = () => {
         // Mettez à jour la couleur pour toutes les affectation identiques
         const updatedData = data.map((item) => {
@@ -260,13 +186,12 @@ export default function DataTable() {
         // setShowModal(false);
         setnewSelectedCale("");
         };
-
+    
     const [sorting, setSorting] = React.useState<SortingState>([]);
     const [globalFilter, setGlobalFilter] = React.useState('')
     const cale = useSelector<RootState, string>(state => state.dataSS.selectedCale);
     const data = useSelector<RootState, export_stepe_catalog_Data[]>(state => state.dataSS.catalog_data_state);
     const columns = useColumns();
-    
     const table = useReactTable({
         data,
         columns,
@@ -292,9 +217,7 @@ export default function DataTable() {
 
         getRowId: (row) => {return row.reference; } ,
         debugTable: true,
-    }
-    );
-    
+    });
     const tableContainerRef = React.useRef<HTMLDivElement>(null)
     const exportData = () => {
         const aoa: any[][] = [HEADER.map(h => h.name)];
@@ -306,28 +229,21 @@ export default function DataTable() {
         utils.book_append_sheet(wb, sheet);
         writeFile(wb, backupCurrentDateTime())
     };
-
     const clear = () => dispatch(DataAction.clear());
     const [hold, setHold] = useState('');
-    
     const handleHoldChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         dispatch(DataAction.changeCale(e.target.value)) 
         const selectedWorkingHoldValue = (e.target.value);
         const selectedWorkingHoldOption = affectation.find((d) => d.name === selectedWorkingHoldValue);
         setHold(selectedWorkingHoldValue);
         
-    }
-
+    };
     const isStabiloButtonVisible = cale !== "stock"; // Condition pour déterminer la visibilité du bouton STABILO
-    // const TempColors = affectation.map((d) => d.color);
-    
-    // const [checkedRows, setCheckedRows] = useState<{ [key: number]: boolean }>({});
     const [checkedRows, setCheckedRows] = useState<{ [key: number]: boolean }>({});
-    // const handleCheckboxClick = (reference: number) => {
-    //     const updatedCheckedRows = { ...checkedRows };
-    //     updatedCheckedRows[reference] = !updatedCheckedRows[reference];
-    //     setCheckedRows(updatedCheckedRows);
-    // };
+    
+/////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////     RETURN    ////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////
     return ( 
         <>
             <div className="d-flex">
@@ -411,7 +327,6 @@ export default function DataTable() {
                         const reference = parseInt(row.original.reference, 10);
                         
                         const isChecked = checkedRows[reference] || false;
-
             return (
                                 <tr 
                                     key={row.id} 
@@ -459,8 +374,6 @@ export default function DataTable() {
                     {'<<'}
                 </button>&nbsp;&nbsp;&nbsp;&nbsp;
                 
-
-
                 <button
                     className="border rounded p-1"
                     onClick={() => table.previousPage()}
@@ -508,23 +421,12 @@ export default function DataTable() {
                     />
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 </span>
-{/*                 <select
-                    value={table.getState().pagination.pageSize}
-                    onChange={e => {
-                        table.setPageSize(Number(e.target.value))
-                    }}
-                >
-                    {[10, 42, 84, 126, 210].map(pageSize => (
-                        <option key={pageSize} value={pageSize}>
-                            {pageSize}
-                        </option>
-                    ))}
-                </select>
-*/}
+
                 <select
                     value={table.getState().pagination.pageSize}
                     onChange={(e) => {
                         const OpageSize = Number(e.target.value);
+                        handlePageSizeChange (OpageSize);
                         table.setPageSize(OpageSize);
                         localStorage.setItem('local_pageSize', OpageSize.toString());
                     }}
@@ -535,7 +437,6 @@ export default function DataTable() {
                     </option>
                     ))}
                 </select>
-                
             </div>
 
             {/* Modale pour modifier la valeur et la couleur */}
