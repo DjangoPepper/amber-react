@@ -78,7 +78,7 @@ const initial_stepe_Data_State: Interface_stepe_state = {
 
 export const dataReducer: Reducer<Interface_stepe_state> = (state = initial_stepe_Data_State, action: AnyAction): Interface_stepe_state => {
         switch (action.type) {
-            case DataAction.IMPORT_DATA:
+            case DataAction.IMPORT_CATALOG_DATA:
                 return {
                     ...state,
                     catalog_data_state: action.payload,

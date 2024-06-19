@@ -2,7 +2,7 @@ import {AnyAction} from "redux";
 // import { affectation } from "../../utils/destination";
 
 export default class DataAction {
-	public static IMPORT_DATA = "DataAction.IMPORT_DATA";
+	public static IMPORT_CATALOG_DATA = "DataAction.IMPORT_CATALOG_DATA";
 	public static CHANGE_CALE = "DataAction.CHANGE_CALE";
 	public static CHANGE_PREPA = "DataAction.CHANGE_PREPA";
 	public static MOVE_ROW = "DataAction.MOVE_ROW";
@@ -40,6 +40,12 @@ export default class DataAction {
 	public static CHANGE_PREVIOUS_TONS = "DataAction.CHANGE_PREVIOUS_TONS";
 	public static CHANGE_MAXI_TONS = "DataAction.CHANGE_MAXI_TONS";
 
+	public static IMPORT_TALLY_DATA = "DataAction.IMPORT_TALLY_DATA";
+	public static import_tally_Data(tdata: any[]): AnyAction {
+		return { type: DataAction.IMPORT_TALLY_DATA, payload: tdata };
+	}
+
+	
 	public static change_checkbox_state(changecheckboxstate: { [destination: string]: boolean }): AnyAction {
 		return { type: DataAction.CHANGE_CHECKBOX_STATE, payload: changecheckboxstate };
 	}
@@ -72,8 +78,8 @@ export default class DataAction {
 		return { type: DataAction.CHANGE_ORIGINAL_POS, payload: "stock"};
 	}
 	
-	public static importData(data: any[]): AnyAction {
-		return { type: DataAction.IMPORT_DATA, payload: data };
+	public static import_catalog_Data(data: any[]): AnyAction {
+		return { type: DataAction.IMPORT_CATALOG_DATA, payload: data };
 	}
 
 	public static changeCale(cale: string): AnyAction {

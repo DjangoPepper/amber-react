@@ -11,51 +11,49 @@ import Statistics from "./statistics";
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-
-
 function CleanExcelSheet(oSheet: any): export_stepe_catalog_Data {
 	toast.info('Allegement feuille', { position: toast.POSITION.TOP_RIGHT,autoClose: 1000 })// la feuille Bobines existe
-			
-			// effacement des cellules fusionnées
-			deleteExcelMergesInfos(oSheet);
+	
+	// effacement des cellules fusionnées
+	deleteExcelMergesInfos(oSheet);
 
-			// Traitement des margins
-			deleteExcelMarginsInfos(oSheet);
+	// Traitement des margins
+	deleteExcelMarginsInfos(oSheet);
 
-			// Traitement des lignes vides
-			reconstructRefWithoutEmptyRows(oSheet);
-			
-			// Résolution des formules
-			risolveFormulas(oSheet);
+	// Traitement des lignes vides
+	reconstructRefWithoutEmptyRows(oSheet);
+	
+	// Résolution des formules
+	risolveFormulas(oSheet);
 
-			// Supprimer les proprietes inutiles
-			removeProprietes(oSheet);
+	// Supprimer les proprietes inutiles
+	removeProprietes(oSheet);
 
-			//Suppression des infos XML dans r 
-			// removeBalisesXml(oSheet);
+	//Suppression des infos XML dans r 
+	// removeBalisesXml(oSheet);
 
-			// //trouve la ligne de la feuille avec les headers
-			const headersRow = findHeaderRow(oSheet, ['N°','NUMERO', 'RANG', 'POS', 'POSITION']);
-			
-			//creer les cellules vides
-			fillUndefinedNumberCells(oSheet);
+	// //trouve la ligne de la feuille avec les headers
+	const headersRow = findHeaderRow(oSheet, ['N°','NUMERO', 'RANG', 'POS', 'POSITION']);
+	
+	//creer les cellules vides
+	fillUndefinedNumberCells(oSheet);
 
-			//cree une copie de la feuille simplifiée avec les headers en premier puis toutes les cellules  dont la premiere celulles est un nombre			
-			oSheet = copySheetWithHeadersAndNumbers(oSheet, headersRow);
+	//cree une copie de la feuille simplifiée avec les headers en premier puis toutes les cellules  dont la premiere celulles est un nombre			
+	oSheet = copySheetWithHeadersAndNumbers(oSheet, headersRow);
 
-			// Suppression des lignes Null
-			SuppressionCellulesNull(oSheet);
+	// Suppression des lignes Null
+	SuppressionCellulesNull(oSheet);
 
-			// reconstruction de la propriété !ref;
-			reconstruitRef(oSheet, oSheet['!ref']);
-			// deleteExcelMergesInfos(oSheet);
+	// reconstruction de la propriété !ref;
+	reconstruitRef(oSheet, oSheet['!ref']);
+	// deleteExcelMergesInfos(oSheet);
 
-			// Supprimer les apostrophes
-			// SupprimerLesApostrophes(oSheet);
+	// Supprimer les apostrophes
+	// SupprimerLesApostrophes(oSheet);
 
-			return oSheet;
+	return oSheet;
 
-}
+};
 
 function removeProprietes(newsheet: any) {
 	// const range = utils.decode_range(!ref);
@@ -79,11 +77,9 @@ function removeProprietes(newsheet: any) {
 	}
 	// newRef = utils.encode_range({ s: { c: 0, r: 0 }, e: { c: utils.decode_col(newRef), r: utils.decode_row(newRef)}});	
 	return newRef;
-}
-
+};
 
 function reconstruitRef(newesheet: any, newref: any): string {
-
 	const range = utils.decode_range(newref);
 	let newRef = '';
 	let startRow = range.s.r;
@@ -104,7 +100,7 @@ function reconstruitRef(newesheet: any, newref: any): string {
 	}
 	// newRef = utils.encode_range({ s: { c: 0, r: 0 }, e: { c: utils.decode_col(newRef), r: utils.decode_row(newRef)}});	
 	return newRef;
-}
+};
 
 function SuppressionCellulesNull(newsheet: any): any {
 	const range = utils.decode_range(newsheet['!ref']);
@@ -128,7 +124,7 @@ function SuppressionCellulesNull(newsheet: any): any {
     endRow--;
   	}
   	return newsheet;
-}
+};
 
 function copySheetWithHeadersAndNumbers(sheet: any, headersRow: number): any {
     const range = utils.decode_range(sheet['!ref']);
@@ -179,7 +175,7 @@ function copySheetWithHeadersAndNumbers(sheet: any, headersRow: number): any {
     copiedSheet['!ref'] = utils.encode_range(newRef);
 
     return copiedSheet;
-}
+};
 
 function fillUndefinedNumberCells(sheet: any) {
     const range = utils.decode_range(sheet['!ref']);
@@ -194,7 +190,7 @@ function fillUndefinedNumberCells(sheet: any) {
             }
         }
     }
-}
+};
 
 function reconstructRefWithoutEmptyRows(newsheet: any) {
     const range = utils.decode_range(newsheet['!ref']);
@@ -237,7 +233,7 @@ function reconstructRefWithoutEmptyRows(newsheet: any) {
     }
 
     return newsheet;
-}
+};
 
 //trouve la ligne avec les headers
 function findHeaderRow (newsheet: any, headers: string[]): number | 0 {
@@ -259,9 +255,9 @@ function findHeaderRow (newsheet: any, headers: string[]): number | 0 {
 //Traitement des margins
 function deleteExcelMarginsInfos(newsheet: any) {
 	const margins = newsheet['!margins'];
-		if (margins) {
-			delete newsheet['!margins'];
-		}
+	if (margins) {
+		delete newsheet['!margins'];
+	}
 };
 
 //Traitement des merge
@@ -286,11 +282,11 @@ function risolveFormulas(newsheet: any){
 			}
 		}
 	}
-}
+};
 
 function removeAccents(str: string) {
     return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-}
+};
 
 function cleanData(values: any): export_stepe_catalog_Data {
 	const toUpperCaseKeysValues: any = {};
@@ -309,75 +305,75 @@ function cleanData(values: any): export_stepe_catalog_Data {
         weight: toUpperCaseKeysValues["POIDS"] || toUpperCaseKeysValues["TONS"],
         position: toUpperCaseKeysValues["POSITION"],
         destination: toUpperCaseKeysValues["DESTINATION"] || toUpperCaseKeysValues["DEST"] || "stock"
-    };
-}
+    }
+};
 
 
 
 function Main() {
 	const dispatch = useDispatch();
 	const loaded_catalog = useSelector<RootState, boolean>(state => state.dataSS.loaded_catalog_status);
-	// const loaded_catalog = useSelector<RootState, boolean>(state => state.data.loaded_catalog_status);
-	
+	const loaded_tally = useSelector<RootState, boolean>(state => state.dataSS.loaded_tally_status);
 	const onDrop = useCallback((acceptedFiles: any) => {
+		const file = acceptedFiles[0];
+		const reader = new FileReader();
 		
-	const file = acceptedFiles[0];
-	const reader = new FileReader();
-	
-	reader.onload = function (evt) {
+		reader.onload = function (evt) {
+			const rawData = evt.target?.result;
+			if(!rawData) return;
+			
+			const workbook = read(rawData, {type: 'binary'});
+			// const sheetName = workbook.SheetNames[0];
+			
+			let Sheet: { [key: string]: any } = {
+				// ...CatalogSheet,
+			};
+			let sheetTally: { [key: string]: any } = {
+				// ...TallySheet,
+			};
 
-		const rawData = evt.target?.result;
-		if(!rawData) return;
-		
-		const workbook = read(rawData, {type: 'binary'});
-		// const sheetName = workbook.SheetNames[0];
-		
-		let Sheet: { [key: string]: any } = {
-			// ...FirstSheet,
+			if (workbook.Sheets['winwin']){																// la feuille simplifiée existe
+					Sheet = workbook.Sheets['winwin'];
+					toast.info('Feuille  Simplifiée trouvée', { position: toast.POSITION.TOP_RIGHT, autoClose: 5000 })
+					// toast('🦄 Wow so easy!', {
+					// 	position: "top-right",
+					// 	autoClose: 5000,
+					// 	hideProgressBar: false,
+					// 	closeOnClick: true,
+					// 	pauseOnHover: true,
+					// 	draggable: true,
+					// 	progress: undefined,
+					// 	theme: "light",
+					// 	});
+					
+			} 
+			else if (workbook.Sheets['Bobines']){
+				Sheet = CleanExcelSheet(workbook.Sheets['Bobines']);
+				toast.info('Feuille Bobines trouvée', { position: toast.POSITION.TOP_RIGHT })
+			}
+			else if (workbook.Sheets['Brames']){
+				Sheet = CleanExcelSheet(workbook.Sheets['Brames']);
+				toast.info('Feuille Brames trouvée', { position: toast.POSITION.TOP_RIGHT })
+			}
+			else if (workbook.Sheets['Tally'] || workbook.Sheets['tally']){
+				sheetTally = CleanExcelSheet(workbook.Sheets['Tally'] || workbook.Sheets['tally']);
+				toast.info('Feuille Tally trouvée', { position: toast.POSITION.TOP_RIGHT })
+			}	
+			else {
+				// Sheet = workbook.Sheets[workbook.SheetNames[0]];
+				Sheet = CleanExcelSheet(workbook.Sheets[workbook.SheetNames[0]]);
+				// toast.error("Defined sheet doesn't exist", { position: toast.POSITION.TOP_RIGHT })
+				toast.info('Feuille par defaut !', { position: toast.POSITION.TOP_RIGHT, autoClose: 1000 })
+								
+			}
+			dispatch(DataAction.import_catalog_Data(utils.sheet_to_json(Sheet).map(cleanData)));
+			dispatch(DataAction.changeOriginalpos("stock"));
+			toast.success('catalog export_stepe_catalog_Data imported', { position: toast.POSITION.TOP_RIGHT })
+
+			dispatch(DataAction.import_tally_Data(utils.sheet_to_json(sheetTally).map(cleanData)));
+			toast.success('Tally imported', { position: toast.POSITION.TOP_RIGHT })
 		};
-
-		if (workbook.Sheets['winwin']){																// la feuille simplifiée existe
-				Sheet = workbook.Sheets['winwin'];
-				toast.info('Feuille  Simplifiée trouvée', { position: toast.POSITION.TOP_RIGHT, autoClose: 5000 })
-				// toast('🦄 Wow so easy!', {
-				// 	position: "top-right",
-				// 	autoClose: 5000,
-				// 	hideProgressBar: false,
-				// 	closeOnClick: true,
-				// 	pauseOnHover: true,
-				// 	draggable: true,
-				// 	progress: undefined,
-				// 	theme: "light",
-				// 	});
-				
-		} 
-		else if (workbook.Sheets['Bobines']){
-			Sheet = CleanExcelSheet(workbook.Sheets['Bobines']);
-			toast.info('Feuille Bobines trouvée', { position: toast.POSITION.TOP_RIGHT })
-		}
-		else if (workbook.Sheets['Brames']){
-			Sheet = CleanExcelSheet(workbook.Sheets['Brames']);
-			toast.info('Feuille Brames trouvée', { position: toast.POSITION.TOP_RIGHT })
-		}
-		else {
-			// Sheet = workbook.Sheets[workbook.SheetNames[0]];
-			Sheet = CleanExcelSheet(workbook.Sheets[workbook.SheetNames[0]]);
-			// toast.error("Defined sheet doesn't exist", { position: toast.POSITION.TOP_RIGHT })
-			toast.info('Feuille par defaut !', { position: toast.POSITION.TOP_RIGHT, autoClose: 1000 })
-							
-		}
-		
-		// Utilisez le nouvel objet newSheet comme vous le feriez avec sheet
-		// console.log("New sheet with removed content:", newSheet);
-		
-		dispatch(DataAction.importData(utils.sheet_to_json(Sheet).map(cleanData)));
-		// dispatch(DataAction.importData(utils.sheet_to_json(sheet).map(cleanData)));
-		// dispatch(DataAction.importData(utils.sheet_to_json(selectedSheet).map(cleanData)));
-			// // dispatch(DataAction.moveRow(row.original.reference)); //je change la detination de ref cale1,cale2, etc..
-		dispatch(DataAction.changeOriginalpos("stock"));
-		// toast.success('catalog export_stepe_catalog_Data imported', { position: toast.POSITION.TOP_RIGHT })
-	};
-	reader.readAsBinaryString(file);
+		reader.readAsBinaryString(file);
 	}, []);
 	// const [mavariablelocale, setMavariablelocale] = useState()
 
