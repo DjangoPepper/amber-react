@@ -16,8 +16,8 @@ export type export_stepe_catalog_Data = {
 export type export_stepe_tally_Data = {
     tally_Dest: number
     tally_PUnits: string
-    tally_PKilos: number
-    tally_Max: string
+    tally_PTons: number
+    tally_MTons: string
 }
 
 interface Interface_stepe_state {

@@ -48,9 +48,19 @@ export default function Statistics() {
 
 	useEffect(() => {
 		const punits = window.localStorage.getItem("local_punit");
+		const ptons  = window.localStorage.getItem("local_ptons");	
+		const mtons  = window.localStorage.getItem("local_mtons");
+		
 		if(punits) {
 			set_previous_Value_QT(JSON.parse(punits));
 		};
+		if(ptons) {
+			set_previous_Value_TO(JSON.parse(ptons));
+		};
+		if(mtons) {
+			set_maxi_Values(JSON.parse(mtons));
+		};
+
 		if (firstRender) {
 			firstRender = false;
 			toast.info('init statistic First render', { position: toast.POSITION.TOP_LEFT, autoClose: 2000 });
