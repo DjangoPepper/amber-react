@@ -37,20 +37,35 @@ export default function Statistics() {
     
     const [pageSize, setPageSize] = React.useState(99);
     React.useEffect(() => {
-        const e_activeTally = window.localStorage.getItem('local_activeTally')||"false";
-		if (!e_activeTally) {
-			window.localStorage.setItem('local_activeTally', JSON.stringify("false"));        
-		}
+        // const ext_active = window.localStorage.getItem('local_activeTally')||"false";
+		// if (!ext_active) {
+		// 	window.localStorage.setItem('local_activeTally', JSON.stringify("false"));        
+		// }
 		//
-		set_Extended_Tally_Value(JSON.parse(e_activeTally));
+
+		// set_Extended_Tally_Value(JSON.parse(ext_active));
 		//
     }, [Extended_Tally_Value]);
 
 	useEffect(() => {
-		const punits = window.localStorage.getItem("local_punit");
-		const ptons  = window.localStorage.getItem("local_ptons");	
-		const mtons  = window.localStorage.getItem("local_mtons");
+		const checkboxes = window.localStorage.getItem("local_checkboxes");
+		const ext_active = window.localStorage.getItem('local_activeTally')||"false";
+		const punits     = window.localStorage.getItem("local_punit");
+		const ptons      = window.localStorage.getItem("local_ptons");	
+		const mtons      = window.localStorage.getItem("local_mtons");
 		
+		if (checkboxes) {
+			set_checkbox_Hold_State(JSON.parse(checkboxes));
+		};
+
+		if (!ext_active) {
+			window.localStorage.setItem('local_activeTally', JSON.stringify("false"));        
+			// set_ext_active = window.localStorage.getItem('local_activeTally');
+			set_Extended_Tally_Value(false);
+		}
+		if(ext_active) {
+			set_Extended_Tally_Value(JSON.parse(ext_active));
+		};
 		if(punits) {
 			set_previous_Value_QT(JSON.parse(punits));
 		};
@@ -60,7 +75,7 @@ export default function Statistics() {
 		if(mtons) {
 			set_maxi_Values(JSON.parse(mtons));
 		};
-
+		
 		if (firstRender) {
 			firstRender = false;
 			toast.info('init statistic First render', { position: toast.POSITION.TOP_LEFT, autoClose: 2000 });

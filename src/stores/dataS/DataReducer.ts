@@ -191,7 +191,7 @@ export const dataReducer: Reducer<Interface_stepe_state> = (state = initial_step
 //****************************************************************************************************
             case DataAction.SAVE_CHECKBOX_STATE:
                 // if(state.saved_TAlly_HOLD_checkbox_status) return state;
-                window.localStorage.setItem("local_checkbox", JSON.stringify(state.TAlly_HOLD_checkbox));
+                window.localStorage.setItem("local_checkboxes", JSON.stringify(state.TAlly_HOLD_checkbox));
                 state.saved_TAlly_HOLD_checkbox_status = true;
                 return {
                     ...state,
