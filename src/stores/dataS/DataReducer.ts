@@ -208,7 +208,7 @@ export const dataReducer: Reducer<Interface_stepe_state> = (state = initial_step
             case DataAction.SAVE_PREV_TONS:
                 // if(state.saved_TAlly_HOLD_previous_TONS_status) return state;
                 state.saved_TAlly_HOLD_previous_TONS_status = true;
-                window.localStorage.setItem("local_pkilos", JSON.stringify(state.TAlly_HOLD_previous_TONS));
+                window.localStorage.setItem("local_ptons", JSON.stringify(state.TAlly_HOLD_previous_TONS));
                 return {
                     ...state,
                     saved_TAlly_HOLD_previous_TONS_status: false
@@ -216,7 +216,7 @@ export const dataReducer: Reducer<Interface_stepe_state> = (state = initial_step
             case DataAction.SAVE_MAXI_TONS:
                 // if(state.saved_TAlly_HOLD_maxi_TONS_status) return state;
                 state.saved_TAlly_HOLD_maxi_TONS_status = true;
-                window.localStorage.setItem("local_maxi", JSON.stringify(state.TAlly_HOLD_maxi_TONS));
+                window.localStorage.setItem("local_mtons", JSON.stringify(state.TAlly_HOLD_maxi_TONS));
                 return {
                     ...state,
                     saved_TAlly_HOLD_maxi_TONS_status: false

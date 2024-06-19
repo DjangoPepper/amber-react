@@ -70,6 +70,14 @@ const EditableCell = ({ getValue, row, column, table }: any) => {
         return savedPageSize !== null ? Number(savedPageSize) : 88; // Utiliser 88 si non trouvé
     }); */
     
+    /* React.useEffect(() => {
+        // Mettre à jour le localStorage et l'état à partir du localStorage ou de la valeur par défaut
+        const savedPageSize = window.localStorage.getItem('local_pageSize');
+        const e_pageSize = savedPageSize !== null ? Number(savedPageSize) : 88;
+        setPageSize(e_pageSize);
+        window.localStorage.setItem('local_pageSize', e_pageSize.toString());
+        }, [initialValue]); // initialValue en dépendance si nécessaire */
+
     React.useEffect(() => {
         // Mettre à jour le localStorage et l'état à partir du localStorage ou de la valeur par défaut
         const savedPageSize = window.localStorage.getItem('local_pageSize');
@@ -77,6 +85,11 @@ const EditableCell = ({ getValue, row, column, table }: any) => {
         setPageSize(e_pageSize);
         window.localStorage.setItem('local_pageSize', e_pageSize.toString());
         }, [initialValue]); // initialValue en dépendance si nécessaire
+        
+    const handlePageSizeChange = (newSize: number) => {
+        setPageSize(newSize);
+        window.localStorage.setItem('local_pageSize', newSize.toString());
+    };
     
     return (
         <input
@@ -240,7 +253,12 @@ export default function DataTable() {
     };
     const isStabiloButtonVisible = cale !== "stock"; // Condition pour déterminer la visibilité du bouton STABILO
     const [checkedRows, setCheckedRows] = useState<{ [key: number]: boolean }>({});
-    
+
+    const [pageSize, setPageSize] = React.useState(99);
+    const handlePageSizeChange = (newSize: number) => {
+        setPageSize(newSize);
+        window.localStorage.setItem('local_pageSize', newSize.toString());
+    };
 /////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////     RETURN    ////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////
@@ -429,10 +447,12 @@ export default function DataTable() {
                         handlePageSizeChange (OpageSize);
                         table.setPageSize(OpageSize);
                         localStorage.setItem('local_pageSize', OpageSize.toString());
+                        return pageSize;
                     }}
                 >
                     {[10, 42, 84, 126, 210].map((pageSize) => (
                     <option key={pageSize} value={pageSize}>
+                        {/* {pageSize} */}
                         {pageSize}
                     </option>
                     ))}
