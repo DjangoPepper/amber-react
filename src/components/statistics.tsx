@@ -80,7 +80,7 @@ export default function Statistics() {
 			firstRender = false;
 			toast.info('init statistic First render', { position: toast.POSITION.TOP_LEFT, autoClose: 2000 });
 			};
-		}, [firstRender]);
+		}, [firstRender, Extended_Tally_Value, previous_Value_QT, previous_Value_TO, maxi_Value_TO, checkbox_Hold_State]);
 
 	const Toggle_checkbox_boolean = (k: string) => {
 
