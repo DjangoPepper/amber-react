@@ -70,11 +70,17 @@ const EditableCell = ({ getValue, row, column, table }: any) => {
     const onBlur = () => {
         table.options.meta?.updateData(row.original.reference, column.id, value);
     }
+    const [pageSize, setPageSize] = React.useState(99);
+    // LA?
 
     React.useEffect(() => {
-        // const pageSize = Number(localStorage.getItem('pageSize')) || 12;
+        // definire la valeur par defaut ou la lit depuis local_storage si ellle existe
+        const e_pageSize = Number(window.localStorage.getItem('local_pageSize')) || 99;
+        // Stocke la valeur dans le localStorage à chaque changement de pageSize
+        window.localStorage.setItem('local_pageSize', JSON.stringify(e_pageSize));        
+        setPageSize(e_pageSize);
         setValue(initialValue)
-    }, [initialValue])
+    }, [initialValue,pageSize])
     //ICI ?
     return (
         <input
