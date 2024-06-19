@@ -75,7 +75,7 @@ const EditableCell = ({ getValue, row, column, table }: any) => {
         // const pageSize = Number(localStorage.getItem('pageSize')) || 12;
         setValue(initialValue)
     }, [initialValue])
-
+    //ICI ?
     return (
         <input
             value={value as string}
