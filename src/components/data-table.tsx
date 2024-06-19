@@ -70,9 +70,8 @@ const EditableCell = ({ getValue, row, column, table }: any) => {
     const onBlur = () => {
         table.options.meta?.updateData(row.original.reference, column.id, value);
     }
-    const [pageSize, setPageSize] = React.useState(99);
     // LA?
-
+    const [pageSize, setPageSize] = React.useState(99);
     React.useEffect(() => {
         // definire la valeur par defaut ou la lit depuis local_storage si ellle existe
         const e_pageSize = Number(window.localStorage.getItem('local_pageSize')) || 99;
@@ -144,11 +143,11 @@ const row = {
 }; */
 
 // const pageSize = Number(localStorage.getItem('pageSize')) || Number(localStorage.setItem('pageSize', '14')) || 14;
-const pageSize = Number(localStorage.getItem('local_pageSize'))  || 14;
-if (!pageSize) {
-    localStorage.setItem('local_pageSize', '14');
-    // pageSize = Number(localStorage.getItem('pageSize')) || 14;
-    }
+// const pageSize = Number(localStorage.getItem('local_pageSize'))  || 14;
+// if (!pageSize) {
+//     localStorage.setItem('local_pageSize', '14');
+//     // pageSize = Number(localStorage.getItem('pageSize')) || 14;
+//     }
 //FRED
 
 
@@ -329,10 +328,6 @@ export default function DataTable() {
     //     updatedCheckedRows[reference] = !updatedCheckedRows[reference];
     //     setCheckedRows(updatedCheckedRows);
     // };
-
-    // const pageSize = Number(localStorage.getItem('pageSize')) || 10;
-
-
     return ( 
         <>
             <div className="d-flex">
@@ -529,9 +524,9 @@ export default function DataTable() {
                 <select
                     value={table.getState().pagination.pageSize}
                     onChange={(e) => {
-                        const pageSize = Number(e.target.value);
-                        table.setPageSize(pageSize);
-                        localStorage.setItem('local_pageSize', pageSize.toString());
+                        const OpageSize = Number(e.target.value);
+                        table.setPageSize(OpageSize);
+                        localStorage.setItem('local_pageSize', OpageSize.toString());
                     }}
                 >
                     {[10, 42, 84, 126, 210].map((pageSize) => (

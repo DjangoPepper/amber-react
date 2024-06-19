@@ -32,34 +32,29 @@ export default function Statistics() {
 	const [previous_Value_QT, set_previous_Value_QT] = useState<{ [key: string]: string }>({});
 	const [previous_Value_TO, set_previous_Value_TO] = useState<{ [key: string]: string }>({});
 	const [maxi_Value_TO, set_maxi_Values] 			 = useState<{ [key: string]: string }>({});
-
 	const selectedColors = useSelector<RootState, { [key: string]: string }>((state) => state.dataSS.pickerColors);
 
-	// useEffect(() => {
-	// 	const punits = window.localStorage.getItem("local_punit");
-	// 	if(punits) {
-	// 		set_previous_Value_QT(JSON.parse(punits));
-	// 	}
-	// }, []);
+    
+    const [pageSize, setPageSize] = React.useState(99);
+    React.useEffect(() => {
+        const e_activeTally = window.localStorage.getItem('local_activeTally')||"false";
+		if (!e_activeTally) {
+			window.localStorage.setItem('local_activeTally', JSON.stringify("false"));        
+		}
+		//
+		set_Extended_Tally_Value(JSON.parse(e_activeTally));
+		//
+    }, [Extended_Tally_Value]);
 
 	useEffect(() => {
 		const punits = window.localStorage.getItem("local_punit");
 		if(punits) {
 			set_previous_Value_QT(JSON.parse(punits));
-		}
-
-		function init_tally() {
-			affectation.forEach((affectationItem) => {
-				const k = affectationItem.name as string;
-				if (k !== "stock") {}
-			});
+		};
+		if (firstRender) {
 			firstRender = false;
+			toast.info('init statistic First render', { position: toast.POSITION.TOP_LEFT, autoClose: 2000 });
 			};
-				
-			if (firstRender) {
-				init_tally();
-				toast.error('init Tally', { position: toast.POSITION.TOP_LEFT, autoClose: 2000 });
-				}
 		}, [firstRender]);
 
 	const Toggle_checkbox_boolean = (k: string) => {
@@ -132,17 +127,16 @@ export default function Statistics() {
 		dispatch(DataAction.save_maxi_tons());
 		};
 
-		const handle_Extended_Tally = () => {
+		const toggle_Extended_Tally = () => {
 			set_Extended_Tally_Value((prevValue) => {
-				console.log("handle_Extended_Tally :", prevValue);
+				console.log("toggle_Extended_Tally :", !prevValue);
+				window.localStorage.setItem('local_activeTally', JSON.stringify(!prevValue));        
 				return !prevValue;
 			});
 		};
 	
-//
-//
+
 	const catalog_data = useSelector<RootState, export_stepe_catalog_Data[]>((state) => state.dataSS.catalog_data_state);
-//	
 
 	const totalPreviousCalesCount = Object.keys(previous_Value_QT).reduce((total, k) => {
 		return total + (previous_Value_QT[k] ? parseFloat(previous_Value_QT[k]) : 0);
@@ -229,7 +223,7 @@ export default function Statistics() {
 					<th style={{ textAlign: 'left' }}>DesT</th>
 					{/* <th style={{ textAlign: 'center' }}>K</th> */}
 					<th style={{ textAlign: 'center' }}>
-					<Button variant="info" onClick={handle_Extended_Tally}>T</Button>
+						<Button variant="info" onClick={toggle_Extended_Tally}>T</Button>
 					</th>
 					<th style={{ textAlign: 'center' }}>Units</th>
 					<th style={{ textAlign: 'center' }}>Kilos</th>
