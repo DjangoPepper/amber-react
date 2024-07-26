@@ -46,6 +46,8 @@ const monthNames = [
     'juil', 'aou', 'sep', 'oct', 'nov', 'dec'
     ];
 
+const pageOptions = [10, 40, 80, 120, 200];
+
 
 function backupCurrentDateTime(): string {
     const now = new Date();
@@ -268,6 +270,11 @@ export default function DataTable() {
     const table = useReactTable({
         data,
         columns,
+        initialState: {
+            pagination: {
+                pageSize: parseInt(window.localStorage.getItem("pageSize") || `${pageOptions[0]}`),
+            }
+        },
         state: {
             sorting,
             globalFilter,
@@ -292,6 +299,11 @@ export default function DataTable() {
         debugTable: true,
     }
     );
+
+    const setPageSize = (size: number) => {
+        table.setPageSize(size);
+        window.localStorage.setItem("pageSize", `${size}`);
+    }
     
     const tableContainerRef = React.useRef<HTMLDivElement>(null)
     const exportData = () => {
@@ -512,10 +524,10 @@ export default function DataTable() {
                 <select
                     value={table.getState().pagination.pageSize}
                     onChange={e => {
-                        table.setPageSize(Number(e.target.value))
+                        setPageSize(Number(e.target.value))
                     }}
                 >
-                    {[10, 40, 80, 120, 200].map(pageSize => (
+                    {pageOptions.map(pageSize => (
                         <option key={pageSize} value={pageSize}>
                             {pageSize}
                         </option>
