@@ -9,8 +9,6 @@ import { affectation} from "../utils/destination";
 // import { updateAffectationVisibility } from '../stores/data/destinationActions';
 
 import Button from 'react-bootstrap/Button';
-// import {firstRender} from '../App';	
-// import { toast, ToastContainer } from 'react-toastify';
 import { toast } from 'react-toastify';
 
 export default function Statistics() {

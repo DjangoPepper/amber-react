@@ -24,7 +24,7 @@ import DataAction from "../stores/dataS/DataAction";
 import {colors, affectation, HEADER} from "../utils/destination";
 import Filter, {fuzzyFilter} from "./filter";
 import './index-tanstack.css'
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Msg2 from "./Msg2";
 
@@ -562,8 +562,6 @@ export default function DataTable() {
                 </Button>
             </Modal.Footer>
             </Modal>
-            <ToastContainer />
-            
         </>
     );
 }
