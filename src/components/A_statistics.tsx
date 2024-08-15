@@ -46,39 +46,21 @@ export default function Statistics() {
   );
   //montage
   useEffect(() => {
-    const punits = window.localStorage.getItem("local_punits");
+    const punits = window.localStorage.getItem("local_punit");
     if (punits) {
       set_previous_Value_QT(JSON.parse(punits));
     }
-    const pkilos = window.localStorage.getItem("local_pkilos");
-    if (pkilos) {
-      set_previous_Value_TO(JSON.parse(pkilos));
-    }
-    const pmaxis = window.localStorage.getItem("local_pmaxis");
-    if (pmaxis) {
-      set_maxi_Values(JSON.parse(pmaxis));
-    }
-
     const extendedTallyValue = window.localStorage.getItem(
       "Extended_Tally_Value"
     );
-
     if (extendedTallyValue !== null)
       setExtendedTallyValue(JSON.parse(extendedTallyValue));
   }, []);
+// Sauvegarde des valeurs de punits dans le localStorage à chaque mise à jour
+useEffect(() => {
+  window.localStorage.setItem("local_punit", JSON.stringify(previous_Value_QT));
+}, [previous_Value_QT]);
 
-  // Sauvegarde des valeurs de punits dans le localStorage à chaque mise à jour
-  useEffect(() => {
-    window.localStorage.setItem(
-      "local_punits",
-      JSON.stringify(previous_Value_QT)
-    );
-    window.localStorage.setItem(
-      "local_pkilos",
-      JSON.stringify(previous_Value_TO)
-    );
-    window.localStorage.setItem("local_maxis", JSON.stringify(maxi_Value_TO));
-  }, [previous_Value_QT, previous_Value_TO, maxi_Value_TO]);
 
   // Fonction pour gérer le changement de Extended_Tally_Value
   const handleExtendedTally = () => {
