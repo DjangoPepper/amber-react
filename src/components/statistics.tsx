@@ -33,19 +33,42 @@ export default function Statistics() {
   const [previous_Value_QT, set_previous_Value_QT] = useState<{
     [key: string]: string;
   }>({});
-  // const [previous_Value_TO, set_previous_Value_TO] = useState<{ [key: string]: { prevTO_VALUE: string } }>({});
-  const [previous_Value_TO, set_previous_Value_TO] = useState<{
-    [key: string]: { prevTO_VALUE: string };
-  }>({});
-  const [maxi_Value_TO, set_maxi_Values] = useState<{
-    [key: string]: { maxi_To: string };
-  }>({});
 
+  const [previous_Value_TO, set_previous_Value_TO] = useState<{
+    [key: string]: string;
+  }>({});
+  const [maximum_kilos, set_maximum_kilos] = useState<{
+    [key: string]: string;
+  }>({});
+  // const [maximum_kilos, set_maximum_kilos] 			= useState<{ [key: string]: string  }>({});
   const selectedColors = useSelector<RootState, { [key: string]: string }>(
     (state) => state.dataSS.pickerColors
   );
   //montage
   useEffect(() => {
+    //
+    /* const punits = window.localStorage.getItem("local_punit");
+		if(punits) {
+			set_previous_units(JSON.parse(punits));
+		}
+		const pkilos = window.localStorage.getItem("local_pkilos");
+		if(pkilos) {
+			set_previous_kilos(JSON.parse(pkilos));
+		}
+		const pmaxis = window.localStorage.getItem("local_maxis");
+		if(pmaxis) {
+			set_maximum_kilos(JSON.parse(pmaxis));
+		}
+		const pcheckbox = window.localStorage.getItem("local_checkbox");
+		if(pcheckbox) {
+			set_Hold_Checkboxed(JSON.parse(pcheckbox));
+		}
+		const ptally = window.localStorage.getItem("local_tally");
+		if(ptally) {
+			set_Tally_View(JSON.parse(ptally));
+		}
+	}, []); */
+    //
     const punits = window.localStorage.getItem("local_punits");
     if (punits) {
       set_previous_Value_QT(JSON.parse(punits));
@@ -56,7 +79,7 @@ export default function Statistics() {
     }
     const pmaxis = window.localStorage.getItem("local_pmaxis");
     if (pmaxis) {
-      set_maxi_Values(JSON.parse(pmaxis));
+      set_maximum_kilos(JSON.parse(pmaxis));
     }
 
     const extendedTallyValue = window.localStorage.getItem(
@@ -69,6 +92,9 @@ export default function Statistics() {
 
   // Sauvegarde des valeurs de punits dans le localStorage à chaque mise à jour
   useEffect(() => {
+    //
+
+    //
     window.localStorage.setItem(
       "local_punits",
       JSON.stringify(previous_Value_QT)
@@ -77,8 +103,8 @@ export default function Statistics() {
       "local_pkilos",
       JSON.stringify(previous_Value_TO)
     );
-    window.localStorage.setItem("local_maxis", JSON.stringify(maxi_Value_TO));
-  }, [previous_Value_QT, previous_Value_TO, maxi_Value_TO]);
+    window.localStorage.setItem("local_maxis", JSON.stringify(maximum_kilos));
+  }, [previous_Value_QT, previous_Value_TO, maximum_kilos]);
 
   // Fonction pour gérer le changement de Extended_Tally_Value
   const handleExtendedTally = () => {
@@ -102,8 +128,8 @@ export default function Statistics() {
       //si prevqtt,prevtons, maxitons non vide & updatedCheckboxState[k] = false alors updatedCheckboxState[k] = true
       if (
         Number(previous_Value_QT[k]) > 0 ||
-        Number(previous_Value_TO[k].prevTO_VALUE) > 0 ||
-        Number(maxi_Value_TO[k].maxi_To) > 0
+        Number(previous_Value_TO[k]) > 0 ||
+        Number(maximum_kilos[k]) > 0
       ) {
         //  && updatedCheckboxState[k] === false)
         updatedCheckboxState[k] = true;
@@ -155,9 +181,7 @@ export default function Statistics() {
   const handle_PrevTO_VALUE_Change = (destination: string, value: string) => {
     set_previous_Value_TO((previous_Value_TO) => ({
       ...previous_Value_TO,
-      [destination]: {
-        prevTO_VALUE: value,
-      },
+      [destination]: value,
     }));
     // let numericValue = parseFloat(value) || 0;
     // dispatch(DataAction.change_previous_tons({ destination: destination, value: value }));
@@ -165,15 +189,28 @@ export default function Statistics() {
     dispatch(DataAction.save_previous_tons());
   };
 
+  // const handle_maxiTO_VALUE_Change = (destination: string, value: string) => {
+  //   // handle_maxiTO_VALUE_Change(affectationItem.name, e.target.value)}
+  //   set_maximum_kilos((maximum_kilos: any) => ({
+  //     ...maximum_kilos,
+  //     [destination]: { maxi_To: value },
+  //   }));
+  //   // const numericValue = parseFloat(value) || 0;
+  //   // dispatch(DataAction.change_maxi_tons({ destination: destination, value}));
+  //   dispatch(DataAction.change_maxi_tons({ destination, value }));
+  //   dispatch(DataAction.save_maxi_tons());
+  // };
   const handle_maxiTO_VALUE_Change = (destination: string, value: string) => {
-    // handle_maxiTO_VALUE_Change(affectationItem.name, e.target.value)}
-    set_maxi_Values((maxi_Value_TO: any) => ({
-      ...maxi_Value_TO,
-      [destination]: { maxi_To: value },
+    const sanitizedValue = value.trim() === "" ? "0" : value;
+    set_maximum_kilos((maximum_kilos) => ({
+      ...maximum_kilos,
+      [destination]: sanitizedValue,
     }));
     // const numericValue = parseFloat(value) || 0;
     // dispatch(DataAction.change_maxi_tons({ destination: destination, value}));
-    dispatch(DataAction.change_maxi_tons({ destination, value }));
+    dispatch(
+      DataAction.change_maxi_tons({ destination, value: sanitizedValue })
+    );
     dispatch(DataAction.save_maxi_tons());
   };
 
@@ -207,10 +244,7 @@ export default function Statistics() {
   const totalPreviousCalesWeight = Object.keys(previous_Value_TO).reduce(
     (total, k) => {
       return (
-        total +
-        (previous_Value_TO[k]?.prevTO_VALUE
-          ? parseFloat(previous_Value_TO[k].prevTO_VALUE)
-          : 0)
+        total + (previous_Value_TO[k] ? parseFloat(previous_Value_TO[k]) : 0)
       );
     },
     0
@@ -412,7 +446,6 @@ export default function Statistics() {
                               value={
                                 previous_Value_TO[affectationItem.name]
                                   ? previous_Value_TO[affectationItem.name]
-                                      .prevTO_VALUE
                                   : 0
                               }
                               onChange={(e) =>
@@ -439,10 +472,9 @@ export default function Statistics() {
                       <td style={{ textAlign: "center" }}>
                         {(
                           (statistics[affectationItem.name]?.weight ?? 0) +
-                          (previous_Value_TO[affectationItem.name]?.prevTO_VALUE
+                          (previous_Value_TO[affectationItem.name]
                             ? parseFloat(
                                 previous_Value_TO[affectationItem.name]
-                                  .prevTO_VALUE
                               )
                             : 0)
                         ).toLocaleString("en-US", {
@@ -564,10 +596,8 @@ export default function Statistics() {
                           {(
                             ((statistics[affectationItem.name]?.weight ?? 0) +
                               (previous_Value_TO[affectationItem.name]
-                                ?.prevTO_VALUE
                                 ? parseFloat(
                                     previous_Value_TO[affectationItem.name]
-                                      .prevTO_VALUE
                                   )
                                 : 0)) /
                             ((statistics[affectationItem.name]?.count ?? 0) +
@@ -590,8 +620,8 @@ export default function Statistics() {
                             type="text"
                             style={{ width: "80px" }}
                             value={
-                              maxi_Value_TO[affectationItem.name]
-                                ? maxi_Value_TO[affectationItem.name].maxi_To
+                              maximum_kilos[affectationItem.name]
+                                ? maximum_kilos[affectationItem.name]
                                 : 0
                             } // Utilisez prevValues[affectationItem.name].prevTo pour la valeur
                             onChange={(e) =>
@@ -608,14 +638,13 @@ export default function Statistics() {
                           style={{ textAlign: "center" }}
                           className={
                             parseFloat(
-                              maxi_Value_TO[affectationItem.name]?.maxi_To ?? 0
+                              maximum_kilos[affectationItem.name] ?? 0
                             ) -
                               ((parseFloat(
                                 statistics[affectationItem.name]?.weight
                               ) || 0) +
                                 (parseFloat(
                                   previous_Value_TO[affectationItem.name]
-                                    ?.prevTO_VALUE
                                 ) || 0)) <
                             0
                               ? "red-text"
@@ -624,14 +653,13 @@ export default function Statistics() {
                         >
                           {(
                             parseFloat(
-                              maxi_Value_TO[affectationItem.name]?.maxi_To ?? 0
+                              maximum_kilos[affectationItem.name] ?? 0
                             ) -
                             ((parseFloat(
                               statistics[affectationItem.name]?.weight
                             ) || 0) +
                               (parseFloat(
                                 previous_Value_TO[affectationItem.name]
-                                  ?.prevTO_VALUE
                               ) || 0))
                           ).toLocaleString("en-US", {
                             minimumFractionDigits: 3,
@@ -646,7 +674,7 @@ export default function Statistics() {
                             try {
                               const maxiTo =
                                 parseFloat(
-                                  maxi_Value_TO[affectationItem.name]?.maxi_To
+                                  maximum_kilos[affectationItem.name]
                                 ) || 0;
                               const statsWeight =
                                 parseFloat(
@@ -655,7 +683,6 @@ export default function Statistics() {
                               const prevTO =
                                 parseFloat(
                                   previous_Value_TO[affectationItem.name]
-                                    ?.prevTO_VALUE
                                 ) || 0;
                               const prevQT_VALUE =
                                 parseFloat(
@@ -680,7 +707,7 @@ export default function Statistics() {
                             try {
                               const maxiTo =
                                 parseFloat(
-                                  maxi_Value_TO[affectationItem.name]?.maxi_To
+                                  maximum_kilos[affectationItem.name]
                                 ) || 0;
                               const statsWeight =
                                 parseFloat(
@@ -689,7 +716,6 @@ export default function Statistics() {
                               const prevTO =
                                 parseFloat(
                                   previous_Value_TO[affectationItem.name]
-                                    ?.prevTO_VALUE
                                 ) || 0;
                               const prevQT_VALUE =
                                 parseFloat(
