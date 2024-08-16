@@ -1,8 +1,3 @@
-// import React from "react";
-// import { connect } from 'react-redux';
-// import { updateAffectationVisibility } from '../stores/dataS/destinationActions'
-// import Statistics from '../components/statistics';
-
 interface IHeader {
     key: string;
     name: string;
@@ -30,7 +25,8 @@ export const affectation = [
     {name: "H7",    color: "#f03c28", index:7,  previous_quantite: 0, previous_tonnes: 0, maxis_tonnes: 0, boxed_state: false},
     {name: "H8",    color: "#006ee6", index:8,  previous_quantite: 0, previous_tonnes: 0, maxis_tonnes: 0, boxed_state: false},
     {name: "H9",    color: "#fdff5b", index:9,  previous_quantite: 0, previous_tonnes: 0, maxis_tonnes: 0, boxed_state: false},
-    {name: "H10",   color: "#008000", index:10, previous_quantite: 0, previous_tonnes: 0, maxis_tonnes: 0, boxed_state: false},
+    {name: "HNE",   color: "#008000", index:10, previous_quantite: 0, previous_tonnes: 0, maxis_tonnes: 0, boxed_state: false},
+    {name: "AVA",   color: "#f07777", index:11, previous_quantite: 0, previous_tonnes: 0, maxis_tonnes: 0, boxed_state: false},
 ]
 
 export const colors = affectation.reduce<{[key: string]: string}>((obj, d) => {
