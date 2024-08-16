@@ -191,7 +191,7 @@ export const dataReducer: Reducer<Interface_stepe_state> = (state = initial_step
 //****************************************************************************************************
             case DataAction.SAVE_CHECKBOX_STATE:
                 // if(state.saved_TAlly_HOLD_checkbox_status) return state;
-                window.localStorage.setItem("local_checkbox", JSON.stringify(state.TAlly_HOLD_checkbox));
+                window.localStorage.setItem("local_pchecks", JSON.stringify(state.TAlly_HOLD_checkbox));
                 state.saved_TAlly_HOLD_checkbox_status = true;
                 return {
                     ...state,
@@ -200,7 +200,7 @@ export const dataReducer: Reducer<Interface_stepe_state> = (state = initial_step
             case DataAction.SAVE_PREV_QTT:
                 // if(state.saved_TAlly_HOLD_previous_QTT_status) return state;
                 state.saved_TAlly_HOLD_previous_QTT_status = true;
-                window.localStorage.setItem("local_punit", JSON.stringify(state.TAlly_HOLD_previous_QTT));
+                window.localStorage.setItem("local_punits", JSON.stringify(state.TAlly_HOLD_previous_QTT));
                 return {
                     ...state,
                     saved_TAlly_HOLD_previous_QTT_status: false
@@ -216,7 +216,7 @@ export const dataReducer: Reducer<Interface_stepe_state> = (state = initial_step
             case DataAction.SAVE_MAXI_TONS:
                 // if(state.saved_TAlly_HOLD_maxi_TONS_status) return state;
                 state.saved_TAlly_HOLD_maxi_TONS_status = true;
-                window.localStorage.setItem("local_maxi", JSON.stringify(state.TAlly_HOLD_maxi_TONS));
+                window.localStorage.setItem("local_pmaxis", JSON.stringify(state.TAlly_HOLD_maxi_TONS));
                 return {
                     ...state,
                     saved_TAlly_HOLD_maxi_TONS_status: false

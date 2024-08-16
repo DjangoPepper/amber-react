@@ -22,20 +22,16 @@ function init_cata() {
 		}
 	setInterval(() => {
 		store.dispatch(DataAction.save_catalog());
-		// store.dispatch(DataAction.save_checkbox_state());
-		// store.dispatch(DataAction.save_previous_qtt());
-		// store.dispatch(DataAction.save_previous_tons());
-		// store.dispatch(DataAction.save_maxi_tons());
 		toast.warning('AutoSave catalog', { position: toast.POSITION.BOTTOM_LEFT, autoClose: 500 })
 		}, 
 	backupInterval);
 	}
 
 function init_tally(){
-	const Init_tallyDATAS = window.localStorage.getItem("local_tally");
-	if(Init_tallyDATAS) {
-		store.dispatch(DataAction.loaded_tally(Init_tallyDATAS));
-		}
+	// const Init_tallyDATAS = window.localStorage.getItem("local_tally");
+	// if(Init_tallyDATAS) {
+	// 	store.dispatch(DataAction.loaded_tally(Init_tallyDATAS));
+	// 	}
 		
 	setInterval(() => {
 		store.dispatch(DataAction.save_tally());
