@@ -47,28 +47,6 @@ export default function Statistics() {
   //montage
   useEffect(() => {
     //
-    /* const punits = window.localStorage.getItem("local_punit");
-		if(punits) {
-			set_previous_units(JSON.parse(punits));
-		}
-		const pkilos = window.localStorage.getItem("local_pkilos");
-		if(pkilos) {
-			set_previous_kilos(JSON.parse(pkilos));
-		}
-		const pmaxis = window.localStorage.getItem("local_maxis");
-		if(pmaxis) {
-			set_maximum_kilos(JSON.parse(pmaxis));
-		}
-		const pcheckbox = window.localStorage.getItem("local_checkbox");
-		if(pcheckbox) {
-			set_Hold_Checkboxed(JSON.parse(pcheckbox));
-		}
-		const ptally = window.localStorage.getItem("local_tally");
-		if(ptally) {
-			set_Tally_View(JSON.parse(ptally));
-		}
-	}, []); */
-    //
     const punits = window.localStorage.getItem("local_punits");
     if (punits) {
       set_previous_Value_QT(JSON.parse(punits));
@@ -85,16 +63,12 @@ export default function Statistics() {
     const extendedTallyValue = window.localStorage.getItem(
       "Extended_Tally_Value"
     );
-
     if (extendedTallyValue !== null)
       setExtendedTallyValue(JSON.parse(extendedTallyValue));
   }, []);
 
   // Sauvegarde des valeurs de punits dans le localStorage à chaque mise à jour
   useEffect(() => {
-    //
-
-    //
     window.localStorage.setItem(
       "local_punits",
       JSON.stringify(previous_Value_QT)
@@ -104,6 +78,7 @@ export default function Statistics() {
       JSON.stringify(previous_Value_TO)
     );
     window.localStorage.setItem("local_maxis", JSON.stringify(maximum_kilos));
+    //
   }, [previous_Value_QT, previous_Value_TO, maximum_kilos]);
 
   // Fonction pour gérer le changement de Extended_Tally_Value
