@@ -2,7 +2,8 @@ import {AnyAction} from "redux";
 // import { affectation } from "../../utils/destination";
 
 export default class DataAction {
-	public static IMPORT_DATA = "DataAction.IMPORT_DATA";
+	public static IMPORT_CATALOG_DATA = "DataAction.IMPORT_CATALOG_DATA";
+	
 	public static CHANGE_CALE = "DataAction.CHANGE_CALE";
 	public static CHANGE_PREPA = "DataAction.CHANGE_PREPA";
 	public static MOVE_ROW = "DataAction.MOVE_ROW";
@@ -31,14 +32,17 @@ export default class DataAction {
 	public static SAVE_TALLY = "DataAction.SAVE_TALLY";
 
 	public static LOAD_CHECKBOX_STATE = "DataAction.LOAD_CHECKBOX_STATE";
-	public static LOAD_PREV_QTT = "DataAction.LOAD_PREV_QTT";
-	public static LOAD_PREV_TONS = "DataAction.LOAD_PREV_TONS";
-	public static LOAD_MAXI_TONS = "DataAction.LOAD_MAXI_TONS";
+	public static LOAD_PCHECKS = "DataAction.LOAD_PCHECKS";
+	public static LOAD_PUNITS = "DataAction.LOAD_PUNITS";
+	public static LOAD_PKILOS = "DataAction.LOAD_PREV_TONS";
+	public static LOAD_PMAXIS = "DataAction.load_pmaxis";
 
 	public static CHANGE_CHECKBOX_STATE = "DataAction.CHANGE_CHECKBOX_STATE";
 	public static CHANGE_PREVIOUS_QTT = "DataAction.CHANGE_PREVIOUS_QTT";
 	public static CHANGE_PREVIOUS_TONS = "DataAction.CHANGE_PREVIOUS_TONS";
 	public static CHANGE_MAXI_TONS = "DataAction.CHANGE_MAXI_TONS";
+
+	public static IMPORT_TALLY_DATA = "DataAction.IMPORT_TALLY_DATA";
 
 	public static change_checkbox_state(changecheckboxstate: { [destination: string]: boolean }): AnyAction {
 		return { type: DataAction.CHANGE_CHECKBOX_STATE, payload: changecheckboxstate };
@@ -72,8 +76,8 @@ export default class DataAction {
 		return { type: DataAction.CHANGE_ORIGINAL_POS, payload: "stock"};
 	}
 	
-	public static importData(data: any[]): AnyAction {
-		return { type: DataAction.IMPORT_DATA, payload: data };
+	public static import_catalog_data(data: any[]): AnyAction {
+		return { type: DataAction.IMPORT_CATALOG_DATA, payload: data };
 	}
 
 	public static changeCale(cale: string): AnyAction {
@@ -125,21 +129,24 @@ export default class DataAction {
 	}
 //*********************************************************************** */
 
-	public static load_checkbox_state(data: string): AnyAction {
-		return { type: DataAction.LOAD_PREV_QTT, payload: JSON.parse(data) };
+	public static load_pchecks(data: string): AnyAction {
+		return { type: DataAction.LOAD_PCHECKS, payload: JSON.parse(data) };
 	}
 	
-	public static load_previous_qtt(data: string): AnyAction {
-		return { type: DataAction.LOAD_PREV_QTT, payload: JSON.parse(data) };
+	public static load_punits(data: string): AnyAction {
+		return { type: DataAction.LOAD_PUNITS, payload: JSON.parse(data) };
 	}
-	public static load_previous_tons(data: string): AnyAction {
-		return { type: DataAction.LOAD_PREV_TONS, payload: JSON.parse(data) };
+	public static load_pkilos(data: string): AnyAction {
+		return { type: DataAction.LOAD_PKILOS, payload: JSON.parse(data) };
 	}
 
-	public static load_maxi_tons(data: string): AnyAction {
-		return { type: DataAction.LOAD_MAXI_TONS , payload: JSON.parse(data) };
+	public static load_pmaxis(data: string): AnyAction {
+		return { type: DataAction.LOAD_PMAXIS , payload: JSON.parse(data) };
 	}
-	
+	public static import_tally_data(data: any[]): AnyAction {
+		return { type: DataAction.IMPORT_TALLY_DATA, payload: data };
+	}
+
 	public static clear(): AnyAction {
 		return { type: DataAction.CLEAR };
 	}

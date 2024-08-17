@@ -78,14 +78,20 @@ const initial_stepe_Data_State: Interface_stepe_state = {
 
 export const dataReducer: Reducer<Interface_stepe_state> = (state = initial_stepe_Data_State, action: AnyAction): Interface_stepe_state => {
         switch (action.type) {
-            case DataAction.IMPORT_DATA:
+            case DataAction.IMPORT_CATALOG_DATA:
                 return {
                     ...state,
                     catalog_data_state: action.payload,
                     loaded_catalog_status: true,
                     saved_catalog_status: false,
                 };
-            
+            case DataAction.IMPORT_TALLY_DATA:
+                return {
+                    ...state,
+                    tally_data_state: action.payload,
+                    loaded_tally_status: true,
+                    saved_tally_status: false,
+                };
             case DataAction.MOVE_ROW:
                 const d = state.catalog_data_state.find(r => r.reference === action.payload);
                 if(!d) return state;
@@ -233,7 +239,7 @@ export const dataReducer: Reducer<Interface_stepe_state> = (state = initial_step
             case DataAction.LOAD_TALLY:
                 return {
                     ...state,
-                    catalog_data_state: action.payload,
+                    tally_data_state: action.payload,
                     loaded_tally_status: true,
                     saved_tally_status: true,
                 }
@@ -243,17 +249,17 @@ export const dataReducer: Reducer<Interface_stepe_state> = (state = initial_step
                     ...state,
                     TAlly_HOLD_checkbox: action.payload,
                 };
-                case DataAction.LOAD_PREV_QTT:
+                case DataAction.LOAD_PUNITS:
                     return {
                         ...state,
                         TAlly_HOLD_previous_QTT: action.payload,
                     };
-            case DataAction.LOAD_PREV_TONS:
+            case DataAction.LOAD_PKILOS:
                 return {
                     ...state,
                     TAlly_HOLD_previous_TONS: action.payload,
                 };
-            case DataAction.LOAD_MAXI_TONS:
+            case DataAction.load_pmaxis:
                 return {
                     ...state,
                     TAlly_HOLD_maxi_TONS: action.payload,

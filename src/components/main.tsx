@@ -370,9 +370,9 @@ function Main() {
 		// Utilisez le nouvel objet newSheet comme vous le feriez avec sheet
 		// console.log("New sheet with removed content:", newSheet);
 		
-		dispatch(DataAction.importData(utils.sheet_to_json(Sheet).map(cleanData)));
-		// dispatch(DataAction.importData(utils.sheet_to_json(sheet).map(cleanData)));
-		// dispatch(DataAction.importData(utils.sheet_to_json(selectedSheet).map(cleanData)));
+		dispatch(DataAction.import_catalog_data(utils.sheet_to_json(Sheet).map(cleanData)));
+		// dispatch(DataAction.import_catalog_data(utils.sheet_to_json(sheet).map(cleanData)));
+		// dispatch(DataAction.import_catalog_data(utils.sheet_to_json(selectedSheet).map(cleanData)));
 			// // dispatch(DataAction.moveRow(row.original.reference)); //je change la detination de ref cale1,cale2, etc..
 		dispatch(DataAction.changeOriginalpos("stock"));
 		// toast.success('catalog export_stepe_catalog_Data imported', { position: toast.POSITION.TOP_RIGHT })
