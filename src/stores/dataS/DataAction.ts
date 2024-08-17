@@ -12,10 +12,10 @@ export default class DataAction {
 	public static LOAD_CATALOG = "DataAction.LOAD_CATALOG";
 	public static SAVE_CATALOG = "DataAction.SAVE_CATALOG";
 	
-	public static SAVE_CHECKBOX_STATE = "DataAction_SAVE_CHECKBOX_STATE";
-	public static SAVE_PREV_QTT = "DataAction.SAVE_PREV_QTT";
-	public static SAVE_PREV_TONS = "DataAction.SAVE_PREV_TONS";
-	public static SAVE_MAXI_TONS = "DataAction.SAVE_MAXI_TONS";
+	public static SAVE_PCHECKS = "DataAction_SAVE_PCHECKS";
+	public static SAVE_PUNITS = "DataAction.SAVE_PUNITS";
+	public static SAVE_PKILOS = "DataAction.SAVE_PKILOS";
+	public static save_PMAXIS = "DataAction.SAVE_PMAXIS";
 	
 	public static CLEAR = "DataAction.CLEAR";
 	public static REMOVE = "DataAction.REMOVE";
@@ -103,20 +103,20 @@ export default class DataAction {
 		return { type: DataAction.SAVE_TALLY };
 	}
 
-	public static save_checkbox_state(): AnyAction {
-		return { type: DataAction.SAVE_CHECKBOX_STATE };
+	public static save_pchecks(): AnyAction {
+		return { type: DataAction.SAVE_PCHECKS};
 	}
 
-	public static save_previous_qtt(): AnyAction {
-		return { type: DataAction.SAVE_PREV_QTT };
+	public static save_punits(): AnyAction {
+		return { type: DataAction.SAVE_PUNITS };
 	}
 
-	public static save_previous_tons(): AnyAction {
-		return { type: DataAction.SAVE_PREV_TONS };
+	public static save_pkilos(): AnyAction {
+		return { type: DataAction.SAVE_PKILOS };
 	}
 
-	public static save_maxi_tons(): AnyAction {
-		return { type: DataAction.SAVE_MAXI_TONS };
+	public static save_pmaxis(): AnyAction {
+		return { type: DataAction.save_pmaxis };
 	}
 
 	//*********************************************************************** */
@@ -129,23 +129,23 @@ export default class DataAction {
 	}
 //*********************************************************************** */
 
-	public static load_pchecks(data: string): AnyAction {
-		return { type: DataAction.LOAD_PCHECKS, payload: JSON.parse(data) };
+	public static load_pchecks(pchecks_datas: string): AnyAction {
+		return { type: DataAction.LOAD_PCHECKS, payload: JSON.parse(pchecks_datas) };
 	}
 	
-	public static load_punits(data: string): AnyAction {
-		return { type: DataAction.LOAD_PUNITS, payload: JSON.parse(data) };
+	public static load_punits(punits_data: string): AnyAction {
+		return { type: DataAction.LOAD_PUNITS, payload: JSON.parse(punits_data) };
 	}
-	public static load_pkilos(data: string): AnyAction {
-		return { type: DataAction.LOAD_PKILOS, payload: JSON.parse(data) };
+	public static load_pkilos(pkilos_data: string): AnyAction {
+		return { type: DataAction.LOAD_PKILOS, payload: JSON.parse(pkilos_data) };
 	}
 
-	public static load_pmaxis(data: string): AnyAction {
-		return { type: DataAction.LOAD_PMAXIS , payload: JSON.parse(data) };
+	public static load_pmaxis(pmaxis_data: string): AnyAction {
+		return { type: DataAction.LOAD_PMAXIS , payload: JSON.parse(pmaxis_data) };
 	}
-	public static import_tally_data(data: any[]): AnyAction {
-		return { type: DataAction.IMPORT_TALLY_DATA, payload: data };
-	}
+	// public static import_tally_data(data: any[]): AnyAction {
+	// 	return { type: DataAction.IMPORT_TALLY_DATA, payload: data };
+	// }
 
 	public static clear(): AnyAction {
 		return { type: DataAction.CLEAR };

@@ -195,7 +195,7 @@ export const dataReducer: Reducer<Interface_stepe_state> = (state = initial_step
                     saved_tally_status: false
                 }
 //****************************************************************************************************
-            case DataAction.SAVE_CHECKBOX_STATE:
+            case DataAction.SAVE_PCHECKS:
                 // if(state.saved_TAlly_HOLD_checkbox_status) return state;
                 window.localStorage.setItem("local_pchecks", JSON.stringify(state.TAlly_HOLD_checkbox));
                 state.saved_TAlly_HOLD_checkbox_status = true;
@@ -203,7 +203,7 @@ export const dataReducer: Reducer<Interface_stepe_state> = (state = initial_step
                     ...state,
                     saved_TAlly_HOLD_checkbox_status: false
                 };
-            case DataAction.SAVE_PREV_QTT:
+            case DataAction.SAVE_PUNITS:
                 // if(state.saved_TAlly_HOLD_previous_QTT_status) return state;
                 state.saved_TAlly_HOLD_previous_QTT_status = true;
                 window.localStorage.setItem("local_punits", JSON.stringify(state.TAlly_HOLD_previous_QTT));
@@ -211,7 +211,7 @@ export const dataReducer: Reducer<Interface_stepe_state> = (state = initial_step
                     ...state,
                     saved_TAlly_HOLD_previous_QTT_status: false
                 };
-            case DataAction.SAVE_PREV_TONS:
+            case DataAction.SAVE_PKILOS:
                 // if(state.saved_TAlly_HOLD_previous_TONS_status) return state;
                 state.saved_TAlly_HOLD_previous_TONS_status = true;
                 window.localStorage.setItem("local_pkilos", JSON.stringify(state.TAlly_HOLD_previous_TONS));
@@ -219,7 +219,7 @@ export const dataReducer: Reducer<Interface_stepe_state> = (state = initial_step
                     ...state,
                     saved_TAlly_HOLD_previous_TONS_status: false
                 };
-            case DataAction.SAVE_MAXI_TONS:
+            case DataAction.save_pmaxis:
                 // if(state.saved_TAlly_HOLD_maxi_TONS_status) return state;
                 state.saved_TAlly_HOLD_maxi_TONS_status = true;
                 window.localStorage.setItem("local_pmaxis", JSON.stringify(state.TAlly_HOLD_maxi_TONS));
@@ -236,15 +236,15 @@ export const dataReducer: Reducer<Interface_stepe_state> = (state = initial_step
                     saved_catalog_status: true,
                 }
 //****************************************************************************************************
-            case DataAction.LOAD_TALLY:
+            /* case DataAction.LOAD_TALLY:
                 return {
                     ...state,
                     tally_data_state: action.payload,
                     loaded_tally_status: true,
                     saved_tally_status: true,
-                }
+                } */
 //****************************************************************************************************
-            case DataAction.LOAD_CHECKBOX_STATE:
+            case DataAction.LOAD_PCHECKS:
                 return {
                     ...state,
                     TAlly_HOLD_checkbox: action.payload,

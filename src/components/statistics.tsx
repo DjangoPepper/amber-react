@@ -122,14 +122,14 @@ export default function Statistics() {
       dispatch(
         DataAction.change_checkbox_state({ [k]: updatedCheckboxState[k] })
       );
-      dispatch(DataAction.save_checkbox_state());
+      dispatch(DataAction.save_pchecks());
     } else {
       updatedCheckboxState[k] = true;
       set_checkbox_Hold_State(updatedCheckboxState);
       dispatch(
         DataAction.change_checkbox_state({ [k]: updatedCheckboxState[k] })
       );
-      dispatch(DataAction.save_checkbox_state());
+      dispatch(DataAction.save_pchecks());
     }
   };
   
@@ -139,7 +139,7 @@ export default function Statistics() {
       [destination]: value,
     }));
     dispatch(DataAction.change_previous_qtt({ destination, value }));
-    dispatch(DataAction.save_previous_qtt());
+    dispatch(DataAction.save_punits());
   };
 
   const handle_PrevTO_VALUE_Change = (destination: string, value: string) => {
@@ -148,7 +148,7 @@ export default function Statistics() {
       [destination]:  value,
     }));
     dispatch(DataAction.change_previous_tons({ destination, value }));
-    dispatch(DataAction.save_previous_tons());
+    dispatch(DataAction.save_pkilos());
   };
 
   const handle_maxiTO_VALUE_Change = (destination: string, value: string) => {
@@ -160,7 +160,7 @@ export default function Statistics() {
     // const numericValue = parseFloat(value) || 0;
     // dispatch(DataAction.change_maxi_tons({ destination: destination, value}));
     dispatch(DataAction.change_maxi_tons({ destination, value }));
-    dispatch(DataAction.save_maxi_tons());
+    dispatch(DataAction.save_pmaxis());
   };
 
   

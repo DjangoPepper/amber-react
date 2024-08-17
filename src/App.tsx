@@ -11,9 +11,7 @@ import { useLeavePageConfirm } from "./components/use-leave";
 import DataAction from "./stores/dataS/DataAction";
 import { toast } from 'react-toastify';
 
-
 let backupInterval = 30 * 1000; //30 * 1000 ms = 30s
-// let firstRender = false;
 
 function init_cata() {	
 	const Init_catalogDATAS = window.localStorage.getItem("local_catalog");
@@ -28,15 +26,6 @@ function init_cata() {
 	}
 
 function init_tally(){
-	// const Init_tallyDATAS = window.localStorage.getItem("local_tally");
-	// if(Init_tallyDATAS) {
-	// 	store.dispatch(DataAction.loaded_tally(Init_tallyDATAS));
-	// 	}
-	// const Init_TAllY_local_checkbox = window.localStorage.getItem("local_checkbox"); // check
-	// if(Init_TAllY_local_checkbox) {
-	// 	// store.dispatch(DataAction.loaded_checkbox(Init_TAllY_local_checkbox));
-	// 	// store.dispatch(DataAction.load));
-	// 	}
 	const Init_TAllY_local_pchecks = window.localStorage.getItem("local_pchecks"); // check
 	if(Init_TAllY_local_pchecks) {
 		store.dispatch(DataAction.load_pchecks(Init_TAllY_local_pchecks));
@@ -59,10 +48,10 @@ function init_tally(){
 
 	setInterval(() => {
 		// store.dispatch(DataAction.save_tally());
-		store.dispatch(DataAction.save_checkbox_state());
-		store.dispatch(DataAction.save_previous_qtt());
-		store.dispatch(DataAction.save_previous_tons());
-		store.dispatch(DataAction.save_maxi_tons());
+		store.dispatch(DataAction.save_pchecks());
+		store.dispatch(DataAction.save_punits());
+		store.dispatch(DataAction.save_pkilos());
+		store.dispatch(DataAction.save_pmaxis());
 		toast.warning('AutoSave tally', { position: toast.POSITION.BOTTOM_LEFT, autoClose: 500 })
 	}, 
 	backupInterval);
