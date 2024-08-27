@@ -1,6 +1,6 @@
 import React from "react";
 import { SketchPicker, ColorResult } from "react-color";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
     createColumnHelper,
     FilterFn,
@@ -81,7 +81,6 @@ const EditableCell = ({ getValue, row, column, table }: any) => {
     const onBlur = () => {
         table.options.meta?.updateData(row.original.reference, column.id, value);
     }
-
     React.useEffect(() => {
         setValue(initialValue)
     }, [initialValue])
@@ -107,51 +106,17 @@ const globalFilterFn: FilterFn<export_stepe_catalog_Data> = (row, columnId, filt
     };
 
 const useColumns = function useColumns(): any[] {
-
 const dispatch = useDispatch();
-//FRED
-/* const closeToast = () => {
-    // Code pour fermer le toast
-}; */
-
 const closeToast = () => {
     toast.dismiss();
 };
 const row = {
     original: {
-        reference: 123 // Assurez-vous que cela correspond à la structure de vos données
+        reference: 123
     }
 };
 
-/* const Msg2 = ({closedToast,row2}:any) => (
-    <div>
-        {SpaceatPos(row2)}
-        <Button onClick={dispatch(DataAction.moveRow(row2))}>{SpaceatPos(row2)}</Button>
-        <Button onClick={closeToast}>Close</Button>
-    </div>
-    ) */
-
-/* const handleButtonClick = (reference: string) => {
-    toast(({ closeToast }) => (
-        <Msg
-            closeToast={closeToast}
-            onValidate={() => {
-                dispatch(DataAction.moveRow(reference));
-                // closeToast();
-                if (closeToast) {
-                    closeToast();
-                }
-                
-            }}
-        />
-    ));
-}; */
-
-
-//FRED
-
-
-    const columns = [
+const columns = [
         columnHelper.accessor('rank', {
             header: () => 'RANG',
             filterFn: fuzzyFilter,
@@ -161,23 +126,6 @@ const row = {
             cell: EditableCell,
             filterFn: fuzzyFilter,
         }),
-// /* // #####################################################################################################################
-//         columnHelper.accessor('reference', {
-//             header: 'REF',
-//             cell: ({row}: any) =>
-                
-//                 <Button 
-//                     onClick={() => {
-//                     dispatch(DataAction.moveRow(row.original.reference)); //je change la detination de ref cale1,cale2, etc..
-//                     }}
-//                 >
-//                     {SpaceatPos(row.original.reference)}
-//                 </Button>,
-                
-//             filterFn: fuzzyFilter,
-
-//         }),
-// ##################################################################################################################### */
         columnHelper.accessor('reference', {
             header: 'REF',
             cell: ({ row }: any) => (
@@ -191,7 +139,6 @@ const row = {
             ),
             filterFn: fuzzyFilter,
         }),
-// ##################################################################################################################### */
         columnHelper.accessor('weight', {
             header: "POIDS",
             cell: info => info.getValue(),
@@ -202,44 +149,62 @@ const row = {
             filterFn: fuzzyFilter,
         })
     ];
-
     return columns;
 }
-//***********************************************************************/
-//***********************************************************************/
-//***********************************************************************/
-//***********************************************************************/
 export default function DataTable() {
     const dispatch = useDispatch();
-    // const [showModal, setShowModal] = useState(false);
+/*     const [PickerColorForSelectedCale, setPickerColorForSelectedCale] = useState<{ [key: string]: string }>(() => {
+        const savedColors = localStorage.getItem('PickerColorForSelectedCale');
+        return savedColors ? JSON.parse(savedColors) : {};
+    });
+ */
     const [PickerColorForSelectedCale, setPickerColorForSelectedCale] = useState<{ [key: string]: string }>({});
-    const [newSelectedCale, setnewSelectedCale] = useState<string>('');
-    // const [ExtentedTally, setExtentedTally] = useState<string>('');
-
-    const [newColor, setNewColor] = useState<string>('');
     
-    // Accédez à la valeur sélectionnée depuis l'état Redux
+    useEffect(() => {
+        const storedColors = localStorage.getItem('PickerColorForSelectedCale');
+        if (storedColors) {
+            setPickerColorForSelectedCale(JSON.parse(storedColors));
+        }
+    }, []);
+    
+    React.useEffect(() => {
+        localStorage.setItem('PickerColorForSelectedCale', JSON.stringify(PickerColorForSelectedCale));
+    }, [PickerColorForSelectedCale]);    
+    //colorEnd
+    /* const [newSelectedCale, setnewSelectedCale] = useState<string>(''); */
+    const [newSelectedCale, setNewSelectedCale] = useState<string>('');
+
+    
+    const [newColor, setNewColor] = useState<string>('');
     const selectedCale = useSelector<RootState, string>((state) => state.dataSS.selectedCale);
     const selectedColors = useSelector<RootState, { [key: string]: string }>((state) => state.dataSS.pickerColors);
     const setSelectedColors = (colors: { [key: string]: string }) => {
         dispatch(DataAction.changePickColors(colors));
     }
     
-    const handleStabiloClick = () => { 
+    /* const handleStabiloClick = () => { 
         setnewSelectedCale(selectedCale);
+    }; */
+    const handleStabiloClick = () => {
+        setNewSelectedCale(cale); // 'cale' est la cale actuellement sélectionnée
     };
+    
 
     const handleCloseModal = () => { 
         // setShowModal(false); 
-        setnewSelectedCale(""); 
+        setNewSelectedCale(""); 
     };
 
-    const handleColorChange = (color: ColorResult) => {
+/*     const handleColorChange = (color: ColorResult) => {
         // setSelectedColor(color.hex);
         setSelectedColors({...selectedColors, [newSelectedCale]: color.hex});
 
         const updateStickerdColors = { ...PickerColorForSelectedCale, [selectedCale]: color.hex };
         setPickerColorForSelectedCale(updateStickerdColors);
+    }; */
+    const handleColorChange = (color: ColorResult) => {
+        const updatedColors = { ...PickerColorForSelectedCale, [newSelectedCale]: color.hex };
+        setPickerColorForSelectedCale(updatedColors);
     };
     
     const handleSaveChanges = () => {
@@ -258,7 +223,7 @@ export default function DataTable() {
     
         // Fermez la fenêtre contextuelle
         // setShowModal(false);
-        setnewSelectedCale("");
+        setNewSelectedCale("");
         };
 
     const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -328,10 +293,10 @@ export default function DataTable() {
         
     }
 
-    const isStabiloButtonVisible = cale !== "stock"; // Condition pour déterminer la visibilité du bouton STABILO
-    // const TempColors = affectation.map((d) => d.color);
-    
-    // const [checkedRows, setCheckedRows] = useState<{ [key: number]: boolean }>({});
+/*     const isStabiloButtonVisible = cale !== "stock"; // Condition pour déterminer la visibilité du bouton STABILO */
+    const isStabiloButtonVisible = cale !== "stock"; // Le bouton est visible si la cale sélectionnée n'est pas 'stock'
+
+
     const [checkedRows, setCheckedRows] = useState<{ [key: number]: boolean }>({});
     // const handleCheckboxClick = (reference: number) => {
     //     const updatedCheckedRows = { ...checkedRows };
@@ -356,7 +321,7 @@ export default function DataTable() {
                 &nbsp;
                 <div style={{maxWidth: 350 }}>
                     {/* largeur form select stock cale */}
-                    <Form.Select placeholder="vers..." value={cale} 
+                    {/* <Form.Select placeholder="To ->" value={cale} 
                         onChange={(e) => handleHoldChange(e)}
                         style={{ backgroundColor: selectedColors[cale] }}
                         >
@@ -365,7 +330,24 @@ export default function DataTable() {
                                 {d.name}
                             </option>
                         )}
+                    </Form.Select> */}
+                    <Form.Select 
+                        placeholder="To ->" 
+                        value={cale} 
+                        onChange={(e) => handleHoldChange(e)}
+                        style={{ backgroundColor: PickerColorForSelectedCale[cale] || selectedColors[cale] }}
+                    >
+                        {affectation.map(d => 
+                            <option 
+                                key={d.name} 
+                                value={d.name} 
+                                style={{backgroundColor: PickerColorForSelectedCale[d.name] || d.color}}
+                            >
+                                {d.name}
+                            </option>
+                        )}
                     </Form.Select>
+
                 </div>
                 &nbsp;
                 {isStabiloButtonVisible && (
@@ -538,7 +520,7 @@ export default function DataTable() {
 
             {/* Modale pour modifier la valeur et la couleur */}
             {/* <Modal show={showModal} onHide={handleCloseModal}> */}
-            <Modal show={Boolean(newSelectedCale)} onHide={handleCloseModal}>
+            {/* <Modal show={Boolean(newSelectedCale)} onHide={handleCloseModal}>
             <Modal.Header closeButton>
                 <Modal.Title>Modifier la valeur et la couleur</Modal.Title>
             </Modal.Header>
@@ -561,7 +543,26 @@ export default function DataTable() {
                 Enregistrer
                 </Button>
             </Modal.Footer>
-            </Modal>
+            </Modal> */}
+            <Modal show={Boolean(newSelectedCale)} onHide={() => setNewSelectedCale('')}>
+    <Modal.Header closeButton>
+        <Modal.Title>Modifier la couleur</Modal.Title>
+    </Modal.Header>
+    <Modal.Body>
+        <SketchPicker
+            color={PickerColorForSelectedCale[newSelectedCale] || '#ffffff'}
+            onChangeComplete={(color) => {
+                const updatedColors = { ...PickerColorForSelectedCale, [newSelectedCale]: color.hex };
+                setPickerColorForSelectedCale(updatedColors);
+            }}
+        />
+    </Modal.Body>
+    <Modal.Footer>
+        <Button variant="secondary" onClick={() => setNewSelectedCale('')}>Annuler</Button>
+        <Button variant="primary" onClick={() => setNewSelectedCale('')}>Enregistrer</Button>
+    </Modal.Footer>
+</Modal>
+
         </>
     );
 }
