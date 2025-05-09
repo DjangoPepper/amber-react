@@ -13,18 +13,29 @@ interface AffectationManagerProps {
     setAffectation: React.Dispatch<React.SetStateAction<Affectation[]>>; // Ajout de setAffectation
 }
 
+// Fonction pour générer une couleur aléatoire entre bleu et vert au format hexadécimal
+const generateRandomBlueGreenColor = (): string => {
+    const r = Math.floor(Math.random() * 50); // Rouge faible (0-50)
+    const g = Math.floor(150 + Math.random() * 105); // Vert moyen à élevé (150-255)
+    const b = Math.floor(150 + Math.random() * 105); // Bleu moyen à élevé (150-255)
+
+    // Convertir les valeurs RGB en hexadécimal
+    const toHex = (value: number) => value.toString(16).padStart(2, "0");
+    return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+};
+
 const AffectationManager: React.FC<AffectationManagerProps> = ({ affectation, setAffectation }) => {
     const dispatch = useDispatch();
 
     const [newName, setNewName] = useState("");
-    const [newColor, setNewColor] = useState("#000000");
+    const [newColor, setNewColor] = useState(generateRandomBlueGreenColor()); // Initialiser avec une couleur aléatoire
 
     const addAffectation = () => {
         const newIndex = affectation.length;
         const newAffectation = [...affectation, { name: newName, color: newColor, index: newIndex }];
         setAffectation(newAffectation);
         setNewName("");
-        setNewColor("#000000");
+        setNewColor(generateRandomBlueGreenColor()); // Générer une nouvelle couleur aléatoire après ajout
     };
 
     const removeAffectation = (name: string) => {

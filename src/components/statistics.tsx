@@ -5,7 +5,11 @@ import DataAction from "../stores/dataS/DataAction";
 import { export_stepe_catalog_Data } from "../stores/dataS/DataReducer";
 import { Table } from "react-bootstrap";
 import React, { useState, useEffect } from 'react';
+
 import { affectation} from "../utils/destination";
+import {colors, affectation as initialAffectation, HEADER} from "../utils/destination";
+
+
 // import { updateAffectationVisibility } from '../stores/data/destinationActions';
 
 import Button from 'react-bootstrap/Button';
@@ -34,7 +38,9 @@ export default function Statistics() {
 	const [maxi_Value_TO, set_maxi_Values] 			 = useState<{ [key: string]: { maxi_To: string      } }>({});
 
 	const selectedColors = useSelector<RootState, { [key: string]: string }>((state) => state.dataSS.pickerColors);
-
+	const [affectation, setAffectation] = useState(initialAffectation); // Utiliser les données initiales
+	//const affectation = useSelector((state: RootState) => state.dataSS.affectation); // Récupérer les affectations depuis Redux
+	
 	useEffect(() => {
 		const punits = window.localStorage.getItem("local_punit");
 		if(punits) {
