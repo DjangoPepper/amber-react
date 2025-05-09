@@ -219,8 +219,8 @@ export default function DataTable() {
         dispatch(DataAction.changePickColors(colors));
     }
     
-    const handleStabiloClick = () => { 
-        setnewSelectedCale(selectedCale);
+    const handleStabiloClick = () => {
+        setnewSelectedCale(selectedCale); // Ouvre la modale pour la cale sélectionnée
     };
 
     const handleCloseModal = () => { 
@@ -228,23 +228,32 @@ export default function DataTable() {
     };
 
     const handleColorChange = (color: ColorResult) => {
-        setSelectedColors({...selectedColors, [newSelectedCale]: color.hex});
+        // Mettre à jour les couleurs dans l'état local
+        setSelectedColors({ ...selectedColors, [newSelectedCale]: color.hex });
 
-        const updateStickerdColors = { ...PickerColorForSelectedCale, [selectedCale]: color.hex };
-        setPickerColorForSelectedCale(updateStickerdColors);
+        // Mettre à jour les couleurs dans l'état local pour les PickerColors
+        const updatedPickerColors = { ...PickerColorForSelectedCale, [selectedCale]: color.hex };
+        setPickerColorForSelectedCale(updatedPickerColors);
+
+        // Si vous utilisez Redux, mettez à jour les couleurs dans le store
+        dispatch(DataAction.changePickColors({ ...selectedColors, [newSelectedCale]: color.hex }));
     };
     
     const handleSaveChanges = () => {
+        // Mettre à jour les données locales
         const updatedData = data.map((item) => {
-                if (item.destination === newSelectedCale) {
-                    return { ...item, color: newColor };
-                }
+            if (item.destination === newSelectedCale) {
+                return { ...item, color: newColor };
+            }
             return item;
         });
-    
+
+        // Mettre à jour les couleurs dans Redux
         dispatch(DataAction.changeCouleur([newSelectedCale]));
+
+        // Réinitialiser la sélection
         setnewSelectedCale("");
-        };
+    };
 
     const [sorting, setSorting] = React.useState<SortingState>([]);
     const [globalFilter, setGlobalFilter] = React.useState('')
@@ -403,7 +412,7 @@ export default function DataTable() {
                     <tbody className="overflow-auto" style={{ maxHeight: "100px" }}>
                         {table.getRowModel().rows.map((row) => {
                             const destination = row.getValue("destination") as string;
-                            const affectationColor = affectation.find((a) => a.name === destination)?.color || "#ffffff"; // Couleur par défaut
+                            const affectationColor = selectedColors[destination] || affectation.find((a) => a.name === destination)?.color || "#ffffff"; // Couleur par défaut
 
                             return (
                                 <tr
