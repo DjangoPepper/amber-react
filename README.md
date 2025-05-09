@@ -5,6 +5,10 @@ Ce project nous aide à maninpuler des catalogues de marchandises (coils, hotcoi
 
 
 ## Utilisation local depuis vscode
+### `nvm install 18`
+
+## Utilisation local depuis vscode
+### `nvm use 18.20.8`
 
 Dans une console dans le repertoire de principal
 ### `yarn start`
