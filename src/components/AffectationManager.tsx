@@ -64,20 +64,20 @@ const AffectationManager: React.FC<AffectationManagerProps> = ({ affectation, se
                     ))}
                 </tbody>
             </table>
-            <div style={{ marginTop: "20px" }}>
+            <div style={{ marginTop: "20px", display: "flex", alignItems: "center", gap: "10px" }}>
                 <input
                     type="text"
                     placeholder="Nom"
                     maxLength={10}
                     value={newName}
                     onChange={(e) => setNewName(e.target.value)}
-                    style={{ width: "150px", marginRight: "10px" }}
+                    style={{ width: "150px" }}
                 />
                 <input
                     type="color"
                     value={newColor}
                     onChange={(e) => setNewColor(e.target.value)}
-                    style={{ marginRight: "10px" }}
+                    style={{ width: "40px", height: "28px", padding: "0", border: "none" }}
                 />
                 <button onClick={addAffectation} disabled={!newName.trim()}>
                     Ajouter
