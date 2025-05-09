@@ -21,7 +21,7 @@ import {RootState} from "../stores/rootStore";
 import {export_stepe_catalog_Data} from "../stores/dataS/DataReducer";
 import DebouncedInput from "./debounceInput";
 import DataAction from "../stores/dataS/DataAction";
-import {colors, affectation, HEADER} from "../utils/destination";
+import {colors, affectation as initialAffectation, HEADER} from "../utils/destination";
 import Filter, {fuzzyFilter} from "./filter";
 import './index-tanstack.css'
 import { toast } from "react-toastify";
@@ -30,10 +30,8 @@ import Msg2 from "./Msg2";
 
 //FRED ****************************************************************
 import SpaceatPos from "./SpaceatPos";
-// import * as fs from 'fs'
-// import * as path from 'path'
-// import { AnyAction } from "redux";
 import Msg from "./Msg"
+import AffectationManager from "../components/AffectationManager";
 
 const row = {
     original: {
@@ -53,9 +51,6 @@ function backupCurrentDateTime(): string {
     const now = new Date();
     const day = String(now.getDate()).padStart(2, '0');
     const month = monthNames[now.getMonth()];  
-
-    //const month = String(now.getMonth() + 1).padStart(2, '0');
-    //const year = String(now.getFullYear());
     const hour = String(now.getHours()).padStart(2, '0');
     const minute = String(now.getMinutes()).padStart(2, '0');
 
@@ -211,12 +206,11 @@ const row = {
 //***********************************************************************/
 export default function DataTable() {
     const dispatch = useDispatch();
-    // const [showModal, setShowModal] = useState(false);
+    const [affectation, setAffectation] = useState(initialAffectation); // Utiliser les données initiales
     const [PickerColorForSelectedCale, setPickerColorForSelectedCale] = useState<{ [key: string]: string }>({});
     const [newSelectedCale, setnewSelectedCale] = useState<string>('');
-    // const [ExtentedTally, setExtentedTally] = useState<string>('');
-
     const [newColor, setNewColor] = useState<string>('');
+    const [showAffectationManager, setShowAffectationManager] = useState(false); // État pour afficher ou masquer AffectationManager
     
     // Accédez à la valeur sélectionnée depuis l'état Redux
     const selectedCale = useSelector<RootState, string>((state) => state.dataSS.selectedCale);
@@ -230,12 +224,10 @@ export default function DataTable() {
     };
 
     const handleCloseModal = () => { 
-        // setShowModal(false); 
         setnewSelectedCale(""); 
     };
 
     const handleColorChange = (color: ColorResult) => {
-        // setSelectedColor(color.hex);
         setSelectedColors({...selectedColors, [newSelectedCale]: color.hex});
 
         const updateStickerdColors = { ...PickerColorForSelectedCale, [selectedCale]: color.hex };
@@ -243,7 +235,6 @@ export default function DataTable() {
     };
     
     const handleSaveChanges = () => {
-        // Mettez à jour la couleur pour toutes les affectation identiques
         const updatedData = data.map((item) => {
                 if (item.destination === newSelectedCale) {
                     return { ...item, color: newColor };
@@ -251,13 +242,7 @@ export default function DataTable() {
             return item;
         });
     
-        // Mettez à jour l'état des données avec les modifications
-        // dispatch(DataAction.updateData(updatedData));
-    
         dispatch(DataAction.changeCouleur([newSelectedCale]));
-    
-        // Fermez la fenêtre contextuelle
-        // setShowModal(false);
         setnewSelectedCale("");
         };
 
@@ -321,31 +306,27 @@ export default function DataTable() {
     const [hold, setHold] = useState('');
     
     const handleHoldChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        dispatch(DataAction.changeCale(e.target.value)) 
-        const selectedWorkingHoldValue = (e.target.value);
-        const selectedWorkingHoldOption = affectation.find((d) => d.name === selectedWorkingHoldValue);
-        setHold(selectedWorkingHoldValue);
-        
-    }
+        const selectedValue = e.target.value;
+
+        if (selectedValue === "manage_affectations") {
+            setShowAffectationManager(true); // Ouvrir AffectationManager
+        } else {
+            dispatch(DataAction.changeCale(selectedValue));
+        }
+    };
+
+    const handleCloseAffectationManager = () => {
+        setShowAffectationManager(false); // Fermer AffectationManager
+    };
 
     const isStabiloButtonVisible = cale !== "stock"; // Condition pour déterminer la visibilité du bouton STABILO
-    // const TempColors = affectation.map((d) => d.color);
     
-    // const [checkedRows, setCheckedRows] = useState<{ [key: number]: boolean }>({});
     const [checkedRows, setCheckedRows] = useState<{ [key: number]: boolean }>({});
-    // const handleCheckboxClick = (reference: number) => {
-    //     const updatedCheckedRows = { ...checkedRows };
-    //     updatedCheckedRows[reference] = !updatedCheckedRows[reference];
-    //     setCheckedRows(updatedCheckedRows);
-    // };
-
-
 
     return ( 
         <>
             <div className="d-flex">
                 <div style={{maxWidth: 90}}>
-                    {/* 11 chiffres POUR LE CHAMP search de rang*/}
                     <DebouncedInput
                         value={globalFilter ?? ''}
                         onChange={value => setGlobalFilter(String(value))}
@@ -355,7 +336,6 @@ export default function DataTable() {
                 </div>
                 &nbsp;
                 <div style={{maxWidth: 350 }}>
-                    {/* largeur form select stock cale */}
                     <Form.Select placeholder="vers..." value={cale} 
                         onChange={(e) => handleHoldChange(e)}
                         style={{ backgroundColor: selectedColors[cale] }}
@@ -365,9 +345,12 @@ export default function DataTable() {
                                 {d.name}
                             </option>
                         )}
+                        <option value="manage_affectations">--- Gestion des Affectations ---</option>
                     </Form.Select>
                 </div>
+                
                 &nbsp;
+
                 {isStabiloButtonVisible && (
                     <Button variant="warning" onClick={handleStabiloClick}>S</Button>
                 )}
@@ -416,34 +399,20 @@ export default function DataTable() {
                 ))}
             </thead>
             <div ref={tableContainerRef} className="overflow-auto" style={{maxHeight: "490px"}}>
-                {/* hauteur du tableau data 500 px*/}
                 <TableRS>
-                    <tbody className="overflow-auto" style={{maxHeight: "100px"}}>
-                    {table.getRowModel().rows.map(row => {
-                        // const reference = row.original.reference as number;
-                        const reference = parseInt(row.original.reference, 10);
-                        
-                        const isChecked = checkedRows[reference] || false;
+                    <tbody className="overflow-auto" style={{ maxHeight: "100px" }}>
+                        {table.getRowModel().rows.map((row) => {
+                            const destination = row.getValue("destination") as string;
+                            const affectationColor = affectation.find((a) => a.name === destination)?.color || "#ffffff"; // Couleur par défaut
 
-            return (
-                                <tr 
-                                    key={row.id} 
+                            return (
+                                <tr
+                                    key={row.id}
                                     style={{
-                                        // backgroundColor: colors[row.getValue("destination") as string]}}>
-                                        backgroundColor: selectedColors[row.getValue("destination") as string]
+                                        backgroundColor: affectationColor, // Appliquer la couleur de l'affectation
                                     }}
                                 >
-                                    {/* //fred jeudi */}
-                                    {/* <td>
-                                        <input
-                                            type="checkbox"
-                                            checked={isChecked}
-                                            onClick={() => handleCheckboxClick(reference)}
-                                        />
-                                    </td> */}
-                                    {/* //fred jeudi */}
-                                    
-                                    {row.getVisibleCells().map(cell => {
+                                    {row.getVisibleCells().map((cell) => {
                                         return (
                                             <td key={cell.id}>
                                                 {flexRender(
@@ -451,10 +420,10 @@ export default function DataTable() {
                                                     cell.getContext()
                                                 )}
                                             </td>
-                                        )
+                                        );
                                     })}
                                 </tr>
-                            )
+                            );
                         })}
                     </tbody>
 
@@ -494,13 +463,11 @@ export default function DataTable() {
                     className="border rounded p-1"
                     onClick={() => table.setPageIndex(table.getPageCount() - 1)}
                     disabled={!table.getCanNextPage()}
-                    // onclick={() => table.index
                 >
                     {'>>'}
                 </button>&nbsp;&nbsp;&nbsp;&nbsp;
 
                 <span className="flex items-center gap-1">
-                    {/* <div>Page</div> */}
                     <strong>
                         {table.getState().pagination.pageIndex + 1} of{' '}
                         {table.getPageCount()}
@@ -536,8 +503,6 @@ export default function DataTable() {
                 
             </div>
 
-            {/* Modale pour modifier la valeur et la couleur */}
-            {/* <Modal show={showModal} onHide={handleCloseModal}> */}
             <Modal show={Boolean(newSelectedCale)} onHide={handleCloseModal}>
             <Modal.Header closeButton>
                 <Modal.Title>Modifier la valeur et la couleur</Modal.Title>
@@ -546,8 +511,6 @@ export default function DataTable() {
                 <Form.Group>
                 <Form.Label>Nouvelle couleur</Form.Label>
                 <SketchPicker
-                    // color={selectedColor} // color fixé par tableau                    
-                    // color={selectedColors[newSelectedCale]}
                     color={PickerColorForSelectedCale[newSelectedCale] || '' }
                     onChange={handleColorChange}
                 />
@@ -561,6 +524,23 @@ export default function DataTable() {
                 Enregistrer
                 </Button>
             </Modal.Footer>
+            </Modal>
+
+            <Modal show={showAffectationManager} onHide={handleCloseAffectationManager}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Gestion des Affectations</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <AffectationManager
+                        affectation={affectation}
+                        setAffectation={setAffectation}
+                    />
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleCloseAffectationManager}>
+                        Fermer
+                    </Button>
+                </Modal.Footer>
             </Modal>
         </>
     );

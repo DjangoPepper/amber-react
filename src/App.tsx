@@ -1,8 +1,5 @@
-// import React, {useEffect} from 'react';
 import React from 'react';
-// import { Provider, useSelector, useDispatch } from "react-redux";
 import { Provider} from "react-redux";
-// import {RootState} from "./stores/rootStore";
 import './styles/App.scss';
 import Header from "./components/header";
 import Main from "./components/main";
@@ -10,10 +7,9 @@ import {store} from "./stores/rootStore";
 import { useLeavePageConfirm } from "./components/use-leave";
 import DataAction from "./stores/dataS/DataAction";
 import { toast } from 'react-toastify';
-
+//import AffectationManager from './components/AffectationManager';
 
 let backupInterval = 30 * 1000; //30 * 1000 ms = 30s
-// let firstRender = false;
 
 function init_cata() {	
 	const Init_catalogDATAS = window.localStorage.getItem("local_catalog");
@@ -22,10 +18,6 @@ function init_cata() {
 		}
 	setInterval(() => {
 		store.dispatch(DataAction.save_catalog());
-		// store.dispatch(DataAction.save_checkbox_state());
-		// store.dispatch(DataAction.save_previous_qtt());
-		// store.dispatch(DataAction.save_previous_tons());
-		// store.dispatch(DataAction.save_maxi_tons());
 		toast.warning('AutoSave catalog', { position: toast.POSITION.BOTTOM_LEFT, autoClose: 500 })
 		}, 
 	backupInterval);
