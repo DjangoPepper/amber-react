@@ -23,6 +23,10 @@ export type export_stepe_tally_Data = {
 interface Interface_stepe_state {
     catalog_data_state: export_stepe_catalog_Data[];
     tally_data_state: export_stepe_tally_Data[];
+    
+    affectation: string;
+    initialAffectation: string;
+
     selectedCale: string;
     selectedPrepa: string;
     loaded_catalog_status: boolean;
@@ -51,6 +55,10 @@ interface Interface_stepe_state {
 const initial_stepe_Data_State: Interface_stepe_state = {
     catalog_data_state: [],
     tally_data_state: [],
+    
+    affectation: "",
+    initialAffectation: "",
+
     selectedCale: "stock",
     selectedPrepa: "_",
     loaded_catalog_status: false,
@@ -263,6 +271,11 @@ export const dataReducer: Reducer<Interface_stepe_state> = (state = initial_step
                     ...state,
                     loaded_catalog_status: false,
                 }
+            case DataAction.UPDATE_AFFECTATION:
+                return {
+                    ...state,
+                    affectation: action.payload,
+                };
 
             default:
                 return state;

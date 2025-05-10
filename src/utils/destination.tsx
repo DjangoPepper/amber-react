@@ -4,6 +4,11 @@ interface IHeader {
     default?: string;
 }
 
+// interface AffectationItem {
+//     name: string;
+//     color: string;
+// }
+
 export const HEADER: IHeader[] = [
     {key: "rank", name :"RANG" },
     {key: "prepa", name :"PREPA" },
@@ -22,10 +27,10 @@ export const affectation = [
     {name: "H3",    color: "#3cbefc", index:3,   },
     {name: "H4",    color: "#ff9b2c", index:4,   },
     {name: "H5",    color: "#800080", index:5,   },
-    {name: "H6",    color: "#80ff00", index:6,   },
-    {name: "H7",    color: "#f03c28", index:7,   },
-    {name: "H8",    color: "#006ee6", index:8,   },
-    {name: "H9",    color: "#fdff5b", index:9,   },
+    {name: "H6",    color: "#3cff00", index:6,   },
+    {name: "H7",    color: "#3cfc28", index:7,   },
+    {name: "H8",    color: "#3cfee6", index:8,   },
+    {name: "H9",    color: "#3cff5b", index:9,   },
     {name: "H10",   color: "#3cbbbc", index:10,  },
     {name: "H11",   color: "#3eeefc", index:11,  },
     {name: "H12",   color: "#3ccbbc", index:12,  },

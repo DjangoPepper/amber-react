@@ -1,11 +1,16 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Modal, Button } from "react-bootstrap";
+import DataAction from "../stores/dataS/DataAction"; // Assurez-vous que le chemin est correct
 
 interface Affectation {
     name: string;
     color: string;
     index: number;
+}
+interface affectationItem {
+    name: string;   
+    color: string;
 }
 
 interface AffectationManagerProps {
@@ -34,13 +39,15 @@ const AffectationManager: React.FC<AffectationManagerProps> = ({ affectation, se
         const newIndex = affectation.length;
         const newAffectation = [...affectation, { name: newName, color: newColor, index: newIndex }];
         setAffectation(newAffectation);
+        dispatch(DataAction.updateAffectation(newAffectation)); // Met à jour Redux
         setNewName("");
-        setNewColor(generateRandomBlueGreenColor()); // Générer une nouvelle couleur aléatoire après ajout
+        setNewColor(generateRandomBlueGreenColor());
     };
 
     const removeAffectation = (name: string) => {
         const updatedAffectation = affectation.filter((a) => a.name !== name);
         setAffectation(updatedAffectation);
+        dispatch(DataAction.updateAffectation(updatedAffectation)); // Met à jour Redux
     };
 
     return (

@@ -37,10 +37,19 @@ export default function Statistics() {
 	const [previous_Value_TO, set_previous_Value_TO] = useState<{ [key: string]: { prevTO_VALUE: string } }>({});
 	const [maxi_Value_TO, set_maxi_Values] 			 = useState<{ [key: string]: { maxi_To: string      } }>({});
 
-	const selectedColors = useSelector<RootState, { [key: string]: string }>((state) => state.dataSS.pickerColors);
+
 	const [affectation, setAffectation] = useState(initialAffectation); // Utiliser les données initiales
-	//const affectation = useSelector((state: RootState) => state.dataSS.affectation); // Récupérer les affectations depuis Redux
 	
+	// Define the AffectationItem type
+	type AffectationItem = {
+		key: string;
+		name: string;
+		color: string;
+	};
+
+
+    const selectedColors = useSelector((state: RootState) => state.dataSS.pickerColors);
+
 	useEffect(() => {
 		const punits = window.localStorage.getItem("local_punit");
 		if(punits) {
@@ -140,8 +149,7 @@ export default function Statistics() {
 	
 //
 //
-	const catalog_data = useSelector<RootState, export_stepe_catalog_Data[]>((state) => state.dataSS.catalog_data_state);
-//	
+	const catalog_data = useSelector<RootState, export_stepe_catalog_Data[]>((state) => state.dataSS.catalog_data_state);	
 
 	const totalPreviousCalesCount = Object.keys(previous_Value_QT).reduce((total, k) => {
 		return total + (previous_Value_QT[k] ? parseFloat(previous_Value_QT[k]) : 0);

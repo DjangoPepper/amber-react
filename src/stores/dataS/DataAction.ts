@@ -39,6 +39,12 @@ export default class DataAction {
 	public static CHANGE_PREVIOUS_TONS = "DataAction.CHANGE_PREVIOUS_TONS";
 	public static CHANGE_MAXI_TONS = "DataAction.CHANGE_MAXI_TONS";
 
+	public static UPDATE_AFFECTATION = "DataAction.UPDATE_AFFECTATION";
+
+	public static updateAffectation(affectation: any[]): AnyAction {
+		return { type: DataAction.UPDATE_AFFECTATION, payload: affectation };
+	}
+
 	public static change_checkbox_state(changecheckboxstate: { [destination: string]: boolean }): AnyAction {
 		return { type: DataAction.CHANGE_CHECKBOX_STATE, payload: changecheckboxstate };
 	}
