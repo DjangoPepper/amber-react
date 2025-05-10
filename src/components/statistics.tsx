@@ -2,10 +2,9 @@ import { useSelector, useDispatch} from "react-redux";
 import { RootState } from "../stores/rootStore";
 import DataAction from "../stores/dataS/DataAction";
 
-import { export_stepe_catalog_Data } from "../stores/dataS/DataReducer";
+import {export_stepe_catalog_Data, ICale} from "../stores/dataS/DataReducer";
 import { Table } from "react-bootstrap";
 import React, { useState, useEffect } from 'react';
-import { affectation} from "../utils/destination";
 // import { updateAffectationVisibility } from '../stores/data/destinationActions';
 
 import Button from 'react-bootstrap/Button';
@@ -33,7 +32,12 @@ export default function Statistics() {
 	const [previous_Value_TO, set_previous_Value_TO] = useState<{ [key: string]: { prevTO_VALUE: string } }>({});
 	const [maxi_Value_TO, set_maxi_Values] 			 = useState<{ [key: string]: { maxi_To: string      } }>({});
 
-	const selectedColors = useSelector<RootState, { [key: string]: string }>((state) => state.dataSS.pickerColors);
+	const cales = useSelector<RootState, ICale[]>((state) => state.dataSS.cales);
+
+	const selectedColors = cales.reduce<{[key: string]: string}>((colors, cale) => {
+		colors[cale.uid] = cale.color;
+		return colors;
+	}, {})
 
 	useEffect(() => {
 		const punits = window.localStorage.getItem("local_punit");
@@ -148,13 +152,13 @@ export default function Statistics() {
 	///
 	let firstRender = true;
 	function init_tally() {
-		affectation.forEach((affectationItem) => {
-			const k = affectationItem.name as string;
-			if (k !== "stock") {
-
-				
-				}
-		});
+		// affectation.forEach((affectationItem) => {
+		// 	const k = affectationItem.name as string;
+		// 	if (k !== "stock") {
+		//
+		//
+		// 		}
+		// });
 		firstRender = false;
 	};
 
@@ -231,9 +235,9 @@ export default function Statistics() {
 			<tbody>
 			
 {/* HEADERS */}				
-							{affectation.map((affectationItem) => {
-				const statistics_array = statistics[affectationItem.name] || {}; // Utilise un objet vide par défaut
-				let chsafin = checkbox_Hold_State[affectationItem.name] || false;
+							{cales.map((affectationItem) => {
+				const statistics_array = statistics[affectationItem.uid] || {}; // Utilise un objet vide par défaut
+				let chsafin = checkbox_Hold_State[affectationItem.uid] || false;
 				if (
 					chsafin || 
 					(
@@ -245,10 +249,10 @@ export default function Statistics() {
 					// console.log("visible : ", affectationItem.name)
 					
 					return (
-						<tr key={affectationItem.name}>
+						<tr key={affectationItem.uid}>
 							
 {/* DEST */}
-							<td style={{ backgroundColor: selectedColors[affectationItem.name], textAlign: 'left' }}>{affectationItem.name}
+							<td style={{ backgroundColor: selectedColors[affectationItem.uid], textAlign: 'left' }}>{affectationItem.name}
 							{/* </td> */}
 							
 {/* CHECKBOX */} <>  </>
@@ -267,13 +271,13 @@ export default function Statistics() {
 {/* DAY_Q */}				
 							{/* <tr> */}
 								<td style={{ textAlign: 'center'}}>
-									{statistics[affectationItem.name] ? statistics[affectationItem.name].count : 0}
+									{statistics[affectationItem.uid] ? statistics[affectationItem.uid].count : 0}
 								</td>
 							{/* </tr> */}
 
 {/* DAY_T */}
 							<td style={{ textAlign: 'center'}}>
-								{statistics[affectationItem.name] ? parseFloat(statistics[affectationItem.name].weight).toLocaleString("en-US", {minimumFractionDigits: 3, maximumFractionDigits: 3,}) : "0.000"}
+								{statistics[affectationItem.uid] ? parseFloat(statistics[affectationItem.uid].weight).toLocaleString("en-US", {minimumFractionDigits: 3, maximumFractionDigits: 3,}) : "0.000"}
 							</td>
 
 								{/* si dest est stock passe x colonnes */}
@@ -326,7 +330,7 @@ export default function Statistics() {
 {/* TTL_Q */}
 											<td style={{ textAlign: 'center'}}>
 												{(
-													(statistics[affectationItem.name]?.count ?? 0) +
+													(statistics[affectationItem.uid]?.count ?? 0) +
 													(previous_Value_QT[affectationItem.name]
 													? parseFloat(previous_Value_QT[affectationItem.name])
 													: 0)
@@ -339,7 +343,7 @@ export default function Statistics() {
 {/* TTL_T */}											
 											<td style={{ textAlign: 'center'}}>
 												{(
-													(statistics[affectationItem.name]?.weight ?? 0) +
+													(statistics[affectationItem.uid]?.weight ?? 0) +
 													(previous_Value_TO[affectationItem.name]?.prevTO_VALUE
 													? parseFloat(previous_Value_TO[affectationItem.name].prevTO_VALUE)
 													: 0)
@@ -407,9 +411,9 @@ export default function Statistics() {
 			<tbody>
 			
 {/* HEADERS */}
-			{affectation.map((affectationItem) => {
+			{cales.map((affectationItem) => {
 
-				const statistics_array = statistics[affectationItem.name] || {}; // Utilisez un objet vide par défaut
+				const statistics_array = statistics[affectationItem.uid] || {}; // Utilisez un objet vide par défaut
 				let chsafin = checkbox_Hold_State[affectationItem.name] || false;
 				if (
 					chsafin || 
@@ -447,14 +451,14 @@ export default function Statistics() {
 												{
 													(
 														(
-															(statistics[affectationItem.name]?.weight ??  0) 
+															(statistics[affectationItem.uid]?.weight ??  0)
 															+
 															(previous_Value_TO[affectationItem.name]?.prevTO_VALUE ?
 																parseFloat(previous_Value_TO[affectationItem.name].prevTO_VALUE) : 0)
 														)
 														/
 														(
-															(statistics[affectationItem.name]?.count ?? 0) 
+															(statistics[affectationItem.uid]?.count ?? 0)
 															+ 
 															(previous_Value_QT[affectationItem.name] ?
 																parseFloat(previous_Value_QT[affectationItem.name]) : 0)
@@ -482,7 +486,7 @@ export default function Statistics() {
 												(
 														(parseFloat(maxi_Value_TO[affectationItem.name]?.maxi_To ?? 0) - 
 															(
-																(parseFloat(statistics[affectationItem.name]?.weight) || 0) +
+																(parseFloat(statistics[affectationItem.uid]?.weight) || 0) +
 																(parseFloat(previous_Value_TO[affectationItem.name]?.prevTO_VALUE) || 0)
 															)
 														) < 0 ? 'red-text' : 'blue-text'
@@ -493,7 +497,7 @@ export default function Statistics() {
 												(
 													parseFloat(maxi_Value_TO[affectationItem.name]?.maxi_To ?? 0) - 
 													(
-													(parseFloat(statistics[affectationItem.name]?.weight) || 0) +
+													(parseFloat(statistics[affectationItem.uid]?.weight) || 0) +
 													(parseFloat(previous_Value_TO[affectationItem.name]?.prevTO_VALUE) || 0)
 													)
 												).toLocaleString("en-US", { minimumFractionDigits: 3, maximumFractionDigits: 3 })
@@ -507,13 +511,13 @@ export default function Statistics() {
 												(() => {
 													try {
 													const maxiTo = parseFloat(maxi_Value_TO[affectationItem.name]?.maxi_To) || 0;
-													const statsWeight = parseFloat(statistics[affectationItem.name]?.weight) || 0;
+													const statsWeight = parseFloat(statistics[affectationItem.uid]?.weight) || 0;
 													const prevTO = parseFloat(previous_Value_TO[affectationItem.name]?.prevTO_VALUE) || 0;
 													const prevQT_VALUE = parseFloat(previous_Value_QT[affectationItem.name]) || 0;
 
 													const result = (maxiTo - statsWeight - prevTO) / (
 														(statsWeight + prevTO) /
-														(statistics[affectationItem.name]?.count + prevQT_VALUE)
+														(statistics[affectationItem.uid]?.count + prevQT_VALUE)
 													);
 
 													return Math.floor(isNaN(result) ? 0 : result) < 0 ? 'red-text' : 'blue-text';
@@ -525,13 +529,13 @@ export default function Statistics() {
 												{(() => {
 													try {
 													const maxiTo = parseFloat(maxi_Value_TO[affectationItem.name]?.maxi_To) || 0;
-													const statsWeight = parseFloat(statistics[affectationItem.name]?.weight) || 0;
+													const statsWeight = parseFloat(statistics[affectationItem.uid]?.weight) || 0;
 													const prevTO = parseFloat(previous_Value_TO[affectationItem.name]?.prevTO_VALUE) || 0;
 													const prevQT_VALUE = parseFloat(previous_Value_QT[affectationItem.name]) || 0;
 
 													const result = (maxiTo - statsWeight - prevTO) / (
 														(statsWeight + prevTO) /
-														(statistics[affectationItem.name]?.count + prevQT_VALUE)
+														(statistics[affectationItem.uid]?.count + prevQT_VALUE)
 													);
 
 													return isNaN(result) ? 0 : Math.floor(result).toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 0 });

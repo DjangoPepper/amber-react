@@ -4,7 +4,7 @@ import {Col, Container, Row} from "react-bootstrap";
 import {read, utils} from "xlsx";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../stores/rootStore";
-import {export_stepe_catalog_Data} from "../stores/dataS/DataReducer";
+import {export_stepe_catalog_Data, ICale} from "../stores/dataS/DataReducer";
 import DataAction from "../stores/dataS/DataAction";
 import DataTable from "./data-table";
 import Statistics from "./statistics";
@@ -292,32 +292,36 @@ function removeAccents(str: string) {
     return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 }
 
-function cleanData(values: any): export_stepe_catalog_Data {
-	const toUpperCaseKeysValues: any = {};
-	for (const key in values) {
-		const upperCaseKey = key.toUpperCase();
-		// if (upperCaseKey in values ) {console.log("fred", values,upperCaseKey);}
-		const cleanedKey = removeAccents(upperCaseKey);
-		// const cleanedKey = removeAccentsAndApostrophes(upperCaseKey);
-		toUpperCaseKeysValues[cleanedKey] = values[key];
-	}
-
-    return {
-        rank: toUpperCaseKeysValues["POS"] || toUpperCaseKeysValues["NUMERO"] || toUpperCaseKeysValues["RANG"] || toUpperCaseKeysValues["N°"],
-        prepa: toUpperCaseKeysValues["ZONE"] || toUpperCaseKeysValues["PREPA"] ,
-        reference: toUpperCaseKeysValues["N° DE COILS"] || toUpperCaseKeysValues["N° DE BRAME"] || toUpperCaseKeysValues["N° PRODUIT"] ||  toUpperCaseKeysValues["REFERENCE"] || toUpperCaseKeysValues["REF"] || toUpperCaseKeysValues["COILS"] || toUpperCaseKeysValues["BRAMES"],
-        weight: toUpperCaseKeysValues["POIDS"] || toUpperCaseKeysValues["TONS"],
-        position: toUpperCaseKeysValues["POSITION"],
-        destination: toUpperCaseKeysValues["DESTINATION"] || toUpperCaseKeysValues["DEST"] || "stock"
-    };
-}
-
-
 
 function Main() {
 	const dispatch = useDispatch();
 	const loaded_catalog = useSelector<RootState, boolean>(state => state.dataSS.loaded_catalog_status);
 	// const loaded_catalog = useSelector<RootState, boolean>(state => state.data.loaded_catalog_status);
+
+	const calesPerName: {[key: string]: string} = useSelector<RootState, ICale[]>(state => state.dataSS.cales).reduce((acc: any, cale: ICale) => {
+		acc[cale.name] = cale.uid;
+		return acc;
+	}, {});
+
+	function cleanData(values: any): export_stepe_catalog_Data {
+		const toUpperCaseKeysValues: any = {};
+		for (const key in values) {
+			const upperCaseKey = key.toUpperCase();
+			// if (upperCaseKey in values ) {console.log("fred", values,upperCaseKey);}
+			const cleanedKey = removeAccents(upperCaseKey);
+			// const cleanedKey = removeAccentsAndApostrophes(upperCaseKey);
+			toUpperCaseKeysValues[cleanedKey] = values[key];
+		}
+
+		return {
+			rank: toUpperCaseKeysValues["POS"] || toUpperCaseKeysValues["NUMERO"] || toUpperCaseKeysValues["RANG"] || toUpperCaseKeysValues["N°"],
+			prepa: toUpperCaseKeysValues["ZONE"] || toUpperCaseKeysValues["PREPA"] ,
+			reference: toUpperCaseKeysValues["N° DE COILS"] || toUpperCaseKeysValues["N° DE BRAME"] || toUpperCaseKeysValues["N° PRODUIT"] ||  toUpperCaseKeysValues["REFERENCE"] || toUpperCaseKeysValues["REF"] || toUpperCaseKeysValues["COILS"] || toUpperCaseKeysValues["BRAMES"],
+			weight: toUpperCaseKeysValues["POIDS"] || toUpperCaseKeysValues["TONS"],
+			position: toUpperCaseKeysValues["POSITION"],
+			destination: calesPerName[toUpperCaseKeysValues["DESTINATION"]] || calesPerName[toUpperCaseKeysValues["DEST"]] || calesPerName["stock"]
+		};
+	}
 	
 	const onDrop = useCallback((acceptedFiles: any) => {
 		
@@ -374,7 +378,7 @@ function Main() {
 		// dispatch(DataAction.importData(utils.sheet_to_json(sheet).map(cleanData)));
 		// dispatch(DataAction.importData(utils.sheet_to_json(selectedSheet).map(cleanData)));
 			// // dispatch(DataAction.moveRow(row.original.reference)); //je change la detination de ref cale1,cale2, etc..
-		dispatch(DataAction.changeOriginalpos("stock"));
+		dispatch(DataAction.changeOriginalpos());
 		// toast.success('catalog export_stepe_catalog_Data imported', { position: toast.POSITION.TOP_RIGHT })
 	};
 	reader.readAsBinaryString(file);

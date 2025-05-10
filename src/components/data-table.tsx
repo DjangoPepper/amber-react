@@ -18,10 +18,10 @@ import {utils, writeFile } from "xlsx";
 import {Button, Modal, Form, Table as TableRS} from "react-bootstrap";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../stores/rootStore";
-import {export_stepe_catalog_Data} from "../stores/dataS/DataReducer";
+import {export_stepe_catalog_Data, ICale} from "../stores/dataS/DataReducer";
 import DebouncedInput from "./debounceInput";
 import DataAction from "../stores/dataS/DataAction";
-import {colors, affectation, HEADER} from "../utils/destination";
+import {HEADER} from "../utils/destination";
 import Filter, {fuzzyFilter} from "./filter";
 import './index-tanstack.css'
 import { toast } from "react-toastify";
@@ -35,11 +35,11 @@ import SpaceatPos from "./SpaceatPos";
 // import { AnyAction } from "redux";
 import Msg from "./Msg"
 
-const row = {
-    original: {
-        reference: 133
-    }
-};
+// const row = {
+//     original: {
+//         reference: 133
+//     }
+// };
 
 const monthNames = [
     'jan', 'fev', 'mar', 'avr', 'mai', 'juin',
@@ -108,7 +108,7 @@ const globalFilterFn: FilterFn<export_stepe_catalog_Data> = (row, columnId, filt
 
 const useColumns = function useColumns(): any[] {
 
-const dispatch = useDispatch();
+// const dispatch = useDispatch();
 //FRED
 /* const closeToast = () => {
     // Code pour fermer le toast
@@ -117,11 +117,11 @@ const dispatch = useDispatch();
 const closeToast = () => {
     toast.dismiss();
 };
-const row = {
-    original: {
-        reference: 123 // Assurez-vous que cela correspond à la structure de vos données
-    }
-};
+// const row = {
+//     original: {
+//         reference: 123 // Assurez-vous que cela correspond à la structure de vos données
+//     }
+// };
 
 /* const Msg2 = ({closedToast,row2}:any) => (
     <div>
@@ -149,6 +149,11 @@ const row = {
 
 
 //FRED
+
+    const cales = useSelector<RootState, ICale[]>(state => state.dataSS.cales).reduce<{[key: string]: string}>((acc, cale) => {
+        acc[cale.uid] = cale.name;
+        return acc;
+    }, {});
 
 
     const columns = [
@@ -199,6 +204,7 @@ const row = {
         }),
         columnHelper.accessor('destination', {
             header: 'DEST',
+            cell: info => cales[info.getValue()],
             filterFn: fuzzyFilter,
         })
     ];
@@ -214,15 +220,24 @@ export default function DataTable() {
     // const [showModal, setShowModal] = useState(false);
     const [PickerColorForSelectedCale, setPickerColorForSelectedCale] = useState<{ [key: string]: string }>({});
     const [newSelectedCale, setnewSelectedCale] = useState<string>('');
+    const [showParams, setShowParams] = useState(false);
     // const [ExtentedTally, setExtentedTally] = useState<string>('');
+
+    const toggleParams = () => {setShowParams(!showParams)}
+
+    const handleSaveParams = () => {console.log('save params')};
 
     const [newColor, setNewColor] = useState<string>('');
     
     // Accédez à la valeur sélectionnée depuis l'état Redux
     const selectedCale = useSelector<RootState, string>((state) => state.dataSS.selectedCale);
-    const selectedColors = useSelector<RootState, { [key: string]: string }>((state) => state.dataSS.pickerColors);
-    const setSelectedColors = (colors: { [key: string]: string }) => {
-        dispatch(DataAction.changePickColors(colors));
+    const cales = useSelector<RootState, ICale[]>(state => state.dataSS.cales);
+    const selectedColors = cales.reduce<{ [key: string]: string }>((colors, cale) => {
+        colors[cale.name] = cale.color;
+        return colors;
+    }, {});
+    const setSelectedColors = (cale: string, color: string) => {
+        dispatch(DataAction.changePickColors(cale, color));
     }
     
     const handleStabiloClick = () => { 
@@ -236,7 +251,7 @@ export default function DataTable() {
 
     const handleColorChange = (color: ColorResult) => {
         // setSelectedColor(color.hex);
-        setSelectedColors({...selectedColors, [newSelectedCale]: color.hex});
+        setSelectedColors(newSelectedCale, color.hex);
 
         const updateStickerdColors = { ...PickerColorForSelectedCale, [selectedCale]: color.hex };
         setPickerColorForSelectedCale(updateStickerdColors);
@@ -254,7 +269,7 @@ export default function DataTable() {
         // Mettez à jour l'état des données avec les modifications
         // dispatch(DataAction.updateData(updatedData));
     
-        dispatch(DataAction.changeCouleur([newSelectedCale]));
+        dispatch(DataAction.changeCale(newSelectedCale));
     
         // Fermez la fenêtre contextuelle
         // setShowModal(false);
@@ -263,7 +278,6 @@ export default function DataTable() {
 
     const [sorting, setSorting] = React.useState<SortingState>([]);
     const [globalFilter, setGlobalFilter] = React.useState('')
-    const cale = useSelector<RootState, string>(state => state.dataSS.selectedCale);
     const data = useSelector<RootState, export_stepe_catalog_Data[]>(state => state.dataSS.catalog_data_state);
     const columns = useColumns();
     
@@ -323,12 +337,12 @@ export default function DataTable() {
     const handleHoldChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         dispatch(DataAction.changeCale(e.target.value)) 
         const selectedWorkingHoldValue = (e.target.value);
-        const selectedWorkingHoldOption = affectation.find((d) => d.name === selectedWorkingHoldValue);
+        const selectedWorkingHoldOption = cales.find((d) => d.name === selectedWorkingHoldValue);
         setHold(selectedWorkingHoldValue);
         
     }
 
-    const isStabiloButtonVisible = cale !== "stock"; // Condition pour déterminer la visibilité du bouton STABILO
+    const isStabiloButtonVisible = selectedCale !== "stock"; // Condition pour déterminer la visibilité du bouton STABILO
     // const TempColors = affectation.map((d) => d.color);
     
     // const [checkedRows, setCheckedRows] = useState<{ [key: number]: boolean }>({});
@@ -356,17 +370,19 @@ export default function DataTable() {
                 &nbsp;
                 <div style={{maxWidth: 350 }}>
                     {/* largeur form select stock cale */}
-                    <Form.Select placeholder="vers..." value={cale} 
+                    <Form.Select placeholder="vers..." value={selectedCale}
                         onChange={(e) => handleHoldChange(e)}
-                        style={{ backgroundColor: selectedColors[cale] }}
+                        style={{ backgroundColor: selectedColors[selectedCale] }}
                         >
-                        { affectation.map(
-                            d => <option key={d.name} value={d.name} style={{backgroundColor:d.color}}>
+                        { cales.map(
+                            d => <option key={d.name} value={d.uid} style={{backgroundColor:d.color}}>
                                 {d.name}
                             </option>
                         )}
                     </Form.Select>
                 </div>
+                &nbsp;
+                <Button variant="primary" onClick={toggleParams}>Gerer</Button>
                 &nbsp;
                 {isStabiloButtonVisible && (
                     <Button variant="warning" onClick={handleStabiloClick}>S</Button>
@@ -561,6 +577,45 @@ export default function DataTable() {
                 Enregistrer
                 </Button>
             </Modal.Footer>
+            </Modal>
+            <Modal show={showParams} onHide={toggleParams}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Gerer les cales</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <TableRS>
+                        <tbody>
+                            {cales.map((d) => (
+                                <tr key={d.uid}>
+                                    <td><Form.Control value={d.name} /></td>
+                                    <td>
+                                        <Button variant="danger">
+                                            Supprimer
+                                        </Button>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </TableRS>
+                    <Button variant="primary">Ajouter une cale</Button>
+                    {/*<Form.Group>*/}
+                    {/*<Form.Label>Nouvelle couleur</Form.Label>*/}
+                    {/*<SketchPicker*/}
+                    {/*    // color={selectedColor} // color fixé par tableau                    */}
+                    {/*    // color={selectedColors[newSelectedCale]}*/}
+                    {/*    color={PickerColorForSelectedCale[newSelectedCale] || '' }*/}
+                    {/*    onChange={handleColorChange}*/}
+                    {/*/>*/}
+                    {/*</Form.Group>*/}
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={toggleParams}>
+                    Annuler
+                    </Button>
+                    <Button variant="primary" onClick={handleSaveParams}>
+                    Enregistrer
+                    </Button>
+                </Modal.Footer>
             </Modal>
         </>
     );
