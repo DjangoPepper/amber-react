@@ -7,7 +7,9 @@ export default class DataAction {
 	public static CHANGE_PREPA = "DataAction.CHANGE_PREPA";
 	public static MOVE_ROW = "DataAction.MOVE_ROW";
 	public static UPDATE_ROW = "DataAction.UPDATE_ROW";
-	
+
+	public static RESET_CALES = "DataAction.RESET_CALES";
+
 	public static LOAD_CATALOG = "DataAction.LOAD_CATALOG";
 	public static SAVE_CATALOG = "DataAction.SAVE_CATALOG";
 	
@@ -82,6 +84,10 @@ export default class DataAction {
 
 	public static updateRow(reference: number, columnId: string, value: any) {
 		return {type: DataAction.UPDATE_ROW, payload: {reference, columnId, value}};
+	}
+
+	public static resetCales(cales: any[]) {
+		return {type: DataAction.RESET_CALES, payload: cales};
 	}
 
 	public static moveRow(reference: string): AnyAction {

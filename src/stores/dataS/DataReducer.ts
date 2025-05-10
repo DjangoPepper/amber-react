@@ -134,6 +134,13 @@ export const dataReducer: Reducer<Interface_stepe_state> = (state = initial_step
                     ...state,
                     selectedPrepa: action.payload
                 }
+            case DataAction.RESET_CALES:
+                // TODO find deleted cales and reassign to stock
+                // TODO prevent deleting stock cale
+                return {
+                    ...state,
+                    cales: action.payload,
+                }
             case DataAction.CHANGE_CHECKBOX_STATE:
                 return {
                     ...state,

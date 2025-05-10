@@ -27,6 +27,7 @@ import './index-tanstack.css'
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Msg2 from "./Msg2";
+import {v4 as uuidv4} from 'uuid';
 
 //FRED ****************************************************************
 import SpaceatPos from "./SpaceatPos";
@@ -49,6 +50,98 @@ const monthNames = [
 const pageOptions = [10, 40, 80, 120, 200];
 
 
+interface ICalesModalProps {
+    show: boolean
+    onHide: () => void;
+}
+
+
+function CalesModal({show, onHide}: ICalesModalProps) {
+    const dispatch = useDispatch();
+    const cales = useSelector<RootState, ICale[]>(state => state.dataSS.cales);
+    const [newCales, setNewCales] = useState(cales);
+    const handleSaveParams = () => {
+        dispatch(DataAction.resetCales(newCales));
+        onHide();
+    };
+
+    const addCale = () => {
+        setNewCales([...newCales, {
+            uid: uuidv4(),
+            name: '',
+            color: '#000000',
+            index: newCales.length,
+            previous_quantite: 0,
+            previous_tonnes: 0,
+            maxis_tonnes: 0,
+            boxed_state: false,
+        }])
+    }
+
+    const renameCale = (uid: string, name: string) => {
+        if(name === 'stock') {
+            alert('Je crois pas non')
+            return;
+        }
+        const updatedCales = [];
+        for(const c of newCales) {
+            if(c.uid === uid) {
+                updatedCales.push({...c, name});
+            } else {
+                updatedCales.push(c);
+            }
+        }
+        setNewCales(updatedCales);
+    }
+
+    const deleteCale = (uid: string) => {
+        setNewCales(newCales.filter((d) => d.uid !== uid));
+    }
+
+    return <Modal show={show} onHide={onHide}>
+        <Modal.Header closeButton>
+            <Modal.Title>Gerer les cales</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+            <TableRS>
+                <tbody>
+                    {newCales.map((d) => (
+                        <tr key={d.uid}>
+                            <td><Form.Control
+                                value={d.name}
+                                onChange={e => renameCale(d.uid, e.target.value)}
+                                disabled={d.name === 'stock'}
+                            /></td>
+                            <td>
+                                <Button disabled={d.name === 'stock'} variant="danger" onClick={() => deleteCale(d.uid)}>Supprimer</Button>
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </TableRS>
+            <Button variant="primary" onClick={addCale}>Ajouter une cale</Button>
+            {/*<Form.Group>*/}
+            {/*<Form.Label>Nouvelle couleur</Form.Label>*/}
+            {/*<SketchPicker*/}
+            {/*    // color={selectedColor} // color fixé par tableau                    */}
+            {/*    // color={selectedColors[newSelectedCale]}*/}
+            {/*    color={PickerColorForSelectedCale[newSelectedCale] || '' }*/}
+            {/*    onChange={handleColorChange}*/}
+            {/*/>*/}
+            {/*</Form.Group>*/}
+        </Modal.Body>
+        <Modal.Footer>
+            <Button variant="secondary" onClick={onHide}>
+            Annuler
+            </Button>
+            <Button variant="primary" onClick={handleSaveParams}>
+            Enregistrer
+            </Button>
+        </Modal.Footer>
+    </Modal>
+}
+
+
 function backupCurrentDateTime(): string {
     const now = new Date();
     const day = String(now.getDate()).padStart(2, '0');
@@ -68,8 +161,6 @@ function backupCurrentDateTime(): string {
             updateData: (reference: number, columnId: string, value: unknown) => void
             }
         }
-
-
 
 
 
@@ -224,8 +315,6 @@ export default function DataTable() {
     // const [ExtentedTally, setExtentedTally] = useState<string>('');
 
     const toggleParams = () => {setShowParams(!showParams)}
-
-    const handleSaveParams = () => {console.log('save params')};
 
     const [newColor, setNewColor] = useState<string>('');
     
@@ -578,45 +667,7 @@ export default function DataTable() {
                 </Button>
             </Modal.Footer>
             </Modal>
-            <Modal show={showParams} onHide={toggleParams}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Gerer les cales</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <TableRS>
-                        <tbody>
-                            {cales.map((d) => (
-                                <tr key={d.uid}>
-                                    <td><Form.Control value={d.name} /></td>
-                                    <td>
-                                        <Button variant="danger">
-                                            Supprimer
-                                        </Button>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </TableRS>
-                    <Button variant="primary">Ajouter une cale</Button>
-                    {/*<Form.Group>*/}
-                    {/*<Form.Label>Nouvelle couleur</Form.Label>*/}
-                    {/*<SketchPicker*/}
-                    {/*    // color={selectedColor} // color fixé par tableau                    */}
-                    {/*    // color={selectedColors[newSelectedCale]}*/}
-                    {/*    color={PickerColorForSelectedCale[newSelectedCale] || '' }*/}
-                    {/*    onChange={handleColorChange}*/}
-                    {/*/>*/}
-                    {/*</Form.Group>*/}
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={toggleParams}>
-                    Annuler
-                    </Button>
-                    <Button variant="primary" onClick={handleSaveParams}>
-                    Enregistrer
-                    </Button>
-                </Modal.Footer>
-            </Modal>
+            <CalesModal show={showParams} onHide={toggleParams} />
         </>
     );
 }
