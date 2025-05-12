@@ -14,7 +14,8 @@ export const HEADER: IHeader[] = [
     {key: "prepa", name :"PREPA" },
     {key: "reference", name :"REF" },
     {key: "weight", name :"POIDS" },
-    {key: "width", name :"LARGEUR" },
+    {key: "width", name :"LARGR" },
+    {key: "length", name :"LONGUR" },
     {key: "position", name :"POS" },
     {key: "destination", name :"DEST", default: "NE" },
 ]

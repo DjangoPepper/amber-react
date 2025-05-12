@@ -28,19 +28,8 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Msg2 from "./Msg2";
 import {v4 as uuidv4} from 'uuid';
-
-//FRED ****************************************************************
 import SpaceatPos from "./SpaceatPos";
-// import * as fs from 'fs'
-// import * as path from 'path'
-// import { AnyAction } from "redux";
-import Msg from "./Msg"
-
-// const row = {
-//     original: {
-//         reference: 133
-//     }
-// };
+import Msg from "./Msg";
 
 const monthNames = [
     'jan', 'fev', 'mar', 'avr', 'mai', 'juin',
@@ -49,33 +38,48 @@ const monthNames = [
 
 const pageOptions = [10, 40, 80, 120, 200];
 
-
 interface ICalesModalProps {
     show: boolean
     onHide: () => void;
 }
 
-
 function CalesModal({show, onHide}: ICalesModalProps) {
     const dispatch = useDispatch();
     const cales = useSelector<RootState, ICale[]>(state => state.dataSS.cales);
     const [newCales, setNewCales] = useState(cales);
+    const [newName, setNewName] = useState('');
+
+    const generateRandomBlueGreenColor = (): string => {
+        const r = Math.floor(Math.random() * 50);
+        const g = Math.floor(150 + Math.random() * 105);
+        const b = Math.floor(150 + Math.random() * 105);
+        const toHex = (value: number) => value.toString(16).padStart(2, "0");
+        return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+    };
+
+    const [newColor, setNewColor] = useState(generateRandomBlueGreenColor());
+
     const handleSaveParams = () => {
         dispatch(DataAction.resetCales(newCales));
         onHide();
     };
 
     const addCale = () => {
-        setNewCales([...newCales, {
-            uid: uuidv4(),
-            name: '',
-            color: '#000000',
-            index: newCales.length,
-            previous_quantite: 0,
-            previous_tonnes: 0,
-            maxis_tonnes: 0,
-            boxed_state: false,
-        }])
+        setNewCales([
+            ...newCales,
+            {
+                uid: uuidv4(),
+                name: newName,
+                color: newColor,
+                index: newCales.length,
+                previous_quantite: 0,
+                previous_tonnes: 0,
+                maxis_tonnes: 0,
+                boxed_state: false,
+            }
+        ]);
+        setNewName("");
+        setNewColor(generateRandomBlueGreenColor());
     }
 
     const renameCale = (uid: string, name: string) => {
@@ -100,69 +104,112 @@ function CalesModal({show, onHide}: ICalesModalProps) {
 
     return <Modal show={show} onHide={onHide}>
         <Modal.Header closeButton>
-            <Modal.Title>Gerer les cales</Modal.Title>
+            <Modal.Title>Gestion des Affectations</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-            <TableRS>
-                <tbody>
-                    {newCales.map((d) => (
-                        <tr key={d.uid}>
-                            <td><Form.Control
-                                value={d.name}
-                                onChange={e => renameCale(d.uid, e.target.value)}
-                                disabled={d.name === 'stock'}
-                            /></td>
-                            <td>
-                                <Button disabled={d.name === 'stock'} variant="danger" onClick={() => deleteCale(d.uid)}>Supprimer</Button>
-                            </td>
+            <div>
+                {/* <h3>Gestion des Affectations</h3> */}
+                <table style={{ width: "100%", borderCollapse: "collapse" }}>
+                    <thead>
+                        <tr>
+                            <th style={{ width: "40%", border: "1px solid #ddd", padding: "8px" }}>Nom</th>
+                            <th style={{ width: "40%", border: "1px solid #ddd", padding: "8px" }}>Couleur</th>
+                            <th style={{ width: "20%", border: "1px solid #ddd", padding: "8px" }}>Actions</th>
                         </tr>
-                    ))}
-                </tbody>
-            </TableRS>
-            <Button variant="primary" onClick={addCale}>Ajouter une cale</Button>
-            {/*<Form.Group>*/}
-            {/*<Form.Label>Nouvelle couleur</Form.Label>*/}
-            {/*<SketchPicker*/}
-            {/*    // color={selectedColor} // color fixé par tableau                    */}
-            {/*    // color={selectedColors[newSelectedCale]}*/}
-            {/*    color={PickerColorForSelectedCale[newSelectedCale] || '' }*/}
-            {/*    onChange={handleColorChange}*/}
-            {/*/>*/}
-            {/*</Form.Group>*/}
+                    </thead>
+                    <tbody>
+                        {newCales.map((a) => (
+                            <tr key={a.uid}>
+                                <td style={{ border: "1px solid #ddd", padding: "8px" }}>{a.name}</td>
+                                <td style={{ border: "1px solid #ddd", padding: "8px" }}>
+                                    <div
+                                        style={{
+                                            width: "20px",
+                                            height: "20px",
+                                            backgroundColor: a.color,
+                                            border: "1px solid #000",
+                                        }}
+                                    ></div>
+                                </td>
+                                <td style={{ border: "1px solid #ddd", padding: "8px" }}>
+                                    <button onClick={() => deleteCale(a.uid)}>Supprimer</button>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+                <div style={{ marginTop: "20px", display: "flex", alignItems: "center", gap: "10px" }}>
+                    <input
+                        type="text"
+                        placeholder="Nom"
+                        maxLength={10}
+                        value={newName}
+                        onChange={(e) => setNewName(e.target.value)}
+                        style={{ width: "150px" }}
+                    />
+                    <input
+                        type="color"
+                        value={newColor}
+                        onChange={(e) => setNewColor(e.target.value)}
+                        style={{ width: "40px", height: "28px", padding: "0", border: "none" }}
+                    />
+                    <button onClick={addCale} disabled={!newName.trim()}>
+                        Ajouter
+                    </button>
+                    <button
+                        onClick={() => {
+                            addCale();
+                            // Utiliser directement la nouvelle cale dans data-table
+                            if (newCales.length > 0) {
+                                const lastCale = {
+                                    uid: uuidv4(),
+                                    name: newName,
+                                    color: newColor,
+                                    index: newCales.length,
+                                    previous_quantite: 0,
+                                    previous_tonnes: 0,
+                                    maxis_tonnes: 0,
+                                    boxed_state: false,
+                                };
+                                setNewCales([...newCales, lastCale]);
+                                dispatch(DataAction.resetCales([...newCales, lastCale]));
+                                dispatch(DataAction.changeCale(lastCale.uid));
+                                setNewName("");
+                                setNewColor(generateRandomBlueGreenColor());
+                            }
+                        }}
+                        disabled={!newName.trim()}
+                    >
+                        Utiliser
+                    </button>
+                </div>
+            </div>
         </Modal.Body>
         <Modal.Footer>
             <Button variant="secondary" onClick={onHide}>
-            Annuler
+                Annuler
             </Button>
             <Button variant="primary" onClick={handleSaveParams}>
-            Enregistrer
+                Enregistrer
             </Button>
         </Modal.Footer>
     </Modal>
 }
 
-
 function backupCurrentDateTime(): string {
     const now = new Date();
     const day = String(now.getDate()).padStart(2, '0');
     const month = monthNames[now.getMonth()];  
-
-    //const month = String(now.getMonth() + 1).padStart(2, '0');
-    //const year = String(now.getFullYear());
     const hour = String(now.getHours()).padStart(2, '0');
     const minute = String(now.getMinutes()).padStart(2, '0');
-
     return `Stepe ${month}${day}_${hour}${minute}.xlsx`;
+}
+
+declare module '@tanstack/react-table' {
+    interface TableMeta<TData extends RowData> {
+        updateData: (reference: number, columnId: string, value: unknown) => void
     }
-
-
-    declare module '@tanstack/react-table' {
-        interface TableMeta<TData extends RowData> {
-            updateData: (reference: number, columnId: string, value: unknown) => void
-            }
-        }
-
-
+}
 
 const columnHelper = createColumnHelper<export_stepe_catalog_Data>();
 
@@ -183,70 +230,25 @@ const EditableCell = ({ getValue, row, column, table }: any) => {
             onChange={e => setValue(e.target.value)}
             onBlur={onBlur}
             style={{width: "59px"}}
-            // largeur prepa box
         />
     )
-    };
+};
 
 const globalFilterFn: FilterFn<export_stepe_catalog_Data> = (row, columnId, filterValue: string) => {
     const search = filterValue.toLowerCase();
-
     let value = row.getValue(columnId) as string;
     if (typeof value === 'number') value = String(value);
-
     return value?.toLowerCase().includes(search);
-    };
+};
 
 const useColumns = function useColumns(): any[] {
-
-// const dispatch = useDispatch();
-//FRED
-/* const closeToast = () => {
-    // Code pour fermer le toast
-}; */
-
-const closeToast = () => {
-    toast.dismiss();
-};
-// const row = {
-//     original: {
-//         reference: 123 // Assurez-vous que cela correspond à la structure de vos données
-//     }
-// };
-
-/* const Msg2 = ({closedToast,row2}:any) => (
-    <div>
-        {SpaceatPos(row2)}
-        <Button onClick={dispatch(DataAction.moveRow(row2))}>{SpaceatPos(row2)}</Button>
-        <Button onClick={closeToast}>Close</Button>
-    </div>
-    ) */
-
-/* const handleButtonClick = (reference: string) => {
-    toast(({ closeToast }) => (
-        <Msg
-            closeToast={closeToast}
-            onValidate={() => {
-                dispatch(DataAction.moveRow(reference));
-                // closeToast();
-                if (closeToast) {
-                    closeToast();
-                }
-                
-            }}
-        />
-    ));
-}; */
-
-
-//FRED
-
+    const closeToast = () => {
+        toast.dismiss();
+    };
     const cales = useSelector<RootState, ICale[]>(state => state.dataSS.cales).reduce<{[key: string]: string}>((acc, cale) => {
         acc[cale.uid] = cale.name;
         return acc;
     }, {});
-
-
     const columns = [
         columnHelper.accessor('rank', {
             header: () => 'RANG',
@@ -257,37 +259,19 @@ const closeToast = () => {
             cell: EditableCell,
             filterFn: fuzzyFilter,
         }),
-// /* // #####################################################################################################################
-//         columnHelper.accessor('reference', {
-//             header: 'REF',
-//             cell: ({row}: any) =>
-                
-//                 <Button 
-//                     onClick={() => {
-//                     dispatch(DataAction.moveRow(row.original.reference)); //je change la detination de ref cale1,cale2, etc..
-//                     }}
-//                 >
-//                     {SpaceatPos(row.original.reference)}
-//                 </Button>,
-                
-//             filterFn: fuzzyFilter,
-
-//         }),
-// ##################################################################################################################### */
         columnHelper.accessor('reference', {
             header: 'REF',
             cell: ({ row }: any) => (
                 <div>
                     <Button onClick={() => {
                         toast(<Msg2 closeToast={closeToast} row2={row.original.reference} />,
-                        { position: toast.POSITION.TOP_RIGHT, autoClose: 3000 });
-                }}>{SpaceatPos(row.original.reference)}
-            </Button>
+                        { position: toast.POSITION.TOP_RIGHT, autoClose: 3500 });
+                        }}>{SpaceatPos(row.original.reference)}
+                    </Button>
             </div>
             ),
             filterFn: fuzzyFilter,
         }),
-// ##################################################################################################################### */
         columnHelper.accessor('weight', {
             header: "POIDS",
             cell: info => info.getValue(),
@@ -299,80 +283,65 @@ const closeToast = () => {
             filterFn: fuzzyFilter,
         })
     ];
-
     return columns;
 }
-//***********************************************************************/
-//***********************************************************************/
-//***********************************************************************/
-//***********************************************************************/
+
 export default function DataTable() {
     const dispatch = useDispatch();
-    // const [showModal, setShowModal] = useState(false);
     const [PickerColorForSelectedCale, setPickerColorForSelectedCale] = useState<{ [key: string]: string }>({});
     const [newSelectedCale, setnewSelectedCale] = useState<string>('');
     const [showParams, setShowParams] = useState(false);
-    // const [ExtentedTally, setExtentedTally] = useState<string>('');
-
     const toggleParams = () => {setShowParams(!showParams)}
-
     const [newColor, setNewColor] = useState<string>('');
-    
-    // Accédez à la valeur sélectionnée depuis l'état Redux
     const selectedCale = useSelector<RootState, string>((state) => state.dataSS.selectedCale);
     const cales = useSelector<RootState, ICale[]>(state => state.dataSS.cales);
     const selectedColors = cales.reduce<{ [key: string]: string }>((colors, cale) => {
-        colors[cale.name] = cale.color;
+        colors[cale.uid] = cale.color;
         return colors;
     }, {});
     const setSelectedColors = (cale: string, color: string) => {
         dispatch(DataAction.changePickColors(cale, color));
     }
-    
-    const handleStabiloClick = () => { 
-        setnewSelectedCale(selectedCale);
-    };
-
-    const handleCloseModal = () => { 
-        // setShowModal(false); 
-        setnewSelectedCale(""); 
-    };
-
+    const handleStabiloClick = () => { setnewSelectedCale(selectedCale); };
+    const handleCloseModal = () => { setnewSelectedCale(""); };
     const handleColorChange = (color: ColorResult) => {
-        // setSelectedColor(color.hex);
         setSelectedColors(newSelectedCale, color.hex);
-
         const updateStickerdColors = { ...PickerColorForSelectedCale, [selectedCale]: color.hex };
         setPickerColorForSelectedCale(updateStickerdColors);
     };
-    
     const handleSaveChanges = () => {
-        // Mettez à jour la couleur pour toutes les affectation identiques
-        const updatedData = data.map((item) => {
-                if (item.destination === newSelectedCale) {
-                    return { ...item, color: newColor };
-                }
-            return item;
-        });
-    
-        // Mettez à jour l'état des données avec les modifications
-        // dispatch(DataAction.updateData(updatedData));
-    
-        dispatch(DataAction.changeCale(newSelectedCale));
-    
-        // Fermez la fenêtre contextuelle
-        // setShowModal(false);
         setnewSelectedCale("");
-        };
-
+        dispatch(DataAction.changeCale(newSelectedCale));
+    };
     const [sorting, setSorting] = React.useState<SortingState>([]);
     const [globalFilter, setGlobalFilter] = React.useState('')
-    const data = useSelector<RootState, export_stepe_catalog_Data[]>(state => state.dataSS.catalog_data_state);
+    const data = useSelector<RootState, export_stepe_catalog_Data[]>(state =>
+        state.dataSS.catalog_data_state.map(row => ({
+            ...row,
+            destination: row.destination || 'stock',
+        }))
+    );
+    const [showMoreCols, setShowMoreCols] = useState(false);
     const columns = useColumns();
-    
+    let extendedColumns = columns;
+    if (showMoreCols) {
+        extendedColumns = [
+            ...columns,
+            columnHelper.accessor('length', {
+                header: 'LONGR',
+                cell: info => info.getValue(),
+                filterFn: fuzzyFilter,
+            }),
+            columnHelper.accessor('width', {
+                header: 'LARGR',
+                cell: info => info.getValue(),
+                filterFn: fuzzyFilter,
+            })
+        ];
+    }
     const table = useReactTable({
         data,
-        columns,
+        columns: extendedColumns,
         initialState: {
             pagination: {
                 pageSize: parseInt(window.localStorage.getItem("pageSize") || `${pageOptions[0]}`),
@@ -397,17 +366,13 @@ export default function DataTable() {
                 }
             },
         },
-
         getRowId: (row) => {return row.reference; } ,
         debugTable: true,
-    }
-    );
-
+    });
     const setPageSize = (size: number) => {
         table.setPageSize(size);
         window.localStorage.setItem("pageSize", `${size}`);
     }
-    
     const tableContainerRef = React.useRef<HTMLDivElement>(null)
     const exportData = () => {
         const aoa: any[][] = [HEADER.map(h => h.name)];
@@ -419,36 +384,22 @@ export default function DataTable() {
         utils.book_append_sheet(wb, sheet);
         writeFile(wb, backupCurrentDateTime())
     };
-
     const clear = () => dispatch(DataAction.clear());
     const [hold, setHold] = useState('');
-    
     const handleHoldChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        if (e.target.value === "manage_affectations") {
+            toggleParams();
+            return;
+        }
         dispatch(DataAction.changeCale(e.target.value)) 
-        const selectedWorkingHoldValue = (e.target.value);
-        const selectedWorkingHoldOption = cales.find((d) => d.name === selectedWorkingHoldValue);
-        setHold(selectedWorkingHoldValue);
-        
+        setHold(e.target.value);
     }
-
-    const isStabiloButtonVisible = selectedCale !== "stock"; // Condition pour déterminer la visibilité du bouton STABILO
-    // const TempColors = affectation.map((d) => d.color);
-    
-    // const [checkedRows, setCheckedRows] = useState<{ [key: number]: boolean }>({});
+    const isStabiloButtonVisible = selectedCale !== "stock";
     const [checkedRows, setCheckedRows] = useState<{ [key: number]: boolean }>({});
-    // const handleCheckboxClick = (reference: number) => {
-    //     const updatedCheckedRows = { ...checkedRows };
-    //     updatedCheckedRows[reference] = !updatedCheckedRows[reference];
-    //     setCheckedRows(updatedCheckedRows);
-    // };
-
-
-
     return ( 
         <>
             <div className="d-flex">
                 <div style={{maxWidth: 90}}>
-                    {/* 11 chiffres POUR LE CHAMP search de rang*/}
                     <DebouncedInput
                         value={globalFilter ?? ''}
                         onChange={value => setGlobalFilter(String(value))}
@@ -458,20 +409,19 @@ export default function DataTable() {
                 </div>
                 &nbsp;
                 <div style={{maxWidth: 350 }}>
-                    {/* largeur form select stock cale */}
                     <Form.Select placeholder="vers..." value={selectedCale}
                         onChange={(e) => handleHoldChange(e)}
-                        style={{ backgroundColor: selectedColors[selectedCale] }}
+                        style={{ backgroundColor: cales.find(c => c.uid === selectedCale)?.color || '#fff', color: '#000' }}
                         >
                         { cales.map(
-                            d => <option key={d.name} value={d.uid} style={{backgroundColor:d.color}}>
+                            d => <option key={d.name} value={d.uid} style={{backgroundColor:d.color, color: '#12345'}}>
                                 {d.name}
                             </option>
                         )}
+                    <option value="manage_affectations" style={{ color: 'white', backgroundColor: 'black' }} onClick={toggleParams}>--- Gestion ---</option>
                     </Form.Select>
                 </div>
                 &nbsp;
-                <Button variant="primary" onClick={toggleParams}>Gerer</Button>
                 &nbsp;
                 {isStabiloButtonVisible && (
                     <Button variant="warning" onClick={handleStabiloClick}>S</Button>
@@ -480,6 +430,10 @@ export default function DataTable() {
                 <Button variant="success" onClick={exportData}>Export</Button>
                 &nbsp;
                 <Button variant="danger" onClick={clear}>Import</Button>
+                &nbsp;
+                <Button style={{ backgroundColor: '#17bebb', color: 'white' }} onClick={() => {
+                    setShowMoreCols(prev => !prev);
+                }}>MoRe</Button>
                 &nbsp;
                 
             </div>
@@ -521,46 +475,29 @@ export default function DataTable() {
                 ))}
             </thead>
             <div ref={tableContainerRef} className="overflow-auto" style={{maxHeight: "490px"}}>
-                {/* hauteur du tableau data 500 px*/}
                 <TableRS>
                     <tbody className="overflow-auto" style={{maxHeight: "100px"}}>
                     {table.getRowModel().rows.map(row => {
-                        // const reference = row.original.reference as number;
-                        const reference = parseInt(row.original.reference, 10);
-                        
-                        const isChecked = checkedRows[reference] || false;
-
-            return (
-                                <tr 
-                                    key={row.id} 
-                                    style={{
-                                        // backgroundColor: colors[row.getValue("destination") as string]}}>
-                                        backgroundColor: selectedColors[row.getValue("destination") as string]
-                                    }}
-                                >
-                                    {/* //fred jeudi */}
-                                    {/* <td>
-                                        <input
-                                            type="checkbox"
-                                            checked={isChecked}
-                                            onClick={() => handleCheckboxClick(reference)}
-                                        />
-                                    </td> */}
-                                    {/* //fred jeudi */}
-                                    
-                                    {row.getVisibleCells().map(cell => {
-                                        return (
-                                            <td key={cell.id}>
-                                                {flexRender(
-                                                    cell.column.columnDef.cell,
-                                                    cell.getContext()
-                                                )}
-                                            </td>
-                                        )
-                                    })}
-                                </tr>
-                            )
-                        })}
+                        const destinationUid = String(row.getValue("destination"));
+                        const rowColor = selectedColors[destinationUid] || '#fff';
+                        return (
+                            <tr 
+                                key={row.id} 
+                                style={{ backgroundColor: rowColor }}
+                            >
+                                {row.getVisibleCells().map(cell => {
+                                    return (
+                                        <td key={cell.id}>
+                                            {flexRender(
+                                                cell.column.columnDef.cell,
+                                                cell.getContext()
+                                            )}
+                                        </td>
+                                    );
+                                })}
+                            </tr>
+                        );
+                    })}
                     </tbody>
 
                     <tfoot>
@@ -599,13 +536,11 @@ export default function DataTable() {
                     className="border rounded p-1"
                     onClick={() => table.setPageIndex(table.getPageCount() - 1)}
                     disabled={!table.getCanNextPage()}
-                    // onclick={() => table.index
                 >
                     {'>>'}
                 </button>&nbsp;&nbsp;&nbsp;&nbsp;
 
                 <span className="flex items-center gap-1">
-                    {/* <div>Page</div> */}
                     <strong>
                         {table.getState().pagination.pageIndex + 1} of{' '}
                         {table.getPageCount()}
@@ -641,8 +576,6 @@ export default function DataTable() {
                 
             </div>
 
-            {/* Modale pour modifier la valeur et la couleur */}
-            {/* <Modal show={showModal} onHide={handleCloseModal}> */}
             <Modal show={Boolean(newSelectedCale)} onHide={handleCloseModal}>
             <Modal.Header closeButton>
                 <Modal.Title>Modifier la valeur et la couleur</Modal.Title>
@@ -651,8 +584,6 @@ export default function DataTable() {
                 <Form.Group>
                 <Form.Label>Nouvelle couleur</Form.Label>
                 <SketchPicker
-                    // color={selectedColor} // color fixé par tableau                    
-                    // color={selectedColors[newSelectedCale]}
                     color={PickerColorForSelectedCale[newSelectedCale] || '' }
                     onChange={handleColorChange}
                 />

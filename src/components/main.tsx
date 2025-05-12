@@ -316,8 +316,10 @@ function Main() {
 		return {
 			rank: toUpperCaseKeysValues["POS"] || toUpperCaseKeysValues["NUMERO"] || toUpperCaseKeysValues["RANG"] || toUpperCaseKeysValues["N°"],
 			prepa: toUpperCaseKeysValues["ZONE"] || toUpperCaseKeysValues["PREPA"] ,
-			reference: toUpperCaseKeysValues["N° DE COILS"] || toUpperCaseKeysValues["N° DE BRAME"] || toUpperCaseKeysValues["N° PRODUIT"] ||  toUpperCaseKeysValues["REFERENCE"] || toUpperCaseKeysValues["REF"] || toUpperCaseKeysValues["COILS"] || toUpperCaseKeysValues["BRAMES"],
+			reference: toUpperCaseKeysValues["N°"] || ["N° DE COILS"] || toUpperCaseKeysValues["N° DE BRAME"] || toUpperCaseKeysValues["N° PRODUIT"] ||  toUpperCaseKeysValues["REFERENCE"] || toUpperCaseKeysValues["REF"] || toUpperCaseKeysValues["COILS"] || toUpperCaseKeysValues["BRAMES"],
 			weight: toUpperCaseKeysValues["POIDS"] || toUpperCaseKeysValues["TONS"],
+			length: toUpperCaseKeysValues["LONG"] || toUpperCaseKeysValues["LENGTH"],
+			width: toUpperCaseKeysValues["LARG"] || toUpperCaseKeysValues["WIDTH"],
 			position: toUpperCaseKeysValues["POSITION"],
 			destination: calesPerName[toUpperCaseKeysValues["DESTINATION"]] || calesPerName[toUpperCaseKeysValues["DEST"]] || calesPerName["stock"]
 		};

@@ -7,6 +7,8 @@ export type export_stepe_catalog_Data = {
     rank: number
     reference: string
     weight: number
+    length: number
+    width: number
     destination: string
     position: string
     prepa: string
@@ -64,12 +66,7 @@ export const initialCales: ICale[] = [
     {name: "H2",    color: "#f447d1", index:2,  previous_quantite: 0, previous_tonnes: 0, maxis_tonnes: 0, boxed_state: false},
     {name: "H3",    color: "#3cbefc", index:3,  previous_quantite: 0, previous_tonnes: 0, maxis_tonnes: 0, boxed_state: false},
     {name: "H4",    color: "#ff9b2c", index:4,  previous_quantite: 0, previous_tonnes: 0, maxis_tonnes: 0, boxed_state: false},
-    {name: "H5",    color: "#800080", index:5,  previous_quantite: 0, previous_tonnes: 0, maxis_tonnes: 0, boxed_state: false},
-    {name: "H6",    color: "#80ff00", index:6,  previous_quantite: 0, previous_tonnes: 0, maxis_tonnes: 0, boxed_state: false},
-    {name: "H7",    color: "#f03c28", index:7,  previous_quantite: 0, previous_tonnes: 0, maxis_tonnes: 0, boxed_state: false},
-    {name: "H8",    color: "#006ee6", index:8,  previous_quantite: 0, previous_tonnes: 0, maxis_tonnes: 0, boxed_state: false},
-    {name: "H9",    color: "#fdff5b", index:9,  previous_quantite: 0, previous_tonnes: 0, maxis_tonnes: 0, boxed_state: false},
-    {name: "H10",   color: "#008000", index:10, previous_quantite: 0, previous_tonnes: 0, maxis_tonnes: 0, boxed_state: false},
+    {name: "H5",    color: "#ee82ee", index:5,  previous_quantite: 0, previous_tonnes: 0, maxis_tonnes: 0, boxed_state: false},
 ].map(c => ({...c, uid: uuidv4()}));
 
 const initial_stepe_Data_State: Interface_stepe_state = {
@@ -81,10 +78,10 @@ const initial_stepe_Data_State: Interface_stepe_state = {
     loaded_catalog_status: false,
     saved_catalog_status: true,
     
-    TAlly_HOLD_checkbox: {"H1": false, "H2": false, "H3": false, "H4": false, "H5": false, "H6": false, "H7": false, "H8": false, "H9": false, "H10": false},
-    TAlly_HOLD_previous_QTT: {"H1": "0", "H2": "0", "H3": "0", "H4": "0", "H5": "0", "H6": "0", "H7": "0", "H8": "0", "H9": "0", "H10": "0"},
-    TAlly_HOLD_previous_TONS: {"H1": "0", "H2": "0", "H3": "0", "H4": "0", "H5": "0", "H6": "0", "H7": "0", "H8": "0", "H9": "0", "H10": "0"}, 
-    TAlly_HOLD_maxi_TONS: {"H1": "0", "H2": "0", "H3": "0", "H4": "0", "H5": "0", "H6": "0", "H7": "0", "H8": "0", "H9": "0", "H10": "0"},
+    TAlly_HOLD_checkbox: {"H1": false, "H2": false, "H3": false, "H4": false, "H5": false},
+    TAlly_HOLD_previous_QTT: {"H1": "0", "H2": "0", "H3": "0", "H4": "0", "H5": "0"},
+    TAlly_HOLD_previous_TONS: {"H1": "0", "H2": "0", "H3": "0", "H4": "0", "H5": "0"}, 
+    TAlly_HOLD_maxi_TONS: {"H1": "0", "H2": "0", "H3": "0", "H4": "0", "H5": "0"},
 
     loaded_TAlly_HOLD_checkbox_status: false,
     loaded_TAlly_HOLD_previous_QTT_status: false,
