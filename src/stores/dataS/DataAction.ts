@@ -146,3 +146,8 @@ export default class DataAction {
 		return { type: DataAction.CLEAR };
 	}
 }
+
+export const updateRow = (reference: number, columnId: string, value: unknown) => ({
+    type: 'UPDATE_ROW',
+    payload: { reference, columnId, value },
+});

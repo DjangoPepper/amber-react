@@ -167,26 +167,27 @@ function backupCurrentDateTime(): string {
 const columnHelper = createColumnHelper<export_stepe_catalog_Data>();
 
 const EditableCell = ({ getValue, row, column, table }: any) => {
-    const initialValue = getValue()
-    const [value, setValue] = React.useState(initialValue)
+    const initialValue = getValue() || 0; // Valeur par défaut : 0
+    const [value, setValue] = React.useState(initialValue);
+
     const onBlur = () => {
         table.options.meta?.updateData(row.original.reference, column.id, value);
-    }
+    };
 
     React.useEffect(() => {
-        setValue(initialValue)
-    }, [initialValue])
+        setValue(initialValue);
+    }, [initialValue]);
 
     return (
         <input
-            value={value as string}
-            onChange={e => setValue(e.target.value)}
+            type="number"
+            value={value}
+            onChange={e => setValue(Number(e.target.value))}
             onBlur={onBlur}
-            style={{width: "59px"}}
-            // largeur prepa box
+            style={{ width: "59px" }}
         />
-    )
-    };
+    );
+};
 
 const globalFilterFn: FilterFn<export_stepe_catalog_Data> = (row, columnId, filterValue: string) => {
     const search = filterValue.toLowerCase();
@@ -250,17 +251,20 @@ const closeToast = () => {
         }),
         columnHelper.accessor('largeur', {
             header: 'LARGEUR',
-            cell: info => info.getValue(),
+            cell: EditableCell, // Utilisation du composant EditableCell
             filterFn: fuzzyFilter,
         }),
         columnHelper.accessor('longueur', {
             header: 'LONGUEUR',
-            cell: info => info.getValue(),
+            cell: EditableCell, // Utilisation du composant EditableCell
             filterFn: fuzzyFilter,
         }),
         columnHelper.accessor('destination', {
             header: 'DEST',
-            cell: info => cales[info.getValue()],
+            cell: info => {
+                const destination = info.getValue() || "stock"; // Défaut : "stock"
+                return cales[destination] || "stock";
+            },
             filterFn: fuzzyFilter,
         })
     ];
@@ -278,6 +282,7 @@ export default function DataTable() {
     const [newSelectedCale, setnewSelectedCale] = useState<string>('');
     const [showParams, setShowParams] = useState(false);
     // const [ExtentedTally, setExtentedTally] = useState<string>('');
+    const [showMoreColumns, setShowMoreColumns] = React.useState(false);
 
     const toggleParams = () => {setShowParams(!showParams)}
 
@@ -357,16 +362,14 @@ export default function DataTable() {
         autoResetPageIndex: false,
         meta: {
             updateData: (reference, columnId, value) => {
-                if(columnId === "prepa") {
-                    dispatch(DataAction.updateRow(reference, columnId, value));
+                if (columnId === "largeur" || columnId === "longueur") {
+                    dispatch(DataAction.updateRow(reference, columnId, value)); // Mettez à jour l'état Redux
                 }
             },
         },
-
-        getRowId: (row) => {return row.reference; } ,
+        getRowId: (row) => { return row.reference; },
         debugTable: true,
-    }
-    );
+    });
 
     const setPageSize = (size: number) => {
         table.setPageSize(size);

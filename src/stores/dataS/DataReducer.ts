@@ -121,16 +121,13 @@ export const dataReducer: Reducer<Interface_stepe_state> = (state = initial_step
                     saved_catalog_status: false,
                 }
             case DataAction.UPDATE_ROW:
-                const currentRow = state.catalog_data_state.find(r => r.reference === action.payload.reference);
-                if(!currentRow) return state;
+                const { reference, columnId, value } = action.payload;
                 return {
                     ...state,
-                    catalog_data_state: [
-                        ...state.catalog_data_state.filter(r => r.reference !== action.payload.reference),
-                        {...currentRow, [action.payload.columnId]: action.payload.value}
-                    ],
-                    saved_catalog_status: false,
-                }
+                    catalog_data_state: state.catalog_data_state.map(row =>
+                        row.reference === reference ? { ...row, [columnId]: value } : row
+                    ),
+                };
             case DataAction.CHANGE_PREPA:
                 return {
                     ...state,
