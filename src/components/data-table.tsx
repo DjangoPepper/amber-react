@@ -208,36 +208,6 @@ const useColumns = function useColumns(): any[] {
 const closeToast = () => {
     toast.dismiss();
 };
-// const row = {
-//     original: {
-//         reference: 123 // Assurez-vous que cela correspond à la structure de vos données
-//     }
-// };
-
-/* const Msg2 = ({closedToast,row2}:any) => (
-    <div>
-        {SpaceatPos(row2)}
-        <Button onClick={dispatch(DataAction.moveRow(row2))}>{SpaceatPos(row2)}</Button>
-        <Button onClick={closeToast}>Close</Button>
-    </div>
-    ) */
-
-/* const handleButtonClick = (reference: string) => {
-    toast(({ closeToast }) => (
-        <Msg
-            closeToast={closeToast}
-            onValidate={() => {
-                dispatch(DataAction.moveRow(reference));
-                // closeToast();
-                if (closeToast) {
-                    closeToast();
-                }
-                
-            }}
-        />
-    ));
-}; */
-
 
 //FRED
 
@@ -257,22 +227,7 @@ const closeToast = () => {
             cell: EditableCell,
             filterFn: fuzzyFilter,
         }),
-// /* // #####################################################################################################################
-//         columnHelper.accessor('reference', {
-//             header: 'REF',
-//             cell: ({row}: any) =>
-                
-//                 <Button 
-//                     onClick={() => {
-//                     dispatch(DataAction.moveRow(row.original.reference)); //je change la detination de ref cale1,cale2, etc..
-//                     }}
-//                 >
-//                     {SpaceatPos(row.original.reference)}
-//                 </Button>,
-                
-//             filterFn: fuzzyFilter,
 
-//         }),
 // ##################################################################################################################### */
         columnHelper.accessor('reference', {
             header: 'REF',
@@ -290,6 +245,16 @@ const closeToast = () => {
 // ##################################################################################################################### */
         columnHelper.accessor('weight', {
             header: "POIDS",
+            cell: info => info.getValue(),
+            filterFn: fuzzyFilter,
+        }),
+        columnHelper.accessor('largeur', {
+            header: 'LARGEUR',
+            cell: info => info.getValue(),
+            filterFn: fuzzyFilter,
+        }),
+        columnHelper.accessor('longueur', {
+            header: 'LONGUEUR',
             cell: info => info.getValue(),
             filterFn: fuzzyFilter,
         }),

@@ -310,6 +310,8 @@ export function cleanData(values: any): export_stepe_catalog_Data {
         prepa: toUpperCaseKeysValues["ZONE"] || toUpperCaseKeysValues["PREPA"] ,
         reference: toUpperCaseKeysValues["N° DE COILS"] || toUpperCaseKeysValues["N° DE BRAME"] || toUpperCaseKeysValues["N° PRODUIT"] ||  toUpperCaseKeysValues["REFERENCE"] || toUpperCaseKeysValues["REF"] || toUpperCaseKeysValues["COILS"] || toUpperCaseKeysValues["BRAMES"],
         weight: toUpperCaseKeysValues["POIDS"] || toUpperCaseKeysValues["TONS"],
+		largeur: toUpperCaseKeysValues["LARGEUR"] || toUpperCaseKeysValues["LARG"],
+		longueur: toUpperCaseKeysValues["LONGUEUR"] || toUpperCaseKeysValues["LONG"],
         position: toUpperCaseKeysValues["POSITION"],
         destination: toUpperCaseKeysValues["DESTINATION"] || toUpperCaseKeysValues["DEST"] || "stock"
     };

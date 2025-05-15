@@ -7,6 +7,8 @@ export type export_stepe_catalog_Data = {
     rank: number
     reference: string
     weight: number
+    longueur: number
+    largeur: number
     destination: string
     position: string
     prepa: string

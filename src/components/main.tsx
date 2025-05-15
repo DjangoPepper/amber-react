@@ -307,19 +307,19 @@ function Main() {
 		const toUpperCaseKeysValues: any = {};
 		for (const key in values) {
 			const upperCaseKey = key.toUpperCase();
-			// if (upperCaseKey in values ) {console.log("fred", values,upperCaseKey);}
 			const cleanedKey = removeAccents(upperCaseKey);
-			// const cleanedKey = removeAccentsAndApostrophes(upperCaseKey);
 			toUpperCaseKeysValues[cleanedKey] = values[key];
 		}
 
 		return {
 			rank: toUpperCaseKeysValues["POS"] || toUpperCaseKeysValues["NUMERO"] || toUpperCaseKeysValues["RANG"] || toUpperCaseKeysValues["N°"],
-			prepa: toUpperCaseKeysValues["ZONE"] || toUpperCaseKeysValues["PREPA"] ,
-			reference: toUpperCaseKeysValues["N° DE COILS"] || toUpperCaseKeysValues["N° DE BRAME"] || toUpperCaseKeysValues["N° PRODUIT"] ||  toUpperCaseKeysValues["REFERENCE"] || toUpperCaseKeysValues["REF"] || toUpperCaseKeysValues["COILS"] || toUpperCaseKeysValues["BRAMES"],
+			prepa: toUpperCaseKeysValues["ZONE"] || toUpperCaseKeysValues["PREPA"],
+			reference: toUpperCaseKeysValues["N° DE COILS"] || toUpperCaseKeysValues["N° DE BRAME"] || toUpperCaseKeysValues["N° PRODUIT"] || toUpperCaseKeysValues["REFERENCE"] || toUpperCaseKeysValues["REF"] || toUpperCaseKeysValues["COILS"] || toUpperCaseKeysValues["BRAMES"],
 			weight: toUpperCaseKeysValues["POIDS"] || toUpperCaseKeysValues["TONS"],
+			longueur: toUpperCaseKeysValues["LONGUEUR"] || toUpperCaseKeysValues["LONG"], // Ajout de la longueur
+			largeur: toUpperCaseKeysValues["LARGEUR"] || toUpperCaseKeysValues["LARG"],  // Ajout de la largeur
 			position: toUpperCaseKeysValues["POSITION"],
-			destination: calesPerName[toUpperCaseKeysValues["DESTINATION"]] || calesPerName[toUpperCaseKeysValues["DEST"]] || calesPerName["stock"]
+			destination: calesPerName[toUpperCaseKeysValues["DESTINATION"]] || calesPerName[toUpperCaseKeysValues["DEST"]] || "stock"
 		};
 	}
 	
