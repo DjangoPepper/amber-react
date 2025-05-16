@@ -279,7 +279,10 @@ const useColumns = function useColumns(): any[] {
         }),
         columnHelper.accessor('destination', {
             header: 'DEST',
-            cell: info => cales[info.getValue()],
+            cell: info => {
+                const destination = info.getValue() || "stock"; // Valeur par défaut : "stock"
+                return cales[destination] || "stock"; // Vérifie si la destination existe dans `cales`
+            },
             filterFn: fuzzyFilter,
         })
     ];
