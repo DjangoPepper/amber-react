@@ -156,23 +156,7 @@ const row = {
             cell: EditableCell,
             filterFn: fuzzyFilter,
         }),
-// /* // #####################################################################################################################
-//         columnHelper.accessor('reference', {
-//             header: 'REF',
-//             cell: ({row}: any) =>
-                
-//                 <Button 
-//                     onClick={() => {
-//                     dispatch(DataAction.moveRow(row.original.reference)); //je change la detination de ref cale1,cale2, etc..
-//                     }}
-//                 >
-//                     {SpaceatPos(row.original.reference)}
-//                 </Button>,
-                
-//             filterFn: fuzzyFilter,
 
-//         }),
-// ##################################################################################################################### */
         columnHelper.accessor('reference', {
             header: 'REF',
             cell: ({ row }: any) => (
@@ -211,6 +195,7 @@ export default function DataTable() {
     const [newSelectedCale, setnewSelectedCale] = useState<string>('');
     const [newColor, setNewColor] = useState<string>('');
     const [showAffectationManager, setShowAffectationManager] = useState(false); // État pour afficher ou masquer AffectationManager
+    const [isMoreActive, setIsMoreActive] = useState(true); // State for the toggleable button
     
     // Accédez à la valeur sélectionnée depuis l'état Redux
     const selectedCale = useSelector<RootState, string>((state) => state.dataSS.selectedCale);
@@ -253,6 +238,10 @@ export default function DataTable() {
 
         // Réinitialiser la sélection
         setnewSelectedCale("");
+    };
+
+    const toggleMoreButton = () => {
+        setIsMoreActive((prev) => !prev);
     };
 
     const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -368,7 +357,13 @@ export default function DataTable() {
                 &nbsp;
                 <Button variant="danger" onClick={clear}>Import</Button>
                 &nbsp;
-                
+                <Button
+                    style={{ backgroundColor: '#008B8B', borderColor: '#FFD700', color: 'white' }}
+                    onClick={toggleMoreButton}
+                >
+                    {isMoreActive ? 'More' : 'Less'}
+                </Button>
+                &nbsp;
             </div>
             <thead>
                 {table.getHeaderGroups().map(headerGroup => (
