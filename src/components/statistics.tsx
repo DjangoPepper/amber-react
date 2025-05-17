@@ -172,13 +172,19 @@ export default function Statistics() {
 	}, [firstRender]);
 
 	const statistics = catalog_data.reduce<any>((p, row) => {
-		if (!p[row.destination]) {
-			p[row.destination] = { count: 0, weight: 0  };
+		const destination = row.destination || 'stock'; // Définit "stock" par défaut
+		if (!p[destination]) {
+			p[destination] = { count: 0, weight: 0 };
 		}
-		p[row.destination].count += 1;
-		p[row.destination].weight += parseFloat((row.weight).toFixed(3));
+		p[destination].count += 1;
+		p[destination].weight += parseFloat((row.weight || 0).toFixed(3));
 		return p;
-		}, {});
+	}, {});
+
+	// Ajoutez une ligne pour "stock" si elle est absente
+	if (!statistics['stock']) {
+		statistics['stock'] = { count: 0, weight: 0 };
+	}
 
 	
 //

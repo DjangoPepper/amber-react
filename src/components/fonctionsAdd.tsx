@@ -295,13 +295,11 @@ function removeAccents(str: string) {
     return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 }
 
-export function cleanData(values: any): export_stepe_catalog_Data {
+export function cleanDataMore(values: any): export_stepe_catalog_Data {
 	const toUpperCaseKeysValues: any = {};
 	for (const key in values) {
 		const upperCaseKey = key.toUpperCase();
-		// if (upperCaseKey in values ) {console.log("fred", values,upperCaseKey);}
 		const cleanedKey = removeAccents(upperCaseKey);
-		// const cleanedKey = removeAccentsAndApostrophes(upperCaseKey);
 		toUpperCaseKeysValues[cleanedKey] = values[key];
 	}
 
@@ -310,6 +308,10 @@ export function cleanData(values: any): export_stepe_catalog_Data {
         prepa: toUpperCaseKeysValues["ZONE"] || toUpperCaseKeysValues["PREPA"] ,
         reference: toUpperCaseKeysValues["N° DE COILS"] || toUpperCaseKeysValues["N° DE BRAME"] || toUpperCaseKeysValues["N° PRODUIT"] ||  toUpperCaseKeysValues["REFERENCE"] || toUpperCaseKeysValues["REF"] || toUpperCaseKeysValues["COILS"] || toUpperCaseKeysValues["BRAMES"],
         weight: toUpperCaseKeysValues["POIDS"] || toUpperCaseKeysValues["TONS"],
+
+		length: toUpperCaseKeysValues["LONGUEUR"] || toUpperCaseKeysValues["LENGTH"],
+		width: toUpperCaseKeysValues["LARGEUR"] || toUpperCaseKeysValues["WIDTH"],
+
         position: toUpperCaseKeysValues["POSITION"],
         destination: toUpperCaseKeysValues["DESTINATION"] || toUpperCaseKeysValues["DEST"] || "stock"
     };

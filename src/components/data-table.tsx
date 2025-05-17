@@ -156,13 +156,11 @@ function backupCurrentDateTime(): string {
     }
 
 
-    declare module '@tanstack/react-table' {
-        interface TableMeta<TData extends RowData> {
-            updateData: (reference: number, columnId: string, value: unknown) => void
-            }
+declare module '@tanstack/react-table' {
+    interface TableMeta<TData extends RowData> {
+        updateData: (reference: number, columnId: string, value: unknown) => void
         }
-
-
+    }
 
 const columnHelper = createColumnHelper<export_stepe_catalog_Data>();
 
@@ -188,58 +186,21 @@ const EditableCell = ({ getValue, row, column, table }: any) => {
     )
     };
 
-const globalFilterFn: FilterFn<export_stepe_catalog_Data> = (row, columnId, filterValue: string) => {
-    const search = filterValue.toLowerCase();
 
-    let value = row.getValue(columnId) as string;
-    if (typeof value === 'number') value = String(value);
 
-    return value?.toLowerCase().includes(search);
+    const globalFilterFn: FilterFn<export_stepe_catalog_Data> = (row, columnId, filterValue: string) => {
+        const search = filterValue.toLowerCase();
+        let value = row.getValue(columnId) as string;
+        if (typeof value === 'number') value = String(value);
+        return value?.toLowerCase().includes(search);
     };
 
-const useColumns = function useColumns(): any[] {
 
-// const dispatch = useDispatch();
-//FRED
-/* const closeToast = () => {
-    // Code pour fermer le toast
-}; */
+    const useColumns = function useColumns(): any[] {
 
-const closeToast = () => {
+        const closeToast = () => {
     toast.dismiss();
-};
-// const row = {
-//     original: {
-//         reference: 123 // Assurez-vous que cela correspond à la structure de vos données
-//     }
-// };
-
-/* const Msg2 = ({closedToast,row2}:any) => (
-    <div>
-        {SpaceatPos(row2)}
-        <Button onClick={dispatch(DataAction.moveRow(row2))}>{SpaceatPos(row2)}</Button>
-        <Button onClick={closeToast}>Close</Button>
-    </div>
-    ) */
-
-/* const handleButtonClick = (reference: string) => {
-    toast(({ closeToast }) => (
-        <Msg
-            closeToast={closeToast}
-            onValidate={() => {
-                dispatch(DataAction.moveRow(reference));
-                // closeToast();
-                if (closeToast) {
-                    closeToast();
-                }
-                
-            }}
-        />
-    ));
-}; */
-
-
-//FRED
+    };
 
     const cales = useSelector<RootState, ICale[]>(state => state.dataSS.cales).reduce<{[key: string]: string}>((acc, cale) => {
         acc[cale.uid] = cale.name;
@@ -257,23 +218,7 @@ const closeToast = () => {
             cell: EditableCell,
             filterFn: fuzzyFilter,
         }),
-// /* // #####################################################################################################################
-//         columnHelper.accessor('reference', {
-//             header: 'REF',
-//             cell: ({row}: any) =>
-                
-//                 <Button 
-//                     onClick={() => {
-//                     dispatch(DataAction.moveRow(row.original.reference)); //je change la detination de ref cale1,cale2, etc..
-//                     }}
-//                 >
-//                     {SpaceatPos(row.original.reference)}
-//                 </Button>,
-                
-//             filterFn: fuzzyFilter,
 
-//         }),
-// ##################################################################################################################### */
         columnHelper.accessor('reference', {
             header: 'REF',
             cell: ({ row }: any) => (
@@ -287,7 +232,6 @@ const closeToast = () => {
             ),
             filterFn: fuzzyFilter,
         }),
-// ##################################################################################################################### */
         columnHelper.accessor('weight', {
             header: "POIDS",
             cell: info => info.getValue(),
@@ -302,10 +246,7 @@ const closeToast = () => {
 
     return columns;
 }
-//***********************************************************************/
-//***********************************************************************/
-//***********************************************************************/
-//***********************************************************************/
+
 export default function DataTable() {
     const dispatch = useDispatch();
     // const [showModal, setShowModal] = useState(false);
@@ -367,7 +308,14 @@ export default function DataTable() {
 
     const [sorting, setSorting] = React.useState<SortingState>([]);
     const [globalFilter, setGlobalFilter] = React.useState('')
-    const data = useSelector<RootState, export_stepe_catalog_Data[]>(state => state.dataSS.catalog_data_state);
+    //const data = useSelector<RootState, export_stepe_catalog_Data[]>(state => state.dataSS.catalog_data_state);
+    const data = useSelector<RootState, export_stepe_catalog_Data[]>(state =>
+        state.dataSS.catalog_data_state.map(row => ({
+            ...row,
+            destination: row.destination || 'stock', // Définit "stock" par défaut
+        }))
+        );
+    
     const columns = useColumns();
     
     const table = useReactTable({
