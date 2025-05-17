@@ -101,50 +101,12 @@ const globalFilterFn: FilterFn<export_stepe_catalog_Data> = (row, columnId, filt
     return value?.toLowerCase().includes(search);
     };
 
-const useColumns = function useColumns(): any[] {
-
-const dispatch = useDispatch();
-//FRED
-/* const closeToast = () => {
-    // Code pour fermer le toast
-}; */
-
 const closeToast = () => {
     toast.dismiss();
 };
-const row = {
-    original: {
-        reference: 123 // Assurez-vous que cela correspond à la structure de vos données
-    }
-};
 
-/* const Msg2 = ({closedToast,row2}:any) => (
-    <div>
-        {SpaceatPos(row2)}
-        <Button onClick={dispatch(DataAction.moveRow(row2))}>{SpaceatPos(row2)}</Button>
-        <Button onClick={closeToast}>Close</Button>
-    </div>
-    ) */
-
-/* const handleButtonClick = (reference: string) => {
-    toast(({ closeToast }) => (
-        <Msg
-            closeToast={closeToast}
-            onValidate={() => {
-                dispatch(DataAction.moveRow(reference));
-                // closeToast();
-                if (closeToast) {
-                    closeToast();
-                }
-                
-            }}
-        />
-    ));
-}; */
-
-
-//FRED
-
+const useColumns = function useColumns(isMoreActive: boolean): any[] {
+    const dispatch = useDispatch();
 
     const columns = [
         columnHelper.accessor('rank', {
@@ -156,21 +118,19 @@ const row = {
             cell: EditableCell,
             filterFn: fuzzyFilter,
         }),
-
         columnHelper.accessor('reference', {
             header: 'REF',
             cell: ({ row }: any) => (
                 <div>
                     <Button onClick={() => {
-                        toast(<Msg2 closeToast={closeToast} row2={row.original.reference} />,
-                        { position: toast.POSITION.TOP_RIGHT, autoClose: 3000 });
-                }}>{SpaceatPos(row.original.reference)}
-            </Button>
-            </div>
+                        toast(<Msg2 closeToast={closeToast} row2={row.original.reference} />, {
+                            position: toast.POSITION.TOP_RIGHT, autoClose: 3000
+                        });
+                    }}>{SpaceatPos(row.original.reference)}</Button>
+                </div>
             ),
             filterFn: fuzzyFilter,
         }),
-// ##################################################################################################################### */
         columnHelper.accessor('weight', {
             header: "POIDS",
             cell: info => info.getValue(),
@@ -179,11 +139,27 @@ const row = {
         columnHelper.accessor('destination', {
             header: 'DEST',
             filterFn: fuzzyFilter,
-        })
+        }),
     ];
 
+    if (isMoreActive) {
+        columns.push(
+            columnHelper.accessor('BrameSLo', {
+                header: 'BrameSLo',
+                cell: info => info.getValue(),
+                filterFn: fuzzyFilter,
+            }),
+            columnHelper.accessor('BrameSLa', {
+                header: 'BrameSLa',
+                cell: info => info.getValue(),
+                filterFn: fuzzyFilter,
+            })
+        );
+    }
+
     return columns;
-}
+};
+
 //***********************************************************************/
 //***********************************************************************/
 //***********************************************************************/
@@ -195,7 +171,7 @@ export default function DataTable() {
     const [newSelectedCale, setnewSelectedCale] = useState<string>('');
     const [newColor, setNewColor] = useState<string>('');
     const [showAffectationManager, setShowAffectationManager] = useState(false); // État pour afficher ou masquer AffectationManager
-    const [isMoreActive, setIsMoreActive] = useState(true); // State for the toggleable button
+    const [isMoreActive, setIsMoreActive] = useState(false); // State for the toggleable button
     
     // Accédez à la valeur sélectionnée depuis l'état Redux
     const selectedCale = useSelector<RootState, string>((state) => state.dataSS.selectedCale);
@@ -248,7 +224,7 @@ export default function DataTable() {
     const [globalFilter, setGlobalFilter] = React.useState('')
     const cale = useSelector<RootState, string>(state => state.dataSS.selectedCale);
     const data = useSelector<RootState, export_stepe_catalog_Data[]>(state => state.dataSS.catalog_data_state);
-    const columns = useColumns();
+    const columns = useColumns(isMoreActive);
     
     const table = useReactTable({
         data,
@@ -361,7 +337,7 @@ export default function DataTable() {
                     style={{ backgroundColor: '#008B8B', borderColor: '#FFD700', color: 'white' }}
                     onClick={toggleMoreButton}
                 >
-                    {isMoreActive ? 'More' : 'Less'}
+                    {isMoreActive ? 'Less' : 'MorE'}
                 </Button>
                 &nbsp;
             </div>

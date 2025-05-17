@@ -5,13 +5,15 @@ import { colors } from "../../utils/destination";
 import { stat } from "fs";
 
 export type export_stepe_catalog_Data = {
-    rank: number
-    reference: string
-    weight: number
-    destination: string
-    position: string
-    prepa: string
-}
+    rank: number;
+    reference: string;
+    weight: number;
+    destination: string;
+    position: string;
+    prepa: string;
+    BrameSLo?: number; // Added for BrameSLo column
+    BrameSLa?: number; // Added for BrameSLa column
+};
 
 export type export_stepe_tally_Data = {
     tally_Dest: number
