@@ -11,7 +11,14 @@ import { toast } from 'react-toastify';
 
 let backupInterval = 30 * 1000; //30 * 1000 ms = 30s
 
-function init_cata() {	
+function init_affectation() {
+	const savedAffectation = window.localStorage.getItem("local_affectation");
+	if(savedAffectation) {
+		store.dispatch(DataAction.load_affectation(savedAffectation));
+	}
+}
+
+function init_cata() {
 	const Init_catalogDATAS = window.localStorage.getItem("local_catalog");
 	if(Init_catalogDATAS) {
 		store.dispatch(DataAction.loaded_catalog(Init_catalogDATAS));
@@ -35,11 +42,13 @@ function init_tally(){
 		store.dispatch(DataAction.save_previous_qtt());
 		store.dispatch(DataAction.save_previous_tons());
 		store.dispatch(DataAction.save_maxi_tons());
+		store.dispatch(DataAction.save_affectation());
 		toast.warning('AutoSave tally', { position: toast.POSITION.BOTTOM_LEFT, autoClose: 500 })
-	}, 
+	},
 	backupInterval);
 }
 
+init_affectation();
 init_cata();
 init_tally();
 

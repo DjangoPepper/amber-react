@@ -6,8 +6,7 @@ import { export_stepe_catalog_Data } from "../stores/dataS/DataReducer";
 import { Table } from "react-bootstrap";
 import React, { useState, useEffect } from 'react';
 
-import { affectation} from "../utils/destination";
-import {colors, affectation as initialAffectation, HEADER} from "../utils/destination";
+import { AffectationItem } from "../stores/dataS/DataReducer";
 
 
 // import { updateAffectationVisibility } from '../stores/data/destinationActions';
@@ -38,14 +37,7 @@ export default function Statistics() {
 	const [maxi_Value_TO, set_maxi_Values] 			 = useState<{ [key: string]: { maxi_To: string      } }>({});
 
 
-	const [affectation, setAffectation] = useState(initialAffectation); // Utiliser les données initiales
-	
-	// Define the AffectationItem type
-	type AffectationItem = {
-		key: string;
-		name: string;
-		color: string;
-	};
+	const affectation = useSelector<RootState, AffectationItem[]>((state) => state.dataSS.affectationList);
 
 
     const selectedColors = useSelector((state: RootState) => state.dataSS.pickerColors);
