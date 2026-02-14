@@ -1,82 +1,140 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { Modal, Button } from "react-bootstrap";
-import DataAction from "../stores/dataS/DataAction"; // Assurez-vous que le chemin est correct
+import { useDispatch, useSelector } from "react-redux";
+import { Button } from "react-bootstrap";
+import DataAction from "../stores/dataS/DataAction";
+import { RootState } from "../stores/rootStore";
+import { AffectationItem } from "../stores/dataS/DataReducer";
 
-interface Affectation {
-    name: string;
-    color: string;
-    index: number;
-}
-interface affectationItem {
-    name: string;   
-    color: string;
-}
-
-interface AffectationManagerProps {
-    affectation: Affectation[];
-    setAffectation: React.Dispatch<React.SetStateAction<Affectation[]>>; // Ajout de setAffectation
-}
-
-// Fonction pour générer une couleur aléatoire entre bleu et vert au format hexadécimal
 const generateRandomBlueGreenColor = (): string => {
-    const r = Math.floor(Math.random() * 50); // Rouge faible (0-50)
-    const g = Math.floor(150 + Math.random() * 105); // Vert moyen à élevé (150-255)
-    const b = Math.floor(150 + Math.random() * 105); // Bleu moyen à élevé (150-255)
-
-    // Convertir les valeurs RGB en hexadécimal
+    const r = Math.floor(Math.random() * 50);
+    const g = Math.floor(150 + Math.random() * 105);
+    const b = Math.floor(150 + Math.random() * 105);
     const toHex = (value: number) => value.toString(16).padStart(2, "0");
     return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
 };
 
-const AffectationManager: React.FC<AffectationManagerProps> = ({ affectation, setAffectation }) => {
+export default function AffectationManager() {
     const dispatch = useDispatch();
+    const affectation = useSelector<RootState, AffectationItem[]>(
+        (state) => state.dataSS.affectationList
+    );
 
     const [newName, setNewName] = useState("");
-    const [newColor, setNewColor] = useState(generateRandomBlueGreenColor()); // Initialiser avec une couleur aléatoire
+    const [newColor, setNewColor] = useState(generateRandomBlueGreenColor());
+    const [editingName, setEditingName] = useState<string | null>(null);
+    const [editValue, setEditValue] = useState("");
 
     const addAffectation = () => {
+        const trimmed = newName.trim();
+        if (!trimmed) return;
+        if (affectation.some(a => a.name.toLowerCase() === trimmed.toLowerCase())) return;
         const newIndex = affectation.length;
-        const newAffectation = [...affectation, { name: newName, color: newColor, index: newIndex }];
-        setAffectation(newAffectation);
-        dispatch(DataAction.updateAffectation(newAffectation)); // Met à jour Redux
+        const updated = [...affectation, { name: trimmed, color: newColor, index: newIndex }];
+        dispatch(DataAction.updateAffectation(updated));
+        dispatch(DataAction.save_affectation());
         setNewName("");
         setNewColor(generateRandomBlueGreenColor());
     };
 
     const removeAffectation = (name: string) => {
-        const updatedAffectation = affectation.filter((a) => a.name !== name);
-        setAffectation(updatedAffectation);
-        dispatch(DataAction.updateAffectation(updatedAffectation)); // Met à jour Redux
+        if (name === "stock") return;
+        const updated = affectation.filter((a) => a.name !== name);
+        dispatch(DataAction.updateAffectation(updated));
+        dispatch(DataAction.save_affectation());
+    };
+
+    const startRename = (name: string) => {
+        if (name === "stock") return;
+        setEditingName(name);
+        setEditValue(name);
+    };
+
+    const confirmRename = () => {
+        if (!editingName) return;
+        const trimmed = editValue.trim();
+        if (!trimmed || trimmed === editingName) {
+            setEditingName(null);
+            return;
+        }
+        if (affectation.some(a => a.name.toLowerCase() === trimmed.toLowerCase())) {
+            setEditingName(null);
+            return;
+        }
+        dispatch(DataAction.renameAffectation(editingName, trimmed));
+        dispatch(DataAction.save_affectation());
+        setEditingName(null);
+    };
+
+    const handleRenameKeyDown = (e: React.KeyboardEvent) => {
+        if (e.key === "Enter") confirmRename();
+        if (e.key === "Escape") setEditingName(null);
+    };
+
+    const changeColor = (name: string, color: string) => {
+        const updated = affectation.map(a =>
+            a.name === name ? { ...a, color } : a
+        );
+        dispatch(DataAction.updateAffectation(updated));
+        dispatch(DataAction.save_affectation());
     };
 
     return (
         <div>
-            <h3>Gestion des Affectations</h3>
             <table style={{ width: "100%", borderCollapse: "collapse" }}>
                 <thead>
                     <tr>
-                        <th style={{ width: "40%", border: "1px solid #ddd", padding: "8px" }}>Nom</th>
-                        <th style={{ width: "40%", border: "1px solid #ddd", padding: "8px" }}>Couleur</th>
-                        <th style={{ width: "20%", border: "1px solid #ddd", padding: "8px" }}>Actions</th>
+                        <th style={{ width: "35%", border: "1px solid #ddd", padding: "8px" }}>Nom</th>
+                        <th style={{ width: "15%", border: "1px solid #ddd", padding: "8px" }}>Couleur</th>
+                        <th style={{ width: "50%", border: "1px solid #ddd", padding: "8px" }}>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     {affectation.map((a) => (
                         <tr key={a.name}>
-                            <td style={{ border: "1px solid #ddd", padding: "8px" }}>{a.name}</td>
                             <td style={{ border: "1px solid #ddd", padding: "8px" }}>
-                                <div
-                                    style={{
-                                        width: "20px",
-                                        height: "20px",
-                                        backgroundColor: a.color,
-                                        border: "1px solid #000",
-                                    }}
-                                ></div>
+                                {editingName === a.name ? (
+                                    <input
+                                        type="text"
+                                        value={editValue}
+                                        onChange={(e) => setEditValue(e.target.value)}
+                                        onBlur={confirmRename}
+                                        onKeyDown={handleRenameKeyDown}
+                                        maxLength={10}
+                                        autoFocus
+                                        style={{ width: "100%" }}
+                                    />
+                                ) : (
+                                    a.name
+                                )}
                             </td>
                             <td style={{ border: "1px solid #ddd", padding: "8px" }}>
-                                <button onClick={() => removeAffectation(a.name)}>Supprimer</button>
+                                <input
+                                    type="color"
+                                    value={a.color}
+                                    onChange={(e) => changeColor(a.name, e.target.value)}
+                                    style={{ width: "30px", height: "24px", padding: "0", border: "none", cursor: "pointer" }}
+                                />
+                            </td>
+                            <td style={{ border: "1px solid #ddd", padding: "8px" }}>
+                                {a.name !== "stock" && (
+                                    <>
+                                        <Button
+                                            size="sm"
+                                            variant="outline-primary"
+                                            onClick={() => startRename(a.name)}
+                                            style={{ marginRight: "4px" }}
+                                        >
+                                            Renommer
+                                        </Button>
+                                        <Button
+                                            size="sm"
+                                            variant="outline-danger"
+                                            onClick={() => removeAffectation(a.name)}
+                                        >
+                                            Supprimer
+                                        </Button>
+                                    </>
+                                )}
                             </td>
                         </tr>
                     ))}
@@ -85,10 +143,11 @@ const AffectationManager: React.FC<AffectationManagerProps> = ({ affectation, se
             <div style={{ marginTop: "20px", display: "flex", alignItems: "center", gap: "10px" }}>
                 <input
                     type="text"
-                    placeholder="Nom"
+                    placeholder="Nouveau nom"
                     maxLength={10}
                     value={newName}
                     onChange={(e) => setNewName(e.target.value)}
+                    onKeyDown={(e) => e.key === "Enter" && addAffectation()}
                     style={{ width: "150px" }}
                 />
                 <input
@@ -97,39 +156,10 @@ const AffectationManager: React.FC<AffectationManagerProps> = ({ affectation, se
                     onChange={(e) => setNewColor(e.target.value)}
                     style={{ width: "40px", height: "28px", padding: "0", border: "none" }}
                 />
-                <button onClick={addAffectation} disabled={!newName.trim()}>
+                <Button onClick={addAffectation} disabled={!newName.trim()}>
                     Ajouter
-                </button>
+                </Button>
             </div>
         </div>
     );
-};
-
-const AffectationModal: React.FC<{
-    showAffectationManager: boolean;
-    handleCloseAffectationManager: () => void;
-    affectation: Affectation[];
-    setAffectation: React.Dispatch<React.SetStateAction<Affectation[]>>;
-}> = ({ showAffectationManager, handleCloseAffectationManager, affectation, setAffectation }) => {
-    return (
-        <Modal show={showAffectationManager} onHide={handleCloseAffectationManager}>
-            <Modal.Header closeButton>
-                <Modal.Title>Gestion des Affectations</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-                <AffectationManager
-                    affectation={affectation}
-                    setAffectation={setAffectation} // Passer setAffectation comme prop
-                />
-            </Modal.Body>
-            <Modal.Footer>
-                <Button variant="secondary" onClick={handleCloseAffectationManager}>
-                    Fermer
-                </Button>
-            </Modal.Footer>
-        </Modal>
-    );
-};
-
-export default AffectationManager;
-export { AffectationModal };
+}

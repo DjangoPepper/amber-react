@@ -1,8 +1,7 @@
 import { AnyAction } from "redux";
 import DataAction from "./DataAction";
 import {Reducer} from "@reduxjs/toolkit";
-import { colors } from "../../utils/destination";
-import { stat } from "fs";
+import { colors, affectation as defaultAffectation } from "../../utils/destination";
 
 export type export_stepe_catalog_Data = {
     rank: number
@@ -20,12 +19,17 @@ export type export_stepe_tally_Data = {
     tally_Max: string
 }
 
+export type AffectationItem = {
+    name: string;
+    color: string;
+    index: number;
+}
+
 interface Interface_stepe_state {
     catalog_data_state: export_stepe_catalog_Data[];
     tally_data_state: export_stepe_tally_Data[];
-    
-    affectation: string;
-    initialAffectation: string;
+
+    affectationList: AffectationItem[];
 
     selectedCale: string;
     selectedPrepa: string;
@@ -55,9 +59,8 @@ interface Interface_stepe_state {
 const initial_stepe_Data_State: Interface_stepe_state = {
     catalog_data_state: [],
     tally_data_state: [],
-    
-    affectation: "",
-    initialAffectation: "",
+
+    affectationList: defaultAffectation,
 
     selectedCale: "stock",
     selectedPrepa: "_",
@@ -274,7 +277,37 @@ export const dataReducer: Reducer<Interface_stepe_state> = (state = initial_step
             case DataAction.UPDATE_AFFECTATION:
                 return {
                     ...state,
-                    affectation: action.payload,
+                    affectationList: action.payload,
+                };
+
+            case DataAction.RENAME_AFFECTATION: {
+                const { oldName, newName } = action.payload;
+                return {
+                    ...state,
+                    affectationList: state.affectationList.map(a =>
+                        a.name === oldName ? { ...a, name: newName } : a
+                    ),
+                    catalog_data_state: state.catalog_data_state.map(row =>
+                        row.destination === oldName ? { ...row, destination: newName } : row
+                    ),
+                    selectedCale: state.selectedCale === oldName ? newName : state.selectedCale,
+                    pickerColors: Object.fromEntries(
+                        Object.entries(state.pickerColors).map(([k, v]) =>
+                            k === oldName ? [newName, v] : [k, v]
+                        )
+                    ),
+                    saved_catalog_status: false,
+                };
+            }
+
+            case DataAction.SAVE_AFFECTATION:
+                window.localStorage.setItem("local_affectation", JSON.stringify(state.affectationList));
+                return state;
+
+            case DataAction.LOAD_AFFECTATION:
+                return {
+                    ...state,
+                    affectationList: action.payload,
                 };
 
             default:

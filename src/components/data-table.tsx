@@ -21,7 +21,8 @@ import {RootState} from "../stores/rootStore";
 import {export_stepe_catalog_Data} from "../stores/dataS/DataReducer";
 import DebouncedInput from "./debounceInput";
 import DataAction from "../stores/dataS/DataAction";
-import {colors, affectation as initialAffectation, HEADER} from "../utils/destination";
+import {HEADER} from "../utils/destination";
+import {AffectationItem} from "../stores/dataS/DataReducer";
 import Filter, {fuzzyFilter} from "./filter";
 import './index-tanstack.css'
 import { toast } from "react-toastify";
@@ -206,7 +207,7 @@ const row = {
 //***********************************************************************/
 export default function DataTable() {
     const dispatch = useDispatch();
-    const [affectation, setAffectation] = useState(initialAffectation); // Utiliser les données initiales
+    const affectation = useSelector<RootState, AffectationItem[]>((state) => state.dataSS.affectationList);
     const [PickerColorForSelectedCale, setPickerColorForSelectedCale] = useState<{ [key: string]: string }>({});
     const [newSelectedCale, setnewSelectedCale] = useState<string>('');
     const [newColor, setNewColor] = useState<string>('');
@@ -540,10 +541,7 @@ export default function DataTable() {
                     <Modal.Title>Gestion des Affectations</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <AffectationManager
-                        affectation={affectation}
-                        setAffectation={setAffectation}
-                    />
+                    <AffectationManager />
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleCloseAffectationManager}>

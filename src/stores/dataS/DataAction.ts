@@ -40,9 +40,24 @@ export default class DataAction {
 	public static CHANGE_MAXI_TONS = "DataAction.CHANGE_MAXI_TONS";
 
 	public static UPDATE_AFFECTATION = "DataAction.UPDATE_AFFECTATION";
+	public static RENAME_AFFECTATION = "DataAction.RENAME_AFFECTATION";
+	public static SAVE_AFFECTATION = "DataAction.SAVE_AFFECTATION";
+	public static LOAD_AFFECTATION = "DataAction.LOAD_AFFECTATION";
 
 	public static updateAffectation(affectation: any[]): AnyAction {
 		return { type: DataAction.UPDATE_AFFECTATION, payload: affectation };
+	}
+
+	public static renameAffectation(oldName: string, newName: string): AnyAction {
+		return { type: DataAction.RENAME_AFFECTATION, payload: { oldName, newName } };
+	}
+
+	public static save_affectation(): AnyAction {
+		return { type: DataAction.SAVE_AFFECTATION };
+	}
+
+	public static load_affectation(data: string): AnyAction {
+		return { type: DataAction.LOAD_AFFECTATION, payload: JSON.parse(data) };
 	}
 
 	public static change_checkbox_state(changecheckboxstate: { [destination: string]: boolean }): AnyAction {
