@@ -18,7 +18,7 @@ interface MsgProps {
     };
 }
 
-const Msg: React.FC<MsgProps> = ({ closeToast, row }) => {
+const Msg: React.FC<MsgProps> = ({ closeToast = () => {}, row }) => {
     const dispatch = useDispatch();
 
     return (
@@ -32,8 +32,5 @@ const Msg: React.FC<MsgProps> = ({ closeToast, row }) => {
     );
 };
 
-Msg.defaultProps = {
-    closeToast: () => {},
-};
 
 export default Msg;

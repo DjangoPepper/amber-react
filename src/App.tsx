@@ -25,7 +25,7 @@ function init_cata() {
 		}
 	setInterval(() => {
 		store.dispatch(DataAction.save_catalog());
-		toast.warning('AutoSave catalog', { position: toast.POSITION.BOTTOM_LEFT, autoClose: 500 })
+		toast.warning('AutoSave catalog', { position: "bottom-left", autoClose: 500 })
 		}, 
 	backupInterval);
 	}
@@ -43,7 +43,7 @@ function init_tally(){
 		store.dispatch(DataAction.save_previous_tons());
 		store.dispatch(DataAction.save_maxi_tons());
 		store.dispatch(DataAction.save_affectation());
-		toast.warning('AutoSave tally', { position: toast.POSITION.BOTTOM_LEFT, autoClose: 500 })
+		toast.warning('AutoSave tally', { position: "bottom-left", autoClose: 500 })
 	},
 	backupInterval);
 }
