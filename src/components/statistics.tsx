@@ -63,8 +63,8 @@ export default function Statistics() {
 				//  && updatedCheckboxState[k] === false) 
 				{
 					updatedCheckboxState[k] = true;
-					toast.error("Ligne tally pleine", { position: toast.POSITION.TOP_RIGHT,autoClose: 1500 })
-					// 160,3: 		toast.error('init Tally', { position: toast.POSITION.TOP_LEFT, autoClose: 500 });
+					toast.error("Ligne tally pleine", { position: "top-right",autoClose: 1500 })
+					// 160,3: 		toast.error('init Tally', { position: "top-left", autoClose: 500 });
 				} else {
 					// Si oui, basculez simplement la valeur (true devient false, false devient true)
 					updatedCheckboxState[k] = !updatedCheckboxState[k];
@@ -168,7 +168,7 @@ export default function Statistics() {
 	useEffect(() => {
 	if (firstRender) {
 		init_tally();
-		toast.error('init Tally', { position: toast.POSITION.TOP_LEFT, autoClose: 2000 });
+		toast.error('init Tally', { position: "top-left", autoClose: 2000 });
 
 	}
 	}, [firstRender]);

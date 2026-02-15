@@ -180,7 +180,7 @@ const row = {
                 <div>
                     <Button onClick={() => {
                         toast(<Msg2 closeToast={closeToast} row2={row.original.reference} />,
-                        { position: toast.POSITION.TOP_RIGHT, autoClose: 3000 });
+                        { position: "top-right", autoClose: 3000 });
                 }}>{SpaceatPos(row.original.reference)}
             </Button>
             </div>
@@ -346,7 +346,7 @@ export default function DataTable() {
                 </div>
                 &nbsp;
                 <div style={{maxWidth: 350 }}>
-                    <Form.Select placeholder="vers..." value={cale} 
+                    <Form.Select value={cale}
                         onChange={(e) => handleHoldChange(e)}
                         style={{ backgroundColor: selectedColors[cale] }}
                         >
